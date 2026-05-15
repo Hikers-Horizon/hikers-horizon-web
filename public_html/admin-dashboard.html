@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Hikers Horizon</title>
+  <style>
+    :root {
+      --primary-color: #FFFFFF;
+      --secondary-color: #FFFFFF;
+      --text-light: #B0B0B0;
+      --bg-dark: #000000;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    
+            -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Open Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      overscroll-behavior-x: none;
+      scroll-behavior: smooth;
+    }
+
+    /* Fixed Background Video from About */
+    video#bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+.nav-header {
+      position: sticky;
+      top: 0;
+      background: rgba(0, 0, 0, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      padding: 0.75rem 0.5rem;
+      z-index: 100;
+      width: 100%;
+    }
+
+    .nav-header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 85rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+.logo-img {
+      max-width: clamp(8rem, 20vw, 10rem);
+      max-height: clamp(2.5rem, 8vw, 3.5rem);
+    }
+
+main {
+      flex: 1 0 auto;
+      padding: 4rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2.5rem;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+    }
+
+    .dashboard-header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      font-weight: 800;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+    }
+.btn {
+       padding: 0.8rem 1.5rem;
+       border-radius: 12px;
+       font-family: 'Montserrat', sans-serif;
+       font-weight: 700;
+       text-transform: uppercase;
+       cursor: pointer;
+       transition: all 0.3s ease;
+       border: none;
+    }
+
+    .btn-refresh {
+        background: #FFFFFF;
+        color: #000000;
+    }
+
+    .btn-logout {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.25rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-label {
+      color: #B0B0B0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      color: #FFFFFF;
+      font-weight: 800;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.25rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      color: #B0B0B0;
+      padding: 0.8rem 1rem;
+      text-align: left;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #FFFFFF;
+      font-size: 0.95rem;
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .badge.verified {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .badge.unverified {
+      background: rgba(255,0,0,0.1);
+      color: #FF5555;
+      border: 1px solid rgba(255,0,0,0.2);
+    }
+
+    .delete-btn {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.2);
+      color: #FF5555;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    .delete-btn:hover {
+      background: rgba(255, 0, 0, 0.2);
+    }
+
+    .no-data {
+      text-align: center;
+      color: #B0B0B0;
+      padding: 3rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.03);
+      margin: 10% auto;
+      padding: 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.6);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .modal-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      font-size: 1.4rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .close {
+      color: #FFFFFF;
+      font-size: 2rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+    }
+
+    .close:hover {
+      opacity: 1;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: #FFFFFF;
+      margin-bottom: 0.75rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 1rem;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .confirm-btn {
+      background: #FFFFFF;
+      color: #000000;
+      border: none;
+      padding: 1.2rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .confirm-btn:hover {
+      background: #CCCCCC;
+      transform: translateY(-2px);
+    }
+
+    .cancel-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      padding: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      width: 100%;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .cancel-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .error {
+      color: #FF5555;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+    }
+
+    .success {
+      background: rgba(0, 255, 0, 0.1);
+      color: #55FF55;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+      border: 1px solid rgba(0, 255, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-header {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1.5rem 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .dashboard-header h1 { font-size: 1.8rem; }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        padding: 1.2rem 1rem;
+      }
+
+      .stat-value {
+        font-size: 1.1rem;
+      }
+
+      .section {
+        padding: 1.5rem 1rem;
+      }
+
+      .nav-header-container { padding: 0 0.5rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+</head>
+<body>
+  <!-- Background Video -->
+  <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+    <source src="img/v.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+
+  <!-- Navigation Header -->
+    <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+  <main>
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <div class="header-btns">
+            <button class="btn btn-refresh" onclick="loadDashboardData()">Refresh Data</button>
+            <button class="btn btn-logout" onclick="logout()">Logout</button>
+        </div>
+      </div>
+
+    <!-- Login Modal for Admin Access -->
+    <div id="adminLoginModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Admin Access Required</h2>
+          <button class="close" onclick="goBack()">&times;</button>
+        </div>
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminEmail">Admin Email:</label>
+            <input type="email" id="adminEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="adminPassword">Admin Password:</label>
+            <input type="password" id="adminPassword" required>
+          </div>
+          <button type="submit" class="confirm-btn">Login as Admin</button>
+          <div id="loginError" class="error"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Delete User</h2>
+          <button class="close" onclick="closeDeleteModal()">&times;</button>
+        </div>
+        <p style="margin-bottom: 1.5rem; color: #B0B0B0;">Are you sure you want to delete this user? This action cannot be undone.</p>
+        <div class="form-group">
+          <label for="deleteConfirmPassword">Enter Admin Password to confirm:</label>
+          <input type="password" id="deleteConfirmPassword" placeholder="Admin password">
+        </div>
+        <button type="button" class="confirm-btn" style="background: #FF5555; color: white;" onclick="confirmDelete()">Delete User</button>
+        <button type="button" class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+        <div id="deleteError" class="error"></div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Verified Users</div>
+        <div class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Unverified Users</div>
+        <div class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Bookings</div>
+        <div class="stat-value">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Today's Revenue</div>
+        <div class="stat-value" id="todayRevenue">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value" id="weekRevenue">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value" id="monthRevenue">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-value" id="totalRevenue">₹0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Queries</div>
+        <div class="stat-value" id="totalQueries">-</div>
+      </div>
+    </div>
+
+    <!-- Users Section -->
+    <div class="section">
+      <h2 class="section-title">All Users</h2>
+      <div id="usersMessage" class="success" style="display: none;"></div>
+      <div class="table-responsive">
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr><td colspan="6" class="no-data">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bookings Section -->
+    <div class="section">
+      <h2 class="section-title">All Bookings</h2>
+      <div class="table-responsive">
+        <table id="bookingsTable">
+          <thead>
+            <tr>
+              <th>User Email</th>
+              <th>Mobile</th>
+              <th>Trek Name</th>
+              <th>Date</th>
+              <th>Participants</th>
+              <th>Total Cost</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsTableBody">
+            <tr><td colspan="6" class="no-data">Loading bookings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Queries Section -->
+    <div class="section">
+      <h2 class="section-title">Customer Queries</h2>
+      <div class="table-responsive">
+        <table id="queriesTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Subject</th>
+              <th>Message</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="queriesTableBody">
+            <tr><td colspan="6" class="no-data">Loading queries...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </main>
+
+  <script>
+    let adminPassword = null;
+    let userToDelete = null;
+
+    // Check admin access on load
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminLoginModal').style.display = 'block';
+    });
+
+    // Admin login form
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value;
+      const password = document.getElementById('adminPassword').value;
+
+      adminPassword = password;
+
+      // Verify against backend API
+      try {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        if (response.ok) {
+          adminPassword = password;
+          document.getElementById('adminLoginModal').style.display = 'none';
+          loadDashboardData();
+        } else {
+          document.getElementById('loginError').textContent = 'Invalid Admin Email or Password. Access Denied.';
+        }
+      } catch (e) {
+        document.getElementById('loginError').textContent = 'Server connection failed.';
+      }
+    });
+
+    function loadDashboardData() {
+      loadStats();
+      loadUsers();
+      loadBookings();
+      loadQueries();
+    }
+
+    function loadStats() {
+      fetch('/api/admin/stats')
+        .then(res => res.json())
+        .then(data => {
+          const statsValues = document.querySelectorAll('.stat-card .stat-value');
+          statsValues[0].textContent = data.totalUsers;
+          statsValues[1].textContent = data.verifiedUsers;
+          statsValues[2].textContent = data.unverifiedUsers;
+          statsValues[3].textContent = data.totalBookings;
+          
+          document.getElementById('todayRevenue').textContent = '₹' + (data.todayRevenue || 0).toLocaleString('en-IN');
+          document.getElementById('weekRevenue').textContent = '₹' + (data.weekRevenue || 0).toLocaleString('en-IN');
+          document.getElementById('monthRevenue').textContent = '₹' + (data.monthRevenue || 0).toLocaleString('en-IN');
+          document.getElementById('totalRevenue').textContent = '₹' + (data.totalRevenue || 0).toLocaleString('en-IN');
+          document.getElementById('totalQueries').textContent = data.totalQueries || 0;
+        })
+        .catch(err => console.error('Error loading stats:', err));
+    }
+
+    function loadUsers() {
+      fetch('/api/admin/users')
+        .then(res => res.json())
+        .then(users => {
+          const tbody = document.getElementById('usersTableBody');
+          
+          if (users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="no-data">No users found</td></tr>';
+          } else {
+            tbody.innerHTML = users.map(user => `
+              <tr>
+                <td>${user.username}</td>
+                <td>${user.email}</td>
+                <td>${user.mobile || '-'}</td>
+                <td>
+                  <span class="badge ${user.verified ? 'verified' : 'unverified'}">
+                    ${user.verified ? '✓ Verified' : '✗ Unverified'}
+                  </span>
+                </td>
+                <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <button class="delete-btn" onclick="openDeleteModal('${user.email}')">Delete</button>
+                </td>
+              </tr>
+            `).join('');
+          }
+        })
+        .catch(err => console.error('Error loading users:', err));
+    }
+
+    function loadBookings() {
+      fetch('/api/admin/bookings')
+        .then(res => res.json())
+        .then(bookings => {
+          const tbody = document.getElementById('bookingsTableBody');
+          
+          if (bookings.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="no-data">No bookings found</td></tr>';
+          } else {
+            tbody.innerHTML = bookings.map(booking => `
+              <tr>
+                <td>${booking.userEmail}</td>
+                <td>${booking.mobileNumber || '-'}</td>
+                <td>${booking.trekName}</td>
+                <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+                <td>${booking.participants}</td>
+                <td>₹${booking.totalCost.toLocaleString('en-IN')}</td>
+              </tr>
+            `).join('');
+          }
+        })
+        .catch(err => console.error('Error loading bookings:', err));
+    }
+
+    function loadQueries() {
+      fetch('/admin/queries')
+        .then(res => res.json())
+        .then(queries => {
+          const tbody = document.getElementById('queriesTableBody');
+          
+          if (queries.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="no-data">No queries found</td></tr>';
+          } else {
+            tbody.innerHTML = queries.map(q => `
+              <tr>
+                <td>${q.name}</td>
+                <td>${q.email}</td>
+                <td>${q.phone || '-'}</td>
+                <td>${q.subject}</td>
+                <td title="${q.message}">${q.message.substring(0, 50)}${q.message.length > 50 ? '...' : ''}</td>
+                <td>${new Date(q.createdAt).toLocaleDateString()} ${new Date(q.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+              </tr>
+            `).join('');
+          }
+        })
+        .catch(err => console.error('Error loading queries:', err));
+    }
+
+    function openDeleteModal(email) {
+      userToDelete = email;
+      document.getElementById('deleteModal').style.display = 'block';
+      document.getElementById('deleteError').textContent = '';
+      document.getElementById('deleteConfirmPassword').value = '';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      userToDelete = null;
+    }
+
+    async function confirmDelete() {
+      const password = document.getElementById('deleteConfirmPassword').value;
+
+      if (!password) {
+        document.getElementById('deleteError').textContent = 'Please enter admin password';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/admin/users/${userToDelete}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ adminPassword: password })
+        });
+
+        if (response.ok) {
+          closeDeleteModal();
+          showMessage('User deleted successfully');
+          loadUsers();
+          loadStats();
+        } else {
+          document.getElementById('deleteError').textContent = 'Unauthorized or user not found';
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        document.getElementById('deleteError').textContent = 'Error deleting user';
+      }
+    }
+
+    function showMessage(msg) {
+      const messageDiv = document.getElementById('usersMessage');
+      messageDiv.textContent = msg;
+      messageDiv.style.display = 'block';
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 3000);
+    }
+
+    function goBack() {
+      window.location.href = '/index.html';
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const loginModal = document.getElementById('adminLoginModal');
+      const deleteModal = document.getElementById('deleteModal');
+      
+      if (event.target === loginModal) {
+        goBack();
+      }
+      if (event.target === deleteModal) {
+        closeDeleteModal();
+      }
+    };
+  </script></body>
+</html>

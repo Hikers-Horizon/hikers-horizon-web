@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Backpacking Trip - Hikers Horizon</title>
+  <meta name="description" content="Book your Backpacking Trip with Hikers Horizon. Secure online payment via Razorpay.">
+  <link rel="stylesheet" href="booking-premium.css">
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+</head>
+<body class="booking-page">
+  <video class="video-bg" data-autoplay="true" muted playsinline loop poster="/img/back.jpg" preload="none">
+    <source src="/img/BG.webp" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+    <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+  <main class="booking-main">
+    <div class="booking-card">
+      <div class="booking-card-inner">
+        <div class="trek-header">
+          <div class="trek-badge">🎒 Adventure</div>
+          <h1>Backpacking Trip</h1>
+          <p class="trek-subtitle">The ultimate multi-day adventure</p>
+        </div>
+        <div id="booking-form-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="booking-razorpay.js"></script>
+  <script>
+    BookingEngine.init({
+      trekName: 'Backpacking Trip',
+      pricingType: 'select',
+      basePrice: 5000,
+      options: [{label:'Standard Backpacking',price:5000},{label:'Premium Backpacking',price:7500}],
+      transportInclusive: true
+    });
+  </script></body>
+</html>

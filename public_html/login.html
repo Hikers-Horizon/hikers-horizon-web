@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Access Your Adventure Profile | Hikers Horizon</title>
+  <meta name="description"
+    content="Login to your Hikers Horizon account to manage your bookings, view your profile, and plan your next trekking adventure from Bangalore.">
+  <meta name="keywords"
+    content="Hikers Horizon login, trekker profile, manage bookings Bangalore, adventure account India">
+  <link rel="canonical" href="https://hikershorizon.in/login.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="theme.css?v=6">
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+  <style>
+    :root {
+      --primary-color: #ffd700;
+      --secondary-color: #FFFFFF;
+      --text-light: #B0B0B0;
+      --bg-dark: #000000;
+      --accent: #ffd700;
+    }
+
+    
+            -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    video#bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.5;
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.9));
+      z-index: -1;
+    }
+main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 1.5rem 4rem;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+      animation: fadeInLogin 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInLogin {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 2.5rem;
+      background: linear-gradient(to right, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      text-align: left;
+      position: relative;
+    }
+
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--accent);
+      opacity: 0.85;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .toggle-password:hover {
+      opacity: 1;
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 1.1rem;
+      margin-top: 1rem;
+      background: var(--accent);
+      color: #000000;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .login-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+      background: #FFFFFF;
+    }
+
+    .login-links {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .login-links a {
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .login-links a:hover {
+      color: var(--accent);
+    }
+
+    .signup-highlight {
+      color: #FFFFFF !important;
+      font-weight: 700 !important;
+    }
+
+    /* Footer styles are handled globally by /auth-navigation.css?v=12 + //auth-navigation.js */
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 2.5rem 1.75rem;
+      }
+}
+  </style>
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+</head>
+
+<body>
+  <!-- Background Video -->
+  <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+    <source src="/img/BG.webp" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="video-overlay"></div>
+    <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+  <!-- Main Content -->
+  <main>
+    <div class="login-container">
+      <h1 class="login-title">Wanderlust</h1>
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <div class="input-wrapper">
+            <input type="email" id="email" name="email" class="form-input" placeholder="john@example.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+            <button type="button" class="toggle-password" id="togglePassword">Show</button>
+          </div>
+        </div>
+        <button type="submit" class="login-button" id="loginBtn">Authorize Access</button>
+      </form>
+      <div class="login-links">
+        <a href="forgot-password">Trouble signing in? Reset Password</a>
+        <a href="/signup.html">New explorer? <span class="signup-highlight">Create an account</span></a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 Hikers Horizon. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript for Form Handling -->
+  <script>
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+
+      loginBtn.textContent = 'Authenticating...';
+      loginBtn.disabled = true;
+
+      // Use a slightly more robust path for cPanel/localhost compatibility
+      // We also add a timestamp to prevent caching if necessary
+      fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+        .then(async response => {
+          const isJson = response.headers.get('content-type')?.includes('application/json');
+          const data = isJson ? await response.json() : null;
+
+          if (!response.ok) {
+            if (response.status === 404) {
+              throw new Error('Endpoint not found. Please check if the Node.js server is running and proxied correctly.');
+            }
+            if (!isJson) {
+              const text = await response.text();
+              console.error('Non-JSON response:', text);
+              throw new Error(`Server returned ${response.status} (HTML). This usually means the Node.js backend is stopped or there is an Apache routing loop.`);
+            }
+            throw new Error(data?.message || `Login failed (Status: ${response.status})`);
+          }
+
+          return data;
+        })
+        .then(data => {
+          if (data && data.message === 'Login successful') {
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', data.username);
+
+            // Premium success feedback
+            loginBtn.textContent = 'Success!';
+            loginBtn.style.background = '#22c55e';
+            loginBtn.style.color = '#ffffff';
+
+            setTimeout(() => {
+              window.location.href = '/profile.html';
+            }, 800);
+          }
+        })
+        .catch(error => {
+          console.error('Login detailed error:', error);
+          alert('Login Denied: ' + error.message);
+          loginBtn.textContent = 'Authorize Access';
+          loginBtn.disabled = false;
+        });
+    });
+  </script></body>
+
+</html>

@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gokarna Beach Trek & Murudeshwar Trip | Hikers Horizon</title>
+    <meta name="description"
+        content="Coastal trekking, beach camping, and spiritual exploration. Gokarna & Murudeshwar 3-day trip. Book for just ₹2,799!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+
+        :root {
+            --primary-color: #FFFFFF;
+            --secondary-color: #FFFFFF;
+            --text-light: #B0B0B0;
+            --bg-dark: #000000;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            overscroll-behavior-x: none;
+            scroll-behavior: smooth;
+        }
+
+        /* Fixed Background Video */
+        video#bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+/* Hero Section */
+        .hero {
+            padding: clamp(4rem, 10vw, 8rem) 1rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom, #ffffff, #b0b0b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto 8rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            padding: clamp(1.5rem, 4vw, 3rem);
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Detail Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #ffd700;
+            letter-spacing: 0.1em;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Gallery */
+        /* Gallery System */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .gallery-image {
+                width: 100%;
+                height: 0;
+                position: relative;
+                border-radius: 12px;
+            }
+            /* Bento Layout */
+            .gallery-grid > *:nth-child(1),
+            .gallery-grid > *:nth-child(4) {
+                grid-column: span 2;
+            }
+            .gallery-grid > *:nth-child(1) .gallery-image,
+            .gallery-grid > *:nth-child(4) .gallery-image {
+                padding-bottom: 55%;
+            }
+            .gallery-grid > *:nth-child(2) .gallery-image,
+            .gallery-grid > *:nth-child(3) .gallery-image {
+                grid-column: span 1;
+                padding-bottom: 100%;
+            }
+            .gallery-grid h4 {
+                font-size: 0.9rem;
+                margin-top: 0.5rem !important;
+            }
+        }
+
+        .gallery-image {
+            border-radius: 16px;
+            overflow: hidden;
+            height: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .gallery-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .trek-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ffd700, #ffcc00);
+            color: #000000;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+
+        .gallery-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Itinerary & Lists */
+        .modern-list {
+            list-style: none;
+        }
+
+                .modern-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            line-height: 1.7;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .modern-list li:last-child {
+            border-bottom: none;
+        }
+
+        .itinerary-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.3s ease;
+        }
+
+        .itinerary-item:last-child {
+            border-bottom: none;
+        }
+
+        .itinerary-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .itinerary-header:hover {
+            opacity: 0.8;
+        }
+
+        .day-tag {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #ffd700;
+            min-width: 90px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .itinerary-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .dropdown-icon {
+            width: 24px;
+            height: 24px;
+            fill: #ffd700;
+            transition: transform 0.3s ease;
+        }
+
+        .itinerary-item.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .itinerary-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-left: calc(90px + 1.5rem); /* Day-tag width + gap */
+            opacity: 0;
+        }
+
+        .itinerary-item.active .itinerary-content {
+            max-height: 800px; /* Increased to accommodate more content */
+            padding-bottom: 1.5rem;
+            opacity: 1;
+        }
+
+        .itinerary-content p {
+            line-height: 1.8;
+            margin-top: 0.5rem;
+            color: #b0b0b0;
+        }
+
+        .itinerary-time {
+            color: #ffd700;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .itinerary-content {
+                padding-left: 0;
+            }
+            .itinerary-header {
+                gap: 1rem;
+            }
+            .day-tag {
+                min-width: 70px;
+                font-size: 0.8rem;
+            }
+            .itinerary-title {
+                font-size: 1rem;
+            }
+        }
+
+        /* Pricing Cards */
+        .pricing-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .price-card:hover {
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .price-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .amount-box {
+            margin-bottom: 2rem;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .new-price {
+            display: block;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .pricing-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 1.25rem 2rem;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .price-card:hover .pricing-btn {
+            background: #ffd700;
+        }
+
+        /* Carry grid */
+        .carry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .carry-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: #000000;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 6rem 1.5rem 2rem 1.5rem;
+        }
+
+        .footer-container {
+            max-width: 85rem;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .footer-links-col h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+
+        .footer-links-col ul {
+            list-style: none;
+        }
+
+        .footer-links-col li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links-col a {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links-col a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: #666666;
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #666666;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #ffffff;
+        }
+
+        .social-links svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: currentColor;
+        }
+
+        /* Floating WhatsApp Enquiry Button */
+        .enquiry-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(37, 211, 102, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .enquiry-button:hover {
+            transform: scale(1.1) rotate(10deg);
+            background: #25D366;
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-icon {
+            width: 32px;
+            height: 32px;
+            fill: #25D366;
+            transition: fill 0.3s ease;
+        }
+
+        .enquiry-button:hover .whatsapp-icon {
+            fill: #ffffff;
+        }
+
+        /* Floating Book Now Button */
+        .floating-book-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            /* Slightly adjusted to align with WhatsApp */
+            background: linear-gradient(45deg, #ffd700, #ffb300);
+            color: #000000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        .floating-book-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+            background: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+    
+    </style>
+    <link rel="stylesheet" href="../../auth-navigation.css?v=12">
+</head>
+
+<body>
+    <!-- Background Video -->
+    <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+        <source src="/img/BG.webp" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <!-- Header -->
+        <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+    <main>
+        <section class="hero">
+            <h1>Gokarna Beach Trek</h1>
+            <p>Coastal trekking, hidden beaches, majestic temples & backwater escapes.</p>
+        </section>
+
+        <div class="page-container">
+            <!-- Adventure Overview Card -->
+            <div class="glass-card">
+                <h2 class="section-title">Adventure Overview</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Vibe</span>
+                        <span class="info-value">Coastal & Adventure</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value">2 Days / 3 Nights</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Start Point</span>
+                        <span class="info-value">Bangalore (<span class="itinerary-time">08:00 PM</span>)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Activities</span>
+                        <span class="info-value">Beach Trek, Boating, Fort</span>
+                    </div>
+                </div>
+                <p style="margin-top: 2rem; line-height: 1.8; color: #b0b0b0;">
+                    Experience the ultimate coastal journey through Karnataka’s serene shoreline. From hidden beaches and ocean treks to majestic temples and backwater escapes – this trip with Hikers Horizon blends adventure and calm in one unforgettable weekend.
+                </p>
+                <p style="margin-top: 1rem; color: #b0b0b0;">Explore the Karnataka coast with <a
+                        href="https://karnatakatourism.org/" target="_blank" rel="noopener"
+                        style="color: #ffd700;">Karnataka Tourism</a>.</p>
+            </div>
+
+            <!-- Visual Journey -->
+            <div class="glass-card">
+                <h2 class="section-title">Visual Journey</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-image"><img src="/img/gokarna1.jpg" alt="Pristine Beaches"></div>
+                    <div class="gallery-image"><img src="/img/gokarna2.jpg" alt="Coastal Trek"></div>
+                    <div class="gallery-image"><img src="/img/gokarna3.jpg" alt="Sunset Points"></div>
+                    <div class="gallery-image"><img src="/img/gokarna4.jpg" alt="Beach Vibes"></div>
+                </div>
+            </div>
+
+            <!-- Pickup Points -->
+            <div class="glass-card">
+                <h2 class="section-title">Pickup Locations</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem 2rem;">
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">08:00 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Banashankari</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">08:15 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">BTM Layout</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">08:30 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Silk Board</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">08:45 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Koramangala</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">09:00 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Domlur</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">09:15 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">MG Road</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">09:30 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Mekhri Circle</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">09:45 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Yeshwanthpura</span>
+                    </div>
+                    <div style="border-left: 2px solid rgba(255,215,0,0.4); padding-left: 1rem;">
+                        <span style="color: #ffd700; font-family: 'Montserrat'; font-size: 0.75rem; font-weight: 800; display: block; letter-spacing: 0.05em;">10:00 PM</span>
+                        <span style="font-size: 0.95rem; font-weight: 500;">Goraguntepalya</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Itinerary -->
+            <div class="glass-card">
+                <h2 class="section-title">The Detailed Itinerary</h2>
+                <div class="modern-list">
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 0</span>
+                            <span class="itinerary-title">Departure from Bengaluru</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;">As the sun sets over Bangalore, our adventure begins. We'll embark on a comfortable journey towards Gokarna in a Tempo Traveler or Minibus with push-back seats.</p>
+                        </div>
+                    </div>
+
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 1</span>
+                            <span class="itinerary-title">Temple and Beaches!</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;">
+                                • <span class="itinerary-time">09:00 AM</span>: Arrival at Campsite and Get Ready<br>
+                                • <span class="itinerary-time">10:30 AM</span>: Depart to Belekan Beach, the starting point of our trek<br>
+                                • <span class="itinerary-time">11:00 AM</span>: Trek to Paradise Beach (30 mins) & Enjoy the secluded cove<br>
+                                • <span class="itinerary-time">12:30 PM</span>: Trek to Half-Moon Beach (1 hour) & Relax<br>
+                                • <span class="itinerary-time">02:30 PM</span>: Trek to Om Beach (1 hour) & Lunch (Self-Sponsored)<br>
+                                • <span class="itinerary-time">04:30 PM</span>: Trek through the Forest to Kudle Beach for a mesmerizing sunset<br>
+                                • <span class="itinerary-time">06:30 PM</span>: Trek to Gokarna Beach stay while exploring the Gokarna Market<br>
+                                • <span class="itinerary-time">09:30 PM</span>: Campfire, Dinner and retire for the night
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 2</span>
+                            <span class="itinerary-title">Fort, Temple and Backwaters!</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;">
+                                • <span class="itinerary-time">06:00 AM</span>: Wake up and Breakfast<br>
+                                • <span class="itinerary-time">08:30 AM</span>: Check-out and head to Mirjan Fort<br>
+                                • <span class="itinerary-time">09:30 AM</span>: Explore the majestic Mirjan Fort<br>
+                                • <span class="itinerary-time">11:00 AM</span>: Visit Murudeshwar Temple & the giant Shiva Statue<br>
+                                • <span class="itinerary-time">01:00 PM</span>: Lunch (Self-Sponsored)<br>
+                                • <span class="itinerary-time">03:00 PM</span>: Honnavara Backwaters Boating experience (Self-Sponsored)<br>
+                                • <span class="itinerary-time">06:00 PM</span>: Depart for Bengaluru with dinner en route
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 3</span>
+                            <span class="itinerary-title">Homeward Bound</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;">05:00 AM: Reach Bangalore. Drop-offs at the same points as pick-ups. Time to head home with memories of a lifetime!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Know Before You Go -->
+            <div class="glass-card">
+                <h2 class="section-title">Know Before You Go</h2>
+                <ul class="modern-list" style="color: #b0b0b0;">
+                    <li>• The trek distance is approximately 10 km (one side).</li>
+                    <li>• Alcohol consumption is strictly prohibited during the trip.</li>
+                    <li>• Stay is provided in tent stays/beachside cottages.</li>
+                    <li>• Murudeshwar requires modest clothing (Temple dress code applies).</li>
+                    <li>• Carry a xerox copy of your Aadhar/Voter ID (Mandatory for permits).</li>
+                </ul>
+            </div>
+
+            <!-- Things to Carry -->
+            <div class="glass-card">
+                <h2 class="section-title">Things to Carry</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Water Bottles (2L)
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Small Backpack
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Good Grip Shoes
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        ID Proof (Xerox)
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Face Mask/Sanitizer
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Raincoat/Poncho
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Torch/Headlamp
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Personal Meds
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Extra Clothes
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Portable Charger
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Flip-flops
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Polybags (Wet Clothes)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutique Packages -->
+            <div class="glass-card">
+                <h2 class="section-title">Boutique Packages</h2>
+                <div class="pricing-section">
+                    <div class="price-card">
+                        <h3>Beachfront</h3>
+                        <div class="amount-box">
+                            <span class="old-price">₹3,999</span>
+                            <span class="new-price">₹3,499</span>
+                        </div>
+                        <ul class="modern-list" style="text-align: left; margin-bottom: 2rem; font-size: 0.9rem;">
+                            <li>• To and fro transport from Bengaluru</li>
+                            <li>• Two Veg Breakfasts & One Veg Dinner</li>
+                            <li>• Tent Stays / Beachside Stay</li>
+                            <li>• Trek Leads from Hikers Horizon</li>
+                            <li>• Guided Beach Trek</li>
+                            <li>• Basic First Aid Kit</li>
+                        </ul>
+                        <a href="../../booking-gokarna" class="pricing-btn">Reserve Spot</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews & FAQs -->
+            <div class="glass-card">
+                <h2 class="section-title">Traveler Experiences</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div
+                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
+                        "The beach trek was so peaceful. Om beach is definitely my favorite. Great group vibes!"
+                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">-
+                            Akshara M.</strong>
+                    </div>
+                    <div
+                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
+                        "Mirjan Fort was magnificent. Murudeshwar statue is massive. A very well-planned trip."
+                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">-
+                            Deepak R.</strong>
+                    </div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 4rem;">Frequently Asked Questions</h2>
+                <ul class="modern-list">
+                    <li>
+                        <div>
+                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">Is swimming
+                                allowed?</strong>
+                            <p style="color: #b0b0b0;">Yes, at designated beaches like Kudle and Om beach, but avoid
+                                Paradise during high tides.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">What is the stay
+                                like?</strong>
+                            <p style="color: #b0b0b0;">We provide clean, basic beachside homestays/shacks to give you
+                                the authentic Gokarna experience.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+                        <!-- Other Adventures -->
+            <div class="glass-card">
+                <h2 class="section-title">Explore More</h2>
+                <div class="gallery-grid">
+                    <a href="../Netravathi" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <div class="trek-badge">Trending</div>
+                            <img src="/img/Netravathi.jpg" alt="Netravathi Peak">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Netravathi Peak</h4>
+                    </a>                    <a href="../Tadiandamol" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <div class="trek-badge">Best Seller</div>
+                            <img src="/img/Tadiandamol.jpg" alt="Tadiandamol Coorg">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Tadiandamol Coorg</h4>
+                    </a>                    <a href="../Kumaraparvatha" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <div class="trek-badge">Elite</div>
+                            <img src="/img/Kumara.jpg" alt="Kumara Parvatha">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Kumara Parvatha</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-links-col">
+                    <h3>Explore</h3>
+                    <ul>
+                        <li><a href="../../Sunrise">Sunrise Treks</a></li>
+                        <li><a href="../../Twodays">Two-day Treks</a></li>
+                        <li><a href="../../Backpacking">Backpacking Trips</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-col">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="../../About">About Us</a></li>
+                        <li><a href="../../Contact">Contact</a></li>
+                        <li><a href="../../Blogs">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-col">
+                    <h3>Policies</h3>
+                    <ul>
+                        <li><a href="../../Privacy">Privacy Policy</a></li>
+                        <li><a href="../../Terms">Terms and Conditions</a></li>
+                        <li><a href="../../Cancellation">Cancellation Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Hikers Horizon. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/hikershorizon" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/hikershorizon" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Book Now Button -->
+    <a href="../../booking-gokarna" class="floating-book-btn">Book Now</a>
+
+    <!-- WhatsApp Button logic -->
+    <a href="https://wa.me/919902653393" class="enquiry-button" id="enquiryButton" aria-label="WhatsApp">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        </svg>
+    </a>
+
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Gokarna Beach Trek & Murudeshwar Trip from Bangalore",
+        "description": "Experience the coastal circuit of Gokarna, Murudeshwar and Honnavar with Hikers Horizon. Beach trekking, Shiva statue and backwaters starting at ₹2,799.",
+        "startDate": "2025-08-20T20:30:00+05:30",
+        "endDate": "2025-08-23T23:00:00+05:30",
+        "location": {
+            "@type": "Place",
+            "name": "Gokarna",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Gokarna",
+                "addressRegion": "Karnataka",
+                "addressCountry": "IN"
+            }
+        },
+        "organizer": {
+            "@type": "Organization",
+            "name": "Hikers Horizon",
+            "url": "https://hikershorizon.in"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "3499",
+            "priceCurrency": "INR",
+            "url": "https://hikershorizon.in/trips/gokarna",
+            "availability": "https://schema.org/InStock"
+        }
+    }
+    </script>
+    
+    <script>
+        function toggleItinerary(header) {
+            const item = header.parentElement;
+            const isActive = item.classList.contains('active');
+            
+            // Close all other items (Optional: remove this loop if you want multiple items open)
+            document.querySelectorAll('.itinerary-item').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
