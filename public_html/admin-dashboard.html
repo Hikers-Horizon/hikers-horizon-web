@@ -687,11 +687,17 @@ main {
     }
 
     function loadUsers() {
+      const tbody = document.getElementById('usersTableBody');
       fetch('/api/admin/users')
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load users');
+          return res.json();
+        })
         .then(users => {
-          const tbody = document.getElementById('usersTableBody');
-          
+          if (!Array.isArray(users)) {
+            tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading users.</td></tr>`;
+            return;
+          }
           if (users.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="no-data">No users found</td></tr>';
           } else {
@@ -713,15 +719,24 @@ main {
             `).join('');
           }
         })
-        .catch(err => console.error('Error loading users:', err));
+        .catch(err => {
+          console.error('Error loading users:', err);
+          tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Failed to connect to server.</td></tr>`;
+        });
     }
 
     function loadBookings() {
+      const tbody = document.getElementById('bookingsTableBody');
       fetch('/api/admin/bookings')
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load bookings');
+          return res.json();
+        })
         .then(bookings => {
-          const tbody = document.getElementById('bookingsTableBody');
-          
+          if (!Array.isArray(bookings)) {
+            tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading bookings.</td></tr>`;
+            return;
+          }
           if (bookings.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="no-data">No bookings found</td></tr>';
           } else {
@@ -737,15 +752,24 @@ main {
             `).join('');
           }
         })
-        .catch(err => console.error('Error loading bookings:', err));
+        .catch(err => {
+          console.error('Error loading bookings:', err);
+          tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Failed to connect to server.</td></tr>`;
+        });
     }
 
     function loadQueries() {
+      const tbody = document.getElementById('queriesTableBody');
       fetch('/admin/queries')
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load queries');
+          return res.json();
+        })
         .then(queries => {
-          const tbody = document.getElementById('queriesTableBody');
-          
+          if (!Array.isArray(queries)) {
+            tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading queries.</td></tr>`;
+            return;
+          }
           if (queries.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="no-data">No queries found</td></tr>';
           } else {
@@ -761,7 +785,10 @@ main {
             `).join('');
           }
         })
-        .catch(err => console.error('Error loading queries:', err));
+        .catch(err => {
+          console.error('Error loading queries:', err);
+          tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Failed to connect to server.</td></tr>`;
+        });
     }
 
     function openDeleteModal(email) {
