@@ -626,9 +626,10 @@ main {
     let adminPassword = null;
     let userToDelete = null;
 
-    // Check admin access on load
+    // Check admin access on load (Free Admin Access)
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('adminLoginModal').style.display = 'block';
+      document.getElementById('adminLoginModal').style.display = 'none';
+      loadDashboardData();
     });
 
     // Admin login form
