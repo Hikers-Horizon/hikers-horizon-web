@@ -90,8 +90,8 @@ const OPTIMIZED_SCRIPT = `<!-- JavaScript -->
     </script>`;
 
 // Precision regex to target only the WhatsApp drag script block
-const REGEX_DRAG_SCRIPT = /<!--\s*(?:JavaScript|WhatsApp Button logic)\s*-->\s*<script>[\s\S]*?const\s+enquiryButton\s*=\s*document\.getElementById\(['"]enquiryButton['"]\);[\s\S]*?<\/script>/gi;
-const REGEX_FALLBACK = /<script>[\s\S]*?const\s+enquiryButton\s*=\s*document\.getElementById\(['"]enquiryButton['"]\);[\s\S]*?<\/script>/gi;
+const REGEX_DRAG_SCRIPT = /<!--\s*(?:JavaScript|WhatsApp Button logic)\s*-->\s*<script>[\s\S]*?const\s+enquiryButton\s*=\s*document\.getElementById\(['"]enquiryButton['"]\);[\s\S]*?<\/script>/i;
+const REGEX_FALLBACK = /<script>[\s\S]*?const\s+enquiryButton\s*=\s*document\.getElementById\(['"]enquiryButton['"]\);[\s\S]*?<\/script>/i;
 
 function walkDir(dir, callback) {
     fs.readdirSync(dir).forEach(f => {
