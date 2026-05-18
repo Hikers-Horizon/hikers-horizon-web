@@ -286,8 +286,8 @@ app.put(['/profile/:email([^\/]+)', '/api/profile/:email([^\/]+)'], async (req, 
 
 // --- ADMIN API ROUTES ---
 app.post(['/admin/login', '/api/admin/login'], async (req, res) => {
-    const { email, password } = req.body;
-    if ((email === 'hikershorizon@gmail.com' || email === 'venturesven@gmail.com') && password === 'Asdf@2003') return res.json({ message: 'Admin login' });
+    const cleanEmail = email ? email.trim().toLowerCase() : '';
+    if ((cleanEmail === 'hikershorizon@gmail.com' || cleanEmail === 'venturesven@gmail.com') && password === 'Asdf@2003') return res.json({ message: 'Admin login' });
     res.status(401).json({ message: 'Unauthorized' });
 });
 
