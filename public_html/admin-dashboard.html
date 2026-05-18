@@ -668,7 +668,7 @@ main {
     }
 
     function loadStats() {
-      fetch('/api/admin/stats')
+      fetch('/admin/stats')
         .then(res => res.json())
         .then(data => {
           const statsValues = document.querySelectorAll('.stat-card .stat-value');
@@ -688,7 +688,7 @@ main {
 
     function loadUsers() {
       const tbody = document.getElementById('usersTableBody');
-      fetch('/api/admin/users')
+      fetch('/admin/users')
         .then(res => {
           if (!res.ok) throw new Error('Failed to load users');
           return res.json();
@@ -727,7 +727,7 @@ main {
 
     function loadBookings() {
       const tbody = document.getElementById('bookingsTableBody');
-      fetch('/api/admin/bookings')
+      fetch('/admin/bookings')
         .then(res => {
           if (!res.ok) throw new Error('Failed to load bookings');
           return res.json();
