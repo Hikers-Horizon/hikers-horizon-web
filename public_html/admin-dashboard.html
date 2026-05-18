@@ -467,7 +467,8 @@ main {
     <div class="container">
       <div class="dashboard-header">
         <h1>Admin Dashboard</h1>
-        <div class="header-btns">
+        <div class="header-btns" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <a href="/bot-admin" class="btn btn-logout" style="text-decoration: none; border-color: rgba(255, 215, 0, 0.4); color: #FFD700; display: flex; align-items: center; gap: 6px;">🤖 Bot Controller</a>
             <button class="btn btn-refresh" onclick="loadDashboardData()">Refresh Data</button>
             <button class="btn btn-logout" onclick="logout()">Logout</button>
         </div>

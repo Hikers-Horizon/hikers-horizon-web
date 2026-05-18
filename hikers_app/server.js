@@ -347,6 +347,63 @@ app.get(['/admin/bookings', '/api/admin/bookings'], async (req, res) => {
     }
 });
 
+// --- ADMIN WHATSAPP BOT PROXY ROUTES ---
+const BOT_API_URL = 'http://localhost:8083';
+
+app.get(['/admin/bot/status', '/api/admin/bot/status'], async (req, res) => {
+    try {
+        const response = await axios.get(`${BOT_API_URL}/api/status`);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ status: 'offline', message: 'Bot server is not running or unreachable' });
+    }
+});
+
+app.get(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], async (req, res) => {
+    try {
+        const response = await axios.get(`${BOT_API_URL}/api/blacklist`);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ message: 'Bot server unreachable' });
+    }
+});
+
+app.post(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], async (req, res) => {
+    try {
+        const response = await axios.post(`${BOT_API_URL}/api/blacklist`, req.body);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ message: 'Bot server unreachable' });
+    }
+});
+
+app.delete(['/admin/bot/blacklist/:number', '/api/admin/bot/blacklist/:number'], async (req, res) => {
+    try {
+        const response = await axios.delete(`${BOT_API_URL}/api/blacklist/${req.params.number}`);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ message: 'Bot server unreachable' });
+    }
+});
+
+app.get(['/admin/bot/customers', '/api/admin/bot/customers'], async (req, res) => {
+    try {
+        const response = await axios.get(`${BOT_API_URL}/api/customers`);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ message: 'Bot server unreachable' });
+    }
+});
+
+app.post(['/admin/bot/broadcast', '/api/admin/bot/broadcast'], async (req, res) => {
+    try {
+        const response = await axios.post(`${BOT_API_URL}/api/broadcast`, req.body);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ message: 'Bot server unreachable' });
+    }
+});
+
 
 // --- STATIC FILE SERVING ---
 const cpanelPath = path.join(__dirname, '..', 'public_html');
