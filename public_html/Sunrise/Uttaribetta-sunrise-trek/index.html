@@ -637,15 +637,13 @@
                         <span class="itinerary-title">Sunrise Expedition</span>
                     </div>
                     <div class="itinerary-content">
-                            <p><span class="itinerary-time">11:30 PM</span> Depart from Bangalore</p>
-                            <p><span class="itinerary-time">01:30 AM</span> Reach Uttaribetta Base & Briefing</p>
-                            <p><span class="itinerary-time">04:00 AM</span> Start trek through the seven fort gateways</span>
-                    </li>
-                    <li><span class="time-tag">06:15 AM</span><span>Reach Summit & Witness the wide-angle Sunrise</span>
-                    </li>
-                    <li><span class="time-tag">08:30 AM</span><span>Begin descent back to base</p>
-                            <p><span class="itinerary-time">10:00 AM</span> Homestyle breakfast & Refreshments</p>
-                            <p><span class="itinerary-time">12:30 PM</span> Arrival back at Bangalore</p>
+                        <p><span class="itinerary-time">11:30 PM</span> Depart from Bangalore</p>
+                        <p><span class="itinerary-time">01:30 AM</span> Reach Uttaribetta Base & Briefing</p>
+                        <p><span class="itinerary-time">04:00 AM</span> Start trek through the seven fort gateways</p>
+                        <p><span class="itinerary-time">06:15 AM</span> Reach Summit & Witness the wide-angle Sunrise</p>
+                        <p><span class="itinerary-time">08:30 AM</span> Begin descent back to base</p>
+                        <p><span class="itinerary-time">10:00 AM</span> Homestyle breakfast & Refreshments</p>
+                        <p><span class="itinerary-time">12:30 PM</span> Arrival back at Bangalore</p>
                     </div>
                 </div>
             </div>
@@ -939,13 +937,88 @@
 
     <!-- JavaScript -->
     <script>
-        const enquiryButton = document.getElementById('enquiryButton');
-        let isDragging = false; let startX, startY, initialRight, initialBottom; let hasMoved = false; const dragThreshold = 5;
-        function constrainPosition() { const rect = enquiryButton.getBoundingClientRect(); const maxX = window.innerWidth - rect.width; const maxY = window.innerHeight - rect.height; let currentRight = parseFloat(enquiryButton.style.right || '30px'); let currentBottom = parseFloat(enquiryButton.style.bottom || '30px'); currentRight = Math.max(0, Math.min(currentRight, maxX)); currentBottom = Math.max(0, Math.min(currentBottom, maxY)); enquiryButton.style.right = `${currentRight}px`; enquiryButton.style.bottom = `${currentBottom}px`; }
-        function startDrag(e) { isDragging = true; hasMoved = false; enquiryButton.style.transition = 'none'; const computedStyle = window.getComputedStyle(enquiryButton); initialRight = parseFloat(computedStyle.right); initialBottom = parseFloat(computedStyle.bottom); if (e.type === 'touchstart') { startX = e.touches[0].clientX; startY = e.touches[0].clientY; } else { startX = e.clientX; startY = e.clientY; } }
-        function doDrag(e) { if (!isDragging) return; let currentX, currentY; if (e.type === 'touchmove') { currentX = e.touches[0].clientX; currentY = e.touches[0].clientY; } else { currentX = e.clientX; currentY = e.clientY; } const deltaX = startX - currentX; const deltaY = currentY - startY; if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) { hasMoved = true; enquiryButton.style.right = `${initialRight + deltaX}px`; enquiryButton.style.bottom = `${initialBottom - deltaY}px`; constrainPosition(); } }
-        function stopDrag(e) { if (isDragging && !hasMoved) { window.open(enquiryButton.href, '_blank'); } isDragging = false; enquiryButton.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; }
-        enquiryButton.addEventListener('mousedown', startDrag); enquiryButton.addEventListener('touchstart', startDrag, { passive: true }); document.addEventListener('mousemove', doDrag); document.addEventListener('touchmove', doDrag, { passive: false }); document.addEventListener('mouseup', stopDrag); document.addEventListener('touchend', stopDrag);
+        // Optimized WhatsApp Drag Functionality (Zero-Jank, Mobile-Safe)
+        (function() {
+            const btn = document.getElementById('enquiryButton');
+            if (!btn) return;
+            let isDragging = false;
+            let startX, startY, initialRight, initialBottom;
+            let hasMoved = false;
+            const dragThreshold = 5;
+
+            function constrainPosition() {
+                const rect = btn.getBoundingClientRect();
+                const maxX = window.innerWidth - rect.width;
+                const maxY = window.innerHeight - rect.height;
+                let currentRight = parseFloat(btn.style.right || '30px');
+                let currentBottom = parseFloat(btn.style.bottom || '30px');
+                currentRight = Math.max(0, Math.min(currentRight, maxX));
+                currentBottom = Math.max(0, Math.min(currentBottom, maxY));
+                btn.style.right = currentRight + 'px';
+                btn.style.bottom = currentBottom + 'px';
+            }
+
+            function startDrag(e) {
+                isDragging = true;
+                hasMoved = false;
+                btn.style.transition = 'none';
+                const computedStyle = window.getComputedStyle(btn);
+                initialRight = parseFloat(computedStyle.right);
+                initialBottom = parseFloat(computedStyle.bottom);
+
+                if (e.type === 'touchstart') {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    document.addEventListener('touchmove', doDrag, { passive: false });
+                    document.addEventListener('touchend', stopDrag, { passive: true });
+                    document.addEventListener('touchcancel', stopDrag, { passive: true });
+                } else {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    document.addEventListener('mousemove', doDrag);
+                    document.addEventListener('mouseup', stopDrag);
+                }
+            }
+
+            function doDrag(e) {
+                if (!isDragging) return;
+                let currentX, currentY;
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                } else {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
+                const deltaX = startX - currentX;
+                const deltaY = currentY - startY;
+
+                if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+                    hasMoved = true;
+                    btn.style.right = (initialRight + deltaX) + 'px';
+                    btn.style.bottom = (initialBottom - deltaY) + 'px';
+                    constrainPosition();
+                }
+            }
+
+            function stopDrag(e) {
+                if (!isDragging) return;
+                if (!hasMoved) {
+                    window.open(btn.href, '_blank');
+                }
+                isDragging = false;
+                btn.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                
+                document.removeEventListener('mousemove', doDrag);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchmove', doDrag);
+                document.removeEventListener('touchend', stopDrag);
+                document.removeEventListener('touchcancel', stopDrag);
+            }
+
+            btn.addEventListener('mousedown', startDrag);
+            btn.addEventListener('touchstart', startDrag, { passive: true });
+        })();
     </script>
 
     <!-- Google Analytics -->
