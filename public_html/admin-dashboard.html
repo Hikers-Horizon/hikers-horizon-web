@@ -629,15 +629,10 @@ main {
     let adminPassword = null;
     let userToDelete = null;
 
-    // Check admin access on load
+    // Check admin access on load (Free Admin Access)
     window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('adminLoginModal').style.display = 'block';
-      
-      // Toggle Password Visibility
-      document.getElementById('showPasswordCheckbox').addEventListener('change', function() {
-        const passwordInput = document.getElementById('adminPassword');
-        passwordInput.type = this.checked ? 'text' : 'password';
-      });
+      document.getElementById('adminLoginModal').style.display = 'none';
+      loadDashboardData();
     });
 
     // Admin login form
