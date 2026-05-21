@@ -15,6 +15,16 @@ const app = express();
 const HOST = process.env.HOST || 'localhost'; // 'localhost' is most reliable for cPanel internal proxy
 const PORT = process.env.PORT || 8082;
 
+// --- CRASH PROTECTION (Global Error Handlers) ---
+// Prevents the Node.js process from crashing and going offline on unhandled errors
+process.on('uncaughtException', (err) => {
+    console.error('🔥 FATAL UNCAUGHT EXCEPTION:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🔥 UNHANDLED PROMISE REJECTION:', reason);
+});
+
 // --- RAZORPAY SETUP ---
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,

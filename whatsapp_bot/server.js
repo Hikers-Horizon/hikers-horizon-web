@@ -15,6 +15,14 @@ const { initBroadcast } = require("./broadcast");
 const { COMPANY_INFO } = require("./trekData");
 const { isBlacklisted, addToBlacklist, removeFromBlacklist, getBlacklist, normalizeNumber } = require("./blacklist");
 
+// --- CRASH PROTECTION (Global Error Handlers) ---
+process.on('uncaughtException', (err) => {
+    console.error('🔥 FATAL UNCAUGHT EXCEPTION:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🔥 UNHANDLED PROMISE REJECTION:', reason);
+});
 // Get default admin number from company info
 const defaultAdmin = COMPANY_INFO.phone ? COMPANY_INFO.phone.replace(/\D/g, "") : "";
 
@@ -59,7 +67,16 @@ const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         executablePath: isAndroid ? '/data/data/com.termux/files/usr/bin/chromium-browser' : undefined,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: [
+            '--no-sandbox', 
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process',
+            '--disable-gpu'
+        ]
     }
 });
 
@@ -179,7 +196,7 @@ client.on('message', async msg => {
     const rawNumber = from.replace('@c.us', '');
     
     // Check if the sender is blacklisted
-    if (isBlacklisted(from)) {
+    if (await isBlacklisted(from)) {
         console.log(`🔕 Ignored blacklisted number: ${rawNumber}`);
         return;
     }
