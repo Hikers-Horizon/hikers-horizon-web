@@ -91,13 +91,7 @@ const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         executablePath: isAndroid ? '/data/data/com.termux/files/usr/bin/chromium-browser' : undefined,
-        args: isAndroid ? [
-            '--no-sandbox', 
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-accelerated-2d-canvas',
-            '--disable-gpu'
-        ] : [
+        args: [
             '--no-sandbox', 
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
@@ -251,77 +245,70 @@ client.on('message', async msg => {
 
 client.initialize();
 
-// --- EXPRESS DASHBOARD API ---
-const express = require('express');
-const app = express();
-app.use(express.json());
+// --- CLOUD SYNC ARCHITECTURE ---
+const axios = require('axios');
+const SYNC_URL = 'https://hikershorizon.in/api/bot/sync';
 
-// Enable CORS
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
-
-app.get('/api/status', (req, res) => {
-    res.json({
-        status: botStatus,
-        qr: latestQR,
-        uptime: Math.floor(process.uptime())
-    });
-});
-
-app.get('/api/blacklist', (req, res) => {
-    res.json(getBlacklist());
-});
-
-app.get('/api/logs', (req, res) => {
-    res.json(botLogs);
-});
-
-app.post('/api/blacklist', (req, res) => {
-    const { number } = req.body;
-    const normalized = normalizeNumber(number);
-    if (!normalized) return res.status(400).json({ error: 'Invalid number' });
-    const added = addToBlacklist(normalized);
-    res.json({ success: true, added });
-});
-
-app.delete('/api/blacklist/:number', (req, res) => {
-    const removed = removeFromBlacklist(req.params.number);
-    res.json({ success: true, removed });
-});
-
-app.get('/api/customers', (req, res) => {
-    try {
-        const customers = JSON.parse(fs.readFileSync(CUSTOMERS_FILE, "utf8"));
-        res.json(customers);
-    } catch (err) {
-        res.json([]);
-    }
-});
-
-app.post('/api/broadcast', async (req, res) => {
-    const { message } = req.body;
-    if (!message) return res.status(400).json({ error: 'Message required' });
-    try {
-        const customers = JSON.parse(fs.readFileSync(CUSTOMERS_FILE, "utf8"));
-        let count = 0;
-        for (const num of customers) {
-            const formattedNum = num.includes('@c.us') ? num : `${num}@c.us`;
-            if (!isBlacklisted(formattedNum)) {
-                await client.sendMessage(formattedNum, message);
-                count++;
+async function processCommands(commands) {
+    for (const cmd of commands) {
+        try {
+            if (cmd.type === 'blacklist_add') {
+                const normalized = normalizeNumber(cmd.payload.number);
+                if (normalized) {
+                    addToBlacklist(normalized);
+                    console.log(`🚫 Synced Blacklist Addition: ${normalized}`);
+                }
             }
+            else if (cmd.type === 'blacklist_remove') {
+                removeFromBlacklist(cmd.payload.number);
+                console.log(`✅ Synced Blacklist Removal: ${cmd.payload.number}`);
+            }
+            else if (cmd.type === 'broadcast') {
+                const message = cmd.payload.message;
+                const customers = JSON.parse(fs.readFileSync(CUSTOMERS_FILE, "utf8") || "[]");
+                let count = 0;
+                console.log(`📣 Starting broadcast to ${customers.length} customers...`);
+                for (const num of customers) {
+                    const formattedNum = num.includes('@c.us') ? num : `${num}@c.us`;
+                    if (!(await isBlacklisted(formattedNum))) {
+                        await client.sendMessage(formattedNum, message);
+                        count++;
+                    }
+                }
+                console.log(`📣 Broadcast completed. Sent to ${count} customers.`);
+            }
+        } catch (err) {
+            console.error('❌ Error processing cloud command:', err.message);
         }
-        res.json({ success: true, sentCount: count });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
     }
-});
+}
 
-const BOT_PORT = process.env.BOT_PORT || 8083;
-app.listen(BOT_PORT, () => {
-    console.log(`📡 Bot Express API running on port ${BOT_PORT}`);
-});
+async function syncWithCloud() {
+    try {
+        let customers = [];
+        try {
+            customers = JSON.parse(fs.readFileSync(CUSTOMERS_FILE, "utf8"));
+        } catch (e) {}
+
+        const payload = {
+            status: botStatus,
+            qr: latestQR,
+            uptime: Math.floor(process.uptime()),
+            blacklist: getBlacklist(),
+            customers,
+            logs: botLogs
+        };
+
+        const response = await axios.post(SYNC_URL, payload);
+        
+        if (response.data && response.data.commands && response.data.commands.length > 0) {
+            await processCommands(response.data.commands);
+        }
+    } catch (err) {
+        // Sync errors are suppressed so they don't spam the console if AWS is down
+    }
+}
+
+// Sync with AWS every 3 seconds
+setInterval(syncWithCloud, 3000);
+

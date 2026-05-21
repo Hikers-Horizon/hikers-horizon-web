@@ -357,70 +357,68 @@ app.get(['/admin/bookings', '/api/admin/bookings'], async (req, res) => {
     }
 });
 
-// --- ADMIN WHATSAPP BOT PROXY ROUTES ---
-const BOT_API_URL = 'http://localhost:8083';
+// --- ADMIN WHATSAPP BOT STATE (Polling Architecture) ---
+let botState = {
+    status: 'offline',
+    qr: null,
+    uptime: 0,
+    lastSync: 0,
+    blacklist: [],
+    customers: [],
+    logs: []
+};
+const botCommandQueue = [];
 
-app.get(['/admin/bot/status', '/api/admin/bot/status'], async (req, res) => {
-    try {
-        const response = await axios.get(`${BOT_API_URL}/api/status`);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ status: 'offline', message: 'Bot server is not running or unreachable' });
-    }
+// Dashboard Endpoints (Fetching State)
+app.get(['/admin/bot/status', '/api/admin/bot/status'], (req, res) => {
+    if (Date.now() - botState.lastSync > 15000) botState.status = 'offline';
+    res.json({ status: botState.status, qr: botState.qr, uptime: botState.uptime });
 });
 
-app.get(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], async (req, res) => {
-    try {
-        const response = await axios.get(`${BOT_API_URL}/api/blacklist`);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ message: 'Bot server unreachable' });
-    }
+app.get(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], (req, res) => {
+    res.json(botState.blacklist);
 });
 
-app.get(['/admin/bot/logs', '/api/admin/bot/logs'], async (req, res) => {
-    try {
-        const response = await axios.get(`${BOT_API_URL}/api/logs`);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ message: 'Bot server unreachable', logs: [] });
-    }
+app.get(['/admin/bot/customers', '/api/admin/bot/customers'], (req, res) => {
+    res.json(botState.customers);
 });
 
-app.post(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], async (req, res) => {
-    try {
-        const response = await axios.post(`${BOT_API_URL}/api/blacklist`, req.body);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ message: 'Bot server unreachable' });
-    }
+app.get(['/admin/bot/logs', '/api/admin/bot/logs'], (req, res) => {
+    res.json(botState.logs);
 });
 
-app.delete(['/admin/bot/blacklist/:number', '/api/admin/bot/blacklist/:number'], async (req, res) => {
-    try {
-        const response = await axios.delete(`${BOT_API_URL}/api/blacklist/${req.params.number}`);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ message: 'Bot server unreachable' });
-    }
+// Dashboard Endpoints (Sending Commands)
+app.post(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], (req, res) => {
+    botCommandQueue.push({ type: 'blacklist_add', payload: { number: req.body.number } });
+    res.json({ success: true, queued: true });
 });
 
-app.get(['/admin/bot/customers', '/api/admin/bot/customers'], async (req, res) => {
-    try {
-        const response = await axios.get(`${BOT_API_URL}/api/customers`);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ message: 'Bot server unreachable' });
-    }
+app.delete(['/admin/bot/blacklist/:number', '/api/admin/bot/blacklist/:number'], (req, res) => {
+    botCommandQueue.push({ type: 'blacklist_remove', payload: { number: req.params.number } });
+    res.json({ success: true, queued: true });
 });
 
-app.post(['/admin/bot/broadcast', '/api/admin/bot/broadcast'], async (req, res) => {
-    try {
-        const response = await axios.post(`${BOT_API_URL}/api/broadcast`, req.body);
-        res.json(response.data);
-    } catch (err) {
-        res.status(503).json({ message: 'Bot server unreachable' });
-    }
+app.post(['/admin/bot/broadcast', '/api/admin/bot/broadcast'], (req, res) => {
+    botCommandQueue.push({ type: 'broadcast', payload: { message: req.body.message } });
+    res.json({ success: true, queued: true });
+});
+
+// Bot Sync Endpoint (Used by the mobile bot)
+app.post('/api/bot/sync', (req, res) => {
+    const { status, qr, uptime, blacklist, customers, logs } = req.body;
+    botState = {
+        status: status || 'offline',
+        qr: qr || null,
+        uptime: uptime || 0,
+        blacklist: blacklist || [],
+        customers: customers || [],
+        logs: logs || [],
+        lastSync: Date.now()
+    };
+    
+    const commands = [...botCommandQueue];
+    botCommandQueue.length = 0; // Clear the queue after sending
+    res.json({ commands });
 });
 
 
