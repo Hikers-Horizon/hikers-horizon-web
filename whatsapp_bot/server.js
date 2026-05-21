@@ -231,7 +231,7 @@ client.on('message', async msg => {
     }
     
     // Extract raw number
-    const rawNumber = from.replace('@c.us', '');
+    const rawNumber = from.replace('@c.us', '').replace('@lid', '');
     
     // Check if the sender is blacklisted
     if (await isBlacklisted(from)) {
