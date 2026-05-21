@@ -294,6 +294,21 @@ app.put(['/profile/:email([^\/]+)', '/api/profile/:email([^\/]+)'], async (req, 
     }
 });
 
+// --- CONTACT & INQUIRY ROUTES ---
+app.post(['/contact', '/api/contact'], async (req, res) => {
+    const { name, email, phone, subject, message } = req.body;
+    try {
+        await pool.query(
+            'INSERT INTO queries (name, email, phone, subject, message) VALUES (?, ?, ?, ?, ?)',
+            [name, email, phone, subject, message]
+        );
+        res.json({ message: 'Message sent successfully' });
+    } catch (err) {
+        console.error('[CONTACT ERROR]', err.message);
+        res.status(500).json({ message: 'Error saving query' });
+    }
+});
+
 // --- ADMIN API ROUTES ---
 app.post(['/admin/login', '/api/admin/login'], async (req, res) => {
     const { email, password } = req.body;
