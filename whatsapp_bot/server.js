@@ -15,6 +15,29 @@ const { initBroadcast } = require("./broadcast");
 const { COMPANY_INFO } = require("./trekData");
 const { isBlacklisted, addToBlacklist, removeFromBlacklist, getBlacklist, normalizeNumber } = require("./blacklist");
 
+// --- LIVE LOG CAPTURE ---
+const botLogs = [];
+const MAX_LOGS = 100;
+const originalLog = console.log;
+const originalError = console.error;
+
+function captureLog(type, ...args) {
+    const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
+    const timestamp = new Date().toISOString();
+    botLogs.push({ timestamp, type, message: msg });
+    if (botLogs.length > MAX_LOGS) botLogs.shift();
+}
+
+console.log = function(...args) {
+    captureLog('info', ...args);
+    originalLog.apply(console, args);
+};
+
+console.error = function(...args) {
+    captureLog('error', ...args);
+    originalError.apply(console, args);
+};
+
 // --- CRASH PROTECTION (Global Error Handlers) ---
 process.on('uncaughtException', (err) => {
     console.error('🔥 FATAL UNCAUGHT EXCEPTION:', err);
@@ -23,6 +46,7 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason, promise) => {
     console.error('🔥 UNHANDLED PROMISE REJECTION:', reason);
 });
+
 // Get default admin number from company info
 const defaultAdmin = COMPANY_INFO.phone ? COMPANY_INFO.phone.replace(/\D/g, "") : "";
 
@@ -244,6 +268,10 @@ app.get('/api/status', (req, res) => {
 
 app.get('/api/blacklist', (req, res) => {
     res.json(getBlacklist());
+});
+
+app.get('/api/logs', (req, res) => {
+    res.json(botLogs);
 });
 
 app.post('/api/blacklist', (req, res) => {

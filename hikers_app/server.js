@@ -378,6 +378,15 @@ app.get(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], async (req, res) =
     }
 });
 
+app.get(['/admin/bot/logs', '/api/admin/bot/logs'], async (req, res) => {
+    try {
+        const response = await axios.get(`${BOT_API_URL}/api/logs`);
+        res.json(response.data);
+    } catch (err) {
+        res.status(503).json({ message: 'Bot server unreachable', logs: [] });
+    }
+});
+
 app.post(['/admin/bot/blacklist', '/api/admin/bot/blacklist'], async (req, res) => {
     try {
         const response = await axios.post(`${BOT_API_URL}/api/blacklist`, req.body);
