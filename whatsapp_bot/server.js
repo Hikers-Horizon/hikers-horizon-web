@@ -71,7 +71,10 @@ const CUSTOMERS_FILE = path.join(__dirname, "customers.json");
 
 function saveCustomer(number) {
   try {
-    let customers = JSON.parse(fs.readFileSync(CUSTOMERS_FILE, "utf8"));
+    let customers = [];
+    if (fs.existsSync(CUSTOMERS_FILE)) {
+        customers = JSON.parse(fs.readFileSync(CUSTOMERS_FILE, "utf8"));
+    }
     if (!customers.includes(number)) {
       customers.push(number);
       fs.writeFileSync(CUSTOMERS_FILE, JSON.stringify(customers, null, 2));
