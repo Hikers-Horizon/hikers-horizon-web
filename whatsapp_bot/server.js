@@ -230,8 +230,8 @@ client.on('message', async msg => {
         }
     }
     
-    // Extract raw number
-    const rawNumber = from.replace('@c.us', '').replace('@lid', '');
+    // Extract raw number - preserve @lid if the real number couldn't be found so we can still message them later
+    const rawNumber = from.includes('@lid') ? from : from.replace('@c.us', '');
     
     // Check if the sender is blacklisted
     if (await isBlacklisted(from)) {
@@ -249,7 +249,7 @@ client.on('message', async msg => {
     // If replyText is null, it means the bot is muted for this user
     if (replyText) {
         try {
-            await client.sendMessage(from, replyText);
+            await client.sendMessage(msg.from, replyText);
             console.log(`✅ Replied to ${rawNumber}`);
         } catch (err) {
             console.error("❌ Send Error:", err.message);
@@ -283,7 +283,7 @@ async function processCommands(commands) {
                 let count = 0;
                 console.log(`📣 Starting broadcast to ${customers.length} customers...`);
                 for (const num of customers) {
-                    const formattedNum = num.includes('@c.us') ? num : `${num}@c.us`;
+                    const formattedNum = num.includes('@') ? num : `${num}@c.us`;
                     if (!(await isBlacklisted(formattedNum))) {
                         await client.sendMessage(formattedNum, message);
                         count++;
