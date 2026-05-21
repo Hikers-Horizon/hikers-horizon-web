@@ -163,7 +163,18 @@ client.on('message', async msg => {
     }
 
     // The sender number (e.g., 919902653393@c.us)
-    const from = msg.from;
+    let from = msg.from;
+    
+    // Attempt to resolve real phone number if it's a hidden @lid (often happens in communities or certain privacy settings)
+    if (from.includes('@lid')) {
+        try {
+            const contact = await msg.getContact();
+            if (contact && contact.number) {
+                from = `${contact.number}@c.us`;
+            }
+        } catch (e) {}
+    }
+
     const text = msg.body;
     
     // Skip empty messages or media messages without body
