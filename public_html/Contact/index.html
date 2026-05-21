@@ -617,10 +617,26 @@
         });
 
         // Subscribe Form
-        document.querySelector('.subscribe-form').addEventListener('submit', function (e) {
+        document.querySelector('.subscribe-form').addEventListener('submit', async function (e) {
             e.preventDefault();
-            alert('Welcome to the Horizon! You have successfully subscribed.');
-            this.reset();
+            const emailInput = this.querySelector('input[type="email"]');
+            const email = emailInput.value;
+            try {
+                const response = await fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                if (response.ok) {
+                    alert('Welcome to the Horizon! You have successfully subscribed.');
+                    this.reset();
+                } else {
+                    alert('Error subscribing. Please try again.');
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('Connection error. Please try again later.');
+            }
         });
     </script></body>
 

@@ -109,6 +109,15 @@ async function initDatabase() {
     `);
     console.log('✅ Queries table ready');
 
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS subscribers (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('✅ Subscribers table ready');
+
     dbStatus = 'UP';
     global.dbError = "UP";
     connection.release();
@@ -306,6 +315,22 @@ app.post(['/contact', '/api/contact'], async (req, res) => {
     } catch (err) {
         console.error('[CONTACT ERROR]', err.message);
         res.status(500).json({ message: 'Error saving query' });
+    }
+});
+
+// --- NEWSLETTER SUBSCRIPTION ---
+app.post(['/subscribe', '/api/subscribe'], async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email required' });
+    try {
+        await pool.query(
+            'INSERT IGNORE INTO subscribers (email) VALUES (?)',
+            [email.toLowerCase().trim()]
+        );
+        res.json({ message: 'Subscribed successfully' });
+    } catch (err) {
+        console.error('[SUBSCRIBE ERROR]', err.message);
+        res.status(500).json({ message: 'Error subscribing' });
     }
 });
 

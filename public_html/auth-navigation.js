@@ -219,10 +219,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div>
                     <div class="newsletter-form">
                         <h3 class="footer-col-title">Stay Updated</h3>
-                        <div class="newsletter-input">
-                            <input type="email" placeholder="Enter email">
-                            <button>Join</button>
-                        </div>
+                        <form class="newsletter-input" action="#" method="post">
+                            <input type="email" placeholder="Enter email" required>
+                            <button type="submit">Join</button>
+                        </form>
                         <div class="social-links">
                             <a href="https://instagram.com/hikershorizon" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.25" fill="currentColor"/></svg></a>
                             <a href="https://youtube.com/@hikershorizon" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M19.6 3.2H4.4C2.5 3.2 1 4.7 1 6.6v10.8c0 1.9 1.5 3.4 3.4 3.4h15.2c1.9 0 3.4-1.5 3.4-3.4V6.6c0-1.9-1.5-3.4-3.4-3.4zM9.5 16V8l7 4-7 4z" fill="currentColor"/></svg></a>
@@ -249,6 +249,31 @@ document.addEventListener('DOMContentLoaded', function () {
             footer.className = 'footer';
             footer.innerHTML = newFooterHTML;
             document.body.appendChild(footer);
+        }
+
+        const newsletterInputForm = document.querySelector('.newsletter-input');
+        if (newsletterInputForm && newsletterInputForm.tagName === 'FORM') {
+            newsletterInputForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const emailInput = newsletterInputForm.querySelector('input[type="email"]');
+                const email = emailInput.value;
+                try {
+                    const response = await fetch('/api/subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    if (response.ok) {
+                        alert('Thank you for subscribing! Stay tuned for updates.');
+                        e.target.reset();
+                    } else {
+                        alert('Error subscribing. Please try again.');
+                    }
+                } catch (err) {
+                    console.error('Error:', err);
+                    alert('Connection error. Please try again later.');
+                }
+            });
         }
     }
 

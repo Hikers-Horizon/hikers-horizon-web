@@ -2752,10 +2752,26 @@
       // ──── Newsletter ────
       const newsletterForm = document.getElementById('newsletterForm');
       if (newsletterForm) {
-        newsletterForm.addEventListener('submit', e => {
+        newsletterForm.addEventListener('submit', async (e) => {
           e.preventDefault();
-          alert('Thank you for subscribing! Stay tuned for updates.');
-          e.target.reset();
+          const emailInput = newsletterForm.querySelector('input[type="email"]');
+          const email = emailInput.value;
+          try {
+            const response = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+            if (response.ok) {
+                alert('Thank you for subscribing! Stay tuned for updates.');
+                e.target.reset();
+            } else {
+                alert('Error subscribing. Please try again.');
+            }
+          } catch (err) {
+            console.error('Error:', err);
+            alert('Connection error. Please try again later.');
+          }
         });
       }
 
