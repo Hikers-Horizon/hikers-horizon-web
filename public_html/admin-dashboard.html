@@ -582,7 +582,11 @@ main {
 
     <!-- Bookings Section -->
     <div class="section">
-      <h2 class="section-title">All Bookings</h2>
+      <h2 class="section-title">
+        All Bookings
+        <input type="date" id="bookingDateFilter" style="margin-left: auto; margin-right: 10px; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;" onchange="filterBookingsByDate()">
+        <button onclick="clearBookingFilter()" class="delete-btn" style="padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); color: white; background: rgba(255,255,255,0.1); margin-right: 15px;">Clear</button>
+      </h2>
       <div class="table-responsive">
         <table id="bookingsTable">
           <thead>
@@ -729,6 +733,50 @@ main {
         });
     }
 
+    let allBookingsData = [];
+
+    function renderBookings(bookings) {
+      const tbody = document.getElementById('bookingsTableBody');
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="no-data">No bookings found</td></tr>';
+      } else {
+        tbody.innerHTML = bookings.map(booking => `
+          <tr>
+            <td>${booking.userEmail}</td>
+            <td>${booking.mobileNumber || '-'}</td>
+            <td>${booking.trekName}</td>
+            <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+            <td>${booking.participants}</td>
+            <td>₹${booking.totalCost.toLocaleString('en-IN')}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function filterBookingsByDate() {
+      const filterDate = document.getElementById('bookingDateFilter').value;
+      if (!filterDate) {
+        renderBookings(allBookingsData);
+        return;
+      }
+      
+      const filtered = allBookingsData.filter(b => {
+        if (!b.bookingDate) return false;
+        const bDate = new Date(b.bookingDate);
+        const year = bDate.getFullYear();
+        const month = String(bDate.getMonth() + 1).padStart(2, '0');
+        const day = String(bDate.getDate()).padStart(2, '0');
+        const localDateString = `${year}-${month}-${day}`;
+        return localDateString === filterDate;
+      });
+      renderBookings(filtered);
+    }
+
+    function clearBookingFilter() {
+      document.getElementById('bookingDateFilter').value = '';
+      renderBookings(allBookingsData);
+    }
+
     function loadBookings() {
       const tbody = document.getElementById('bookingsTableBody');
       fetch('/admin/bookings')
@@ -741,20 +789,8 @@ main {
             tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading bookings.</td></tr>`;
             return;
           }
-          if (bookings.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="no-data">No bookings found</td></tr>';
-          } else {
-            tbody.innerHTML = bookings.map(booking => `
-              <tr>
-                <td>${booking.userEmail}</td>
-                <td>${booking.mobileNumber || '-'}</td>
-                <td>${booking.trekName}</td>
-                <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
-                <td>${booking.participants}</td>
-                <td>₹${booking.totalCost.toLocaleString('en-IN')}</td>
-              </tr>
-            `).join('');
-          }
+          allBookingsData = bookings;
+          renderBookings(bookings);
         })
         .catch(err => {
           console.error('Error loading bookings:', err);
