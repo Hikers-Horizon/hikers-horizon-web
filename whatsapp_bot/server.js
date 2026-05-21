@@ -91,7 +91,13 @@ const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         executablePath: isAndroid ? '/data/data/com.termux/files/usr/bin/chromium-browser' : undefined,
-        args: [
+        args: isAndroid ? [
+            '--no-sandbox', 
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--disable-gpu'
+        ] : [
             '--no-sandbox', 
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
