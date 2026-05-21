@@ -310,16 +310,22 @@ app.get(['/admin/stats', '/api/admin/stats'], async (req, res) => {
         const [[{ tBookings }]] = await pool.query('SELECT COUNT(*) as tBookings FROM bookings');
         const [[{ tQueries }]] = await pool.query('SELECT COUNT(*) as tQueries FROM queries');
         
+        // Calculate Revenues
+        const [[{ totalRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as totalRevenue FROM bookings');
+        const [[{ todayRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as todayRevenue FROM bookings WHERE DATE(createdAt) = CURDATE()');
+        const [[{ weekRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as weekRevenue FROM bookings WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1)');
+        const [[{ monthRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as monthRevenue FROM bookings WHERE MONTH(createdAt) = MONTH(CURDATE()) AND YEAR(createdAt) = YEAR(CURDATE())');
+        
         res.json({ 
             totalUsers: tUsers, 
             verifiedUsers: vUsers, 
             unverifiedUsers: tUsers - vUsers, 
             totalBookings: tBookings,
             totalQueries: tQueries,
-            todayRevenue: 0,
-            weekRevenue: 0,
-            monthRevenue: 0,
-            totalRevenue: 0
+            todayRevenue: Number(todayRevenue),
+            weekRevenue: Number(weekRevenue),
+            monthRevenue: Number(monthRevenue),
+            totalRevenue: Number(totalRevenue)
         });
     } catch (err) { 
         console.error('[STATS ERROR]', err.message);
