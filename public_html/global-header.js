@@ -180,7 +180,7 @@
         `;
         
         // Add home-page class to body if we are on the homepage
-        if (window.location.pathname === '/' || window.location.pathname === '/index.html' || window.location.pathname.endsWith('/index.html') && window.location.pathname.split('/').length <= 2) {
+        if (window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
             document.body.classList.add('home-page');
         }
         document.head.appendChild(s);
@@ -189,7 +189,7 @@
     // ─── 2. Header HTML Template ───
     const headerHTML = `
     <div class="header-container">
-        <a href="/index.html" class="logo-link" aria-label="Hikers Horizon Home">
+        <a href="/" class="logo-link" aria-label="Hikers Horizon Home">
             <img id="logo" src="/img/lo.png" alt="Hikers Horizon Logo" loading="eager">
             <div class="logo-text-container">
                 <h1>HIKERS <span>HORIZON</span></h1>
@@ -198,9 +198,9 @@
         </a>
         <nav class="nav-menu" id="navMenu">
             <ul class="nav-list">
-                <li><a href="/index.html" class="nav-link">Home</a></li>
+                <li><a href="/" class="nav-link">Home</a></li>
                 <li class="dropdown">
-                    <a href="/index.html#treks" class="nav-link">Treks <span class="arrow">▾</span></a>
+                    <a href="/#treks" class="nav-link">Treks <span class="arrow">▾</span></a>
                     <div class="mega-menu">
                         <div class="mega-menu-container">
                             <div class="mega-menu-column">
@@ -227,17 +227,17 @@
                                     <img src="/img/BP.webp" alt="Gokarna Beach Trek">
                                     <div class="featured-trek-content">
                                         <div class="featured-trek-title">Gokarna Beach Trek</div>
-                                        <a href="/Backpacking/index.html" class="featured-trek-btn">Explore Now</a>
+                                        <a href="/Backpacking/" class="featured-trek-btn">Explore Now</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </li>
-                <li><a href="/Corporate/index.html" class="nav-link">Corporate</a></li>
-                <li><a href="/Blog/index.html" class="nav-link">Blog</a></li>
-                <li><a href="/About/index.html" class="nav-link">About</a></li>
-                <li><a href="/Contact/index.html" class="nav-link">Contact</a></li>
+                <li><a href="/Corporate/" class="nav-link">Corporate</a></li>
+                <li><a href="/Blog/" class="nav-link">Blog</a></li>
+                <li><a href="/About/" class="nav-link">About</a></li>
+                <li><a href="/Contact/" class="nav-link">Contact</a></li>
             </ul>
         </nav>
         <div class="auth-nav-items" id="authNav"></div>
@@ -294,7 +294,7 @@
             localStorage.removeItem('userName');
             // Check if any other auth items are stored
             alert('Logged out successfully!');
-            window.location.href = '/index.html';
+            window.location.href = '/';
         };
 
         // Hamburger
@@ -324,12 +324,12 @@
             navUl.className = 'nav-list';
 
             const menuItems = [
-                { icon: '⌂', label: 'Home', href: '/index.html' },
-                { icon: '▲', label: 'Treks', href: '/index.html#treks' },
-                { icon: '◆', label: 'Corporate', href: '/Corporate/index.html' },
-                { icon: '✎', label: 'Blog', href: '/Blog/index.html' },
-                { icon: '◎', label: 'About', href: '/About/index.html' },
-                { icon: '✉', label: 'Contact', href: '/Contact/index.html' },
+                { icon: '⌂', label: 'Home', href: '/' },
+                { icon: '▲', label: 'Treks', href: '/#treks' },
+                { icon: '◆', label: 'Corporate', href: '/Corporate/' },
+                { icon: '✎', label: 'Blog', href: '/Blog/' },
+                { icon: '◎', label: 'About', href: '/About/' },
+                { icon: '✉', label: 'Contact', href: '/Contact/' },
             ];
 
             menuItems.forEach(item => {

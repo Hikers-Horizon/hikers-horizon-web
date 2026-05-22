@@ -89,9 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const path = window.location.pathname;
 
         navList.innerHTML = `
-            <li><a href="/index.html" class="nav-link ${path === '/' || path.includes('index.html') ? 'active' : ''}">Home</a></li>
+            <li><a href="/" class="nav-link ${path === '/' || path.includes('index.html') ? 'active' : ''}">Home</a></li>
             <li class="dropdown">
-                <a href="/index.html#treks" class="nav-link ${path.includes('Sunrise') || path.includes('Twodays') ? 'active' : ''}">Treks <span class="arrow">▾</span></a>
+                <a href="/#treks" class="nav-link ${path.includes('Sunrise') || path.includes('Twodays') ? 'active' : ''}">Treks <span class="arrow">▾</span></a>
                 <div class="mega-menu">
                     <div class="mega-menu-container">
                         <div class="mega-menu-column">
@@ -105,12 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="mega-menu-column">
                             <h3 class="mega-column-title" id="region-title">Sunrise Treks</h3>
                             <ul class="trek-list-grid" id="trek-items-list">
-                                <li class="trek-list-item"><a href="/Sunrise/index.html">Skandagiri Sunrise Trek</a></li>
-                                <li class="trek-list-item"><a href="/Sunrise/index.html">Nandi Hills Sunrise</a></li>
-                                <li class="trek-list-item"><a href="/Sunrise/index.html">Uttari Betta Trek</a></li>
-                                <li class="trek-list-item"><a href="/Sunrise/index.html">Savandurga Night Trek</a></li>
-                                <li class="trek-list-item"><a href="/Sunrise/index.html">Anthargange Exploration</a></li>
-                                <li class="trek-list-item"><a href="/Sunrise/index.html">Makalidurga Adventure</a></li>
+                                <li><a href="/Sunrise/">Skandagiri Sunrise Trek</a></li>
+                                <li><a href="/Sunrise/">Nandi Hills Sunrise</a></li>
+                                <li><a href="/Sunrise/">Uttari Betta Trek</a></li>
+                                <li><a href="/Sunrise/">Savandurga Night Trek</a></li>
+                                <li><a href="/Sunrise/">Anthargange Exploration</a></li>
+                                <li><a href="/Sunrise/">Makalidurga Adventure</a></li>
                             </ul>
                         </div>
                         <div class="mega-menu-column">
@@ -120,17 +120,17 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="featured-trek-content">
                                     <div class="featured-trek-title">Gokarna Beach Trek</div>
                                     <p style="font-size:0.8rem; color:#8a8a8a; margin-bottom:1rem">Trek across white sand beaches and rugged cliffs. A coastal adventure you'll never forget!</p>
-                                    <a href="/Backpacking/index.html" class="featured-trek-btn" style="background:var(--color-accent); color:var(--color-bg); padding:0.5rem 1rem; border-radius:50px; font-size:0.75rem; font-weight:700;">Explore Now</a>
+                                    <a href="/Backpacking/" class="featured-trek-btn" style="background:var(--color-accent); color:var(--color-bg); padding:0.5rem 1rem; border-radius:50px; font-size:0.75rem; font-weight:700;">Explore Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </li>
-            <li><a href="/Corporate/index.html" class="nav-link ${path.includes('Corporate') ? 'active' : ''}">Corporate</a></li>
-            <li><a href="/Blogs" class="nav-link">Blog</a></li>
-            <li><a href="/About/index.html" class="nav-link ${path.includes('About') ? 'active' : ''}">About</a></li>
-            <li><a href="/Contact/index.html" class="nav-link ${path.includes('Contact') ? 'active' : ''}">Contact</a></li>
+            <li><a href="/Corporate/" class="nav-link ${path.includes('Corporate') ? 'active' : ''}">Corporate</a></li>
+            <li><a href="/Blog/" class="nav-link ${path.includes('Blog') ? 'active' : ''}">Blog</a></li>
+            <li><a href="/About/" class="nav-link ${path.includes('About') ? 'active' : ''}">About</a></li>
+            <li><a href="/Contact/" class="nav-link ${path.includes('Contact') ? 'active' : ''}">Contact</a></li>
         `;
 
         initMegaMenuInteractivity();
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const newFooterHTML = `
             <div class="footer-top">
                 <div class="footer-col">
-                    <a href="/index.html" class="logo-link" style="margin-bottom:2rem">
+                    <a href="/" class="logo-link" style="margin-bottom:2rem">
                         <img src="/img/lo.png" alt="Hikers Horizon" style="width:40px; border-radius:50%">
                         <div class="logo-text-container">
                             <h1 style="font-size:1rem; color:#fff">HIKERS <span style="color:var(--color-accent)">HORIZON</span></h1>
@@ -201,17 +201,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div>
                     <div class="footer-col-title">Treks</div>
                     <ul class="footer-col-links">
-                        <li><a href="/Sunrise/index.html">Sunrise Treks</a></li>
-                        <li><a href="/Twodays/index.html">Two Day Treks</a></li>
-                        <li><a href="/Backpacking/index.html">Backpacking Trips</a></li>
-                        <li><a href="/Corporate/index.html">Corporate Outings</a></li>
+                        <li><a href="/Sunrise/">Sunrise Treks</a></li>
+                        <li><a href="/Twodays/">Two Day Treks</a></li>
+                        <li><a href="/Backpacking/">Backpacking Trips</a></li>
+                        <li><a href="/Corporate/">Corporate Outings</a></li>
                     </ul>
                 </div>
                 <div>
                     <div class="footer-col-title">Company</div>
                     <ul class="footer-col-links">
-                        <li><a href="/About/index.html">About Us</a></li>
-                        <li><a href="/Contact/index.html">Contact</a></li>
+                        <li><a href="/About/">About Us</a></li>
+                        <li><a href="/Contact/">Contact</a></li>
                         <li><a href="/Blogs">Blog</a></li>
                         <li><a href="/Privacy">Privacy Policy</a></li>
                     </ul>

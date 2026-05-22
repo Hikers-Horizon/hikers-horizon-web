@@ -8,6 +8,10 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{HTTP_HOST} ^www\.hikershorizon\.in [NC]
 RewriteRule ^(.*)$ https://hikershorizon.in/$1 [L,R=301]
 
+# 1c. Remove index.html from URLs for SEO (301 Redirect)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^/]+/)*index\.html\ HTTP/ [NC]
+RewriteRule ^(([^/]+/)*)index\.html$ https://hikershorizon.in/$1 [L,R=301]
+
 # 2. Node.js Internal Route Fix
 # This tells Apache: "If the URL matches these backend routes, don't append .html"
 RewriteRule ^(api/.*|admin/.*|login|signup|verify-otp|verify-email/.*|resend-otp|contact|create-order|verify-payment|health|profile/.*)/?$ - [L]
