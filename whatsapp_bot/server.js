@@ -291,6 +291,16 @@ async function processCommands(commands) {
                 }
                 console.log(`📣 Broadcast completed. Sent to ${count} customers.`);
             }
+            else if (cmd.type === 'send_otp') {
+                const { number, otp } = cmd.payload;
+                let formattedNum = number.replace(/\D/g, '');
+                if (formattedNum.length === 10) formattedNum = '91' + formattedNum;
+                formattedNum = formattedNum + '@c.us';
+
+                const message = `*HIKERS HORIZON*\nYour verification code is: *${otp}*\n\nThis code is valid for 10 minutes. Do not share it with anyone.`;
+                await client.sendMessage(formattedNum, message);
+                console.log(`🔑 Synced OTP Sent to ${formattedNum}`);
+            }
         } catch (err) {
             console.error('❌ Error processing cloud command:', err.message);
         }

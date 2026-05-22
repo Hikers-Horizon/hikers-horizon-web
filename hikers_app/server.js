@@ -309,13 +309,14 @@ app.post(['/send-mobile-otp', '/api/send-mobile-otp'], async (req, res) => {
 
         await pool.query('UPDATE users SET mobile_otp = ?, mobile_otp_expiry = ? WHERE mobile = ?', [otp, otpExpiry, mobile]);
 
-        // Call the WhatsApp Bot API
+        // Call the WhatsApp Bot API via Cloud Sync Queue
         try {
-            await axios.post('http://localhost:8083/send-otp', { number: mobile, otp: otp });
-            res.json({ message: 'OTP sent via WhatsApp' });
+            // Push the OTP command to the sync queue so the Termux bot picks it up
+            botCommandQueue.push({ type: 'send_otp', payload: { number: mobile, otp: otp } });
+            res.json({ message: 'OTP queued for WhatsApp delivery' });
         } catch (botErr) {
-            console.error('[BOT API ERROR]', botErr.message);
-            res.status(500).json({ message: 'Failed to send OTP via WhatsApp. Bot may be offline.' });
+            console.error('[BOT QUEUE ERROR]', botErr.message);
+            res.status(500).json({ message: 'Failed to queue OTP. Please try again later.' });
         }
     } catch (err) {
         console.error('[SEND MOBILE OTP ERROR]', err);
