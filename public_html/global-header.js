@@ -235,6 +235,7 @@
                     </div>
                 </li>
                 <li><a href="/Corporate/index.html" class="nav-link">Corporate</a></li>
+                <li><a href="/Blog/index.html" class="nav-link">Blog</a></li>
                 <li><a href="/About/index.html" class="nav-link">About</a></li>
                 <li><a href="/Contact/index.html" class="nav-link">Contact</a></li>
             </ul>
@@ -326,6 +327,7 @@
                 { icon: '⌂', label: 'Home', href: '/index.html' },
                 { icon: '▲', label: 'Treks', href: '/index.html#treks' },
                 { icon: '◆', label: 'Corporate', href: '/Corporate/index.html' },
+                { icon: '✎', label: 'Blog', href: '/Blog/index.html' },
                 { icon: '◎', label: 'About', href: '/About/index.html' },
                 { icon: '✉', label: 'Contact', href: '/Contact/index.html' },
             ];
