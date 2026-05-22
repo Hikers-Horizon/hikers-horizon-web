@@ -423,12 +423,18 @@ apiApp.post('/send-otp', async (req, res) => {
     
     try {
         await client.sendMessage(formattedNum, message);
-        console.log(`🔑 Sent OTP to ${formattedNum}`);
-        res.json({ success: true });
+        console.log(`🔑 Sent OTP to WhatsApp: ${formattedNum}`);
     } catch (err) {
-        console.error('❌ Failed to send OTP:', err.message);
-        res.status(500).json({ error: 'Failed to send OTP' });
+        console.error('❌ Failed to send OTP to WhatsApp:', err.message);
     }
+
+    try {
+        await sendSMS(number, otp);
+    } catch (smsErr) {
+        console.error('❌ Failed to process SMS backup delivery:', smsErr.message);
+    }
+    
+    res.json({ success: true });
 });
 
 apiApp.listen(8083, () => {
