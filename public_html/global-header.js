@@ -23,6 +23,15 @@
         document.head.appendChild(f);
     }
 
+    // Inject SEO injector globally if missing
+    if (!document.getElementById('seo-injector-js')) {
+        const seoScript = document.createElement('script');
+        seoScript.id = 'seo-injector-js';
+        seoScript.src = '/seo-injector.js';
+        seoScript.defer = true;
+        document.head.appendChild(seoScript);
+    }
+
     // Inject inline overrides to kill any leftover local header CSS
     if (!document.getElementById('gh-overrides')) {
         const s = document.createElement('style');
