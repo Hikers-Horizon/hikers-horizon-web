@@ -206,6 +206,37 @@
     </image:image>
   </url>
 
+  <url>
+    <loc>https://hikershorizon.in/Blog/Gokarna-Beach-Trek-Itinerary-from-Bangalore</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://hikershorizon.in/img/Gokarna.jpg</image:loc>
+      <image:title>Om Beach Gokarna</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://hikershorizon.in/Blog/Top-Reasons-To-Visit-Wayanad-On-A-Weekend</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://hikershorizon.in/img/wayn.jpg</image:loc>
+      <image:title>Tea Estates Wayanad</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://hikershorizon.in/Blog/Best-Corporate-Team-Outing-Destinations-Near-Bangalore</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://hikershorizon.in/img/c7.webp</image:loc>
+      <image:title>Corporate Team Outing</image:title>
+    </image:image>
+  </url>
+
   <!-- ====== LEGAL ====== -->
   <url>
     <loc>https://hikershorizon.in/Privacy/</loc>
