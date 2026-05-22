@@ -69,13 +69,26 @@ async function initDatabase() {
         username VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
-        mobile VARCHAR(20),
+        mobile VARCHAR(20) UNIQUE,
         otp VARCHAR(10),
         otp_expiry DATETIME,
+        mobile_otp VARCHAR(10),
+        mobile_otp_expiry DATETIME,
         verified TINYINT DEFAULT 0,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+    
+    // Attempt to alter existing table safely
+    try {
+        await connection.query('ALTER TABLE users ADD COLUMN mobile_otp VARCHAR(10)');
+        await connection.query('ALTER TABLE users ADD COLUMN mobile_otp_expiry DATETIME');
+    } catch (e) { /* Ignore if columns already exist */ }
+    
+    try {
+        await connection.query('ALTER TABLE users ADD UNIQUE (mobile)');
+    } catch (e) { /* Ignore if unique constraint exists or fails due to duplicates */ }
+
     console.log('✅ Users table ready');
 
     await connection.query(`
@@ -277,6 +290,61 @@ app.post(['/login', '/api/login'], async (req, res) => {
         if (!isMatch) return res.status(401).json({ message: 'Incorrect password' });
         res.json({ message: 'Login successful', username: users[0].username, email: users[0].email });
     } catch (err) { res.status(500).json({ message: 'Login error' }); }
+});
+
+// --- MOBILE LOGIN ROUTES ---
+
+app.post(['/send-mobile-otp', '/api/send-mobile-otp'], async (req, res) => {
+    const { mobile } = req.body;
+    if (!mobile) return res.status(400).json({ message: 'Mobile number required' });
+
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE mobile = ?', [mobile]);
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'Mobile number not registered. Please sign up first.' });
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
+        await pool.query('UPDATE users SET mobile_otp = ?, mobile_otp_expiry = ? WHERE mobile = ?', [otp, otpExpiry, mobile]);
+
+        // Call the WhatsApp Bot API
+        try {
+            await axios.post('http://localhost:8083/send-otp', { number: mobile, otp: otp });
+            res.json({ message: 'OTP sent via WhatsApp' });
+        } catch (botErr) {
+            console.error('[BOT API ERROR]', botErr.message);
+            res.status(500).json({ message: 'Failed to send OTP via WhatsApp. Bot may be offline.' });
+        }
+    } catch (err) {
+        console.error('[SEND MOBILE OTP ERROR]', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.post(['/verify-mobile-otp', '/api/verify-mobile-otp'], async (req, res) => {
+    const { mobile, otp } = req.body;
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE mobile = ?', [mobile]);
+        if (users.length === 0) return res.status(404).json({ message: 'User not found' });
+        
+        const user = users[0];
+        if (!user.mobile_otp || user.mobile_otp !== otp) {
+            return res.status(400).json({ message: 'Invalid OTP' });
+        }
+        if (new Date() > new Date(user.mobile_otp_expiry)) {
+            return res.status(400).json({ message: 'OTP has expired' });
+        }
+
+        // Clear OTP on success
+        await pool.query('UPDATE users SET mobile_otp = NULL, mobile_otp_expiry = NULL WHERE mobile = ?', [mobile]);
+
+        res.json({ message: 'Login successful', username: user.username, email: user.email });
+    } catch (err) {
+        console.error('[VERIFY MOBILE OTP ERROR]', err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
 
 // --- PROFILE ROUTE ---

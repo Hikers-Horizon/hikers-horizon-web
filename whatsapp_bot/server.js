@@ -326,3 +326,33 @@ async function syncWithCloud() {
 // Sync with AWS every 3 seconds
 setInterval(syncWithCloud, 3000);
 
+// --- LOCAL API SERVER FOR MAIN APP ---
+const express = require('express');
+const cors = require('cors');
+const apiApp = express();
+apiApp.use(cors());
+apiApp.use(express.json());
+
+apiApp.post('/send-otp', async (req, res) => {
+    const { number, otp } = req.body;
+    if (!number || !otp) return res.status(400).json({ error: 'Missing number or OTP' });
+    
+    let formattedNum = number.replace(/\D/g, '');
+    if (formattedNum.length === 10) formattedNum = '91' + formattedNum;
+    formattedNum = formattedNum + '@c.us';
+
+    const message = `*HIKERS HORIZON*\nYour verification code is: *${otp}*\n\nThis code is valid for 10 minutes. Do not share it with anyone.`;
+    
+    try {
+        await client.sendMessage(formattedNum, message);
+        console.log(`🔑 Sent OTP to ${formattedNum}`);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('❌ Failed to send OTP:', err.message);
+        res.status(500).json({ error: 'Failed to send OTP' });
+    }
+});
+
+apiApp.listen(8083, () => {
+    console.log('🌐 Local API Server running on port 8083');
+});

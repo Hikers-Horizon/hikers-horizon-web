@@ -222,6 +222,32 @@ main {
       font-weight: 700 !important;
     }
 
+    .login-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 5px;
+      border-radius: 12px;
+    }
+    
+    .toggle-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+    }
+
     /* Footer styles are handled globally by /auth-navigation.css?v=12 + //auth-navigation.js */
 
     @media (max-width: 768px) {
@@ -248,6 +274,12 @@ main {
   <main>
     <div class="login-container">
       <h1 class="login-title">Wanderlust</h1>
+
+      <div class="login-toggle">
+        <button id="toggleEmailBtn" class="toggle-btn active">Email</button>
+        <button id="toggleMobileBtn" class="toggle-btn">Mobile / WhatsApp</button>
+      </div>
+
       <form class="login-form" id="loginForm">
         <div class="form-group">
           <label for="email" class="form-label">Email Address</label>
@@ -263,6 +295,24 @@ main {
           </div>
         </div>
         <button type="submit" class="login-button" id="loginBtn">Authorize Access</button>
+      </form>
+
+      <form class="login-form" id="mobileLoginForm" style="display: none;">
+        <div class="form-group" id="mobileInputGroup">
+          <label for="mobile" class="form-label">Mobile Number</label>
+          <div class="input-wrapper">
+            <input type="tel" id="mobile" name="mobile" class="form-input" placeholder="Enter 10-digit number" required>
+          </div>
+        </div>
+        <div class="form-group" id="otpInputGroup" style="display: none;">
+          <label for="otp" class="form-label">Enter 6-Digit OTP</label>
+          <div class="input-wrapper">
+            <input type="text" id="otp" name="otp" class="form-input" placeholder="000000">
+          </div>
+          <p style="font-size: 0.75rem; color: var(--accent); text-align: right; margin-top: 5px;">Sent via WhatsApp</p>
+        </div>
+        <button type="button" class="login-button" id="sendOtpBtn">Send OTP</button>
+        <button type="submit" class="login-button" id="verifyOtpBtn" style="display: none;">Verify & Login</button>
       </form>
       <div class="login-links">
         <a href="forgot-password">Trouble signing in? Reset Password</a>
@@ -346,6 +396,105 @@ main {
           loginBtn.textContent = 'Authorize Access';
           loginBtn.disabled = false;
         });
+    });
+
+    // --- MOBILE LOGIN LOGIC ---
+    const toggleEmailBtn = document.getElementById('toggleEmailBtn');
+    const toggleMobileBtn = document.getElementById('toggleMobileBtn');
+    const emailForm = document.getElementById('loginForm');
+    const mobileForm = document.getElementById('mobileLoginForm');
+
+    toggleEmailBtn.addEventListener('click', () => {
+      toggleEmailBtn.classList.add('active');
+      toggleMobileBtn.classList.remove('active');
+      emailForm.style.display = 'flex';
+      mobileForm.style.display = 'none';
+    });
+
+    toggleMobileBtn.addEventListener('click', () => {
+      toggleMobileBtn.classList.add('active');
+      toggleEmailBtn.classList.remove('active');
+      mobileForm.style.display = 'flex';
+      emailForm.style.display = 'none';
+    });
+
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+    const mobileInputGroup = document.getElementById('mobileInputGroup');
+    const otpInputGroup = document.getElementById('otpInputGroup');
+    const mobileInput = document.getElementById('mobile');
+    const otpInput = document.getElementById('otp');
+
+    sendOtpBtn.addEventListener('click', async () => {
+      const mobile = mobileInput.value.trim();
+      if (!mobile) return alert('Please enter a mobile number.');
+      
+      sendOtpBtn.textContent = 'Sending...';
+      sendOtpBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/send-mobile-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          alert('OTP sent to your WhatsApp!');
+          mobileInputGroup.style.display = 'none';
+          sendOtpBtn.style.display = 'none';
+          otpInputGroup.style.display = 'block';
+          verifyOtpBtn.style.display = 'block';
+          otpInput.required = true;
+        } else {
+          alert(data.message || 'Error sending OTP');
+          sendOtpBtn.textContent = 'Send OTP';
+          sendOtpBtn.disabled = false;
+        }
+      } catch (err) {
+        alert('Network error. Please try again.');
+        sendOtpBtn.textContent = 'Send OTP';
+        sendOtpBtn.disabled = false;
+      }
+    });
+
+    mobileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const mobile = mobileInput.value.trim();
+      const otp = otpInput.value.trim();
+
+      verifyOtpBtn.textContent = 'Verifying...';
+      verifyOtpBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/verify-mobile-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile, otp })
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('userEmail', data.email);
+          localStorage.setItem('userName', data.username);
+          
+          verifyOtpBtn.textContent = 'Success!';
+          verifyOtpBtn.style.background = '#22c55e';
+          verifyOtpBtn.style.color = '#ffffff';
+
+          setTimeout(() => {
+            window.location.href = '/profile.html';
+          }, 800);
+        } else {
+          alert(data.message || 'Invalid OTP');
+          verifyOtpBtn.textContent = 'Verify & Login';
+          verifyOtpBtn.disabled = false;
+        }
+      } catch (err) {
+        alert('Network error. Please try again.');
+        verifyOtpBtn.textContent = 'Verify & Login';
+        verifyOtpBtn.disabled = false;
+      }
     });
   </script></body>
 
