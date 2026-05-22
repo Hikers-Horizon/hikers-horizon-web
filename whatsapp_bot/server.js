@@ -14,6 +14,60 @@ const { handleMessage } = require("./messageHandler");
 const { initBroadcast } = require("./broadcast"); 
 const { COMPANY_INFO } = require("./trekData");
 const { isBlacklisted, addToBlacklist, removeFromBlacklist, getBlacklist, normalizeNumber } = require("./blacklist");
+const { exec } = require('child_process');
+
+// --- Twilio SMS Backup Configuration ---
+const twilioSid = process.env.TWILIO_ACCOUNT_SID;
+const twilioToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioFrom = process.env.TWILIO_PHONE_NUMBER;
+
+let twilioClient = null;
+if (twilioSid && twilioToken) {
+    try {
+        twilioClient = require('twilio')(twilioSid, twilioToken);
+        console.log('✅ Twilio SMS Client configured successfully.');
+    } catch (e) {
+        console.error('❌ Failed to initialize Twilio client:', e.message);
+    }
+}
+
+async function sendSMS(number, otp) {
+    const cleanNum = number.replace(/\D/g, '');
+    let smsNumber = cleanNum;
+    if (smsNumber.length === 10) smsNumber = '91' + smsNumber;
+
+    const smsMessage = `HIKERS HORIZON: Your verification code is: ${otp}. This code is valid for 10 minutes.`;
+
+    // 1. Try Twilio if configured
+    if (twilioClient && twilioFrom) {
+        try {
+            const formattedTwilioNum = smsNumber.startsWith('+') ? smsNumber : '+' + smsNumber;
+            await twilioClient.messages.create({
+                body: smsMessage,
+                from: twilioFrom.replace('whatsapp:', ''), // Strip prefix if copied from whatsapp sandbox
+                to: formattedTwilioNum
+            });
+            console.log(`📱 SMS sent to ${formattedTwilioNum} via Twilio`);
+            return;
+        } catch (err) {
+            console.error('❌ Twilio SMS delivery failed, attempting Termux fallback:', err.message);
+        }
+    }
+
+    // 2. Fallback to Termux cellular SMS (Android device SIM card)
+    const escapedMsg = smsMessage.replace(/"/g, '\\"');
+    const targetNum = smsNumber.startsWith('+') ? smsNumber : '+' + smsNumber;
+    const cmd = `termux-sms-send -n ${targetNum} "${escapedMsg}"`;
+
+    exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+            console.error('❌ Termux SMS Send failed or tool not installed:', error.message);
+            return;
+        }
+        console.log(`📱 Local cellular SMS sent to ${targetNum} via Termux SIM`);
+    });
+}
+
 
 // --- LIVE LOG CAPTURE ---
 const botLogs = [];
@@ -297,9 +351,21 @@ async function processCommands(commands) {
                 if (formattedNum.length === 10) formattedNum = '91' + formattedNum;
                 formattedNum = formattedNum + '@c.us';
 
-                const message = `*HIKERS HORIZON*\nYour verification code is: *${otp}*\n\nThis code is valid for 10 minutes. Do not share it with anyone.`;
-                await client.sendMessage(formattedNum, message);
-                console.log(`🔑 Synced OTP Sent to ${formattedNum}`);
+                // Send via WhatsApp
+                try {
+                    const message = `*HIKERS HORIZON*\nYour verification code is: *${otp}*\n\nThis code is valid for 10 minutes. Do not share it with anyone.`;
+                    await client.sendMessage(formattedNum, message);
+                    console.log(`🔑 Synced OTP Sent to WhatsApp: ${formattedNum}`);
+                } catch (waErr) {
+                    console.error('❌ Failed to send OTP via WhatsApp:', waErr.message);
+                }
+
+                // Send via SMS (Twilio or Termux Cellular SIM fallback)
+                try {
+                    await sendSMS(number, otp);
+                } catch (smsErr) {
+                    console.error('❌ Failed to process SMS backup delivery:', smsErr.message);
+                }
             }
         } catch (err) {
             console.error('❌ Error processing cloud command:', err.message);
