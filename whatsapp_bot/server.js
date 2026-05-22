@@ -147,6 +147,7 @@ const isAndroid = process.platform === 'android';
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
+        headless: true,
         executablePath: isAndroid ? '/data/data/com.termux/files/usr/bin/chromium-browser' : undefined,
         args: [
             '--no-sandbox', 
@@ -156,7 +157,8 @@ const client = new Client({
             '--no-first-run',
             '--no-zygote',
             '--single-process',
-            '--disable-gpu'
+            '--disable-gpu',
+            '--headless'
         ]
     }
 });
