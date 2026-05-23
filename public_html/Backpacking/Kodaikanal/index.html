@@ -292,7 +292,7 @@
         }
 
         .itinerary-item.active .itinerary-content {
-            max-height: 800px; /* Increased to accommodate more content */
+            max-height: 3500px; /* Accommodate very long content on mobile */
             padding-bottom: 1.5rem;
             opacity: 1;
         }
@@ -631,29 +631,88 @@
             <div class="glass-card">
                 <h2 class="section-title">Kodaikanal Trek Itinerary</h2>
                 <div class="modern-list">
+                    <!-- Day 0 -->
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 0</span>
+                            <span class="itinerary-title">Overnight Bangalore to Kodaikanal Trip</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0; margin-bottom: 0.5rem;"><strong style="color: #ffffff;">Pickup Points & Travel Details</strong><br>
+                            Planning a weekend escape to Kodaikanal from Bangalore? Join our comfortable overnight journey to the Princess of Hill Stations—Kodaikanal—via private transportation with multiple convenient pickup points across the city.</p>
+                            <ul style="color: #b0b0b0; padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
+                                <li><span class="itinerary-time">08:00 PM</span>: Start from MG Road</li>
+                                <li><span class="itinerary-time">08:10 PM</span>: Next stop, Halasuru</li>
+                                <li><span class="itinerary-time">08:20 PM</span>: Assemble at Indira Nagar</li>
+                                <li><span class="itinerary-time">08:40 PM</span>: Picking up at Tin Factory</li>
+                                <li><span class="itinerary-time">09:00 PM</span>: Meet us at Marathahalli</li>
+                                <li><span class="itinerary-time">09:20 PM</span>: Join at Bellandur</li>
+                                <li><span class="itinerary-time">09:40 PM</span>: Board at Silk Board</li>
+                                <li><span class="itinerary-time">10:00 PM</span>: Last pickup at Electronic City</li>
+                            </ul>
+                            <p style="color: #b0b0b0; margin-top: 1rem;"><strong style="color: #ffffff;">Note for the entire trip:</strong> The travel time may vary depending on the <strong style="color: #ffffff;">traffic</strong> and road <strong style="color: #ffffff;">conditions</strong>. Yet, we will make <strong style="color: #ffffff;">sure</strong> that we will <strong style="color: #ffffff;">cover all the places on the itinerary</strong>.</p>
+                            <p style="color: #b0b0b0; margin-top: 1rem;">🏞️ <strong style="color: #ffffff;">Travel Distance & Duration:</strong><br>
+                            The distance from Bangalore to Kodaikanal is approximately 465 km and takes about 9 hours by road. We depart around 10 PM and reach Kodaikanal early in the morning, just in time to soak in the fresh mountain breeze and serene views.</p>
+                        </div>
+                    </div>
+
+                    <!-- Day 1 -->
                     <div class="itinerary-item">
                         <div class="itinerary-header" onclick="toggleItinerary(this)">
                             <span class="day-tag">Day 1</span>
-                            <span class="itinerary-title">Arrival & Mountain Vistas</span>
+                            <span class="itinerary-title">Caves, Sunset and Observatory!</span>
                             <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
                         <div class="itinerary-content">
-                            <p style="color: #b0b0b0;">Arrive in Kodaikanal and check into our cozy stay. Start with
-                                Coaker’s Walk for panoramic views, visit the towering Pillar Rocks, and explore the
-                                Green Valley View. Walk through the fragrant Pine Forest in the evening before a warm
-                                campfire and dinner.</p>
+                            <ul style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
+                                <li><span class="itinerary-time">09:00 AM</span>: Reach Homestay, freshen up and have breakfast <strong style="color: #ffffff;">*Self Sponsored</strong></li>
+                                <li><strong style="color: #ffffff;">Note: From the vehicle parking area, there will be a short walk to reach the stay property.</strong></li>
+                                <li><span class="itinerary-time">11:00 AM - 11:45 AM</span>: Visit <strong style="color: #ffffff;">Guna Caves</strong> and indulge in cave exploration</li>
+                                <li><span class="itinerary-time">12:00 PM - 12:45 PM</span>: Visit <strong style="color: #ffffff;">Pine Forest</strong> for a photo session</li>
+                                <li><span class="itinerary-time">01:00 PM - 01:45 PM</span>: Visit <strong style="color: #ffffff;">Moir Point</strong></li>
+                                <li><strong style="color: #ffffff;">Please note:</strong> There are <strong style="color: #ffffff;">few or no restaurants available along the route</strong>, so we recommend carrying sufficient snacks and water for the journey.</li>
+                                <li><span class="itinerary-time">02:00 PM - 03:30 PM</span>: Visit the <strong style="color: #ffffff;">Kodaikanal Solar Observatory</strong></li>
+                                <li><span class="itinerary-time">03:30 PM - 04:30 PM</span>: Have <strong style="color: #ffffff;">Lunch *Self Sponsored</strong></li>
+                                <li><span class="itinerary-time">05:00 PM - 06:30 PM</span>: Stop at the <strong style="color: #ffffff;">Upper Lake View Point</strong></li>
+                                <li><span class="itinerary-time">07:15 PM</span>: Get into the vehicle to reach the campsite and have dinner <strong style="color: #ffffff;">*Self Sponsored</strong> on the way. Enjoy the warmth, sharing stories and experiences with fellow travelers. Retire for the night.</li>
+                            </ul>
                         </div>
                     </div>
+
+                    <!-- Day 2 -->
                     <div class="itinerary-item">
                         <div class="itinerary-header" onclick="toggleItinerary(this)">
                             <span class="day-tag">Day 2</span>
-                            <span class="itinerary-title">Lakeside Serenity & Falls</span>
+                            <span class="itinerary-title">Falls, Boating and View Point!</span>
                             <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
                         <div class="itinerary-content">
-                            <p style="color: #b0b0b0;">Morning boating session at Kodaikanal Lake. Visit the refreshing
-                                Silver Cascade and Bear Shola Falls. Relax in the colorful Bryant Park before starting
-                                the return journey to Bangalore.</p>
+                            <ul style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
+                                <li><span class="itinerary-time">05:00 AM - 05:30 AM</span>: Wake up call and freshen up</li>
+                                <li><span class="itinerary-time">05:30 AM - 08:00 AM</span>: Head to <strong style="color: #ffffff;">Dolphin Nose</strong> by <strong style="color: #ffffff;">Walk (1KM)</strong></li>
+                                <li><span class="itinerary-time">08:00 AM - 10:00 AM</span>: Head back to homestay, freshen up, checkout of homestay and have breakfast <strong style="color: #ffffff;">*Self Sponsored</strong> on the way</li>
+                                <li><span class="itinerary-time">10:00 AM - 12:00 PM</span>: Visit the <strong style="color: #ffffff;">Coakers Walk</strong></li>
+                                <li><span class="itinerary-time">12:00 PM - 02:00 PM</span>: Visit the <strong style="color: #ffffff;">Kodaikanal Lake</strong> for boating <strong style="color: #ffffff;">*Self Sponsored</strong></li>
+                                <li><span class="itinerary-time">02:00 PM - 03:00 PM</span>: Have <strong style="color: #ffffff;">Lunch *Self Sponsored</strong></li>
+                                <li><span class="itinerary-time">04:00 PM - 05:30 PM</span>: Visit the <strong style="color: #ffffff;">Silver Cascade Falls</strong></li>
+                                <li><span class="itinerary-time">05:30 PM</span>: Depart to Bangalore, have dinner <strong style="color: #ffffff;">*Self Sponsored</strong> on the way</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Day 3 -->
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 3</span>
+                            <span class="itinerary-title">Back to Bangalore</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <ul style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
+                                <li><span class="itinerary-time">05:00 AM</span>: <strong style="color: #ffffff;">Arrive in Bangalore. The drop-off points will be the same as the pickup points.</strong></li>
+                            </ul>
+                            <p style="color: #b0b0b0; margin-top: 1rem;">Please bear in mind that this itinerary is subject to change based on weather conditions and other variables. Furthermore, the timings provided are approximate and could vary depending on the group's pace.</p>
                         </div>
                     </div>
                 </div>
