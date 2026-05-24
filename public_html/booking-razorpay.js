@@ -14,6 +14,7 @@ const BookingEngine = (() => {
   let totalCost = 0;
   let perHead = 0;
   let userEmail = null;
+  let isGuestMode = false;
 
   // ——————— Helpers ———————
   function $(sel) { return document.querySelector(sel); }
@@ -34,8 +35,12 @@ const BookingEngine = (() => {
   }
 
   function showLoginGate() {
+    // Store current URL so we can redirect back after login
+    sessionStorage.setItem('postLoginRedirect', window.location.href);
+
     const overlay = document.createElement('div');
     overlay.className = 'login-gate';
+    overlay.id = 'login-gate-overlay';
     overlay.innerHTML = `
       <div class="login-gate-card">
         <div class="gate-icon">
@@ -44,14 +49,26 @@ const BookingEngine = (() => {
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
         </div>
-        <h2>Login Required</h2>
-        <p>Your next adventure is just a login away. Sign in to your Hikers Horizon account to continue.</p>
-        <a href="/login.html" class="btn-login">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          Secure Login
-        </a>
+        <h2>Book Your Trek</h2>
+        <p>Choose how you would like to proceed with your booking. Log in to your Hikers Horizon account for a faster checkout, or book without logging in.</p>
+        <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+          <a href="/login.html" class="btn-login" style="margin-bottom: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0.5rem;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Book with Login
+          </a>
+          <button class="btn-guest" id="btnBookGuest">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Book without Login
+          </button>
+        </div>
       </div>`;
     document.body.appendChild(overlay);
+
+    overlay.querySelector('#btnBookGuest').addEventListener('click', () => {
+      overlay.remove();
+      isGuestMode = true;
+      startBookingFlow();
+    });
   }
 
   // ——————— Particles ———————
@@ -141,6 +158,18 @@ const BookingEngine = (() => {
     
     if (!name.value.trim()) { showToast('Please enter your full name', 'error'); name.focus(); return false; }
     if (!mobile.value.trim() || !/^\d{10,15}$/.test(mobile.value)) { showToast('Enter a valid mobile number (10-15 digits)', 'error'); mobile.focus(); return false; }
+    
+    if (isGuestMode) {
+      const emailInput = $('#displayEmail');
+      const emailVal = emailInput.value.trim();
+      if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+        showToast('Please enter a valid email address', 'error');
+        emailInput.focus();
+        return false;
+      }
+      userEmail = emailVal;
+    }
+
     if (!date.value) { showToast('Please select a trek date', 'error'); date.focus(); return false; }
     
     // Validate date is in the future
@@ -333,7 +362,7 @@ const BookingEngine = (() => {
 
         <div class="receipt-actions">
           <button class="btn btn-download" id="downloadReceiptBtn">📥 Save PDF</button>
-          <button class="btn btn-done" id="doneBtn">Adventure Awaits →</button>
+          <button class="btn btn-done" id="doneBtn">${isGuestMode ? 'Explore More Adventures' : 'Adventure Awaits →'}</button>
         </div>
       </div>`;
 
@@ -341,7 +370,11 @@ const BookingEngine = (() => {
 
     overlay.querySelector('#doneBtn').addEventListener('click', () => {
       document.body.style.overflow = '';
-      window.location.href = '/profile.html';
+      if (isGuestMode) {
+        window.location.href = '/index.html';
+      } else {
+        window.location.href = '/profile.html';
+      }
     });
 
     overlay.querySelector('#downloadReceiptBtn').addEventListener('click', () => {
@@ -471,7 +504,7 @@ const BookingEngine = (() => {
   function buildForm(container) {
     const emailField = `<div class="form-group">
       <label><span class="label-icon">📧</span> Email</label>
-      <input type="email" id="displayEmail" value="${userEmail}" readonly>
+      <input type="email" id="displayEmail" value="${userEmail || ''}" ${userEmail ? 'readonly' : ''} placeholder="explorer@example.com">
     </div>`;
 
     // Pricing-specific fields
@@ -594,8 +627,16 @@ const BookingEngine = (() => {
   function init(cfg) {
     config = cfg;
 
-    if (!checkLogin()) return;
+    userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+      showLoginGate();
+    } else {
+      isGuestMode = false;
+      startBookingFlow();
+    }
+  }
 
+  function startBookingFlow() {
     initParticles();
     setMinDate();
 

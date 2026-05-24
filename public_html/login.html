@@ -386,7 +386,13 @@ main {
             loginBtn.style.color = '#ffffff';
 
             setTimeout(() => {
-              window.location.href = '/profile.html';
+              const redir = sessionStorage.getItem('postLoginRedirect');
+              if (redir) {
+                sessionStorage.removeItem('postLoginRedirect');
+                window.location.href = redir;
+              } else {
+                window.location.href = '/profile.html';
+              }
             }, 800);
           }
         })
@@ -483,7 +489,13 @@ main {
           verifyOtpBtn.style.color = '#ffffff';
 
           setTimeout(() => {
-            window.location.href = '/profile.html';
+            const redir = sessionStorage.getItem('postLoginRedirect');
+            if (redir) {
+              sessionStorage.removeItem('postLoginRedirect');
+              window.location.href = redir;
+            } else {
+              window.location.href = '/profile.html';
+            }
           }, 800);
         } else {
           alert(data.message || 'Invalid OTP');
