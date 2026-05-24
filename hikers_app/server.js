@@ -279,6 +279,26 @@ app.post(['/signup', '/api/signup'], async (req, res) => {
     } catch (err) { res.status(500).json({ message: 'Signup error' }); }
 });
 
+app.post(['/verify-otp', '/api/verify-otp'], async (req, res) => {
+    const { email, otp } = req.body;
+    const lowerEmail = email.toLowerCase().trim();
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [lowerEmail]);
+        if (users.length === 0) return res.status(404).json({ message: 'User not found' });
+        
+        const user = users[0];
+        if (user.verified) return res.status(400).json({ message: 'User already verified' });
+        if (!user.otp || user.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
+        if (new Date() > new Date(user.otp_expiry)) return res.status(400).json({ message: 'OTP has expired' });
+
+        await pool.query('UPDATE users SET verified = 1, otp = NULL, otp_expiry = NULL WHERE email = ?', [lowerEmail]);
+        res.json({ message: 'Verification successful' });
+    } catch (err) { 
+        console.error('[VERIFY OTP ERROR]', err);
+        res.status(500).json({ message: 'Verification error' }); 
+    }
+});
+
 app.post(['/login', '/api/login'], async (req, res) => {
     const { email, password } = req.body;
     const lowerEmail = email.toLowerCase().trim();
