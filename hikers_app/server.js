@@ -561,6 +561,22 @@ app.post('/api/bot/sync', (req, res) => {
 const cpanelPath = path.join(__dirname, '..', 'public_html');
 const localPath = path.join(__dirname, 'public');
 const publicDir = fs.existsSync(cpanelPath) ? cpanelPath : localPath;
+
+// --- MULTI-DOMAIN ROUTING FOR GOKARNA CAMPAIGNS ---
+// Serves Gokarna beach trek page as the homepage for gokarn.online and gokarnabeachtrek.in
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.includes('gokarn.online') || host.includes('gokarnabeachtrek.in')) {
+    if (req.path === '/' || req.path === '/index.html') {
+      return res.sendFile(path.join(publicDir, 'Twodays', 'Gokarna', 'index.html'));
+    }
+    if (req.path === '/booking' || req.path === '/booking-gokarna' || req.path === '/booking-gokarna.html') {
+      return res.sendFile(path.join(publicDir, 'booking-gokarna.html'));
+    }
+  }
+  next();
+});
+
 app.use(express.static(publicDir));
 
 // --- ADMIN PAGE ROUTES ---
