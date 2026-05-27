@@ -577,6 +577,41 @@ app.use((req, res, next) => {
   next();
 });
 
+// Dynamic robots.txt and sitemap.xml for campaigns
+app.get('/robots.txt', (req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.includes('gokarn.online') || host.includes('gokarnabeachtrek.in')) {
+    const domain = host.includes('gokarn.online') ? 'gokarn.online' : 'gokarnabeachtrek.in';
+    res.type('text/plain');
+    return res.send(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /admin/\n\nSitemap: https://${domain}/sitemap.xml`);
+  }
+  next();
+});
+
+app.get('/sitemap.xml', (req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.includes('gokarn.online') || host.includes('gokarnabeachtrek.in')) {
+    const domain = host.includes('gokarn.online') ? 'gokarn.online' : 'gokarnabeachtrek.in';
+    res.type('application/xml');
+    return res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://${domain}/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://${domain}/booking</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>`);
+  }
+  next();
+});
+
 app.use(express.static(publicDir));
 
 // --- ADMIN PAGE ROUTES ---

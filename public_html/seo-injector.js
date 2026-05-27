@@ -3,7 +3,7 @@
 //  Auto-injects structured data, OG tags, and meta for all pages
 // ══════════════════════════════════════════════════════════
 (function() {
-  const DOMAIN = 'https://hikershorizon.in';
+  const DOMAIN = window.location.origin;
   const path = window.location.pathname;
   const head = document.head;
 
@@ -145,13 +145,54 @@
   };
 
   // ── Normalize path ──
-  const cleanPath = path.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
+  let cleanPath = path.replace(/\/index\.html$/, '').replace(/\/$/, '') || '/';
+
+  // ── Gokarna domain campaign support ──
+  const hostname = window.location.hostname;
+  const isGokarnaDomain = hostname.includes('gokarn.online') || hostname.includes('gokarnabeachtrek.in');
+  if (isGokarnaDomain) {
+    if (cleanPath === '/' || cleanPath === '/index') {
+      cleanPath = '/Twodays/Gokarna';
+    }
+  }
 
   // ── Find matching trek ──
   const trek = trekSEO[cleanPath];
-  if (!trek) return; // Not a trek page, skip
 
-  // ── 1. Inject missing OG & Twitter meta ──
+  // ── Determine correct URL for canonical & meta ──
+  const fullUrl = isGokarnaDomain && (path === '/' || path === '/index.html') ? DOMAIN + '/' : DOMAIN + path;
+
+  // ── 1. Inject or Update canonical link (Crucial for multi-domain campaign SEO) ──
+  let canonicalLink = document.querySelector('link[rel="canonical"]');
+  if (!canonicalLink) {
+    canonicalLink = document.createElement('link');
+    canonicalLink.rel = 'canonical';
+    head.appendChild(canonicalLink);
+  }
+  canonicalLink.href = fullUrl;
+
+  // If not a trek page, we can still set basic OG meta but stop before structured data
+  if (!trek) {
+    // Inject default meta for non-trek pages if they are missing
+    function addPageMeta(prop, content, isProperty) {
+      if (document.querySelector(`meta[${isProperty ? 'property' : 'name'}="${prop}"]`)) return;
+      const meta = document.createElement('meta');
+      meta.setAttribute(isProperty ? 'property' : 'name', prop);
+      meta.content = content;
+      head.appendChild(meta);
+    }
+    
+    const pageTitle = document.title || 'Hikers Horizon | Premier Trekking & Adventure Trips';
+    addPageMeta('robots', 'index, follow', false);
+    addPageMeta('og:type', 'website', true);
+    addPageMeta('og:url', fullUrl, true);
+    addPageMeta('og:title', pageTitle, true);
+    addPageMeta('og:image', DOMAIN + '/img/lo.png', true);
+    addPageMeta('twitter:card', 'summary_large_image', false);
+    return; // Exit early since we don't have trek structured data
+  }
+
+  // ── 2. Inject missing OG & Twitter meta ──
   function addMeta(prop, content, isProperty) {
     if (document.querySelector(`meta[${isProperty ? 'property' : 'name'}="${prop}"]`)) return;
     const meta = document.createElement('meta');
@@ -159,8 +200,6 @@
     meta.content = content;
     head.appendChild(meta);
   }
-
-  const fullUrl = DOMAIN + cleanPath;
 
   addMeta('robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1', false);
   addMeta('author', 'Hikers Horizon', false);
@@ -175,14 +214,6 @@
   addMeta('twitter:title', trek.name + ' | Hikers Horizon', false);
   addMeta('twitter:description', trek.desc, false);
   addMeta('twitter:image', DOMAIN + trek.image, false);
-
-  // ── 2. Inject canonical if missing ──
-  if (!document.querySelector('link[rel="canonical"]')) {
-    const link = document.createElement('link');
-    link.rel = 'canonical';
-    link.href = fullUrl;
-    head.appendChild(link);
-  }
 
   // ── 3. Enhance title if too short ──
   if (document.title && !document.title.includes('Hikers Horizon')) {
