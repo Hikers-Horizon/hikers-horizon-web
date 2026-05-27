@@ -622,9 +622,22 @@ app.get(['/admin', '/admin-dashboard'], (req, res) => {
 // --- EXTENSION-LESS ROUTING (Wildcard) ---
 app.get('*', (req, res, next) => {
   if (req.path.includes('.') || req.path === '/') return next();
-  const cleanPath = req.path.startsWith('/') ? req.path.slice(1) : req.path;
+  
+  // Strip leading/trailing slashes for clean file system checks
+  const cleanPath = req.path.replace(/^\/+|\/+$/g, '');
+  
+  // 1. Direct HTML file check (e.g., about.html for /About)
   const htmlPath = path.join(publicDir, `${cleanPath}.html`);
-  if (fs.existsSync(htmlPath)) return res.sendFile(htmlPath);
+  if (fs.existsSync(htmlPath) && !fs.lstatSync(htmlPath).isDirectory()) {
+    return res.sendFile(htmlPath);
+  }
+  
+  // 2. Directory with index.html check (e.g., Sunrise/Skandagiri/index.html for /Sunrise/Skandagiri)
+  const indexPath = path.join(publicDir, cleanPath, 'index.html');
+  if (fs.existsSync(indexPath) && !fs.lstatSync(indexPath).isDirectory()) {
+    return res.sendFile(indexPath);
+  }
+  
   next();
 });
 
