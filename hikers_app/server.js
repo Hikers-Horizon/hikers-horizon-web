@@ -594,18 +594,45 @@ app.get('/sitemap.xml', (req, res, next) => {
     const domain = host.includes('gokarn.online') ? 'gokarn.online' : 'gokarnabeachtrek.in';
     res.type('application/xml');
     return res.send(`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://${domain}/</loc>
     <lastmod>2026-05-27</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://${domain}/img/gokarna1.jpg</image:loc>
+      <image:title>Gokarna beach trek - Hikers Horizon</image:title>
+      <image:caption>Trekkers walking on Om Beach during Gokarna coastal trail from Bangalore</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://${domain}/img/gokarna2.jpg</image:loc>
+      <image:title>Half Moon Beach Gokarna</image:title>
+      <image:caption>Hidden beach discovered during 2-day Gokarna trekking expedition</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://${domain}/img/gokarna3.jpg</image:loc>
+      <image:title>Sunset at Paradise Beach Gokarna</image:title>
+      <image:caption>Scenic view during Gokarna coastal trek</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://${domain}/img/gokarna4.jpg</image:loc>
+      <image:title>Gokarna beach camping and trek group</image:title>
+      <image:caption>Hikers Horizon Gokarna beach camping and trek group from Bangalore</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://${domain}/booking</loc>
     <lastmod>2026-05-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://${domain}/Blog/Gokarna-Beach-Trek-Itinerary-from-Bangalore</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>`);
   }

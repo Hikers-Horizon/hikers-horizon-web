@@ -4,13 +4,13 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# 1b. Redirect www to non-www (SEO canonical)
-RewriteCond %{HTTP_HOST} ^www\.hikershorizon\.in [NC]
-RewriteRule ^(.*)$ https://hikershorizon.in/$1 [L,R=301]
+# 1b. Generic Redirect www to non-www for all domains (SEO canonical)
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-# 1c. Remove index.html from URLs for SEO (301 Redirect)
+# 1c. Remove index.html from URLs dynamically for SEO (301 Redirect)
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^/]+/)*index\.html\ HTTP/ [NC]
-RewriteRule ^(([^/]+/)*)index\.html$ https://hikershorizon.in/$1 [L,R=301]
+RewriteRule ^(([^/]+/)*)index\.html$ https://%{HTTP_HOST}/$1 [L,R=301]
 
 # 2. Node.js Internal Route Fix
 # This tells Apache: "If the URL matches these backend routes, don't append .html"

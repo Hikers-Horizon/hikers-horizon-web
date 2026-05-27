@@ -95,10 +95,10 @@
     },
     '/Twodays/Gokarna': {
       name: 'Gokarna Beach Trek',
-      desc: 'Trek across pristine beaches and rugged coastline in Gokarna. 2-day coastal adventure from Bangalore. Book from ₹3499.',
-      price: '3499', altitude: 'Sea level', difficulty: 'Easy', distance: '16 km',
-      image: '/img/BP.webp', duration: '2 days',
-      keywords: 'Gokarna beach trek, Gokarna from Bangalore, coastal trek Karnataka, beach camping Gokarna, 2 day trip'
+      desc: 'Trek 5 pristine beaches of Gokarna — Paradise, Half Moon, Om, Kudle & Gokarna Beach. 2-day coastal trek from Bangalore with beach camping & Murudeshwar visit. Book at ₹3,499.',
+      price: '3499', altitude: 'Sea level', difficulty: 'Easy-Moderate', distance: '10 km',
+      image: '/img/gokarna4.jpg', duration: '2 days',
+      keywords: 'gokarna trek, gokarna beach trek, gokarna beach trek from bangalore, gokarna trekking, gokarna trek from bangalore, gokarna coastal trek, gokarna trip from bangalore, gokarna beach trek booking, gokarna beach trek itinerary, gokarna om beach trek, gokarna half moon beach trek, gokarna paradise beach trek, gokarna murudeshwar trip, gokarna trek package price, gokarna beach camping trek, best gokarna trek organizer, gokarna 2 day trip from bangalore, weekend gokarna trip'
     },
     '/Backpacking/Wayanad': {
       name: 'Wayanad Backpacking Trip',
