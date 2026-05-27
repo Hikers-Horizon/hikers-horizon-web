@@ -228,6 +228,41 @@ main {
       font-size: 0.95rem;
     }
 
+    .msg-cell {
+      max-width: 300px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .msg-cell .msg-preview {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.3s ease;
+    }
+
+    .msg-cell.expanded .msg-preview {
+      display: block;
+      -webkit-line-clamp: unset;
+      overflow: visible;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .msg-cell .msg-hint {
+      font-size: 0.7rem;
+      color: #888;
+      margin-top: 4px;
+      transition: opacity 0.2s;
+    }
+
+    .msg-cell.expanded .msg-hint {
+      opacity: 0;
+    }
+
     tr:hover {
       background: rgba(255, 255, 255, 0.02);
     }
@@ -813,16 +848,22 @@ main {
           if (queries.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="no-data">No queries found</td></tr>';
           } else {
-            tbody.innerHTML = queries.map(q => `
+            tbody.innerHTML = queries.map(q => {
+              const safeMsg = q.message.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+              const isLong = q.message.length > 80;
+              return `
               <tr>
                 <td>${q.name}</td>
                 <td>${q.email}</td>
                 <td>${q.phone || '-'}</td>
                 <td>${q.subject}</td>
-                <td title="${q.message}">${q.message.substring(0, 50)}${q.message.length > 50 ? '...' : ''}</td>
+                <td class="msg-cell" onclick="this.classList.toggle('expanded')">
+                  <div class="msg-preview">${safeMsg}</div>
+                  ${isLong ? '<div class="msg-hint">▸ Click to expand</div>' : ''}
+                </td>
                 <td>${new Date(q.createdAt).toLocaleDateString()} ${new Date(q.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
-              </tr>
-            `).join('');
+              </tr>`;
+            }).join('');
           }
         })
         .catch(err => {
