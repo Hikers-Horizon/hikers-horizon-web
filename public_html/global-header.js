@@ -247,12 +247,21 @@
 
     // ─── 3. Inject Header ───
     function injectHeader() {
-        let el = document.getElementById('global-header') || document.querySelector('header');
+        // Robust safeguard: Find all header elements and ensure only one exists to prevent duplicate rendering
+        const allHeaders = Array.from(document.querySelectorAll('header, .header'));
+        let el = document.getElementById('global-header') || allHeaders.find(h => h.id === 'global-header') || allHeaders[0];
+        
         if (!el) {
             el = document.createElement('header');
             el.id = 'global-header';
             document.body.prepend(el);
+        } else {
+            // Keep the main element, remove all other conflicting headers
+            allHeaders.forEach(h => {
+                if (h !== el) h.remove();
+            });
         }
+        
         el.className = 'header';
         el.innerHTML = headerHTML;
         initLogic();
