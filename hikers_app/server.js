@@ -101,12 +101,21 @@ async function initDatabase() {
         bookingDate DATE,
         participants INT,
         totalCost DECIMAL(10,2),
+        amountPaid DECIMAL(10,2) DEFAULT 0,
+        paymentStatus VARCHAR(50) DEFAULT 'fully_paid',
         razorpay_order_id VARCHAR(255),
         razorpay_payment_id VARCHAR(255),
         razorpay_signature VARCHAR(255),
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Safely add columns if the table already exists
+    try {
+        await connection.query('ALTER TABLE bookings ADD COLUMN amountPaid DECIMAL(10,2) DEFAULT 0');
+        await connection.query("ALTER TABLE bookings ADD COLUMN paymentStatus VARCHAR(50) DEFAULT 'fully_paid'");
+    } catch (e) { /* Ignore if columns already exist */ }
+
     console.log('✅ Bookings table ready');
 
     await connection.query(`
@@ -179,12 +188,14 @@ const transporter = nodemailer.createTransport({
 
 // --- BOOKING & PAYMENT ROUTES ---
 
-// 1. Create Razorpay Order
+// 1. Create Razorpay Order (Optional 30% advance payment or full payment)
 app.post(['/create-order', '/api/create-order'], async (req, res) => {
-    const { amount } = req.body;
+    const { amount, paymentMode } = req.body;
     try {
+        // Calculate amount to pay online (100% or 30%)
+        const chargeAmount = paymentMode === 'full' ? amount : Math.round(amount * 0.30);
         const options = {
-            amount: Math.round(amount * 100),
+            amount: Math.round(chargeAmount * 100), // in paise
             currency: 'INR',
             receipt: `rcpt_${Date.now()}`,
         };
@@ -199,8 +210,6 @@ app.post(['/create-order', '/api/create-order'], async (req, res) => {
         res.status(500).send('Error creating Razorpay order');
     }
 });
-
-// 2. Verify Payment & Save Booking
 app.post(['/verify-payment', '/api/verify-payment'], async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingData } = req.body;
     
@@ -214,27 +223,46 @@ app.post(['/verify-payment', '/api/verify-payment'], async (req, res) => {
 
     if (generatedSignature === razorpay_signature) {
         try {
+            // Read paymentMode (default to 'advance' for backward compatibility)
+            const paymentMode = bookingData.paymentMode || 'advance';
+            const amountPaid = paymentMode === 'full' ? Number(bookingData.totalCost) : Math.round(bookingData.totalCost * 0.30);
+            const balanceDue = bookingData.totalCost - amountPaid;
+            const paymentStatus = paymentMode === 'full' ? 'fully_paid' : 'partially_paid';
+
             // Save to database
             const [result] = await pool.query(
                 `INSERT INTO bookings (
                     userEmail, fullName, mobileNumber, trekName, bookingDate, 
-                    participants, totalCost, razorpay_order_id, razorpay_payment_id, razorpay_signature
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    participants, totalCost, amountPaid, paymentStatus, razorpay_order_id, razorpay_payment_id, razorpay_signature
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     normalizedEmail, bookingData.fullName, bookingData.mobileNumber, 
                     bookingData.trekName, bookingData.bookingDate, bookingData.participants, 
-                    bookingData.totalCost, razorpay_order_id, razorpay_payment_id, razorpay_signature
+                    bookingData.totalCost, amountPaid, paymentStatus, razorpay_order_id, razorpay_payment_id, razorpay_signature
                 ]
             );
 
             // Send CONFIRMATION EMAIL
-            const emailHtml = `
+            const emailHtml = paymentMode === 'full' ? `
             <div style="font-family: sans-serif; padding: 20px; background: #0f172a; color: white; border-radius: 10px;">
                 <h2 style="color: #FFD700;">HIKERS HORIZON — BOOKING CONFIRMED</h2>
-                <p>Hi ${bookingData.fullName}, your booking for <b>${bookingData.trekName}</b> is successful!</p>
+                <p>Hi ${bookingData.fullName}, your booking for <b>${bookingData.trekName}</b> is successful! We have received your full payment.</p>
                 <p><b>Date:</b> ${new Date(bookingData.bookingDate).toDateString()}</p>
                 <p><b>Participants:</b> ${bookingData.participants}</p>
-                <p><b>Total Paid:</b> ₹${bookingData.totalCost}</p>
+                <p><b>Total Cost:</b> ₹${bookingData.totalCost}</p>
+                <p><b>Amount Paid (Full):</b> ₹${amountPaid}</p>
+                <p style="font-size: 16px; color: #55FF55; font-weight: bold;"><b>Remaining Balance:</b> ₹0 (Fully Paid)</p>
+                <hr style="border: 0; border-top: 1px solid #1e293b;">
+                <p style="font-size: 12px; color: #94a3b8;">Payment ID: ${razorpay_payment_id}</p>
+            </div>` : `
+            <div style="font-family: sans-serif; padding: 20px; background: #0f172a; color: white; border-radius: 10px;">
+                <h2 style="color: #FFD700;">HIKERS HORIZON — BOOKING CONFIRMED (30% ADVANCE PAID)</h2>
+                <p>Hi ${bookingData.fullName}, your booking for <b>${bookingData.trekName}</b> is successful with a 30% advance payment!</p>
+                <p><b>Date:</b> ${new Date(bookingData.bookingDate).toDateString()}</p>
+                <p><b>Participants:</b> ${bookingData.participants}</p>
+                <p><b>Total Cost:</b> ₹${bookingData.totalCost}</p>
+                <p><b>Advance Paid (30%):</b> ₹${amountPaid}</p>
+                <p style="font-size: 16px; color: #FFD700; font-weight: bold;"><b>Remaining Balance (Pay on Departure):</b> ₹${balanceDue}</p>
                 <hr style="border: 0; border-top: 1px solid #1e293b;">
                 <p style="font-size: 12px; color: #94a3b8;">Payment ID: ${razorpay_payment_id}</p>
             </div>`;
@@ -439,11 +467,11 @@ app.get(['/admin/stats', '/api/admin/stats'], async (req, res) => {
         const [[{ tBookings }]] = await pool.query('SELECT COUNT(*) as tBookings FROM bookings');
         const [[{ tQueries }]] = await pool.query('SELECT COUNT(*) as tQueries FROM queries');
         
-        // Calculate Revenues
-        const [[{ totalRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as totalRevenue FROM bookings');
-        const [[{ todayRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as todayRevenue FROM bookings WHERE DATE(createdAt) = CURDATE()');
-        const [[{ weekRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as weekRevenue FROM bookings WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1)');
-        const [[{ monthRevenue }]] = await pool.query('SELECT COALESCE(SUM(totalCost), 0) as monthRevenue FROM bookings WHERE MONTH(createdAt) = MONTH(CURDATE()) AND YEAR(createdAt) = YEAR(CURDATE())');
+        // Calculate Collected Revenues (based on actual amountPaid)
+        const [[{ totalRevenue }]] = await pool.query('SELECT COALESCE(SUM(amountPaid), 0) as totalRevenue FROM bookings');
+        const [[{ todayRevenue }]] = await pool.query('SELECT COALESCE(SUM(amountPaid), 0) as todayRevenue FROM bookings WHERE DATE(createdAt) = CURDATE()');
+        const [[{ weekRevenue }]] = await pool.query('SELECT COALESCE(SUM(amountPaid), 0) as weekRevenue FROM bookings WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1)');
+        const [[{ monthRevenue }]] = await pool.query('SELECT COALESCE(SUM(amountPaid), 0) as monthRevenue FROM bookings WHERE MONTH(createdAt) = MONTH(CURDATE()) AND YEAR(createdAt) = YEAR(CURDATE())');
         
         res.json({ 
             totalUsers: tUsers, 
@@ -489,6 +517,27 @@ app.get(['/admin/bookings', '/api/admin/bookings'], async (req, res) => {
     } catch (err) { 
         console.error('[BOOKINGS ERROR]', err.message);
         res.status(500).json({ message: 'Bookings error' }); 
+    }
+});
+
+// Settle partial payment for a booking
+app.post(['/admin/bookings/:id/settle', '/api/admin/bookings/:id/settle'], async (req, res) => {
+    if (dbStatus !== 'UP') return res.status(503).json({ message: 'Database offline' });
+    const { id } = req.params;
+    try {
+        // Fetch booking to verify it exists
+        const [booking] = await pool.query('SELECT totalCost FROM bookings WHERE id = ?', [id]);
+        if (booking.length === 0) return res.status(404).json({ message: 'Booking not found' });
+        
+        // Update to fully paid and update amountPaid to match totalCost
+        await pool.query(
+            "UPDATE bookings SET paymentStatus = 'fully_paid', amountPaid = totalCost WHERE id = ?",
+            [id]
+        );
+        res.json({ message: 'Booking settled successfully' });
+    } catch (err) {
+        console.error('[SETTLE BOOKING ERROR]', err.message);
+        res.status(500).json({ message: 'Error settling booking' });
     }
 });
 

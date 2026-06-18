@@ -632,10 +632,14 @@ main {
               <th>Date</th>
               <th>Participants</th>
               <th>Total Cost</th>
+              <th>Amount Paid</th>
+              <th>Balance Due</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="bookingsTableBody">
-            <tr><td colspan="6" class="no-data">Loading bookings...</td></tr>
+            <tr><td colspan="10" class="no-data">Loading bookings...</td></tr>
           </tbody>
         </table>
       </div>
@@ -773,18 +777,42 @@ main {
     function renderBookings(bookings) {
       const tbody = document.getElementById('bookingsTableBody');
       if (bookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="no-data">No bookings found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="no-data">No bookings found</td></tr>';
       } else {
-        tbody.innerHTML = bookings.map(booking => `
-          <tr>
-            <td>${booking.userEmail}</td>
-            <td>${booking.mobileNumber || '-'}</td>
-            <td>${booking.trekName}</td>
-            <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
-            <td>${booking.participants}</td>
-            <td>₹${booking.totalCost.toLocaleString('en-IN')}</td>
-          </tr>
-        `).join('');
+        tbody.innerHTML = bookings.map(booking => {
+          const paid = booking.amountPaid !== undefined && booking.amountPaid !== null ? Number(booking.amountPaid) : booking.totalCost;
+          const balance = booking.totalCost - paid;
+          const status = booking.paymentStatus || 'fully_paid';
+          
+          let statusBadge = '';
+          if (status === 'fully_paid') {
+            statusBadge = `<span class="badge verified" style="background: rgba(0, 255, 0, 0.15); color: #55FF55; border: 1px solid rgba(0, 255, 0, 0.25);">Fully Paid</span>`;
+          } else {
+            statusBadge = `<span class="badge unverified" style="background: rgba(255, 165, 0, 0.15); color: #FFA500; border: 1px solid rgba(255, 165, 0, 0.25);">30% Paid</span>`;
+          }
+
+          let actionBtn = '';
+          if (status === 'partially_paid') {
+            actionBtn = `<button class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; border-radius: 6px; width: auto; background: #FFD700; color: #000; font-family:'Montserrat',sans-serif; font-weight:700;" onclick="settleBooking(${booking.id})">Settle</button>`;
+          } else {
+            actionBtn = `<span style="font-size: 0.85rem; color: #888;">-</span>`;
+          }
+
+          return `
+            <tr>
+              <td>${booking.userEmail}</td>
+              <td>${booking.mobileNumber || '-'}</td>
+              <td>${booking.trekName}</td>
+              <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+              <td>${booking.participants}</td>
+              <td>₹${booking.totalCost.toLocaleString('en-IN')}</td>
+              <td>₹${paid.toLocaleString('en-IN')}</td>
+              <td style="color: ${balance > 0 ? '#FFA500' : '#55FF55'}; font-weight: ${balance > 0 ? '700' : 'normal'};">₹${balance.toLocaleString('en-IN')}</td>
+              <td>${statusBadge}</td>
+              <td>${actionBtn}</td>
+            </tr>
+          `;
+        }).join('');
       }
     }
 
@@ -821,7 +849,7 @@ main {
         })
         .then(bookings => {
           if (!Array.isArray(bookings)) {
-            tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading bookings.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="10" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading bookings.</td></tr>`;
             return;
           }
           allBookingsData = bookings;
@@ -829,8 +857,27 @@ main {
         })
         .catch(err => {
           console.error('Error loading bookings:', err);
-          tbody.innerHTML = `<tr><td colspan="6" class="no-data" style="color: #FF5555;">⚠️ Failed to connect to server.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="10" class="no-data" style="color: #FF5555;">⚠️ Failed to connect to server.</td></tr>`;
         });
+    }
+
+    async function settleBooking(id) {
+      if (!confirm("Are you sure you want to mark this booking as fully paid and settled?")) return;
+      try {
+        const response = await fetch(`/api/admin/bookings/${id}/settle`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+          alert('Booking settled successfully!');
+          loadDashboardData();
+        } else {
+          alert('Failed to settle booking.');
+        }
+      } catch (err) {
+        console.error('Error settling booking:', err);
+        alert('Error connecting to server.');
+      }
     }
 
     function loadQueries() {

@@ -15,6 +15,7 @@ const BookingEngine = (() => {
   let perHead = 0;
   let userEmail = null;
   let isGuestMode = false;
+  let paymentMode = 'advance'; // 'advance' or 'full'
 
   // ——————— Helpers ———————
   function $(sel) { return document.querySelector(sel); }
@@ -122,14 +123,36 @@ const BookingEngine = (() => {
     }
 
     totalCost = perHead * participants;
+    const advanceCost = Math.round(totalCost * 0.30);
+    const balanceDue = totalCost - advanceCost;
 
     const perHeadEl = $('#perHeadDisplay');
     const totalEl = $('#totalDisplay');
+    const advanceEl = $('#advanceDisplay');
+    const balanceEl = $('#balanceDisplay');
     const participantsEl = $('#participantsDisplay');
+    const onlinePaidLabel = $('#onlinePaidLabel');
+    const payBtn = $('#payBtn');
 
     if (perHeadEl) perHeadEl.textContent = formatINR(perHead);
     if (totalEl) totalEl.textContent = formatINR(totalCost);
     if (participantsEl) participantsEl.textContent = participants + (participants === 1 ? ' person' : ' people');
+
+    if (paymentMode === 'full') {
+      if (onlinePaidLabel) onlinePaidLabel.textContent = 'Amount Paid Now';
+      if (advanceEl) advanceEl.textContent = formatINR(totalCost);
+      if (balanceEl) balanceEl.textContent = formatINR(0);
+      if (payBtn && !payBtn.disabled) {
+        payBtn.innerHTML = '💳 Pay Full Amount ' + formatINR(totalCost);
+      }
+    } else {
+      if (onlinePaidLabel) onlinePaidLabel.textContent = 'Advance Paid Now (30%)';
+      if (advanceEl) advanceEl.textContent = formatINR(advanceCost);
+      if (balanceEl) balanceEl.textContent = formatINR(balanceDue);
+      if (payBtn && !payBtn.disabled) {
+        payBtn.innerHTML = '💳 Pay Advance ' + formatINR(advanceCost);
+      }
+    }
   }
 
   // ——————— Steps ———————
@@ -202,7 +225,8 @@ const BookingEngine = (() => {
       transportation: config.pricingType === 'transport' ? ($('#transportation').value === 'true') : (config.transportInclusive || false),
       participants,
       amountPerHead: perHead,
-      totalCost
+      totalCost,
+      paymentMode // 'advance' or 'full'
     };
 
     try {
@@ -210,7 +234,7 @@ const BookingEngine = (() => {
       const orderRes = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: totalCost, bookingData })
+        body: JSON.stringify({ amount: totalCost, paymentMode, bookingData })
       });
 
       if (!orderRes.ok) {
@@ -264,13 +288,13 @@ const BookingEngine = (() => {
           } catch (verifyErr) {
             showToast('Payment verification failed. Contact support.', 'error');
             payBtn.disabled = false;
-            payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
+            updatePrice();
           }
         },
         modal: {
           ondismiss: function () {
             payBtn.disabled = false;
-            payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
+            updatePrice();
             showToast('Payment cancelled', 'info');
           }
         }
@@ -280,7 +304,7 @@ const BookingEngine = (() => {
       rzp.on('payment.failed', function (response) {
         showToast('Payment failed: ' + response.error.description, 'error');
         payBtn.disabled = false;
-        payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
+        updatePrice();
       });
       rzp.open();
 
@@ -288,7 +312,7 @@ const BookingEngine = (() => {
       console.error('Payment error:', err);
       showToast(err.message || 'Payment initiation failed', 'error');
       payBtn.disabled = false;
-      payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
+      updatePrice();
     }
   }
 
@@ -343,10 +367,25 @@ const BookingEngine = (() => {
             <span class="r-label">Total Explorers</span>
             <span class="r-value">${bookingData.participants} ${bookingData.participants === 1 ? 'Person' : 'People'}</span>
           </div>
-          <div class="receipt-row total-row">
-            <span class="r-label">Total Paid</span>
+          <div class="receipt-row">
+            <span class="r-label">Total Cost</span>
             <span class="r-value">${formatINR(bookingData.totalCost)}</span>
           </div>
+          <div class="receipt-row total-row" style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.5rem;">
+            <span class="r-label" style="color: var(--hh-gold);">${bookingData.paymentMode === 'full' ? 'Total Paid Online' : 'Advance Paid (30%)'}</span>
+            <span class="r-value" style="color: var(--hh-gold); font-weight: bold;">${formatINR(bookingData.paymentMode === 'full' ? bookingData.totalCost : Math.round(bookingData.totalCost * 0.30))}</span>
+          </div>
+          ${bookingData.paymentMode === 'full' ? `
+          <div class="receipt-row" style="padding-bottom: 0.5rem;">
+            <span class="r-label">Balance Due</span>
+            <span class="r-value" style="color: #55FF55; font-weight: bold;">₹0 (Fully Paid)</span>
+          </div>
+          ` : `
+          <div class="receipt-row" style="padding-bottom: 0.5rem;">
+            <span class="r-label">Balance Due on Departure</span>
+            <span class="r-value" style="color: #FF5555; font-weight: bold;">${formatINR(bookingData.totalCost - Math.round(bookingData.totalCost * 0.30))}</span>
+          </div>
+          `}
         </div>
 
         <div class="receipt-id">
@@ -388,6 +427,10 @@ const BookingEngine = (() => {
       day: 'numeric', month: 'long', year: 'numeric'
     });
 
+    const isFullPay = data.paymentMode === 'full';
+    const amountPaid = isFullPay ? data.totalCost : Math.round(data.totalCost * 0.30);
+    const balanceDue = data.totalCost - amountPaid;
+
     const receiptText = `
 ═══════════════════════════════════════
        HIKERS HORIZON — BOOKING RECEIPT
@@ -401,7 +444,9 @@ const BookingEngine = (() => {
   Participants:  ${data.participants}
   Per Head:      ${formatINR(data.amountPerHead)}
   ─────────────────────────────────────
-  TOTAL PAID:    ${formatINR(data.totalCost)}
+  TOTAL COST:    ${formatINR(data.totalCost)}
+  AMOUNT PAID:   ${formatINR(amountPaid)} ${isFullPay ? '(100% Paid Online)' : '(30% Paid Online)'}
+  BALANCE DUE:   ${formatINR(balanceDue)} ${isFullPay ? '(Fully Paid)' : '(Pay on Departure)'}
   ─────────────────────────────────────
 
   Payment ID:    ${paymentId}
@@ -410,6 +455,7 @@ const BookingEngine = (() => {
 
 ═══════════════════════════════════════
   Thank you for choosing Hikers Horizon!
+  ${isFullPay ? 'Your booking is fully paid.' : 'Note: Settle balance on departure day.'}
   For support: hikershorizon@gmail.com
 ═══════════════════════════════════════
     `.trim();
@@ -575,6 +621,27 @@ const BookingEngine = (() => {
       <div class="form-step" id="step2">
         <div style="margin-bottom:0.75rem; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em; color:rgba(255,255,255,0.5);">Review Your Booking</div>
 
+        <!-- Payment Options Selector -->
+        <div class="payment-options-selector" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.6); font-weight: bold; margin-bottom: 0.25rem;">Choose Payment Mode</div>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <label style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.4); border-radius: 8px; padding: 0.75rem; cursor: pointer; transition: all 0.2s;" id="labelPayAdvance">
+              <input type="radio" name="paymentOption" value="advance" checked style="cursor: pointer; accent-color: var(--hh-gold);">
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 0.85rem; font-weight: 700; color: #fff;">30% Advance</span>
+                <span style="font-size: 0.65rem; color: rgba(255,255,255,0.5);">Secure booking now</span>
+              </div>
+            </label>
+            <label style="flex: 1; min-width: 140px; display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 0.75rem; cursor: pointer; transition: all 0.2s;" id="labelPayFull">
+              <input type="radio" name="paymentOption" value="full" style="cursor: pointer; accent-color: var(--hh-gold);">
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-size: 0.85rem; font-weight: 700; color: #fff;">100% Full Payment</span>
+                <span style="font-size: 0.65rem; color: rgba(255,255,255,0.5);">Pay complete amount</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
         <div class="price-panel" style="margin-top: 0;">
           <div class="price-row">
             <span class="price-label">👤 Name</span>
@@ -603,16 +670,24 @@ const BookingEngine = (() => {
             <span class="price-label">👥 Participants</span>
             <span class="price-value" id="participantsDisplay">1 person</span>
           </div>
-          <div class="price-divider"></div>
-          <div class="price-row total">
-            <span class="price-label">Total Amount</span>
+          <div class="price-row">
+            <span class="price-label">💵 Total Cost</span>
             <span class="price-value" id="totalDisplay">${formatINR(config.basePrice || 0)}</span>
+          </div>
+          <div class="price-divider"></div>
+          <div class="price-row total" style="color: var(--hh-gold);">
+            <span class="price-label" id="onlinePaidLabel">Advance Paid Now (30%)</span>
+            <span class="price-value" id="advanceDisplay">₹0</span>
+          </div>
+          <div class="price-row" style="font-size: 0.9rem; opacity: 0.8;">
+            <span class="price-label">Balance Due on Departure</span>
+            <span class="price-value" id="balanceDisplay">₹0</span>
           </div>
         </div>
 
         <div class="btn-row">
           <button type="button" class="btn btn-back" id="backBtn">←</button>
-          <button type="button" class="btn btn-pay" id="payBtn">💳 Pay ${formatINR(config.basePrice || 0)}</button>
+          <button type="button" class="btn btn-pay" id="payBtn">💳 Pay Advance ${formatINR(Math.round((config.basePrice || 0) * 0.30))}</button>
         </div>
 
         <div class="secure-badge">
@@ -646,6 +721,9 @@ const BookingEngine = (() => {
       buildForm(formContainer);
     }
 
+    // Reset default paymentMode
+    paymentMode = 'advance';
+
     // Bind events
     const nextBtn = $('#nextBtn');
     const backBtn = $('#backBtn');
@@ -655,18 +733,48 @@ const BookingEngine = (() => {
     if (backBtn) backBtn.addEventListener('click', () => goToStep(0));
     if (payBtn) payBtn.addEventListener('click', () => initiatePayment());
 
+    // Bind payment mode selector radios
+    const paymentRadios = $$('input[name="paymentOption"]');
+    paymentRadios.forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        paymentMode = e.target.value;
+        updatePrice();
+        
+        // Highlight active radio label
+        const advanceLabel = $('#labelPayAdvance');
+        const fullLabel = $('#labelPayFull');
+        if (paymentMode === 'advance') {
+          if (advanceLabel) {
+            advanceLabel.style.borderColor = 'rgba(255, 215, 0, 0.4)';
+            advanceLabel.style.background = 'rgba(255, 255, 255, 0.05)';
+          }
+          if (fullLabel) {
+            fullLabel.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            fullLabel.style.background = 'rgba(255, 255, 255, 0.02)';
+          }
+        } else {
+          if (advanceLabel) {
+            advanceLabel.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            advanceLabel.style.background = 'rgba(255, 255, 255, 0.02)';
+          }
+          if (fullLabel) {
+            fullLabel.style.borderColor = 'rgba(255, 215, 0, 0.4)';
+            fullLabel.style.background = 'rgba(255, 255, 255, 0.05)';
+          }
+        }
+      });
+    });
+
     // Price updates
     const participants = $('#participants');
     if (participants) participants.addEventListener('input', () => {
       updatePrice();
-      if (payBtn) payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
     });
 
     if (config.pricingType === 'select') {
       const tripType = $('#tripType');
       if (tripType) tripType.addEventListener('change', () => {
         updatePrice();
-        if (payBtn) payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
       });
     }
 
@@ -674,7 +782,6 @@ const BookingEngine = (() => {
       const trans = $('#transportation');
       if (trans) trans.addEventListener('change', () => {
         updatePrice();
-        if (payBtn) payBtn.innerHTML = '💳 Pay ' + formatINR(totalCost);
       });
     }
 
