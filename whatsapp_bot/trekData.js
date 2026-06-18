@@ -411,7 +411,7 @@ const TREKS = {
     duration: "2 Days / 1 Night",
     location: "Coorg (Kodagu), Karnataka",
     pickupFrom: "Bangalore",
-    prices: { standard: 3399 },
+    prices: { standard: 2999 },
     highlights: [
       "Abbey Falls",
       "Raja's Seat",
@@ -426,7 +426,7 @@ const TREKS = {
       "Meals",
       "Sightseeing",
     ],
-    bookingPage: "booking-backpacking",
+    bookingPage: "booking-coorg",
   },
 
   coorg3days: {

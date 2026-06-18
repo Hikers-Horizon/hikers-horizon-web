@@ -123,8 +123,8 @@
     },
     '/Backpacking/Coorg2days': {
       name: 'Coorg 2-Day Getaway',
-      desc: 'Explore the Scotland of India with a 2-day Coorg trip from Bangalore. Waterfalls, coffee estates & Abbey Falls. Book from ₹3999.',
-      price: '3999', altitude: '4000 ft', difficulty: 'Easy', distance: 'Multiple spots',
+      desc: 'Explore the Scotland of India with a 2-day Coorg trip from Bangalore. Waterfalls, coffee estates & Abbey Falls. Book from ₹2999.',
+      price: '2999', altitude: '4000 ft', difficulty: 'Easy', distance: 'Multiple spots',
       image: '/img/coorg.jpg', duration: '2 days',
       keywords: 'Coorg trip from Bangalore, Coorg 2 day trip, Coorg tour package, weekend trip Coorg, Madikeri trip'
     },
