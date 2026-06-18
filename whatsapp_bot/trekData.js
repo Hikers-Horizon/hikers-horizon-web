@@ -218,7 +218,7 @@ const TREKS = {
     distance: "~15 km",
     location: "Shimoga, Karnataka",
     pickupFrom: "Bangalore",
-    prices: { standard: 3699 },
+    prices: { standard: 3199 },
     highlights: [
       "Majestic Western Ghats peak",
       "Hidlumane Falls",
@@ -358,7 +358,7 @@ const TREKS = {
     duration: "2 Days / 1 Night",
     location: "Wayanad, Kerala",
     pickupFrom: "Bangalore",
-    prices: { standard: 3599 },
+    prices: { standard: 3699 },
     highlights: [
       "Edakkal Caves",
       "Banasura Sagar Dam",
@@ -385,7 +385,7 @@ const TREKS = {
     duration: "2 Days / 1 Night",
     location: "Chikmagaluru, Karnataka",
     pickupFrom: "Bangalore",
-    prices: { standard: 3399 },
+    prices: { standard: 3499 },
     highlights: [
       "Coffee plantation tours",
       "Mullayanagiri Peak",

@@ -74,8 +74,8 @@
     },
     '/Twodays/Kodachadri': {
       name: 'Kodachadri Trek',
-      desc: 'Trek to Kodachadri peak through lush rainforests with stunning sunset views. 2-day adventure from Bangalore. Book from ₹3499.',
-      price: '3499', altitude: '4406 ft', difficulty: 'Moderate', distance: '14 km',
+      desc: 'Trek to Kodachadri peak through lush rainforests with stunning sunset views. 2-day adventure from Bangalore. Book from ₹3199.',
+      price: '3199', altitude: '4406 ft', difficulty: 'Moderate', distance: '14 km',
       image: '/img/kodachadri.jpg', duration: '2 days',
       keywords: 'Kodachadri trek, Kodachadri trek from Bangalore, sunset trek Karnataka, 2 day trek South India'
     },
@@ -102,8 +102,8 @@
     },
     '/Backpacking/Wayanad': {
       name: 'Wayanad Backpacking Trip',
-      desc: 'Explore the lush green hills and waterfalls of Wayanad. Multi-day backpacking trip from Bangalore. Book from ₹3599.',
-      price: '3599', altitude: '3000 ft', difficulty: 'Easy', distance: 'Multiple spots',
+      desc: 'Explore the lush green hills and waterfalls of Wayanad. Multi-day backpacking trip from Bangalore. Book from ₹3699.',
+      price: '3699', altitude: '3000 ft', difficulty: 'Easy', distance: 'Multiple spots',
       image: '/img/wayanad.jpg', duration: '3 days',
       keywords: 'Wayanad trip from Bangalore, Wayanad backpacking, Kerala trip from Bangalore, Wayanad tour package'
     },
@@ -116,8 +116,8 @@
     },
     '/Backpacking/Chikmagaluru': {
       name: 'Chikmagaluru Adventure',
-      desc: 'Coffee plantations, waterfalls, and misty mountains in Chikmagaluru. Backpacking trip from Bangalore. Book from ₹3999.',
-      price: '3999', altitude: '3400 ft', difficulty: 'Easy', distance: 'Multiple spots',
+      desc: 'Coffee plantations, waterfalls, and misty mountains in Chikmagaluru. Backpacking trip from Bangalore. Book from ₹3499.',
+      price: '3499', altitude: '3400 ft', difficulty: 'Easy', distance: 'Multiple spots',
       image: '/img/chikmagaluru.jpg', duration: '2 days',
       keywords: 'Chikmagaluru trip from Bangalore, Chikmagaluru backpacking, coffee plantation trip, weekend getaway Bangalore'
     },
