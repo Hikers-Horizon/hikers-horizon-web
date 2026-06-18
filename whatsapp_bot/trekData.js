@@ -516,7 +516,7 @@ const TREKS = {
     duration: "2 Days / 1 Night",
     location: "Munnar, Kerala",
     pickupFrom: "Bangalore",
-    prices: { standard: 4559 },
+    prices: { standard: 5199 },
     highlights: [
       "Kolukkumalai Sunrise Jeep Ride",
       "Phantom Hills Sunset Trek",
