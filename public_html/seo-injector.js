@@ -141,6 +141,13 @@
       price: '4999', altitude: '7000 ft', difficulty: 'Easy', distance: 'Multiple spots',
       image: '/img/kodaikanal.jpg', duration: '3 days',
       keywords: 'Kodaikanal trip from Bangalore, Kodaikanal backpacking, hill station trip, Princess of Hills, Kodaikanal tour'
+    },
+    '/Backpacking/Munnar': {
+      name: 'Munnar & Kolukkumalai Adventure',
+      desc: 'Experience a stunning 2-day Munnar & Kolukkumalai tour from Bangalore. Misty trails, world\'s highest tea estate sunrise, and cultural show. Book from ₹4559.',
+      price: '4559', altitude: '6000 ft', difficulty: 'Easy', distance: 'Multiple spots',
+      image: '/img/munnar.png', duration: '2 days',
+      keywords: 'Munnar tour, Kolukkumalai sunrise trek, Munnar trip from Bangalore, Munnar tour package, Munnar weekend getaway'
     }
   };
 

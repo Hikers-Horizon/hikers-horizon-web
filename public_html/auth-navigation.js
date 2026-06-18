@@ -165,7 +165,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 { name: 'Chikmagaluru Magic', link: '/Backpacking/Chikmagaluru' },
                 { name: 'Coorg 2-Day Getaway', link: '/Backpacking/Coorg2days' },
                 { name: 'Coorg 3-Day Journey', link: '/Backpacking/Coorg3days' },
-                { name: 'Kodaikanal Lake Trail', link: '/Backpacking/Kodaikanal' }
+                { name: 'Kodaikanal Lake Trail', link: '/Backpacking/Kodaikanal' },
+                { name: 'Munnar & Kolukkumalai', link: '/Backpacking/Munnar' }
             ]
         };
 

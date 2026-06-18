@@ -78,6 +78,7 @@ function findTrek(query) {
     coorg3days: ["coorg 3", "coorg three", "coorg3"],
     hampi: ["hampi"],
     kodaikanal: ["kodaikanal", "kodai"],
+    munnar: ["munnar", "kolukkumalai", "munar"],
   };
 
   for (const [key, keywords] of Object.entries(keywordMap)) {

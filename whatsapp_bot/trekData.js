@@ -507,6 +507,33 @@ const TREKS = {
     ],
     bookingPage: "booking-kodaikanal",
   },
+
+  munnar: {
+    name: "Munnar & Kolukkumalai Adventure",
+    slug: "Backpacking/Munnar",
+    category: "backpacking",
+    difficulty: "Easy",
+    duration: "2 Days / 1 Night",
+    location: "Munnar, Kerala",
+    pickupFrom: "Bangalore",
+    prices: { standard: 4559 },
+    highlights: [
+      "Kolukkumalai Sunrise Jeep Ride",
+      "Phantom Hills Sunset Trek",
+      "Signal Point Viewpoint",
+      "Mattupetty Dam",
+      "Traditional Kalaripayattu Show",
+      "Munnar Tea Factory visit",
+    ],
+    bestSeason: "September to May",
+    includes: [
+      "Transport from Bangalore",
+      "Campsite Tent Stay (1 night)",
+      "Meals (2 Breakfasts, 1 Dinner)",
+      "Forest/Trek Guide",
+    ],
+    bookingPage: "booking-munnar",
+  },
 };
 
 // FAQ Knowledge Base

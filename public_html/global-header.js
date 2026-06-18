@@ -428,7 +428,8 @@
                 { name: 'Coorg 3-Day Trip', link: '/Backpacking/Coorg3days/index.html' },
                 { name: 'Hampi Heritage Trail', link: '/Backpacking/Hampi/index.html' },
                 { name: 'Wayanad Expedition', link: '/Backpacking/Wayanad/index.html' },
-                { name: 'Kodaikanal Retreat', link: '/Backpacking/Kodaikanal/index.html' }
+                { name: 'Kodaikanal Retreat', link: '/Backpacking/Kodaikanal/index.html' },
+                { name: 'Munnar & Kolukkumalai', link: '/Backpacking/Munnar/index.html' }
             ]
         };
 
