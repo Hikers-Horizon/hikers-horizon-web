@@ -358,7 +358,7 @@ const TREKS = {
     duration: "2 Days / 1 Night",
     location: "Wayanad, Kerala",
     pickupFrom: "Bangalore",
-    prices: { standard: 4499 },
+    prices: { standard: 3599 },
     highlights: [
       "Edakkal Caves",
       "Banasura Sagar Dam",

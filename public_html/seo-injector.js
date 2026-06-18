@@ -102,8 +102,8 @@
     },
     '/Backpacking/Wayanad': {
       name: 'Wayanad Backpacking Trip',
-      desc: 'Explore the lush green hills and waterfalls of Wayanad. Multi-day backpacking trip from Bangalore. Book from ₹4499.',
-      price: '4499', altitude: '3000 ft', difficulty: 'Easy', distance: 'Multiple spots',
+      desc: 'Explore the lush green hills and waterfalls of Wayanad. Multi-day backpacking trip from Bangalore. Book from ₹3599.',
+      price: '3599', altitude: '3000 ft', difficulty: 'Easy', distance: 'Multiple spots',
       image: '/img/wayanad.jpg', duration: '3 days',
       keywords: 'Wayanad trip from Bangalore, Wayanad backpacking, Kerala trip from Bangalore, Wayanad tour package'
     },
