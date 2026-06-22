@@ -590,6 +590,10 @@ main {
         <div class="stat-label">Total Queries</div>
         <div class="stat-value" id="totalQueries">-</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-label">Abandoned Leads</div>
+        <div class="stat-value" id="totalLeads">-</div>
+      </div>
     </div>
 
     <!-- Users Section -->
@@ -640,6 +644,30 @@ main {
           </thead>
           <tbody id="bookingsTableBody">
             <tr><td colspan="10" class="no-data">Loading bookings...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Captured Leads Section -->
+    <div class="section">
+      <h2 class="section-title">Captured Leads (Abandoned Bookings)</h2>
+      <div class="table-responsive">
+        <table id="leadsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Trek Name</th>
+              <th>Trek Date</th>
+              <th>People</th>
+              <th>Captured Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+            <tr><td colspan="8" class="no-data">Loading leads...</td></tr>
           </tbody>
         </table>
       </div>
@@ -711,6 +739,7 @@ main {
       loadStats();
       loadUsers();
       loadBookings();
+      loadLeads();
       loadQueries();
     }
 
@@ -729,6 +758,7 @@ main {
           document.getElementById('monthRevenue').textContent = '₹' + (data.monthRevenue || 0).toLocaleString('en-IN');
           document.getElementById('totalRevenue').textContent = '₹' + (data.totalRevenue || 0).toLocaleString('en-IN');
           document.getElementById('totalQueries').textContent = data.totalQueries || 0;
+          document.getElementById('totalLeads').textContent = data.totalLeads || 0;
         })
         .catch(err => console.error('Error loading stats:', err));
     }
@@ -878,6 +908,45 @@ main {
         console.error('Error settling booking:', err);
         alert('Error connecting to server.');
       }
+    }
+
+    function loadLeads() {
+      const tbody = document.getElementById('leadsTableBody');
+      fetch('/admin/leads')
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to load leads');
+          return res.json();
+        })
+        .then(leads => {
+          if (!Array.isArray(leads)) {
+            tbody.innerHTML = `<tr><td colspan="8" class="no-data" style="color: #FF5555;">⚠️ Database offline or error loading leads.</td></tr>`;
+            return;
+          }
+          if (leads.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="no-data">No leads captured yet</td></tr>';
+          } else {
+            tbody.innerHTML = leads.map(lead => {
+              const statusBadge = lead.status === 'booked' 
+                ? `<span class="badge verified" style="background: rgba(0, 255, 0, 0.15); color: #55FF55; border: 1px solid rgba(0, 255, 0, 0.25);">Booked</span>`
+                : `<span class="badge unverified" style="background: rgba(255, 0, 0, 0.1); color: #FF5555; border: 1px solid rgba(255, 0, 0, 0.2);">Abandoned</span>`;
+              return `
+              <tr>
+                <td><b>${lead.fullName || '-'}</b></td>
+                <td><a href="tel:${lead.mobileNumber}" style="color: #FFD700; text-decoration: none;">${lead.mobileNumber || '-'}</a></td>
+                <td>${lead.userEmail || '-'}</td>
+                <td>${lead.trekName || '-'}</td>
+                <td>${lead.bookingDate ? new Date(lead.bookingDate).toLocaleDateString() : '-'}</td>
+                <td>${lead.participants || 1}</td>
+                <td>${new Date(lead.createdAt).toLocaleDateString()} ${new Date(lead.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                <td>${statusBadge}</td>
+              </tr>`;
+            }).join('');
+          }
+        })
+        .catch(err => {
+          console.error('Error loading leads:', err);
+          tbody.innerHTML = `<tr><td colspan="8" class="no-data" style="color: #FF5555;">⚠️ Failed to connect to server.</td></tr>`;
+        });
     }
 
     function loadQueries() {

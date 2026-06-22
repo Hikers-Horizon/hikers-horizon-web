@@ -16,6 +16,7 @@ const BookingEngine = (() => {
   let userEmail = null;
   let isGuestMode = false;
   let paymentMode = 'advance'; // 'advance' or 'full'
+  let leadSessionId = null;
 
   // ——————— Helpers ———————
   function $(sel) { return document.querySelector(sel); }
@@ -23,6 +24,61 @@ const BookingEngine = (() => {
 
   function formatINR(n) {
     return '₹' + Number(n).toLocaleString('en-IN');
+  }
+
+  function getLeadSessionId() {
+    if (!leadSessionId) {
+      leadSessionId = sessionStorage.getItem('leadSessionId');
+      if (!leadSessionId) {
+        leadSessionId = 'lead_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now();
+        sessionStorage.setItem('leadSessionId', leadSessionId);
+      }
+    }
+    return leadSessionId;
+  }
+
+  function debounce(fn, delay) {
+    let timer = null;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+
+  async function syncLead() {
+    const fullNameEl = $('#fullName');
+    const mobileNumberEl = $('#mobileNumber');
+    const emailEl = $('#displayEmail');
+    const dateEl = $('#bookingDate');
+    const participantsEl = $('#participants');
+
+    const fullName = fullNameEl ? fullNameEl.value.trim() : '';
+    const mobileNumber = mobileNumberEl ? mobileNumberEl.value.trim() : '';
+    const displayEmail = emailEl ? emailEl.value.trim() : '';
+    const bookingDate = dateEl ? dateEl.value : '';
+    const participants = participantsEl ? parseInt(participantsEl.value) || 1 : 1;
+
+    if (!fullName && !mobileNumber) return;
+
+    const leadData = {
+      leadSessionId: getLeadSessionId(),
+      fullName,
+      mobileNumber,
+      userEmail: displayEmail || userEmail || '',
+      trekName: config.trekName || '',
+      bookingDate,
+      participants
+    };
+
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadData)
+      });
+    } catch (err) {
+      console.error('Failed to sync lead:', err);
+    }
   }
 
   // ——————— Login Gate ———————
@@ -217,6 +273,7 @@ const BookingEngine = (() => {
     updatePrice();
 
     const bookingData = {
+      leadSessionId: getLeadSessionId(),
       userEmail,
       fullName: $('#fullName').value,
       mobileNumber: $('#mobileNumber').value,
@@ -319,6 +376,10 @@ const BookingEngine = (() => {
   // ——————— Receipt ———————
   function showReceipt(serverResult, bookingData, paymentId) {
     launchConfetti();
+
+    // Clear leadSessionId as booking succeeded
+    sessionStorage.removeItem('leadSessionId');
+    leadSessionId = null;
 
     const dateStr = new Date(bookingData.bookingDate).toLocaleDateString('en-IN', {
       day: 'numeric', month: 'long', year: 'numeric'
@@ -786,6 +847,18 @@ const BookingEngine = (() => {
     }
 
     updatePrice();
+
+    // Bind lead capturing inputs
+    const debouncedSync = debounce(syncLead, 2000);
+    const inputsToTrack = ['#fullName', '#mobileNumber', '#displayEmail', '#bookingDate', '#participants', '#tripType', '#transportation'];
+    inputsToTrack.forEach(sel => {
+      const el = $(sel);
+      if (el) {
+        el.addEventListener('input', debouncedSync);
+        el.addEventListener('blur', syncLead);
+        el.addEventListener('change', syncLead);
+      }
+    });
   }
 
   return { init };

@@ -140,6 +140,24 @@ async function initDatabase() {
     `);
     console.log('✅ Subscribers table ready');
 
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS leads (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        leadSessionId VARCHAR(255) UNIQUE,
+        fullName VARCHAR(255),
+        mobileNumber VARCHAR(20),
+        userEmail VARCHAR(255),
+        trekName VARCHAR(255),
+        bookingDate DATE,
+        participants INT DEFAULT 1,
+        status VARCHAR(50) DEFAULT 'abandoned',
+        emailSent TINYINT DEFAULT 0,
+        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('✅ Leads table ready');
+
     dbStatus = 'UP';
     global.dbError = "UP";
     connection.release();
@@ -184,6 +202,121 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false
   }
+});
+
+// --- LEADS EMAIL DISPATCH ---
+async function sendLeadEmail(lead) {
+    try {
+        const dateStr = lead.bookingDate ? new Date(lead.bookingDate).toDateString() : 'Not selected';
+        const emailHtml = `
+        <div style="font-family: sans-serif; padding: 20px; background: #0f172a; color: white; border-radius: 10px; border: 1px solid #1e293b; max-width: 600px; margin: auto;">
+            <h2 style="color: #FFD700; margin-bottom: 20px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">⚡ NEW CAPTURED LEAD</h2>
+            <p>A customer entered details during trek booking but did not proceed to final payment yet:</p>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <tr>
+                    <td style="padding: 8px 0; color: #94a3b8; width: 120px;"><b>Name:</b></td>
+                    <td style="padding: 8px 0; color: #ffffff;"><b>${lead.fullName || 'Not entered'}</b></td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #94a3b8;"><b>Phone:</b></td>
+                    <td style="padding: 8px 0; color: #ffffff;"><b><a href="tel:${lead.mobileNumber}" style="color: #FFD700; text-decoration: none;">${lead.mobileNumber || 'Not entered'}</a></b></td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #94a3b8;"><b>Email:</b></td>
+                    <td style="padding: 8px 0; color: #ffffff;">${lead.userEmail || 'Not entered'}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #94a3b8;"><b>Trek Name:</b></td>
+                    <td style="padding: 8px 0; color: #FFD700;">${lead.trekName || 'Not entered'}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #94a3b8;"><b>Trek Date:</b></td>
+                    <td style="padding: 8px 0; color: #ffffff;">${dateStr}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px 0; color: #94a3b8;"><b>People:</b></td>
+                    <td style="padding: 8px 0; color: #ffffff;">${lead.participants || 1}</td>
+                </tr>
+            </table>
+            <hr style="border: 0; border-top: 1px solid #1e293b; margin: 20px 0;">
+            <p style="font-size: 11px; color: #64748b; text-align: center;">This lead has been saved to your Admin Dashboard.</p>
+        </div>`;
+
+        const recipients = ['hikershorizon@gmail.com', 'venturesven@gmail.com'].join(',');
+
+        await transporter.sendMail({
+            from: `"Hikers Horizon Leads" <${process.env.EMAIL_USER}>`,
+            to: recipients,
+            subject: `⚠️ Lead Captured: ${lead.fullName || 'Anonymous'} - ${lead.trekName || 'Trek'}`,
+            html: emailHtml
+        });
+        console.log(`✉️ Abandoned booking lead email sent for ${lead.fullName}`);
+    } catch (err) {
+        console.error('[SEND LEAD EMAIL ERROR]', err);
+    }
+}
+
+// --- LEADS MANAGEMENT ROUTES ---
+app.post(['/leads', '/api/leads'], async (req, res) => {
+    const { leadSessionId, fullName, mobileNumber, userEmail, trekName, bookingDate, participants } = req.body;
+    if (!leadSessionId) {
+        return res.status(400).json({ message: 'leadSessionId is required' });
+    }
+
+    try {
+        // Find if lead already exists to see if email has been sent
+        const [existing] = await pool.query('SELECT emailSent, status FROM leads WHERE leadSessionId = ?', [leadSessionId]);
+        
+        let emailSent = 0;
+        let status = 'abandoned';
+        
+        if (existing.length > 0) {
+            emailSent = existing[0].emailSent;
+            status = existing[0].status;
+        }
+
+        // Format date properly for mysql or null if empty
+        const formattedDate = bookingDate ? bookingDate : null;
+
+        // Perform the insert or update
+        await pool.query(
+            `INSERT INTO leads (leadSessionId, fullName, mobileNumber, userEmail, trekName, bookingDate, participants, status, emailSent) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) 
+             ON DUPLICATE KEY UPDATE 
+                fullName = VALUES(fullName), 
+                mobileNumber = VALUES(mobileNumber), 
+                userEmail = VALUES(userEmail), 
+                trekName = VALUES(trekName), 
+                bookingDate = VALUES(bookingDate), 
+                participants = VALUES(participants)`,
+            [leadSessionId, fullName, mobileNumber, userEmail, trekName, formattedDate, participants || 1, status, emailSent]
+        );
+
+        // If email hasn't been sent, and we have both name and mobile number, send email notification
+        if (emailSent === 0 && fullName && fullName.trim() !== '' && mobileNumber && mobileNumber.trim() !== '') {
+            // Update emailSent first to prevent double sending if multiple requests hit concurrently
+            await pool.query('UPDATE leads SET emailSent = 1 WHERE leadSessionId = ?', [leadSessionId]);
+            
+            // Send the email asynchronously
+            sendLeadEmail({ fullName, mobileNumber, userEmail, trekName, bookingDate, participants });
+        }
+
+        res.json({ message: 'Lead synchronized successfully' });
+    } catch (err) {
+        console.error('[LEADS POST ERROR]', err);
+        res.status(500).json({ message: 'Error syncing lead' });
+    }
+});
+
+app.get(['/admin/leads', '/api/admin/leads'], async (req, res) => {
+    if (dbStatus !== 'UP') return res.status(503).json({ message: 'Database offline' });
+    try {
+        const [l] = await pool.query('SELECT * FROM leads ORDER BY updatedAt DESC');
+        res.json(l);
+    } catch (err) { 
+        console.error('[LEADS GET ERROR]', err);
+        res.status(500).json({ message: 'Leads error' }); 
+    }
 });
 
 // --- BOOKING & PAYMENT ROUTES ---
@@ -241,6 +374,18 @@ app.post(['/verify-payment', '/api/verify-payment'], async (req, res) => {
                     bookingData.totalCost, amountPaid, paymentStatus, razorpay_order_id, razorpay_payment_id, razorpay_signature
                 ]
             );
+
+            // Update lead status to booked if leadSessionId is present
+            if (bookingData.leadSessionId) {
+                try {
+                    await pool.query(
+                        "UPDATE leads SET status = 'booked' WHERE leadSessionId = ?",
+                        [bookingData.leadSessionId]
+                    );
+                } catch (leadErr) {
+                    console.error('[LEADS UPDATE ERROR]', leadErr);
+                }
+            }
 
             // Send CONFIRMATION EMAIL
             const emailHtml = paymentMode === 'full' ? `
@@ -467,6 +612,8 @@ app.get(['/admin/stats', '/api/admin/stats'], async (req, res) => {
         const [[{ tBookings }]] = await pool.query('SELECT COUNT(*) as tBookings FROM bookings');
         const [[{ tQueries }]] = await pool.query('SELECT COUNT(*) as tQueries FROM queries');
         
+        const [[{ tLeads }]] = await pool.query("SELECT COUNT(*) as tLeads FROM leads WHERE status = 'abandoned'");
+        
         // Calculate Collected Revenues (based on actual amountPaid)
         const [[{ totalRevenue }]] = await pool.query('SELECT COALESCE(SUM(amountPaid), 0) as totalRevenue FROM bookings');
         const [[{ todayRevenue }]] = await pool.query('SELECT COALESCE(SUM(amountPaid), 0) as todayRevenue FROM bookings WHERE DATE(createdAt) = CURDATE()');
@@ -482,7 +629,8 @@ app.get(['/admin/stats', '/api/admin/stats'], async (req, res) => {
             todayRevenue: Number(todayRevenue),
             weekRevenue: Number(weekRevenue),
             monthRevenue: Number(monthRevenue),
-            totalRevenue: Number(totalRevenue)
+            totalRevenue: Number(totalRevenue),
+            totalLeads: tLeads
         });
     } catch (err) { 
         console.error('[STATS ERROR]', err.message);
