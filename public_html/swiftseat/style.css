@@ -1518,3 +1518,39 @@ body::after {
     border-color: var(--border);
   }
 }
+
+/* Editable Route Inputs */
+.route-code-input {
+  font-family: var(--font-timer);
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 90px;
+  padding: 0;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.route-name-input {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 120px;
+  padding: 0;
+  margin: 0;
+}
+
+#from-code, #from-name {
+  text-align: left;
+}
+
+#to-code, #to-name {
+  text-align: right;
+}

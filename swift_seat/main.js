@@ -175,19 +175,19 @@ function attachEvents() {
     swapBtn.addEventListener('click', () => {
         const fromEl = document.getElementById('from-code');
         const toEl = document.getElementById('to-code');
-        const fromParent = fromEl.parentElement;
-        const toParent = toEl.parentElement;
+        const fromNameEl = document.getElementById('from-name');
+        const toNameEl = document.getElementById('to-name');
 
-        const tempCode = fromEl.textContent;
-        const tempName = fromParent.querySelector('.route-name').textContent;
+        const tempCode = fromEl.value;
+        const tempName = fromNameEl.value;
 
-        fromEl.textContent = toEl.textContent;
-        fromParent.querySelector('.route-name').textContent = toParent.querySelector('.route-name').textContent;
+        fromEl.value = toEl.value;
+        fromNameEl.value = toNameEl.value;
 
-        toEl.textContent = tempCode;
-        toParent.querySelector('.route-name').textContent = tempName;
+        toEl.value = tempCode;
+        toNameEl.value = tempName;
 
-        addLog(`Route swapped: ${fromEl.textContent} → ${toEl.textContent}`, 'info');
+        addLog(`Route swapped: ${fromEl.value} → ${toEl.value}`, 'info');
     });
 
     journeyClassSelect.addEventListener('change', () => {
@@ -418,8 +418,8 @@ async function startSequence() {
     const payload = {
         username: document.getElementById('irctc-user').value,
         password: document.getElementById('irctc-pass').value,
-        from: document.getElementById('from-code').textContent,
-        to: document.getElementById('to-code').textContent,
+        from: document.getElementById('from-code').value,
+        to: document.getElementById('to-code').value,
         date: document.getElementById('journey-date').value,
         trainNum: document.getElementById('train-number').value,
         className: journeyClassSelect.value,
@@ -512,8 +512,8 @@ async function startMobileSequence() {
     const payload = {
         username: document.getElementById('irctc-user').value,
         password: document.getElementById('irctc-pass').value,
-        from: document.getElementById('from-code').textContent,
-        to: document.getElementById('to-code').textContent,
+        from: document.getElementById('from-code').value,
+        to: document.getElementById('to-code').value,
         date: document.getElementById('journey-date').value,
         trainNum: document.getElementById('train-number').value,
         className: journeyClassSelect.value,

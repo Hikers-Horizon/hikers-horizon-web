@@ -210,8 +210,8 @@
                     <div id="train-details-container">
                         <div class="route-display-wrapper" id="route-display">
                             <div class="route-station-node">
-                                <span class="route-code-text" id="from-code">YNK</span>
-                                <span class="route-name">Yelahanka</span>
+                                <input type="text" class="route-code-input" id="from-code" value="YNK" maxLength="5" oninput="this.value = this.value.toUpperCase()">
+                                <input type="text" class="route-name-input" id="from-name" value="Yelahanka">
                             </div>
                             
                             <div class="route-visual-path">
@@ -225,8 +225,8 @@
                             </div>
                             
                             <div class="route-station-node">
-                                <span class="route-code-text" id="to-code">YG</span>
-                                <span class="route-name">Yadgiri</span>
+                                <input type="text" class="route-code-input" id="to-code" value="YG" maxLength="5" oninput="this.value = this.value.toUpperCase()">
+                                <input type="text" class="route-name-input" id="to-name" value="Yadgiri">
                             </div>
                         </div>
 
