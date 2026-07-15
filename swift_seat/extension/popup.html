@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --bg: #0d0e12;
+            --card-bg: #14161f;
+            --border: #222533;
+            --primary: #ff5e62;
+            --primary-grad: linear-gradient(135deg, #ff5e62, #ff9966);
+            --text: #ffffff;
+            --text-sub: #8f9cae;
+            --success: #00f2fe;
+            --warning: #f1c40f;
+            --error: #ff4757;
+        }
+
+        body {
+            width: 340px;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 14px;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-icon {
+            font-size: 20px;
+            background: var(--primary-grad);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            color: var(--text-sub);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .tab {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tab.active {
+            border-color: var(--primary);
+            color: var(--text);
+            background: rgba(255, 94, 98, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 6px;
+            color: var(--text);
+            font-size: 12px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--primary);
+        }
+
+        .passenger-list {
+            max-height: 140px;
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+
+        .pax-entry {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background: var(--primary-grad);
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+        }
+
+        .btn-secondary:hover {
+            color: var(--text);
+            border-color: var(--text-sub);
+        }
+
+        .status {
+            font-size: 11px;
+            padding: 6px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .status.info { display: block; background: rgba(241, 196, 15, 0.1); color: var(--warning); border: 1px solid rgba(241, 196, 15, 0.2); }
+        .status.success { display: block; background: rgba(0, 242, 254, 0.1); color: var(--success); border: 1px solid rgba(0, 242, 254, 0.2); }
+        .status.error { display: block; background: rgba(255, 71, 87, 0.1); color: var(--error); border: 1px solid rgba(255, 71, 87, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-icon">🚄</div>
+        <div>
+            <div class="logo-text" id="logo-text">Swift Seat</div>
+            <div class="logo-sub" id="logo-sub">Mobile Extension Bot v2.0</div>
+        </div>
+    </div>
+
+
+    <!-- Credentials Card -->
+    <div class="card">
+        <div class="card-title">🔐 Credentials</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label id="label-user">Username</label>
+                <input type="text" class="form-input" id="username" value="">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-input" id="password" value="">
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Card -->
+    <div class="card">
+        <div class="card-title">⚙️ Booking details</div>
+
+        <!-- Train fields -->
+        <div id="train-fields">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>From Station</label>
+                    <input type="text" class="form-input" id="from-station" value="YNK">
+                </div>
+                <div class="form-group">
+                    <label>To Station</label>
+                    <input type="text" class="form-input" id="to-station" value="YG">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Train Number</label>
+                    <input type="text" class="form-input" id="train-num" value="11312">
+                </div>
+                <div class="form-group">
+                    <label>Class</label>
+                    <select class="form-select" id="train-class">
+                        <option value="SL" selected>Sleeper (SL)</option>
+                        <option value="3A">3rd AC (3A)</option>
+                        <option value="2A">2nd AC (2A)</option>
+                        <option value="1A">1st AC (1A)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Journey Date</label>
+                    <input type="date" class="form-input" id="journey-date">
+                </div>
+                <div class="form-group">
+                    <label>Quota</label>
+                    <select class="form-select" id="train-quota">
+                        <option value="TQ" selected>Tatkal</option>
+                        <option value="GN">General</option>
+                        <option value="PT">Premium Tatkal</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Passengers Card -->
+    <div class="card">
+        <div class="card-title" style="justify-content: space-between;">
+            <span>👤 Passengers</span>
+            <span id="btn-add-pax" style="cursor: pointer; color: var(--success); font-size: 11px;">+ Add</span>
+        </div>
+        <div class="passenger-list" id="pax-list">
+            <div class="pax-entry">
+                <input type="text" class="form-input pax-name" placeholder="Name" value="Shiva">
+                <input type="number" class="form-input pax-age" placeholder="Age" value="23">
+                <select class="form-select pax-gender">
+                    <option value="M" selected>M</option>
+                    <option value="F">F</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" style="margin-top: 4px; margin-bottom: 0;">
+            <label>Mobile Number</label>
+            <input type="tel" class="form-input" id="mobile-num" value="9876543210" placeholder="10-digit number">
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <button class="btn btn-primary" id="btn-start">▶ RUN AUTOMATION</button>
+    <button class="btn btn-secondary" id="btn-reset">RESET CONFIG</button>
+
+    <div class="status info" id="status-box">Ready. Open booking website and click Run.</div>
+
+    <!-- Subscription License Card -->
+    <div class="card" style="margin-top: 12px; border-top: 1px dashed var(--border); padding-top: 12px;">
+        <div class="card-title">🔑 Subscription (₹99/mo)</div>
+        <div class="form-group" style="margin-bottom: 8px;">
+            <input type="text" class="form-input" id="license-key" placeholder="TF-XXXX-XXXX-XXXX" style="letter-spacing: 1px; text-transform: uppercase;">
+        </div>
+        <button class="btn btn-secondary" id="btn-activate" style="padding: 6px; font-size: 12px;">Activate Subscription</button>
+        <div id="license-status" style="font-size: 11px; margin-top: 6px; color: var(--text-sub); text-align: center;">Not Subscribed</div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

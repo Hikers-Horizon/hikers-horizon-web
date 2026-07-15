@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Swift Seat Mobile Bot",
+  "version": "2.0.0",
+  "description": "Natively book Tatkal and Trek tickets on mobile browsers.",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://localhost:3005/*",
+    "http://127.0.0.1:3005/*",
+    "https://hikershorizon.in/*",
+    "http://hikershorizon.in/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.irctc.co.in/*",
+        "*://*.aranyavihaara.karnataka.gov.in/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "TF-TEST-TRIAL-KEY": {
+    "licenseKey": "TF-TEST-TRIAL-KEY",
+    "userEmail": "tf-test-trial-key@tatkalflash.com",
+    "status": "active",
+    "deviceId": null,
+    "expiresAt": "2027-07-11T12:58:25.973Z",
+    "paymentId": "trial_₹99_init"
+  },
+  "TF-99-PRO-KEY-WEEK": {
+    "licenseKey": "TF-99-PRO-KEY-WEEK",
+    "userEmail": "tf-99-pro-key-week@tatkalflash.com",
+    "status": "active",
+    "deviceId": null,
+    "expiresAt": "2027-07-11T12:58:25.975Z",
+    "paymentId": "trial_₹99_init"
+  },
+  "TF-99-TEST-USER": {
+    "licenseKey": "TF-99-TEST-USER",
+    "userEmail": "tf-99-test-user@tatkalflash.com",
+    "status": "active",
+    "deviceId": null,
+    "expiresAt": "2027-07-11T12:58:25.975Z",
+    "paymentId": "trial_₹99_init"
+  },
+  "TF-99-PRO-I1SGW4": {
+    "licenseKey": "TF-99-PRO-I1SGW4",
+    "userEmail": "hikershorizon@gmail.com",
+    "status": "active",
+    "deviceId": null,
+    "expiresAt": "2026-08-10T13:09:20.738Z",
+    "paymentId": "pay_mock_upi_5ayutx76"
+  }
+}

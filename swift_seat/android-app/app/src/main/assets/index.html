@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Seat Mobile</title>
+    <style>
+        :root {
+            --bg: #0d0e12;
+            --card-bg: #14161f;
+            --border: #222533;
+            --primary: #ff5e62;
+            --primary-grad: linear-gradient(135deg, #ff5e62, #ff9966);
+            --text: #ffffff;
+            --text-sub: #8f9cae;
+            --success: #00f2fe;
+            --warning: #f1c40f;
+            --error: #ff4757;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 14px;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            background: var(--primary-grad);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .tab {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .tab.active {
+            border-color: var(--primary);
+            color: var(--text);
+            background: rgba(255, 94, 98, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            color: var(--text);
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--primary);
+        }
+
+        .passenger-list {
+            max-height: 180px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .pax-entry {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background: var(--primary-grad);
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-sub);
+        }
+
+        .btn-secondary:hover {
+            color: var(--text);
+            border-color: var(--text-sub);
+        }
+
+        .status {
+            font-size: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .status.info { display: block; background: rgba(241, 196, 15, 0.1); color: var(--warning); border: 1px solid rgba(241, 196, 15, 0.2); }
+        .status.success { display: block; background: rgba(0, 242, 254, 0.1); color: var(--success); border: 1px solid rgba(0, 242, 254, 0.2); }
+        .status.error { display: block; background: rgba(255, 71, 87, 0.1); color: var(--error); border: 1px solid rgba(255, 71, 87, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-icon">🚄</div>
+        <div>
+            <div class="logo-text" id="logo-text">Swift Seat</div>
+            <div class="logo-sub" id="logo-sub">Android Booking Engine v1.0</div>
+        </div>
+    </div>
+
+    <!-- Mode tabs -->
+    <div class="tabs">
+        <div class="tab active" id="tab-train">🚄 Train Ticket</div>
+        <div class="tab" id="tab-trek">⛰️ Trek Permit</div>
+    </div>
+
+    <!-- Credentials Card -->
+    <div class="card">
+        <div class="card-title">🔐 Credentials</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label id="label-user">Username</label>
+                <input type="text" class="form-input" id="username" value="">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-input" id="password" value="">
+            </div>
+        </div>
+        <div class="form-group" style="margin-top: 8px;" id="mpin-container">
+            <label>mPIN (6 digits)</label>
+            <input type="password" class="form-input" id="mpin" maxlength="6" placeholder="Optional 6-digit mPIN">
+            <span style="font-size: 10px; color: var(--text-sub); display: block; margin-top: 3px;">
+                ⚠️ Optional: Leave empty if you prefer using Fingerprint/Biometrics for login privacy.
+            </span>
+        </div>
+    </div>
+
+    <!-- Details Card -->
+    <div class="card">
+        <div class="card-title">⚙️ Booking details</div>
+
+        <!-- Train fields -->
+        <div id="train-fields">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>From Station</label>
+                    <input type="text" class="form-input" id="from-station" value="YNK">
+                </div>
+                <div class="form-group">
+                    <label>To Station</label>
+                    <input type="text" class="form-input" id="to-station" value="YG">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Train Number</label>
+                    <input type="text" class="form-input" id="train-num" value="11312">
+                </div>
+                <div class="form-group">
+                    <label>Class</label>
+                    <select class="form-select" id="train-class">
+                        <option value="SL" selected>Sleeper (SL)</option>
+                        <option value="3A">3rd AC (3A)</option>
+                        <option value="2A">2nd AC (2A)</option>
+                        <option value="1A">1st AC (1A)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Journey Date</label>
+                    <input type="date" class="form-input" id="journey-date">
+                </div>
+                <div class="form-group">
+                    <label>Quota</label>
+                    <select class="form-select" id="train-quota">
+                        <option value="TQ" selected>Tatkal</option>
+                        <option value="GN">General</option>
+                        <option value="PT">Premium Tatkal</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trek fields (hidden by default) -->
+        <div id="trek-fields" style="display: none;">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>District</label>
+                    <select class="form-select" id="trek-district">
+                        <option value="Dakshina Kannada" selected>Dakshina Kannada</option>
+                        <option value="Chikmagalur">Chikmagalur</option>
+                        <option value="Ramanagara">Ramanagara</option>
+                        <option value="Chikkaballapur">Chikkaballapur</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Trail</label>
+                    <select class="form-select" id="trek-trail">
+                        <option value="Netravathi Peak Trek" selected>Netravathi Peak Trek</option>
+                        <option value="Kudremukh Trek">Kudremukh Trek</option>
+                        <option value="Savandurga Trek">Savandurga Trek</option>
+                        <option value="Skandagiri Trek">Skandagiri Trek</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Trek Date</label>
+                    <input type="date" class="form-input" id="trek-date">
+                </div>
+                <div class="form-group">
+                    <label>Time Slot</label>
+                    <select class="form-select" id="trek-slot">
+                        <option value="Morning (6:00 AM - 9:00 AM)" selected>Morning (6:00 AM)</option>
+                        <option value="Afternoon (11:00 AM - 2:00 PM)">Afternoon (11:00 AM)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passengers Card -->
+    <div class="card">
+        <div class="card-title" style="justify-content: space-between;">
+            <span>👤 Passengers</span>
+            <span id="btn-add-pax" style="cursor: pointer; color: var(--success); font-size: 12px; font-weight: bold;">+ Add</span>
+        </div>
+        <div class="passenger-list" id="pax-list">
+            <div class="pax-entry">
+                <input type="text" class="form-input pax-name" placeholder="Name" value="Shiva">
+                <input type="number" class="form-input pax-age" placeholder="Age" value="23">
+                <select class="form-select pax-gender">
+                    <option value="M" selected>M</option>
+                    <option value="F">F</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" style="margin-top: 4px; margin-bottom: 0;">
+            <label>Mobile Number</label>
+            <input type="tel" class="form-input" id="mobile-num" value="9876543210" placeholder="10-digit number">
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <button class="btn btn-primary" id="btn-start">▶ START BOOKING</button>
+    <button class="btn btn-secondary" id="btn-reset">RESET CONFIG</button>
+
+    <div class="status info" id="status-box">Configure booking and tap Start.</div>
+
+    <script src="main.js"></script>
+</body>
+</html>

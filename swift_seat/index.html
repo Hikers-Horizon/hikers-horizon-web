@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWIFT SEAT — Enterprise-Grade Booking Engine</title>
+    <meta name="description"
+        content="Real-time Tatkal train ticket booking system for Yelahanka to Yadgiri route. Book tickets in seconds when the window opens.">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%233B82F6'/><text x='15' y='75' font-size='70'>⚡</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon-svg">
+                    <i data-lucide="zap"></i>
+                </div>
+                <div>
+                    <span class="logo-text">Swift<span class="logo-text-highlight">Seat</span></span>
+                    <span class="logo-badge">PRO v2.0</span>
+                </div>
+            </div>
+            
+            <div class="nav-metrics">
+                <div class="metric-item">
+                    <span class="status-dot-active" id="status-dot"></span>
+                    <span class="metric-label" id="status-text">Ready</span>
+                </div>
+                <div class="metric-item">
+                    <i data-lucide="shield" class="metric-icon"></i>
+                    <span class="metric-label">License Key:</span>
+                    <span class="metric-val" id="nav-key-status">Checking...</span>
+                </div>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="nav-action-btn" title="System Settings">
+                    <i data-lucide="settings"></i>
+                </button>
+                <div class="user-profile">
+                    <div class="avatar">TF</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app">
+        <!-- Countdown Hero Section -->
+        <section class="countdown-hero fade-in" id="countdown-section">
+            <div class="countdown-backdrop-glow"></div>
+            <div class="countdown-header-title">Next Tatkal Booking Window</div>
+            <div class="countdown-grid">
+                <div class="countdown-block">
+                    <div class="countdown-value" id="cd-hours">00</div>
+                    <div class="countdown-unit">Hours</div>
+                </div>
+                <div class="countdown-sep">:</div>
+                <div class="countdown-block">
+                    <div class="countdown-value" id="cd-minutes">00</div>
+                    <div class="countdown-unit">Minutes</div>
+                </div>
+                <div class="countdown-sep">:</div>
+                <div class="countdown-block">
+                    <div class="countdown-value" id="cd-seconds">00</div>
+                    <div class="countdown-unit">Seconds</div>
+                </div>
+            </div>
+            <div class="countdown-info">
+                <div class="countdown-info-item">
+                    <span class="tag">AC Class</span> Opens at 10:00 AM
+                </div>
+                <div class="countdown-info-item">
+                    <span class="tag">Sleeper</span> Opens at 11:00 AM
+                </div>
+                <div class="countdown-info-item active-target">
+                    <i data-lucide="target" class="target-indicator-icon"></i>
+                    <span class="tag tag-target" id="target-class-tag">SL</span>
+                    <span id="countdown-target-text">Targeting Sleeper Window</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bot Selector Layout -->
+        <div class="mode-toggle fade-in" id="mode-toggle">
+            <div class="mode-btn active" id="mode-desktop" data-mode="desktop">
+                <div class="bot-card-badge">RECOMMENDED</div>
+                <div class="bot-card-icon-wrapper">
+                    <i data-lucide="monitor" class="bot-card-icon"></i>
+                </div>
+                <div class="bot-card-info">
+                    <div class="bot-card-title">Desktop Automation Bot</div>
+                    <div class="bot-card-desc">Blazing-fast bookings using Playwright directly on IRCTC</div>
+                </div>
+            </div>
+            
+            <div class="mode-btn" id="mode-mobile" data-mode="mobile">
+                <div class="bot-card-badge secondary-badge">EXPERIMENTAL</div>
+                <div class="bot-card-icon-wrapper">
+                    <i data-lucide="smartphone" class="bot-card-icon"></i>
+                </div>
+                <div class="bot-card-info">
+                    <div class="bot-card-title">Mobile Appium Bot</div>
+                    <div class="bot-card-desc">Bypass web traffic limits via RailConnect App</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Steps Stepper -->
+        <div class="steps-progress-wrapper fade-in">
+            <div class="steps" id="progress-steps">
+                <div class="step" data-step="1">
+                    <div class="step-dot"></div>
+                    <span class="step-lbl">Launch</span>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-dot"></div>
+                    <span class="step-lbl">Login</span>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-dot"></div>
+                    <span class="step-lbl">Search</span>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-dot"></div>
+                    <span class="step-lbl">Select</span>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-dot"></div>
+                    <span class="step-lbl">Passenger</span>
+                </div>
+                <div class="step" data-step="6">
+                    <div class="step-dot"></div>
+                    <span class="step-lbl">Pay</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Workspace Grid -->
+        <div class="main-grid">
+            <!-- Parameters Left Column -->
+            <div class="dashboard-col left-col">
+                <!-- Credentials Configuration Card -->
+                <section class="card fade-in" id="credentials-card">
+                    <div class="card-header">
+                        <div class="card-icon" id="credentials-icon">
+                            <i data-lucide="key-round"></i>
+                        </div>
+                        <div>
+                            <div class="card-title" id="credentials-title">IRCTC Credentials</div>
+                            <div class="card-subtitle" id="credentials-sub">Auto-Login Authentication</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="text" class="form-input" id="irctc-user" value="" placeholder=" ">
+                            <label class="form-label" id="label-username">Username</label>
+                            <i data-lucide="user" class="input-inline-icon"></i>
+                        </div>
+                        <div class="form-group floating password-group">
+                            <input type="password" class="form-input" id="irctc-pass" value="" placeholder=" ">
+                            <label class="form-label">Password</label>
+                            <i data-lucide="lock" class="input-inline-icon"></i>
+                            <button type="button" class="password-toggle-btn" id="btn-toggle-password" title="Toggle Password Protection View">
+                                <i data-lucide="eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group floating license-key-input-container">
+                        <input type="text" class="form-input text-mono" id="dashboard-license-key" placeholder=" " style="text-transform: uppercase;">
+                        <label class="form-label">Subscription License Key</label>
+                        <i data-lucide="shield-check" class="input-inline-icon"></i>
+                        <div id="dashboard-license-info" class="license-status-feed">
+                            No key entered. Please activate your subscription by entering your key here.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Journey Configuration Card -->
+                <section class="card fade-in" id="journey-card">
+                    <div class="card-header">
+                        <div class="card-icon" id="journey-icon">
+                            <i data-lucide="compass"></i>
+                        </div>
+                        <div>
+                            <div class="card-title" id="journey-title">Journey Details</div>
+                            <div class="card-subtitle" id="journey-subtitle">Route Parameters & Trains</div>
+                        </div>
+                    </div>
+
+                    <!-- Station Info Routing Display -->
+                    <div id="train-details-container">
+                        <div class="route-display-wrapper" id="route-display">
+                            <div class="route-station-node">
+                                <span class="route-code-text" id="from-code">YNK</span>
+                                <span class="route-name">Yelahanka</span>
+                            </div>
+                            
+                            <div class="route-visual-path">
+                                <div class="path-line"></div>
+                                <button type="button" class="route-swap" id="swap-btn" title="Swap Route Direction">
+                                    <i data-lucide="arrow-left-right"></i>
+                                </button>
+                                <div class="train-icon-node">
+                                    <i data-lucide="train"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="route-station-node">
+                                <span class="route-code-text" id="to-code">YG</span>
+                                <span class="route-name">Yadgiri</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group select-container">
+                                <label class="select-label">Journey Date</label>
+                                <input type="date" class="form-input date-input-field" id="journey-date">
+                            </div>
+                            <div class="form-group select-container">
+                                <label class="select-label">Quota</label>
+                                <select class="form-select" id="journey-quota">
+                                    <option value="TQ" selected>Tatkal (TQ)</option>
+                                    <option value="GN">General (GN)</option>
+                                    <option value="PT">Premium Tatkal (PT)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group floating">
+                                <input type="text" class="form-input text-mono" id="train-number" value="11312" placeholder=" ">
+                                <label class="form-label">Train Number</label>
+                                <i data-lucide="hash" class="input-inline-icon"></i>
+                            </div>
+                            <div class="form-group select-container">
+                                <label class="select-label">Class</label>
+                                <select class="form-select" id="journey-class">
+                                    <option value="SL" selected>Sleeper (SL)</option>
+                                    <option value="3A">3rd AC (3A)</option>
+                                    <option value="2A">2nd AC (2A)</option>
+                                    <option value="1A">1st AC (1A)</option>
+                                    <option value="CC">Chair Car (CC)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Passengers Card -->
+                <section class="card fade-in" id="passenger-card">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <div style="display: flex; gap: 0.75rem; align-items: center;">
+                            <div class="card-icon" id="passenger-icon">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <div>
+                                <div class="card-title" id="passenger-title">Passenger Details</div>
+                                <div class="card-subtitle" id="passenger-subtitle">Pre-Configured Profiles</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary add-passenger-pill" id="add-pax-btn">
+                            <i data-lucide="plus" style="width: 14px; height: 14px;"></i> ADD
+                        </button>
+                    </div>
+
+                    <div id="passengers-container">
+                        <div class="passenger-entry">
+                            <div class="form-group select-container" style="margin:0">
+                                <label class="select-label">Name</label>
+                                <input type="text" class="form-input pax-name" value="Shiva" placeholder="Full Name">
+                            </div>
+                            <div class="form-group select-container" style="margin:0">
+                                <label class="select-label">Age</label>
+                                <input type="number" class="form-input pax-age" value="23" placeholder="Age">
+                            </div>
+                            <div class="form-group select-container" style="margin:0">
+                                <label class="select-label">Gender</label>
+                                <select class="form-select pax-gender">
+                                    <option value="M" selected>Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="T">Transgender</option>
+                                </select>
+                            </div>
+                            <div class="form-group select-container pax-berth-group" style="margin:0">
+                                <label class="select-label">Berth</label>
+                                <select class="form-select pax-berth">
+                                    <option value="NP" selected>No Pref</option>
+                                    <option value="LB">Lower</option>
+                                    <option value="MB">Middle</option>
+                                    <option value="UB">Upper</option>
+                                    <option value="SL">Side Lower</option>
+                                    <option value="SU">Side Upper</option>
+                                </select>
+                            </div>
+                            <button class="remove-pax-btn" title="Remove Passenger">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group floating" style="margin-top: 1.5rem;">
+                        <input type="tel" class="form-input" id="pax-mobile" value="9876543210" placeholder=" ">
+                        <label class="form-label" id="mobile-label">Mobile Number</label>
+                        <i data-lucide="smartphone" class="input-inline-icon"></i>
+                    </div>
+                </section>
+
+                <!-- Mobile Device Config Card -->
+                <section class="card fade-in mobile-only" id="mobile-config-card" style="display:none;">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="smartphone"></i>
+                        </div>
+                        <div>
+                            <div class="card-title">Mobile Device Config</div>
+                            <div class="card-subtitle">Appium · Android Connection</div>
+                        </div>
+                    </div>
+                    <div class="mobile-status-badge" id="mobile-connection-status">
+                        <span class="status-indicator offline"></span>
+                        <span>Not Connected</span>
+                    </div>
+                    
+                    <div class="form-group select-container">
+                        <label class="select-label">Target Mobile App</label>
+                        <select class="form-select" id="mobile-app-target">
+                            <option value="railconnect" selected>IRCTC Rail Connect (Official)</option>
+                            <option value="railone">CRIS RailOne (SuperApp)</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="text" class="form-input" id="appium-host" value="127.0.0.1" placeholder=" ">
+                            <label class="form-label">Appium Host</label>
+                        </div>
+                        <div class="form-group floating">
+                            <input type="number" class="form-input" id="appium-port" value="4723" placeholder=" ">
+                            <label class="form-label">Appium Port</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="text" class="form-input" id="device-name" value="WOHAJ7FYCQ8PLNY9" placeholder=" ">
+                            <label class="form-label">Device Name / UDID</label>
+                        </div>
+                        <div class="form-group floating">
+                            <input type="text" class="form-input" id="app-package" value="cris.org.in.prs.ima" placeholder=" ">
+                            <label class="form-label">App Package</label>
+                        </div>
+                    </div>
+                    <div class="form-group floating">
+                        <input type="text" class="form-input" id="app-activity" value="cris.org.in.ima.activities.IRCTCConnectActivity" placeholder=" ">
+                        <label class="form-label">App Activity</label>
+                    </div>
+                    
+                    <div class="setup-hint">
+                        <div class="hint-title"><i data-lucide="help-circle" class="hint-title-icon"></i> Android Appium Connection Guide</div>
+                        <ol class="hint-steps">
+                            <li>Enable <strong>USB Debugging</strong> under Developer Options.</li>
+                            <li>Trust this computer, start the local <code>appium</code> server.</li>
+                            <li>Use <code>adb devices</code> command to fetch connected ID credentials.</li>
+                        </ol>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Operations Right Column -->
+            <div class="dashboard-col right-col">
+                <!-- Live Browser Monitor Stream -->
+                <section class="card monitor-section" id="monitor-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="tv"></i>
+                        </div>
+                        <div class="monitor-card-header-main">
+                            <div>
+                                <div class="card-title">Live Browser Feed</div>
+                                <div class="card-subtitle">Real-time Bot Webpage Stream</div>
+                            </div>
+                            <div class="monitor-badge-grid">
+                                <div class="badge badge-latency">
+                                    <span class="badge-dot orange"></span> FPS: 10
+                                </div>
+                                <div class="badge badge-captcha">
+                                    <span class="badge-dot green"></span> Captcha Ready
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="monitor-container" id="monitor">
+                        <img id="live-stream" src="" alt="Live Feed Container">
+                        <div class="live-badge">● LIVE STREAM</div>
+                        <div class="scan-line"></div>
+                    </div>
+                    
+                    <div class="monitor-placeholder" id="monitor-placeholder">
+                        <div class="placeholder-icon">
+                            <i data-lucide="tv-2"></i>
+                        </div>
+                        <div class="placeholder-text">Live Browser Feed Offline</div>
+                        <div class="placeholder-subtext">Launch the Tatkal sequence to activate the live stream viewer portal.</div>
+                    </div>
+                </section>
+
+                <!-- Shell terminal console logs -->
+                <section class="card console-card" id="console-card">
+                    <div class="terminal-shell-header">
+                        <div class="shell-actions">
+                            <span class="shell-dot red"></span>
+                            <span class="shell-dot yellow"></span>
+                            <span class="shell-dot green"></span>
+                        </div>
+                        <span class="shell-title">tatkal-engine-session-log.sh</span>
+                        <div class="shell-badge">PLAYWRIGHT</div>
+                    </div>
+                    <div class="console" id="console">
+                        <!-- System logs automatically append here -->
+                    </div>
+                </section>
+
+                <!-- Actions Controls Engine parameters -->
+                <section class="card fade-in" id="control-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="zap"></i>
+                        </div>
+                        <div>
+                            <div class="card-title">Booking Engine Rules</div>
+                            <div class="card-subtitle">Automation Dispatch State</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group select-container">
+                        <label class="select-label">Auto-Start Mode Trigger</label>
+                        <select class="form-select" id="auto-mode">
+                            <option value="manual" selected>Manual — Click Start Sequence</option>
+                            <option value="auto-10">Auto at 10:00 AM (AC Open Windows)</option>
+                            <option value="auto-11">Auto at 11:00 AM (Sleeper SL Open Windows)</option>
+                        </select>
+                    </div>
+
+                    <div class="booking-control-row">
+                        <button class="btn btn-primary" id="btn-start">
+                            <i data-lucide="play" class="btn-action-icon"></i> START SEQUENCE
+                        </button>
+                        <button class="btn btn-secondary" id="btn-stop" disabled>
+                            <i data-lucide="square" class="btn-action-icon text-error"></i> ABORT BOT
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Checkout license key subscription portal -->
+                <section class="card fade-in" id="subscription-portal-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        <div>
+                            <div class="card-title">SaaS Licensing Portal</div>
+                            <div class="card-subtitle">Unlock Unlimited Bookings for ₹99/Month</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="email" class="form-input" id="sub-email" placeholder=" ">
+                            <label class="form-label">Email Address</label>
+                            <i data-lucide="mail" class="input-inline-icon"></i>
+                        </div>
+                        <div class="form-group select-container">
+                            <label class="select-label">Payment Gateway</label>
+                            <select class="form-select" id="sub-payment-method">
+                                <option value="UPI" selected>UPI (GPay / PhonePe / Paytm)</option>
+                                <option value="Card">Visa / Master Debit Cards</option>
+                                <option value="NetBanking">Net Banking Portal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-pay-premium" id="btn-pay-subscribe">
+                        <i data-lucide="sparkles" class="btn-action-icon"></i> ACTIVATE INSTANT ACCESS (₹99)
+                    </button>
+
+                    <!-- Successful Transaction Result Output Window -->
+                    <div id="sub-result" class="payment-success-card" style="display: none;">
+                        <div class="success-header-row">
+                            <i data-lucide="check-circle-2"></i>
+                            <div>
+                                <span class="success-title">Payment Completed Successfully!</span>
+                                <span class="txn-code-lbl">Transaction Reference: <code id="sub-txn-id"></code></span>
+                            </div>
+                        </div>
+                        <hr class="success-divider">
+                        <span class="success-instruction-details">
+                            Your billing license key has been verified and registered. Paste this code into your Swift Seat browser extension popup dashboard:
+                        </span>
+                        <div class="txn-license-copy-box">
+                            <input type="text" id="sub-key-value" class="copy-license-entry" readonly>
+                            <button class="btn btn-secondary btn-copy-code" id="btn-copy-sub-key"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-text">Swift Seat Engine Corp · Secure AES Encryption · Speed booking YNK ↔ YG</div>
+        </footer>
+    </div>
+
+    <!-- Initialize Lucide Icons & Custom Passwords toggle scripts -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Hydrate Icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            // Sync Nav status text key indication
+            setInterval(() => {
+                const licenseInfoText = document.getElementById('dashboard-license-info');
+                const navKeyText = document.getElementById('nav-key-status');
+                if (licenseInfoText && navKeyText) {
+                    if (licenseInfoText.textContent.includes('Expired')) {
+                        navKeyText.textContent = 'Expired';
+                        navKeyText.className = 'metric-val key-expired';
+                    } else if (licenseInfoText.textContent.includes('Active')) {
+                        navKeyText.textContent = 'Active';
+                        navKeyText.className = 'metric-val key-active';
+                    } else {
+                        navKeyText.textContent = 'Inactive';
+                        navKeyText.className = 'metric-val key-inactive';
+                    }
+                }
+            }, 1000);
+
+            // Toggle passwords
+            const toggleBtn = document.getElementById('btn-toggle-password');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const passInput = document.getElementById('irctc-pass');
+                    const icon = toggleBtn.querySelector('i');
+                    if (passInput.type === 'password') {
+                        passInput.type = 'text';
+                        toggleBtn.innerHTML = '<i data-lucide="eye-off"></i>';
+                    } else {
+                        passInput.type = 'password';
+                        toggleBtn.innerHTML = '<i data-lucide="eye"></i>';
+                    }
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

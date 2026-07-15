@@ -1,0 +1,198 @@
+{
+  "url": "https://aranyavihaara.karnataka.gov.in/getTimeslot",
+  "inputs": [
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "",
+      "name": "_token",
+      "placeholder": "",
+      "value": "2n6UnmhShrnYMiq2Tz7pdaxy6EKPpC6BJJ5igESX",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" name=\"_token\" value=\"2n6UnmhShrnYMiq2Tz7pdaxy6EKPpC6BJJ5igESX\" autocomplete=\"off\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "",
+      "name": "_token",
+      "placeholder": "",
+      "value": "2n6UnmhShrnYMiq2Tz7pdaxy6EKPpC6BJJ5igESX",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" name=\"_token\" value=\"2n6UnmhShrnYMiq2Tz7pdaxy6EKPpC6BJJ5igESX\" autocomplete=\"off\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "text",
+      "id": "name",
+      "name": "data[0][name]",
+      "placeholder": " ",
+      "value": "",
+      "className": "form-control login_input",
+      "visible": true,
+      "outerHTML": "<input class=\"form-control login_input\" id=\"name\" placeholder=\" \" name=\"data[0][name]\" required=\"\" type=\"text\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "text",
+      "id": "govt_id0",
+      "name": "data[0][govt_id]",
+      "placeholder": " ",
+      "value": "",
+      "className": "form-control login_input",
+      "visible": true,
+      "outerHTML": "<input class=\"form-control login_input\" id=\"govt_id0\" placeholder=\" \" name=\"data[0][govt_id]\" required=\"\" type=\"text\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "text",
+      "id": "age",
+      "name": "data[0][age]",
+      "placeholder": " ",
+      "value": "",
+      "className": "form-control login_input age-input",
+      "visible": true,
+      "outerHTML": "<input type=\"text\" class=\"form-control login_input age-input\" id=\"age\" placeholder=\" \" name=\"data[0][age]\" required=\"\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "text",
+      "id": "mobile_no",
+      "name": "data[0][mobile_no]",
+      "placeholder": " ",
+      "value": "",
+      "className": "form-control login_input",
+      "visible": true,
+      "outerHTML": "<input class=\"form-control login_input\" id=\"mobile_no\" name=\"data[0][mobile_no]\" placeholder=\" \" required=\"\" pattern=\"\\d{10,10}\" maxlength=\"10\" oninput=\"this.value = this.value.replace(/[^0-9]/g, '') \" title=\"Mobile number must be 10 digits\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "text",
+      "id": "otp-input",
+      "name": "",
+      "placeholder": "Enter OTP",
+      "value": "",
+      "className": "form-control mb-3",
+      "visible": false,
+      "outerHTML": "<input type=\"text\" id=\"otp-input\" class=\"form-control mb-3\" placeholder=\"Enter OTP\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "checkbox",
+      "id": "defaultCheck1",
+      "name": "",
+      "placeholder": "",
+      "value": "",
+      "className": "form-check-input mt-2",
+      "visible": true,
+      "outerHTML": "<input class=\"form-check-input mt-2\" type=\"checkbox\" value=\"\" id=\"defaultCheck1\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "otp-input",
+      "name": "",
+      "placeholder": "Enter OTP",
+      "value": "",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" id=\"otp-input\" placeholder=\"Enter OTP\" required=\"\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "mobile_no",
+      "name": "",
+      "placeholder": "Enter Mobile Number",
+      "value": "",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" id=\"mobile_no\" placeholder=\"Enter Mobile Number\" required=\"\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "",
+      "name": "trek_id",
+      "placeholder": "",
+      "value": "113",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" name=\"trek_id\" value=\"113\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "",
+      "name": "timeslot_mapping_id",
+      "placeholder": "",
+      "value": "187",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" name=\"timeslot_mapping_id\" value=\"187\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "",
+      "name": "check_in",
+      "placeholder": "",
+      "value": "11-06-2026",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" name=\"check_in\" value=\"11-06-2026\" style=\"\">"
+    },
+    {
+      "tag": "input",
+      "type": "hidden",
+      "id": "",
+      "name": "TimeslotId",
+      "placeholder": "",
+      "value": "45",
+      "className": "",
+      "visible": false,
+      "outerHTML": "<input type=\"hidden\" name=\"TimeslotId\" value=\"45\" style=\"\">"
+    }
+  ],
+  "selects": [
+    {
+      "tag": "select",
+      "id": "govt_id_type0",
+      "name": "data[0][govt_id_type]",
+      "className": "form-select select-text",
+      "options": [
+        "",
+        "VoterId",
+        "RationCard",
+        "DrivingLicense",
+        "Pancard",
+        "Passport"
+      ],
+      "outerHTML": "<select class=\"form-select select-text\" id=\"govt_id_type0\" name=\"data[0][govt_id_type]\" onchange=\"updatePattern('govt_id_type0', 'govt_id0')\" required=\"\">\n                                                <option value=\"\" disabled=\"\" selected=\"\"></option>\n                                        <option value=\"VoterId\">VoterId</option>\n                                        <option value=\"RationCard\">RationCard</option>\n                                        <option value=\"DrivingLicense\">DrivingLicense</option>\n                                        <option value=\"Pancard\">Pancard</option>\n                                        <option value=\"Passport\">Passport</option>\n\n                                    </select>"
+    },
+    {
+      "tag": "select",
+      "id": "gender",
+      "name": "data[0][gender]",
+      "className": "form-select select-text",
+      "options": [
+        "",
+        "Male",
+        "Female",
+        "Others"
+      ],
+      "outerHTML": "<select class=\"form-select select-text\" id=\"gender\" placeholder=\" \" name=\"data[0][gender]\" aria-label=\"Default select example\" required=\"\">\n                                                <option value=\"\" disabled=\"\" selected=\"\"></option>\n                                                <option value=\"Male\">Male</option>\n                                                <option value=\"Female\">Female</option>\n                                                <option value=\"Others\">Others</option>\n                                            </select>"
+    }
+  ],
+  "labels": [
+    "(Team Leader)",
+    "First Name",
+    "Govt ID",
+    "Govt ID No.",
+    "Age",
+    "Gender",
+    "Mobile Number"
+  ]
+}

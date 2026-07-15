@@ -2,3 +2,10 @@
 .vscode/
 node_modules/
 .env
+**/build/
+**/.gradle/
+**/.idea/
+*.apk
+**/chrome_profile_root/
+**/bot_chrome_data/
+**/user_data/
