@@ -39,6 +39,11 @@
                     <span class="metric-label" id="status-text">Ready</span>
                 </div>
                 <div class="metric-item">
+                    <i data-lucide="clock" class="metric-icon"></i>
+                    <span class="metric-label">System Time:</span>
+                    <span class="metric-val text-mono" id="nav-system-time" style="color: var(--success); font-family: monospace; font-weight: bold;">00:00:00</span>
+                </div>
+                <div class="metric-item">
                     <i data-lucide="shield" class="metric-icon"></i>
                     <span class="metric-label">License Key:</span>
                     <span class="metric-val" id="nav-key-status">Checking...</span>
@@ -569,6 +574,7 @@
             }
         });
     </script>
+    <script src="./main.js"></script>
 </body>
 
 </html>
