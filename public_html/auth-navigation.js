@@ -210,12 +210,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <div>
                     <div class="footer-col-title">Company</div>
-                    <ul class="footer-col-links">
+                        <ul class="footer-col-links">
                         <li><a href="/About/">About Us</a></li>
                         <li><a href="/Contact/">Contact</a></li>
                         <li><a href="/Blogs">Blog</a></li>
                         <li><a href="/Privacy">Privacy Policy</a></li>
-                    </ul>
+                                                <li><a href="/swiftseat/">Swift Seat</a></li>
+                        </ul>
                 </div>
                 <div>
                     <div class="newsletter-form">

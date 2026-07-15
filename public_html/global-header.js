@@ -235,7 +235,6 @@
                     </div>
                 </li>
                 <li><a href="/Corporate/" class="nav-link">Corporate</a></li>
-                <li><a href="/swiftseat/" class="nav-link">Swift Seat</a></li>
                 <li><a href="/Blog/" class="nav-link">Blog</a></li>
                 <li><a href="/About/" class="nav-link">About</a></li>
                 <li><a href="/Contact/" class="nav-link">Contact</a></li>
@@ -337,7 +336,6 @@
                 { icon: '⌂', label: 'Home', href: '/' },
                 { icon: '▲', label: 'Treks', href: '/#treks' },
                 { icon: '◆', label: 'Corporate', href: '/Corporate/' },
-                { icon: '⚡', label: 'Swift Seat', href: '/swiftseat/' },
                 { icon: '✎', label: 'Blog', href: '/Blog/' },
                 { icon: '◎', label: 'About', href: '/About/' },
                 { icon: '✉', label: 'Contact', href: '/Contact/' },
