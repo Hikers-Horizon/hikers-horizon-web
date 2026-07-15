@@ -175,17 +175,10 @@ function attachEvents() {
     swapBtn.addEventListener('click', () => {
         const fromEl = document.getElementById('from-code');
         const toEl = document.getElementById('to-code');
-        const fromNameEl = document.getElementById('from-name');
-        const toNameEl = document.getElementById('to-name');
 
         const tempCode = fromEl.value;
-        const tempName = fromNameEl.value;
-
         fromEl.value = toEl.value;
-        fromNameEl.value = toNameEl.value;
-
         toEl.value = tempCode;
-        toNameEl.value = tempName;
 
         addLog(`Route swapped: ${fromEl.value} → ${toEl.value}`, 'info');
     });
