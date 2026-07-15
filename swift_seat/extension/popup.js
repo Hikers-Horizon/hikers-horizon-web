@@ -13,6 +13,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateStr = tomorrow.toISOString().split('T')[0];
     document.getElementById('journey-date').value = dateStr;
 
+    // ─── Live Clock & Countdown Sync ───
+    function updateClockAndCountdown() {
+        const now = new Date();
+        
+        // 1. Update Live Clock
+        const liveHrs = String(now.getHours()).padStart(2, '0');
+        const liveMins = String(now.getMinutes()).padStart(2, '0');
+        const liveSecs = String(now.getSeconds()).padStart(2, '0');
+        const clockEl = document.getElementById('live-clock');
+        const dateEl = document.getElementById('live-date');
+        
+        if (clockEl) clockEl.textContent = `${liveHrs}:${liveMins}:${liveSecs}`;
+        if (dateEl) {
+            const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+            dateEl.textContent = now.toLocaleDateString('en-US', dateOptions);
+        }
+
+        // 2. Update Countdown
+        const classSelector = document.getElementById('train-class');
+        const quotaSelector = document.getElementById('train-quota');
+        const countdownLabel = document.getElementById('countdown-label');
+        const countdownClock = document.getElementById('countdown-clock');
+        
+        if (classSelector && quotaSelector && countdownLabel && countdownClock) {
+            const trainClass = classSelector.value;
+            const trainQuota = quotaSelector.value;
+            const isTatkal = trainQuota === 'TQ' || trainQuota === 'PT';
+            
+            if (isTatkal) {
+                const targetHour = (trainClass === 'SL') ? 11 : 10;
+                countdownLabel.textContent = `${trainClass} Tatkal Opens In`;
+                
+                let target = new Date(now);
+                target.setHours(targetHour, 0, 0, 0);
+                
+                if (now >= target) {
+                    target.setDate(target.getDate() + 1);
+                }
+                
+                const diff = target - now;
+                const hours = Math.floor(diff / 3600000);
+                const minutes = Math.floor((diff % 3600000) / 60000);
+                const seconds = Math.floor((diff % 60000) / 1000);
+                
+                const countHrs = String(hours).padStart(2, '0');
+                const countMins = String(minutes).padStart(2, '0');
+                const countSecs = String(seconds).padStart(2, '0');
+                countdownClock.textContent = `${countHrs}:${countMins}:${countSecs}`;
+                countdownClock.style.color = 'var(--text)';
+            } else {
+                countdownLabel.textContent = 'General Booking';
+                countdownClock.textContent = 'ACTIVE';
+                countdownClock.style.color = 'var(--success)';
+            }
+        }
+    }
+
+    // Initialize and run interval
+    updateClockAndCountdown();
+    setInterval(updateClockAndCountdown, 100);
+
+    // Bind dropdown changes to immediately update display
+    const classEl = document.getElementById('train-class');
+    const quotaEl = document.getElementById('train-quota');
+    if (classEl) classEl.addEventListener('change', updateClockAndCountdown);
+    if (quotaEl) quotaEl.addEventListener('change', updateClockAndCountdown);
+
     // ─── Add Passenger ───
     btnAddPax.addEventListener('click', () => {
         const entries = paxList.querySelectorAll('.pax-entry');

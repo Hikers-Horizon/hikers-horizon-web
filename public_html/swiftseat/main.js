@@ -75,7 +75,7 @@ function startSystemClock() {
         }
     };
     updateTime();
-    setInterval(updateTime, 1000);
+    setInterval(updateTime, 100);
 }
 
 // ─── COUNTDOWN TIMER ───
@@ -112,7 +112,7 @@ function startCountdown() {
     };
 
     update();
-    setInterval(update, 1000);
+    setInterval(update, 100);
 }
 
 // ─── AUTO-START ───

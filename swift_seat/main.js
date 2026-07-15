@@ -16,6 +16,7 @@ let currentBotMode = 'desktop'; // 'desktop' or 'mobile'
 // ─── INIT ───
 function init() {
     setDefaultDate();
+    startSystemClock();
     startCountdown();
     attachEvents();
 
@@ -61,6 +62,22 @@ function setDefaultDate() {
     document.getElementById('journey-date').value = dateStr;
 }
 
+// ─── SYSTEM LIVE CLOCK ───
+function startSystemClock() {
+    const updateTime = () => {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        const systemTimeEl = document.getElementById('nav-system-time');
+        if (systemTimeEl) {
+            systemTimeEl.textContent = `${hrs}:${mins}:${secs}`;
+        }
+    };
+    updateTime();
+    setInterval(updateTime, 100);
+}
+
 // ─── COUNTDOWN TIMER ───
 function startCountdown() {
     const update = () => {
@@ -95,7 +112,7 @@ function startCountdown() {
     };
 
     update();
-    setInterval(update, 1000);
+    setInterval(update, 100);
 }
 
 // ─── AUTO-START ───
