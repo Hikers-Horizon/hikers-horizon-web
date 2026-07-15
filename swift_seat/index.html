@@ -209,24 +209,26 @@
                     <!-- Station Info Routing Display -->
                     <div id="train-details-container">
                         <div class="route-display-wrapper" id="route-display">
-                            <div class="route-station-node">
-                                <input type="text" class="route-code-input" id="from-code" value="YNK" maxLength="5" oninput="this.value = this.value.toUpperCase()">
-                                <input type="text" class="route-name-input" id="from-name" value="Yelahanka">
-                            </div>
-                            
-                            <div class="route-visual-path">
-                                <div class="path-line"></div>
-                                <button type="button" class="route-swap" id="swap-btn" title="Swap Route Direction">
-                                    <i data-lucide="arrow-left-right"></i>
-                                </button>
-                                <div class="train-icon-node">
-                                    <i data-lucide="train"></i>
+                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
+                                <label class="select-label">From Station</label>
+                                <div class="route-input-group">
+                                    <input type="text" class="route-code-field text-mono" id="from-code" value="YNK" placeholder="Code" oninput="this.value = this.value.toUpperCase()">
+                                    <span class="route-separator">-</span>
+                                    <input type="text" class="route-name-field" id="from-name" value="Yelahanka" placeholder="Name">
                                 </div>
                             </div>
                             
-                            <div class="route-station-node">
-                                <input type="text" class="route-code-input" id="to-code" value="YG" maxLength="5" oninput="this.value = this.value.toUpperCase()">
-                                <input type="text" class="route-name-input" id="to-name" value="Yadgiri">
+                            <button type="button" class="route-swap-btn" id="swap-btn" title="Swap Stations">
+                                <i data-lucide="arrow-left-right"></i>
+                            </button>
+                            
+                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
+                                <label class="select-label">To Station</label>
+                                <div class="route-input-group">
+                                    <input type="text" class="route-code-field text-mono" id="to-code" value="YG" placeholder="Code" oninput="this.value = this.value.toUpperCase()">
+                                    <span class="route-separator">-</span>
+                                    <input type="text" class="route-name-field" id="to-name" value="Yadgiri" placeholder="Name">
+                                </div>
                             </div>
                         </div>
 
