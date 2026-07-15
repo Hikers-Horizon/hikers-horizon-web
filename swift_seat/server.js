@@ -219,6 +219,8 @@ app.post('/api/verify-razorpay-payment', (req, res) => {
         expiresAt: expiryDate.toISOString(),
         paymentId: paymentId
     });
+});
+
 // Endpoint: Get System Time of the Runner Device
 app.get('/api/system-time', (req, res) => {
     res.json({ timestamp: Date.now() });
