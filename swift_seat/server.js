@@ -386,11 +386,21 @@ app.post('/api/start-tatkal', async (req, res) => {
             } catch (cdpErr) {
                 emitLog('Remote Debugging Port 9222 not open. Launching profile directly...', 'info');
                 
+                const isLinux = process.platform === 'linux';
+                const isHeadless = isLinux || (process.env.HEADLESS === 'true');
+                
+                let browserChannel = 'chrome';
+                if (isLinux) {
+                    const chromePathLinux = '/opt/google/chrome/chrome';
+                    if (!fs.existsSync(chromePathLinux)) {
+                        browserChannel = undefined;
+                    }
+                }
+
                 // 2. Try launching their main Chrome profile folder directly (Only works if Chrome is closed)
                 try {
-                    browser = await chromium.launchPersistentContext(mainUserDataDir, {
-                        headless: false,
-                        channel: 'chrome',
+                    const launchOptions = {
+                        headless: isHeadless,
                         args: [
                             '--disable-infobars',
                             '--start-maximized',
@@ -405,19 +415,21 @@ app.post('/api/start-tatkal', async (req, res) => {
                         ],
                         viewport: null,
                         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
-                    });
-                    
+                    };
+                    if (browserChannel) {
+                        launchOptions.channel = browserChannel;
+                    }
+                    browser = await chromium.launchPersistentContext(mainUserDataDir, launchOptions);
                     emitLog('Successfully launched Chrome using your main profile! ✓', 'success');
                 } catch (launchErr) {
-                    emitLog('🔒 Primary Chrome is currently open/locked.', 'warning');
+                    emitLog('🔒 Primary Chrome is currently open/locked or not installed.', 'warning');
                     emitLog('💡 Tip: Close Google Chrome completely before starting to load your saved logins automatically!', 'info');
                     emitLog('Continuing with isolated profile...', 'info');
                     
                     // 3. Fallback to isolated bot profile to guarantee execution
                     const chromePath = './bot_chrome_data'; 
-                    browser = await chromium.launchPersistentContext(chromePath, {
-                        headless: false,
-                        channel: 'chrome',
+                    const fallbackOptions = {
+                        headless: isHeadless,
                         args: [
                             '--disable-infobars',
                             '--start-maximized'
@@ -431,8 +443,24 @@ app.post('/api/start-tatkal', async (req, res) => {
                         ],
                         viewport: null,
                         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
-                    });
-                    emitLog('Launched isolated profile successfully ✓', 'success');
+                    };
+                    if (browserChannel) {
+                        fallbackOptions.channel = browserChannel;
+                    }
+
+                    try {
+                        browser = await chromium.launchPersistentContext(chromePath, fallbackOptions);
+                        emitLog('Launched isolated profile successfully ✓', 'success');
+                    } catch (fallbackErr) {
+                        if (fallbackOptions.channel) {
+                            emitLog('Failed to launch with Google Chrome. Retrying with built-in Chromium...', 'warning');
+                            delete fallbackOptions.channel;
+                            browser = await chromium.launchPersistentContext(chromePath, fallbackOptions);
+                            emitLog('Launched built-in Chromium successfully ✓', 'success');
+                        } else {
+                            throw fallbackErr;
+                        }
+                    }
                 }
 
                 // Inject anti-detection script to the persistent context
