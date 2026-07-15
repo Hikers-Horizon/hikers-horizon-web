@@ -6,7 +6,7 @@ const htmlContent = `
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tatkal Flash - Simple User Guide</title>
+    <title>Swift Seat - Simple User Guide</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
         
@@ -217,7 +217,7 @@ const htmlContent = `
 </head>
 <body>
     <div class="header">
-        <h2 class="logo-text">TATKAL FLASH</h2>
+        <h2 class="logo-text">SWIFT SEAT</h2>
         <div class="subtitle">Easy Guide to Ticket Booking (Manual + Bot Hybrid)</div>
     </div>
 
@@ -252,7 +252,7 @@ const htmlContent = `
             <div class="step-number">1</div>
             <div class="step-content">
                 <div class="step-title">Set up Passenger List <span class="badge-user">USER STEP</span></div>
-                <div class="step-desc">Open the Tatkal Flash icon in Chrome, enter credentials, train codes (like YNK and YG), and add the list of passengers. Click <strong>Start Booking</strong>.</div>
+                <div class="step-desc">Open the Swift Seat extension in <strong>Microsoft Edge</strong> (Note: The extension works on Edge only; do not install it in Chrome), enter credentials, train codes (like YNK and YG), and add the list of passengers. Click <strong>Start Booking</strong>.</div>
             </div>
         </div>
 
@@ -311,7 +311,7 @@ async function main() {
         
         await page.setContent(htmlContent);
         
-        const pdfPath = path.resolve('C:\\Users\\shiva\\Fast2\\Tatkal_Flash_User_Guide.pdf');
+        const pdfPath = path.resolve('Swift_Seat_User_Guide.pdf');
         
         console.log(`Generating PDF at: ${pdfPath}...`);
         await page.pdf({
