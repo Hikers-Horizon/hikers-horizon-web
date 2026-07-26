@@ -14,33 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('journey-date').value = dateStr;
 
     // ─── Live Clock & Countdown Sync ───
-    let timeOffset = 0;
-    
-    async function syncTimeOffset() {
-        try {
-            const start = Date.now();
-            const res = await fetch('https://hikershorizon.in/api/system-time');
-            if (res.ok) {
-                const data = await res.json();
-                const latency = (Date.now() - start) / 2;
-                timeOffset = (data.timestamp + latency) - Date.now();
-                return;
-            }
-        } catch (e) {}
-
-        try {
-            const start = Date.now();
-            const res = await fetch('http://localhost:3005/api/system-time');
-            if (res.ok) {
-                const data = await res.json();
-                const latency = (Date.now() - start) / 2;
-                timeOffset = (data.timestamp + latency) - Date.now();
-            }
-        } catch (e) {}
-    }
-
     function updateClockAndCountdown() {
-        const now = new Date(Date.now() + timeOffset);
+        const now = new Date();
         
         // 1. Update Live Clock
         const liveHrs = String(now.getHours()).padStart(2, '0');
@@ -67,18 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const isTatkal = trainQuota === 'TQ' || trainQuota === 'PT';
             
             if (isTatkal) {
+                const targetHour = (trainClass === 'SL') ? 11 : 10;
                 countdownLabel.textContent = `${trainClass} Tatkal Opens In`;
                 
-                // Target in IST: Sleeper is 11:00 UTC 05:30, others are 10:00 UTC 04:30
-                const isSleeper = (trainClass === 'SL');
-                const targetHourUtc = isSleeper ? 5 : 4;
-                const targetMinUtc = 30;
-
                 let target = new Date(now);
-                target.setUTCHours(targetHourUtc, targetMinUtc, 0, 0);
-
+                target.setHours(targetHour, 0, 0, 0);
+                
                 if (now >= target) {
-                    target.setUTCDate(target.getUTCDate() + 1);
+                    target.setDate(target.getDate() + 1);
                 }
                 
                 const diff = target - now;
@@ -99,12 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initialize and run intervals
-    syncTimeOffset().then(() => {
-        updateClockAndCountdown();
-    });
-    setInterval(syncTimeOffset, 30000);
-    setInterval(updateClockAndCountdown, 100);
+    // Initialize and run interval
+    updateClockAndCountdown();
+    setInterval(updateClockAndCountdown, 1000);
 
     // Bind dropdown changes to immediately update display
     const classEl = document.getElementById('train-class');

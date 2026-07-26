@@ -39,11 +39,6 @@
                     <span class="metric-label" id="status-text">Ready</span>
                 </div>
                 <div class="metric-item">
-                    <i data-lucide="clock" class="metric-icon"></i>
-                    <span class="metric-label">System Time:</span>
-                    <span class="metric-val text-mono" id="nav-system-time" style="color: var(--success); font-family: monospace; font-weight: bold;">00:00:00</span>
-                </div>
-                <div class="metric-item">
                     <i data-lucide="shield" class="metric-icon"></i>
                     <span class="metric-label">License Key:</span>
                     <span class="metric-val" id="nav-key-status">Checking...</span>
@@ -209,18 +204,24 @@
                     <!-- Station Info Routing Display -->
                     <div id="train-details-container">
                         <div class="route-display-wrapper" id="route-display">
-                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
-                                <label class="select-label">From Station</label>
-                                <input type="text" class="form-input text-mono" id="from-code" value="YNK" placeholder="e.g. YNK" maxLength="5" oninput="this.value = this.value.toUpperCase()">
+                            <div class="route-station-node">
+                                <span class="route-code-text" id="from-code">YNK</span>
+                                <span class="route-name">Yelahanka</span>
                             </div>
                             
-                            <button type="button" class="route-swap-btn" id="swap-btn" title="Swap Stations">
-                                <i data-lucide="arrow-left-right"></i>
-                            </button>
+                            <div class="route-visual-path">
+                                <div class="path-line"></div>
+                                <button type="button" class="route-swap" id="swap-btn" title="Swap Route Direction">
+                                    <i data-lucide="arrow-left-right"></i>
+                                </button>
+                                <div class="train-icon-node">
+                                    <i data-lucide="train"></i>
+                                </div>
+                            </div>
                             
-                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
-                                <label class="select-label">To Station</label>
-                                <input type="text" class="form-input text-mono" id="to-code" value="YG" placeholder="e.g. YG" maxLength="5" oninput="this.value = this.value.toUpperCase()">
+                            <div class="route-station-node">
+                                <span class="route-code-text" id="to-code">YG</span>
+                                <span class="route-name">Yadgiri</span>
                             </div>
                         </div>
 
@@ -522,52 +523,7 @@
         </footer>
     </div>
 
-    <!-- Initialize Lucide Icons & Custom Passwords toggle scripts -->
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            // Hydrate Icons
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-
-            // Sync Nav status text key indication
-            setInterval(() => {
-                const licenseInfoText = document.getElementById('dashboard-license-info');
-                const navKeyText = document.getElementById('nav-key-status');
-                if (licenseInfoText && navKeyText) {
-                    if (licenseInfoText.textContent.includes('Expired')) {
-                        navKeyText.textContent = 'Expired';
-                        navKeyText.className = 'metric-val key-expired';
-                    } else if (licenseInfoText.textContent.includes('Active')) {
-                        navKeyText.textContent = 'Active';
-                        navKeyText.className = 'metric-val key-active';
-                    } else {
-                        navKeyText.textContent = 'Inactive';
-                        navKeyText.className = 'metric-val key-inactive';
-                    }
-                }
-            }, 1000);
-
-            // Toggle passwords
-            const toggleBtn = document.getElementById('btn-toggle-password');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    const passInput = document.getElementById('irctc-pass');
-                    const icon = toggleBtn.querySelector('i');
-                    if (passInput.type === 'password') {
-                        passInput.type = 'text';
-                        toggleBtn.innerHTML = '<i data-lucide="eye-off"></i>';
-                    } else {
-                        passInput.type = 'password';
-                        toggleBtn.innerHTML = '<i data-lucide="eye"></i>';
-                    }
-                    if (window.lucide) {
-                        lucide.createIcons();
-                    }
-                });
-            }
-        });
-    </script>
+    <!-- Load Main Dashboard Controller Script -->
     <script src="./main.js"></script>
 </body>
 

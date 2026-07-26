@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Bot Runtime Data
+bot_chrome_data/
+user_data/
+chrome_profile_root/
+swift-seat-extension.zip
+android-app/app/build/
+android-app/.gradle/
+
+
