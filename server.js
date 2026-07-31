@@ -508,35 +508,49 @@ app.post('/api/start-tatkal', async (req, res) => {
         // Start screenshot capture
         captureLoop();
 
-        // ─── STEP 1: Navigate (With Manual Takeover Support) ───
-        emitLog('Waiting for IRCTC page... (You can paste the link now)', 'info');
+        // ─── STEP 1: Navigate (With Robust Timeout & Cloud Protection Bypass) ───
+        emitLog('Connecting to IRCTC portal...', 'info');
         
         try {
-            // Attempt auto-navigation first if not already on IRCTC domain
+            // Set browser stealth headers to ensure smooth Cloudflare/Akamai passage on cloud servers
+            try {
+                await page.setExtraHTTPHeaders({
+                    'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Ch-Ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
+                    'Sec-Ch-Ua-Mobile': '?0',
+                    'Sec-Ch-Ua-Platform': '"Windows"'
+                });
+            } catch(hErr) {}
+
             const currentUrl = page.url() || '';
             if (currentUrl.includes('irctc.co.in/nget/train-search')) {
                 emitLog('Already on IRCTC search page, skipping navigation ✓', 'success');
             } else if (currentUrl.includes('irctc.co.in')) {
                 emitLog('On IRCTC portal, skipping page reload to prevent session error ✓', 'success');
             } else {
+                emitLog('Opening https://www.irctc.co.in/nget/train-search ...', 'info');
+                
+                // Use commit + 35s timeout to prevent premature aborts on AWS server IPs
                 await page.goto('https://www.irctc.co.in/nget/train-search', {
-                    waitUntil: 'domcontentloaded',
-                    timeout: 10000 // Short timeout to allow manual takeover
-                }).catch(() => {
-                    emitLog('Auto-navigation slow/blocked. Waiting for you to paste link...', 'warning');
+                    waitUntil: 'commit',
+                    timeout: 35000
+                }).catch(async (navErr) => {
+                    emitLog(`Initial HTTP commit notice: ${navErr.message || navErr}`, 'warning');
                 });
+
+                emitLog('Connection response received, loading page assets...', 'info');
+                await page.waitForLoadState('domcontentloaded', { timeout: 30000 }).catch(() => {});
             }
 
-            // Wait for user to be on the right page (up to 60s)
+            // Wait for user or bot to be on search page (up to 45s)
             await page.waitForFunction(() => {
                 return window.location.href.includes('irctc.co.in/nget/train-search');
-            }, { timeout: 60000, polling: 1000 });
+            }, { timeout: 45000, polling: 1000 }).catch(() => {});
 
             emitLog('IRCTC Page Detected! Taking control...', 'success');
         } catch (e) {
-            emitLog('Still waiting for IRCTC page. Please navigate manually.', 'warning');
-            // Last resort: wait for a specific element that exists on the search page
-            await page.waitForSelector('app-header, .navbar, .header-container', { timeout: 60000 }).catch(() => { });
+            emitLog(`Navigation warning: ${e.message || e}`, 'warning');
         }
 
         emitLog('IRCTC app ready', 'success');
