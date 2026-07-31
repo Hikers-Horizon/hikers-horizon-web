@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4;
-            margin: 15mm 18mm;
+            margin: 10mm 12mm;
         }
 
         * {
@@ -21,48 +21,62 @@
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
             background: #ffffff;
             color: #0f172a;
-            line-height: 1.5;
-            font-size: 13px;
+            line-height: 1.45;
+            font-size: 12px;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+        }
+
+        .page {
+            height: 277mm; /* Full A4 printable height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+            break-after: auto;
         }
 
         /* Header Banner */
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #ffffff;
-            padding: 24px 28px;
-            border-radius: 16px;
+            padding: 16px 22px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 14px;
         }
 
         .brand-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .brand-icon {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #2563eb, #3b82f6);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
 
         .brand-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             letter-spacing: -0.5px;
-            line-height: 1.2;
+            line-height: 1.1;
         }
 
         .brand-title span {
@@ -70,33 +84,33 @@
         }
 
         .brand-sub {
-            font-size: 12px;
+            font-size: 11px;
             color: #94a3b8;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .price-tag {
             text-align: right;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 10px 18px;
-            border-radius: 12px;
+            padding: 8px 14px;
+            border-radius: 10px;
         }
 
         .price-amount {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             color: #10b981;
             line-height: 1;
         }
 
         .price-label {
-            font-size: 10px;
+            font-size: 9px;
             color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         /* Section Titles */
@@ -104,18 +118,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 24px 0 14px 0;
-            page-break-after: avoid;
-            break-after: avoid;
-        }
-
-        .section-header:first-of-type {
-            margin-top: 0;
+            margin: 12px 0 8px 0;
         }
 
         .section-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 700;
             color: #0f172a;
             letter-spacing: -0.3px;
@@ -124,9 +132,9 @@
         .section-badge {
             background: #eff6ff;
             color: #2563eb;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
         }
 
@@ -134,55 +142,51 @@
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .feature-card {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 14px 16px;
+            border-radius: 10px;
+            padding: 10px 12px;
         }
 
         .feature-card-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
+            gap: 8px;
+            margin-bottom: 4px;
         }
 
         .feature-emoji {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .feature-card-title {
-            font-size: 13.5px;
+            font-size: 12px;
             font-weight: 700;
             color: #1e293b;
         }
 
         .feature-card-desc {
-            font-size: 11.5px;
+            font-size: 10.5px;
             color: #64748b;
-            line-height: 1.45;
+            line-height: 1.35;
         }
 
         /* Roles Division Box */
         .roles-box {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 24px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .role-col {
-            border-radius: 12px;
-            padding: 14px 16px;
+            border-radius: 10px;
+            padding: 10px 12px;
         }
 
         .role-col.bot {
@@ -196,9 +200,9 @@
         }
 
         .role-title {
-            font-size: 13px;
+            font-size: 11.5px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -208,27 +212,25 @@
         .role-col.user .role-title { color: #c2410c; }
 
         .role-list {
-            padding-left: 18px;
-            font-size: 11.5px;
+            padding-left: 16px;
+            font-size: 10.5px;
         }
 
-        .role-col.bot .role-list li { color: #166534; margin-bottom: 4px; }
-        .role-col.user .role-list li { color: #9a3412; margin-bottom: 4px; }
+        .role-col.bot .role-list li { color: #166534; margin-bottom: 3px; }
+        .role-col.user .role-list li { color: #9a3412; margin-bottom: 3px; }
 
         /* Comparison Table */
         .table-container {
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 24px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            margin-bottom: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         th {
@@ -236,15 +238,15 @@
             color: #334155;
             font-weight: 700;
             text-align: left;
-            padding: 10px 14px;
-            font-size: 11px;
+            padding: 8px 12px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 1px solid #e2e8f0;
         }
 
         td {
-            padding: 9px 14px;
+            padding: 7px 12px;
             border-bottom: 1px solid #f1f5f9;
             color: #334155;
         }
@@ -261,9 +263,9 @@
             color: #16a34a;
             font-weight: 700;
             background: #dcfce7;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 10px;
             display: inline-block;
         }
 
@@ -271,47 +273,38 @@
             color: #dc2626;
             font-weight: 600;
             background: #fee2e2;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 10px;
             display: inline-block;
-        }
-
-        /* Page Break Rule */
-        .page-break {
-            page-break-before: always;
-            break-before: page;
-            padding-top: 10px;
         }
 
         /* Step Cards */
         .steps-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 24px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .step-row {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px 16px;
+            border-radius: 10px;
+            padding: 10px 12px;
             align-items: flex-start;
         }
 
         .step-num {
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
             background: #2563eb;
             color: #ffffff;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -319,90 +312,85 @@
         }
 
         .step-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: #0f172a;
             margin-bottom: 2px;
         }
 
         .step-desc {
-            font-size: 11.5px;
+            font-size: 10.5px;
             color: #64748b;
-            line-height: 1.45;
+            line-height: 1.4;
         }
 
         /* Callout Box */
         .callout {
             background: #eff6ff;
             border: 1px solid #bfdbfe;
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
             display: flex;
-            gap: 12px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            gap: 10px;
         }
 
         .callout-icon {
-            font-size: 20px;
+            font-size: 16px;
             flex-shrink: 0;
         }
 
         .callout-title {
-            font-size: 12.5px;
+            font-size: 11.5px;
             font-weight: 700;
             color: #1e40af;
             margin-bottom: 2px;
         }
 
         .callout-text {
-            font-size: 11.5px;
+            font-size: 10.5px;
             color: #1e3a8a;
-            line-height: 1.45;
+            line-height: 1.4;
         }
 
         /* FAQ Section */
         .faq-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 24px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .faq-card {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px 14px;
+            border-radius: 10px;
+            padding: 10px 12px;
         }
 
         .faq-q {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #0f172a;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .faq-a {
-            font-size: 11px;
+            font-size: 10.5px;
             color: #64748b;
-            line-height: 1.45;
+            line-height: 1.35;
         }
 
         /* Footer */
         .footer {
             border-top: 1px solid #e2e8f0;
-            padding-top: 14px;
+            padding-top: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 11px;
+            font-size: 10px;
             color: #94a3b8;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            margin-top: auto;
         }
 
         .footer-link {
@@ -418,212 +406,220 @@
 </head>
 <body>
 
-    <!-- PAGE 1: OVERVIEW & FEATURES -->
-    <div class="header">
-        <div class="brand-left">
-            <div class="brand-icon">⚡</div>
-            <div>
-                <div class="brand-title">Swift<span>Seat</span></div>
-                <div class="brand-sub">IRCTC Tatkal Booking Automation Engine</div>
+    <!-- PAGE 1: OVERVIEW, FEATURES & COMPARISON -->
+    <div class="page">
+        <div>
+            <div class="header">
+                <div class="brand-left">
+                    <div class="brand-icon">⚡</div>
+                    <div>
+                        <div class="brand-title">Swift<span>Seat</span></div>
+                        <div class="brand-sub">IRCTC Tatkal Booking Automation Engine</div>
+                    </div>
+                </div>
+                <div class="price-tag">
+                    <div class="price-amount">₹99 / mo</div>
+                    <div class="price-label">Unlimited Bookings</div>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-top:0;">
+                <div class="section-title">Key Features</div>
+                <div class="section-badge">Fast & Secure</div>
+            </div>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <div class="feature-card-header">
+                        <span class="feature-emoji">⚡</span>
+                        <div class="feature-card-title">Instant Passenger Autofill</div>
+                    </div>
+                    <div class="feature-card-desc">Fills name, age, gender, berth preference & mobile number in under 2 seconds automatically.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-header">
+                        <span class="feature-emoji">⏱️</span>
+                        <div class="feature-card-title">30-Second Pre-Start</div>
+                    </div>
+                    <div class="feature-card-desc">Auto-launches 30s before Tatkal window (10 AM AC / 11 AM Sleeper) so you are ready.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-header">
+                        <span class="feature-emoji">🔐</span>
+                        <div class="feature-card-title">Auto Credentials & Captcha</div>
+                    </div>
+                    <div class="feature-card-desc">Injects login details safely and focuses the Captcha box so you only type the letters.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card-header">
+                        <span class="feature-emoji">📺</span>
+                        <div class="feature-card-title">Live Screen Streaming</div>
+                    </div>
+                    <div class="feature-card-desc">Monitor the entire automation live from your browser dashboard via real-time screen stream.</div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title">Automation Workflow</div>
+                <div class="section-badge">Hybrid System</div>
+            </div>
+
+            <div class="roles-box">
+                <div class="role-col bot">
+                    <div class="role-title">🤖 Bot Handles (Automatic)</div>
+                    <ul class="role-list">
+                        <li>Enters From & To station codes (YNK → YG).</li>
+                        <li>Fills journey date, train & quota options.</li>
+                        <li>Injects all passenger details instantly.</li>
+                        <li>Points you to the final payment box.</li>
+                    </ul>
+                </div>
+                <div class="role-col user">
+                    <div class="role-title">👤 You Handle (Manual)</div>
+                    <ul class="role-list">
+                        <li>Type login Captcha (if prompt appears).</li>
+                        <li>Click Sleeper/AC class & click 'Book Now'.</li>
+                        <li>Type final payment Captcha.</li>
+                        <li>Approve UPI payment on your phone.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-title">Manual vs Swift Seat</div>
+                <div class="section-badge">Performance</div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Manual Booking</th>
+                            <th>Swift Seat ⚡</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Passenger Entry Time</td>
+                            <td>45 – 90 seconds</td>
+                            <td><span class="badge-yes">Under 2 Seconds</span></td>
+                        </tr>
+                        <tr>
+                            <td>Search & Date Setup</td>
+                            <td>20 – 30 seconds</td>
+                            <td><span class="badge-yes">Instant / Auto</span></td>
+                        </tr>
+                        <tr>
+                            <td>Total Time to Payment</td>
+                            <td>2 – 4 minutes</td>
+                            <td><span class="badge-yes">Under 30 Seconds</span></td>
+                        </tr>
+                        <tr>
+                            <td>Tatkal Success Rate</td>
+                            <td>~15% chance</td>
+                            <td><span class="badge-yes">~85%+ Success</span></td>
+                        </tr>
+                        <tr>
+                            <td>Pre-Start Timer</td>
+                            <td><span class="badge-no">No</span></td>
+                            <td><span class="badge-yes">30s Before Window</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="price-tag">
-            <div class="price-amount">₹99 / mo</div>
-            <div class="price-label">Unlimited Bookings</div>
+
+        <div class="footer">
+            <div>Swift Seat v2.0 — Page 1 of 2</div>
+            <div>Web: <a href="https://hikershorizon.in/swiftseat" class="footer-link">hikershorizon.in/swiftseat</a></div>
         </div>
     </div>
 
-    <!-- Section: Features -->
-    <div class="section-header">
-        <div class="section-title">Key Features</div>
-        <div class="section-badge">Fast & Secure</div>
-    </div>
+    <!-- PAGE 2: STEPS & FAQ -->
+    <div class="page">
+        <div>
+            <div class="section-header" style="margin-top:0;">
+                <div class="section-title">Step-by-Step Setup Guide</div>
+                <div class="section-badge">Easy 5 Steps</div>
+            </div>
 
-    <div class="grid-2">
-        <div class="feature-card">
-            <div class="feature-card-header">
-                <span class="feature-emoji">⚡</span>
-                <div class="feature-card-title">Instant Passenger Autofill</div>
+            <div class="steps-container">
+                <div class="step-row">
+                    <div class="step-num">1</div>
+                    <div>
+                        <div class="step-title">Get License Key & Activate</div>
+                        <div class="step-desc">Visit <strong>hikershorizon.in/swiftseat</strong>, enter your email and pay ₹99. Copy your generated key and paste it into the dashboard/extension to activate.</div>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-num">2</div>
+                    <div>
+                        <div class="step-title">Configure Form Details</div>
+                        <div class="step-desc">Enter your IRCTC login credentials, route (e.g., YNK to YG), train number, class, journey date, and passenger list into the dashboard.</div>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-num">3</div>
+                    <div>
+                        <div class="step-title">Start Sequence or Set Auto-Start</div>
+                        <div class="step-desc">Click <strong>Start Sequence</strong> or enable <strong>Auto-Start</strong> mode (starts 30s before 10 AM / 11 AM window). The bot opens IRCTC and initiates search.</div>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-num">4</div>
+                    <div>
+                        <div class="step-title">Select Class & Book Now (Manual Step)</div>
+                        <div class="step-desc">The bot navigates to train results. Immediately click your class (Sleeper/AC) and click <strong>Book Now</strong>. The bot instantly injects all passengers!</div>
+                    </div>
+                </div>
+                <div class="step-row">
+                    <div class="step-num">5</div>
+                    <div>
+                        <div class="step-title">Solve Captcha & Complete Payment</div>
+                        <div class="step-desc">Type the Captcha, select your preferred payment mode (UPI/Card), and approve payment on your phone to confirm your ticket!</div>
+                    </div>
+                </div>
             </div>
-            <div class="feature-card-desc">Fills name, age, gender, berth preference & mobile number in under 2 seconds automatically.</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-card-header">
-                <span class="feature-emoji">⏱️</span>
-                <div class="feature-card-title">30-Second Pre-Start</div>
+
+            <div class="callout">
+                <div class="callout-icon">💡</div>
+                <div>
+                    <div class="callout-title">Pro-Tip for Maximum Speed</div>
+                    <div class="callout-text">Keep your UPI app (GPay / PhonePe / Paytm) open on your smartphone before starting. Once you submit the payment step on IRCTC, approve the UPI request immediately!</div>
+                </div>
             </div>
-            <div class="feature-card-desc">Auto-launches 30s before the Tatkal window opens (10 AM AC / 11 AM Sleeper) so you are ready.</div>
-        </div>
-        <div class="feature-card">
-            <div class="feature-card-header">
-                <span class="feature-emoji">🔐</span>
-                <div class="feature-card-title">Auto Credentials & Captcha</div>
-                <div class="feature-desc">Injects login details safely and focuses the Captcha box so you only type the letters.</div>
+
+            <div class="section-header">
+                <div class="section-title">Frequently Asked Questions</div>
+                <div class="section-badge">FAQ</div>
             </div>
-            <div class="feature-card">
-                <div class="feature-card-header">
-                    <span class="feature-emoji">📺</span>
-                    <div class="feature-card-title">Live Screen Streaming</div>
-                    <div class="feature-desc">Monitor the entire automation live from your browser dashboard via real-time screen stream.</div>
+
+            <div class="faq-grid">
+                <div class="faq-card">
+                    <div class="faq-q">Are my credentials safe?</div>
+                    <div class="faq-a">Yes. Password & passenger data are stored strictly on your local device. We never transmit or store your login info on external servers.</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-q">Which browsers are supported?</div>
+                    <div class="faq-a">Google Chrome and Microsoft Edge on Windows, macOS, and Linux desktop operating systems.</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-q">What if the page hangs?</div>
+                    <div class="faq-a">If IRCTC servers slow down, simply press F5 to reload. The bot resumes automation automatically from the current step.</div>
+                </div>
+                <div class="faq-card">
+                    <div class="faq-q">How long does ₹99 subscription last?</div>
+                    <div class="faq-a">Your license key remains active for 30 days with unlimited ticket bookings during the subscription period.</div>
                 </div>
             </div>
         </div>
 
-    <!-- Section: Roles Division -->
-    <div class="section-header">
-        <div class="section-title">Automation Workflow</div>
-        <div class="section-badge">Hybrid System</div>
-    </div>
-
-    <div class="roles-box">
-        <div class="role-col bot">
-            <div class="role-title">🤖 Bot Handles (Automatic)</div>
-            <ul class="role-list">
-                <li>Enters From & To station codes (YNK → YG).</li>
-                <li>Fills journey date, train & quota options.</li>
-                <li>Injects all passenger details instantly.</li>
-                <li>Points you to the final payment box.</li>
-            </ul>
+        <div class="footer">
+            <div>Swift Seat v2.0 — Page 2 of 2</div>
+            <div>Web: <a href="https://hikershorizon.in/swiftseat" class="footer-link">hikershorizon.in/swiftseat</a></div>
+            <div>Support: hikershorizon@gmail.com</div>
         </div>
-        <div class="role-col user">
-            <div class="role-title">👤 You Handle (Manual)</div>
-            <ul class="role-list">
-                <li>Type login Captcha (if prompt appears).</li>
-                <li>Click Sleeper/AC class & click 'Book Now'.</li>
-                <li>Type final payment Captcha.</li>
-                <li>Approve UPI payment on your phone.</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Section: Comparison -->
-    <div class="section-header">
-        <div class="section-title">Manual vs Swift Seat</div>
-        <div class="section-badge">Performance</div>
-    </div>
-
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Task</th>
-                    <th>Manual Booking</th>
-                    <th>Swift Seat ⚡</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Passenger Entry Time</td>
-                    <td>45 – 90 seconds</td>
-                    <td><span class="badge-yes">Under 2 Seconds</span></td>
-                </tr>
-                <tr>
-                    <td>Search & Date Setup</td>
-                    <td>20 – 30 seconds</td>
-                    <td><span class="badge-yes">Instant / Auto</span></td>
-                </tr>
-                <tr>
-                    <td>Total Time to Payment</td>
-                    <td>2 – 4 minutes</td>
-                    <td><span class="badge-yes">Under 30 Seconds</span></td>
-                </tr>
-                <tr>
-                    <td>Tatkal Success Rate</td>
-                    <td>~15% chance</td>
-                    <td><span class="badge-yes">~85%+ Success</span></td>
-                </tr>
-                <tr>
-                    <td>Pre-Start Timer</td>
-                    <td><span class="badge-no">No</span></td>
-                    <td><span class="badge-yes">30s Before Window</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- PAGE BREAK FOR PAGE 2 -->
-    <div class="page-break"></div>
-
-    <!-- PAGE 2: STEPS & FAQ -->
-    <div class="section-header">
-        <div class="section-title">Step-by-Step Setup Guide</div>
-        <div class="section-badge">Easy 5 Steps</div>
-    </div>
-
-    <div class="steps-container">
-        <div class="step-row">
-            <div class="step-num">1</div>
-            <div>
-                <div class="step-title">Get License Key & Activate</div>
-                <div class="step-desc">Visit <strong>hikershorizon.in/swiftseat</strong>, enter your email and pay ₹99. Copy your generated key and paste it into the dashboard/extension to activate.</div>
-            </div>
-        </div>
-        <div class="step-row">
-            <div class="step-num">2</div>
-            <div>
-                <div class="step-title">Configure Form Details</div>
-                <div class="step-desc">Enter your IRCTC login credentials, route (e.g., YNK to YG), train number, class, journey date, and passenger list into the dashboard.</div>
-            </div>
-        </div>
-        <div class="step-row">
-            <div class="step-num">3</div>
-            <div>
-                <div class="step-title">Start Sequence or Set Auto-Start</div>
-                <div class="step-desc">Click <strong>Start Sequence</strong> or enable <strong>Auto-Start</strong> mode (starts 30s before 10 AM / 11 AM window). The bot opens IRCTC and initiates search.</div>
-            </div>
-        </div>
-        <div class="step-row">
-            <div class="step-num">4</div>
-            <div>
-                <div class="step-title">Select Class & Book Now (Manual Step)</div>
-                <div class="step-desc">The bot navigates to train results. Immediately click your class (Sleeper/AC) and click <strong>Book Now</strong>. The bot instantly injects all passengers!</div>
-            </div>
-        </div>
-        <div class="step-row">
-            <div class="step-num">5</div>
-            <div>
-                <div class="step-title">Solve Captcha & Complete Payment</div>
-                <div class="step-desc">Type the Captcha, select your preferred payment mode (UPI/Card), and approve payment on your phone to confirm your ticket!</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="callout">
-        <div class="callout-icon">💡</div>
-        <div>
-            <div class="callout-title">Pro-Tip for Maximum Speed</div>
-            <div class="callout-text">Keep your UPI app (GPay / PhonePe / Paytm) open on your smartphone before starting. Once you submit the payment step on IRCTC, approve the UPI request immediately!</div>
-        </div>
-    </div>
-
-    <div class="section-header">
-        <div class="section-title">Frequently Asked Questions</div>
-        <div class="section-badge">FAQ</div>
-    </div>
-
-    <div class="faq-grid">
-        <div class="faq-card">
-            <div class="faq-q">Are my credentials safe?</div>
-            <div class="faq-a">Yes. Password & passenger data are stored strictly on your local device. We never transmit or store your login info on external servers.</div>
-        </div>
-        <div class="faq-card">
-            <div class="faq-q">Which browsers are supported?</div>
-            <div class="faq-a">Google Chrome and Microsoft Edge on Windows, macOS, and Linux desktop operating systems.</div>
-        </div>
-        <div class="faq-card">
-            <div class="faq-q">What if the page hangs?</div>
-            <div class="faq-a">If IRCTC servers slow down, simply press F5 to reload. The bot resumes automation automatically from the current step.</div>
-        </div>
-        <div class="faq-card">
-            <div class="faq-q">How long does ₹99 subscription last?</div>
-            <div class="faq-a">Your license key remains active for 30 days with unlimited ticket bookings during the subscription period.</div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <div>Swift Seat v2.0 — IRCTC Tatkal Automation</div>
-        <div>Web: <a href="https://hikershorizon.in/swiftseat" class="footer-link">hikershorizon.in/swiftseat</a></div>
-        <div>Support: hikershorizon@gmail.com</div>
     </div>
 
 </body>
