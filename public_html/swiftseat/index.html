@@ -51,14 +51,60 @@
             </div>
             
             <div class="nav-actions">
-                <button class="nav-action-btn" title="System Settings">
-                    <i data-lucide="settings"></i>
-                </button>
-                <div class="user-profile">
-                    <div class="avatar">TF</div>
+                <div class="settings-wrapper" id="settings-wrapper">
+                    <button class="nav-action-btn" title="System Settings" id="btn-settings-toggle">
+                        <i data-lucide="settings"></i>
+                    </button>
+                    <div class="settings-dropdown" id="settings-dropdown">
+                        <div class="settings-dropdown-header">System Settings</div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="volume-2" class="settings-item-icon"></i>
+                                <span>Sound Alerts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-sound" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="save" class="settings-item-icon"></i>
+                                <span>Auto-Save Form</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-autosave" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="bell" class="settings-item-icon"></i>
+                                <span>Desktop Notifications</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-notifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="monitor" class="settings-item-icon"></i>
+                                <span>Live Stream Quality</span>
+                            </div>
+                            <select class="settings-select" id="setting-stream-quality">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="settings-divider"></div>
+                        <button class="settings-action-btn" id="btn-clear-data">
+                            <i data-lucide="trash-2" class="settings-item-icon"></i> Reset All Data
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
 
     <div id="app">
@@ -568,6 +614,41 @@
                     }
                     if (window.lucide) {
                         lucide.createIcons();
+                    }
+                });
+            }
+
+            // Settings dropdown toggle
+            const settingsBtn = document.getElementById('btn-settings-toggle');
+            const settingsDropdown = document.getElementById('settings-dropdown');
+            if (settingsBtn && settingsDropdown) {
+                settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    settingsDropdown.classList.toggle('open');
+                    settingsBtn.classList.toggle('active');
+                    if (window.lucide) lucide.createIcons();
+                });
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#settings-wrapper')) {
+                        settingsDropdown.classList.remove('open');
+                        settingsBtn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Reset All Data button
+            const clearBtn = document.getElementById('btn-clear-data');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to reset all form data?')) {
+                        document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"]').forEach(input => {
+                            if (!['journey-date', 'from-code', 'to-code', 'train-number'].includes(input.id)) {
+                                input.value = '';
+                            }
+                        });
+                        localStorage.clear();
+                        settingsDropdown.classList.remove('open');
+                        settingsBtn.classList.remove('active');
                     }
                 });
             }
