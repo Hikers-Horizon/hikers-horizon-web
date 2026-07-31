@@ -392,6 +392,8 @@ app.post('/api/start-tatkal', async (req, res) => {
                     '--disable-infobars',
                     '--start-maximized',
                     '--disable-blink-features=AutomationControlled',
+                    '--disable-http2',
+                    '--ignore-certificate-errors',
                     '--window-size=1920,1080'
                 ];
                 if (isLinuxHeadless) {
