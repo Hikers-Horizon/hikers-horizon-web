@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swift Seat — Customer Guide</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <title>Swift Seat — Customer & User Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     <style>
         @page {
             size: A4;
-            margin: 0;
+            margin: 15mm 18mm;
         }
 
         * {
@@ -18,611 +18,612 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0A0E1A;
-            color: #E2E8F0;
-            line-height: 1.6;
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: #ffffff;
+            color: #0f172a;
+            line-height: 1.5;
+            font-size: 13px;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
 
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            margin: 0 auto;
-            padding: 40px 45px;
-            position: relative;
-            overflow: hidden;
-            page-break-after: always;
-        }
-
-        /* Page 1 - Hero */
-        .page-hero {
-            background: linear-gradient(160deg, #0A0E1A 0%, #111827 40%, #0F172A 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .page-hero::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .page-hero::after {
-            content: '';
-            position: absolute;
-            bottom: -150px;
-            left: -100px;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            color: #60A5FA;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 32px;
-        }
-
-        .hero-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            margin-bottom: 28px;
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
-        }
-
-        .hero-title {
-            font-family: 'Manrope', sans-serif;
-            font-size: 52px;
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-title span {
-            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-tagline {
-            font-size: 18px;
-            color: #94A3B8;
-            font-weight: 400;
-            margin-bottom: 48px;
-            max-width: 400px;
-        }
-
-        .hero-price-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Header Banner */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 24px 28px;
             border-radius: 16px;
-            padding: 28px 40px;
-            margin-bottom: 40px;
-        }
-
-        .hero-price {
-            font-family: 'Manrope', sans-serif;
-            font-size: 56px;
-            font-weight: 900;
-            color: #10B981;
-            line-height: 1;
-        }
-
-        .hero-price-sub {
-            font-size: 14px;
-            color: #64748B;
-            margin-top: 4px;
-        }
-
-        .hero-url {
-            font-size: 13px;
-            color: #60A5FA;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            padding: 10px 24px;
-            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 24px;
         }
 
-        .hero-footer-text {
-            font-size: 11px;
-            color: #475569;
-            max-width: 350px;
+        .brand-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        /* Page 2 - Features */
-        .page-content {
-            background: linear-gradient(180deg, #0A0E1A 0%, #111827 100%);
-        }
-
-        .section-header {
-            margin-bottom: 28px;
-        }
-
-        .section-tag {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #3B82F6;
-            margin-bottom: 8px;
-        }
-
-        .section-title {
-            font-family: 'Manrope', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            color: #F1F5F9;
-            letter-spacing: -1px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 14px;
-            padding: 20px;
-        }
-
-        .feature-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            margin-bottom: 12px;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .feature-icon.blue { background: rgba(59, 130, 246, 0.12); }
-        .feature-icon.green { background: rgba(16, 185, 129, 0.12); }
-        .feature-icon.orange { background: rgba(245, 158, 11, 0.12); }
-        .feature-icon.purple { background: rgba(168, 85, 247, 0.12); }
-        .feature-icon.red { background: rgba(239, 68, 68, 0.12); }
-        .feature-icon.cyan { background: rgba(6, 182, 212, 0.12); }
-
-        .feature-title {
-            font-size: 14px;
+        .brand-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
             font-weight: 700;
-            color: #F1F5F9;
-            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
         }
 
-        .feature-desc {
-            font-size: 11.5px;
-            color: #94A3B8;
-            line-height: 1.5;
+        .brand-title span {
+            color: #60a5fa;
         }
+
+        .brand-sub {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .price-tag {
+            text-align: right;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 10px 18px;
+            border-radius: 12px;
+        }
+
+        .price-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #10b981;
+            line-height: 1;
+        }
+
+        .price-label {
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        /* Section Titles */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 24px 0 14px 0;
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        .section-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+        }
+
+        .section-badge {
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* Feature Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .feature-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .feature-emoji {
+            font-size: 16px;
+        }
+
+        .feature-card-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .feature-card-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        /* Roles Division Box */
+        .roles-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .role-col {
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .role-col.bot {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+        }
+
+        .role-col.user {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+        }
+
+        .role-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-col.bot .role-title { color: #15803d; }
+        .role-col.user .role-title { color: #c2410c; }
+
+        .role-list {
+            padding-left: 18px;
+            font-size: 11.5px;
+        }
+
+        .role-col.bot .role-list li { color: #166534; margin-bottom: 4px; }
+        .role-col.user .role-list li { color: #9a3412; margin-bottom: 4px; }
 
         /* Comparison Table */
-        .comparison-table {
+        .table-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 28px;
             font-size: 12px;
         }
 
-        .comparison-table th {
+        th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
             text-align: left;
             padding: 10px 14px;
-            background: rgba(59, 130, 246, 0.08);
-            color: #60A5FA;
-            font-weight: 700;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .comparison-table td {
+        td {
             padding: 9px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: #CBD5E1;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
         }
 
-        .comparison-table tr:nth-child(even) td {
-            background: rgba(255, 255, 255, 0.01);
+        tr:last-child td {
+            border-bottom: none;
         }
 
-        .check { color: #10B981; font-weight: 700; }
-        .cross { color: #EF4444; font-weight: 700; }
-
-        /* Page 3 - How it works */
-        .steps-list {
-            margin-bottom: 28px;
+        tr:nth-child(even) {
+            background: #fafafa;
         }
 
-        .step-item {
+        .badge-yes {
+            color: #16a34a;
+            font-weight: 700;
+            background: #dcfce7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .badge-no {
+            color: #dc2626;
+            font-weight: 600;
+            background: #fee2e2;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        /* Page Break Rule */
+        .page-break {
+            page-break-before: always;
+            break-before: page;
+            padding-top: 10px;
+        }
+
+        /* Step Cards */
+        .steps-container {
             display: flex;
-            gap: 16px;
-            margin-bottom: 18px;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .step-row {
+            display: flex;
+            gap: 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
             align-items: flex-start;
         }
 
         .step-num {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
-            color: #fff;
-            font-weight: 800;
-            font-size: 16px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        .step-content h4 {
-            font-size: 14px;
+        .step-title {
+            font-size: 13px;
             font-weight: 700;
-            color: #F1F5F9;
+            color: #0f172a;
             margin-bottom: 2px;
         }
 
-        .step-content p {
-            font-size: 12px;
-            color: #94A3B8;
-            line-height: 1.5;
-        }
-
-        /* Info cards */
-        .info-card {
-            background: rgba(16, 185, 129, 0.06);
-            border: 1px solid rgba(16, 185, 129, 0.15);
-            border-radius: 12px;
-            padding: 18px 20px;
-            margin-bottom: 18px;
-        }
-
-        .info-card.warning {
-            background: rgba(245, 158, 11, 0.06);
-            border-color: rgba(245, 158, 11, 0.15);
-        }
-
-        .info-card-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #10B981;
-            margin-bottom: 6px;
-        }
-
-        .info-card.warning .info-card-title {
-            color: #F59E0B;
-        }
-
-        .info-card-text {
+        .step-desc {
             font-size: 11.5px;
-            color: #94A3B8;
-            line-height: 1.5;
+            color: #64748b;
+            line-height: 1.45;
+        }
+
+        /* Callout Box */
+        .callout {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .callout-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .callout-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 2px;
+        }
+
+        .callout-text {
+            font-size: 11.5px;
+            color: #1e3a8a;
+            line-height: 1.45;
         }
 
         /* FAQ Section */
-        .faq-item {
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
-        .faq-item:last-child {
-            border-bottom: none;
+        .faq-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
         }
 
         .faq-q {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            color: #F1F5F9;
+            color: #0f172a;
             margin-bottom: 4px;
         }
 
         .faq-a {
-            font-size: 11.5px;
-            color: #94A3B8;
-            line-height: 1.5;
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.45;
         }
 
-        /* Contact Footer */
-        .contact-bar {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 18px 24px;
+        /* Footer */
+        .footer {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: auto;
-        }
-
-        .contact-item {
             font-size: 11px;
-            color: #94A3B8;
+            color: #94a3b8;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
-        .contact-item strong {
-            color: #F1F5F9;
+        .footer-link {
+            color: #2563eb;
+            text-decoration: none;
             font-weight: 600;
         }
 
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
-            margin: 24px 0;
-        }
-
         @media print {
-            body { background: #0A0E1A; }
-            .page { margin: 0; box-shadow: none; }
-        }
-
-        @media screen {
-            .page {
-                margin: 20px auto;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-                border-radius: 4px;
-            }
+            body { padding: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PAGE 1: Hero Cover -->
-    <div class="page page-hero">
-        <div class="hero-badge">⚡ IRCTC Tatkal Automation</div>
-        <div class="hero-logo">⚡</div>
-        <div class="hero-title">Swift<span>Seat</span></div>
-        <div class="hero-tagline">Book Tatkal tickets in seconds, not minutes. The fastest IRCTC booking automation engine.</div>
-        
-        <div class="hero-price-card">
-            <div class="hero-price">₹99<span style="font-size: 20px; color: #64748B; font-weight: 500;">/month</span></div>
-            <div class="hero-price-sub">Unlimited bookings · Cancel anytime · Instant activation</div>
+    <!-- PAGE 1: OVERVIEW & FEATURES -->
+    <div class="header">
+        <div class="brand-left">
+            <div class="brand-icon">⚡</div>
+            <div>
+                <div class="brand-title">Swift<span>Seat</span></div>
+                <div class="brand-sub">IRCTC Tatkal Booking Automation Engine</div>
+            </div>
         </div>
-
-        <div class="hero-url">🌐 hikershorizon.in/swiftseat</div>
-
-        <div class="hero-footer-text">
-            Available on Google Chrome Web Store & Microsoft Edge Add-ons. Works on Windows, Mac & Linux.
+        <div class="price-tag">
+            <div class="price-amount">₹99 / mo</div>
+            <div class="price-label">Unlimited Bookings</div>
         </div>
     </div>
 
-    <!-- PAGE 2: Features & Comparison -->
-    <div class="page page-content">
-        <div class="section-header">
-            <div class="section-tag">Why Swift Seat?</div>
-            <div class="section-title">Everything You Need to Win Tatkal</div>
-        </div>
+    <!-- Section: Features -->
+    <div class="section-header">
+        <div class="section-title">Key Features</div>
+        <div class="section-badge">Fast & Secure</div>
+    </div>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon blue">🚀</div>
-                <div class="feature-title">Lightning-Fast Auto-Fill</div>
-                <div class="feature-desc">Automatically fills passenger names, ages, berth preferences, and mobile number in under 2 seconds.</div>
+    <div class="grid-2">
+        <div class="feature-card">
+            <div class="feature-card-header">
+                <span class="feature-emoji">⚡</span>
+                <div class="feature-card-title">Instant Passenger Autofill</div>
+            </div>
+            <div class="feature-card-desc">Fills name, age, gender, berth preference & mobile number in under 2 seconds automatically.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-header">
+                <span class="feature-emoji">⏱️</span>
+                <div class="feature-card-title">30-Second Pre-Start</div>
+            </div>
+            <div class="feature-card-desc">Auto-launches 30s before the Tatkal window opens (10 AM AC / 11 AM Sleeper) so you are ready.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-header">
+                <span class="feature-emoji">🔐</span>
+                <div class="feature-card-title">Auto Credentials & Captcha</div>
+                <div class="feature-desc">Injects login details safely and focuses the Captcha box so you only type the letters.</div>
             </div>
             <div class="feature-card">
-                <div class="feature-icon green">🔐</div>
-                <div class="feature-title">Auto Login & CAPTCHA Focus</div>
-                <div class="feature-desc">Injects your IRCTC credentials instantly and auto-focuses the CAPTCHA field so you only type 1 thing.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon orange">⏱️</div>
-                <div class="feature-title">Smart Auto-Start Timer</div>
-                <div class="feature-desc">Automatically starts 30 seconds before the Tatkal window opens (10:00 AM AC / 11:00 AM Sleeper).</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon purple">📺</div>
-                <div class="feature-title">Live Browser Monitor</div>
-                <div class="feature-desc">Watch the entire booking process in real-time through a live screenshot stream on your dashboard.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon cyan">🔄</div>
-                <div class="feature-title">Smart Form Detection</div>
-                <div class="feature-desc">Automatically detects IRCTC pages and fills search forms with your pre-configured route and train details.</div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon red">🛡️</div>
-                <div class="feature-title">AES Encrypted & Secure</div>
-                <div class="feature-desc">Your credentials are stored locally on your device only. Nothing is sent to external servers.</div>
+                <div class="feature-card-header">
+                    <span class="feature-emoji">📺</span>
+                    <div class="feature-card-title">Live Screen Streaming</div>
+                    <div class="feature-desc">Monitor the entire automation live from your browser dashboard via real-time screen stream.</div>
+                </div>
             </div>
         </div>
 
-        <div class="divider"></div>
+    <!-- Section: Roles Division -->
+    <div class="section-header">
+        <div class="section-title">Automation Workflow</div>
+        <div class="section-badge">Hybrid System</div>
+    </div>
 
-        <div class="section-header">
-            <div class="section-tag">Comparison</div>
-            <div class="section-title">Manual Booking vs Swift Seat</div>
+    <div class="roles-box">
+        <div class="role-col bot">
+            <div class="role-title">🤖 Bot Handles (Automatic)</div>
+            <ul class="role-list">
+                <li>Enters From & To station codes (YNK → YG).</li>
+                <li>Fills journey date, train & quota options.</li>
+                <li>Injects all passenger details instantly.</li>
+                <li>Points you to the final payment box.</li>
+            </ul>
         </div>
+        <div class="role-col user">
+            <div class="role-title">👤 You Handle (Manual)</div>
+            <ul class="role-list">
+                <li>Type login Captcha (if prompt appears).</li>
+                <li>Click Sleeper/AC class & click 'Book Now'.</li>
+                <li>Type final payment Captcha.</li>
+                <li>Approve UPI payment on your phone.</li>
+            </ul>
+        </div>
+    </div>
 
-        <table class="comparison-table">
+    <!-- Section: Comparison -->
+    <div class="section-header">
+        <div class="section-title">Manual vs Swift Seat</div>
+        <div class="section-badge">Performance</div>
+    </div>
+
+    <div class="table-container">
+        <table>
             <thead>
                 <tr>
-                    <th>Feature</th>
+                    <th>Task</th>
                     <th>Manual Booking</th>
                     <th>Swift Seat ⚡</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Login Speed</td>
-                    <td>15–30 seconds</td>
-                    <td class="check">Instant (auto-fill)</td>
+                    <td>Passenger Entry Time</td>
+                    <td>45 – 90 seconds</td>
+                    <td><span class="badge-yes">Under 2 Seconds</span></td>
                 </tr>
                 <tr>
-                    <td>Fill Passenger Details</td>
-                    <td>45–90 seconds</td>
-                    <td class="check">Under 2 seconds</td>
-                </tr>
-                <tr>
-                    <td>Search Train & Date</td>
-                    <td>20–40 seconds</td>
-                    <td class="check">Auto-configured</td>
+                    <td>Search & Date Setup</td>
+                    <td>20 – 30 seconds</td>
+                    <td><span class="badge-yes">Instant / Auto</span></td>
                 </tr>
                 <tr>
                     <td>Total Time to Payment</td>
-                    <td>2–4 minutes</td>
-                    <td class="check">Under 30 seconds</td>
+                    <td>2 – 4 minutes</td>
+                    <td><span class="badge-yes">Under 30 Seconds</span></td>
                 </tr>
                 <tr>
                     <td>Tatkal Success Rate</td>
-                    <td>~15%</td>
-                    <td class="check">~85%+</td>
+                    <td>~15% chance</td>
+                    <td><span class="badge-yes">~85%+ Success</span></td>
                 </tr>
                 <tr>
-                    <td>Auto-Start Before Window</td>
-                    <td class="cross">✗ No</td>
-                    <td class="check">✓ 30s before</td>
-                </tr>
-                <tr>
-                    <td>Works While You Sleep</td>
-                    <td class="cross">✗ No</td>
-                    <td class="check">✓ Fully automated</td>
+                    <td>Pre-Start Timer</td>
+                    <td><span class="badge-no">No</span></td>
+                    <td><span class="badge-yes">30s Before Window</span></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- PAGE 3: How It Works + FAQ -->
-    <div class="page page-content" style="display: flex; flex-direction: column;">
-        <div class="section-header">
-            <div class="section-tag">Getting Started</div>
-            <div class="section-title">How to Use Swift Seat</div>
-        </div>
+    <!-- PAGE BREAK FOR PAGE 2 -->
+    <div class="page-break"></div>
 
-        <div class="steps-list">
-            <div class="step-item">
-                <div class="step-num">1</div>
-                <div class="step-content">
-                    <h4>Install the Extension</h4>
-                    <p>Download Swift Seat from the Chrome Web Store or Microsoft Edge Add-ons. Click "Add to browser" and pin the extension icon.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">2</div>
-                <div class="step-content">
-                    <h4>Get Your License Key (₹99/month)</h4>
-                    <p>Visit <strong>hikershorizon.in/swiftseat</strong> → scroll to the "SaaS Licensing Portal" card → enter your email → pay ₹99 via UPI/Card → copy your license key.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">3</div>
-                <div class="step-content">
-                    <h4>Activate Your Key</h4>
-                    <p>Click the Swift Seat extension icon → paste your license key → click "Activate". The extension is now linked to your browser.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">4</div>
-                <div class="step-content">
-                    <h4>Configure Your Journey</h4>
-                    <p>Open the dashboard and enter: IRCTC username/password, From & To stations, Train number, Class, Date, Quota, and Passenger details.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">5</div>
-                <div class="step-content">
-                    <h4>Start the Automation</h4>
-                    <p>Click "START SEQUENCE" or set Auto-Start to trigger before the Tatkal window. The bot handles login, search, train selection, and passenger filling automatically.</p>
-                </div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">6</div>
-                <div class="step-content">
-                    <h4>Complete Payment</h4>
-                    <p>You only need to type the CAPTCHA and complete payment on IRCTC. Swift Seat does everything else for you.</p>
-                </div>
+    <!-- PAGE 2: STEPS & FAQ -->
+    <div class="section-header">
+        <div class="section-title">Step-by-Step Setup Guide</div>
+        <div class="section-badge">Easy 5 Steps</div>
+    </div>
+
+    <div class="steps-container">
+        <div class="step-row">
+            <div class="step-num">1</div>
+            <div>
+                <div class="step-title">Get License Key & Activate</div>
+                <div class="step-desc">Visit <strong>hikershorizon.in/swiftseat</strong>, enter your email and pay ₹99. Copy your generated key and paste it into the dashboard/extension to activate.</div>
             </div>
         </div>
-
-        <div class="divider"></div>
-
-        <div class="info-card">
-            <div class="info-card-title">💡 Pro Tip</div>
-            <div class="info-card-text">For the best Tatkal success rate, set Auto-Start mode to trigger 30 seconds before the window opens. Keep your browser open and connected to the internet. The bot will take over automatically.</div>
+        <div class="step-row">
+            <div class="step-num">2</div>
+            <div>
+                <div class="step-title">Configure Form Details</div>
+                <div class="step-desc">Enter your IRCTC login credentials, route (e.g., YNK to YG), train number, class, journey date, and passenger list into the dashboard.</div>
+            </div>
         </div>
+        <div class="step-row">
+            <div class="step-num">3</div>
+            <div>
+                <div class="step-title">Start Sequence or Set Auto-Start</div>
+                <div class="step-desc">Click <strong>Start Sequence</strong> or enable <strong>Auto-Start</strong> mode (starts 30s before 10 AM / 11 AM window). The bot opens IRCTC and initiates search.</div>
+            </div>
+        </div>
+        <div class="step-row">
+            <div class="step-num">4</div>
+            <div>
+                <div class="step-title">Select Class & Book Now (Manual Step)</div>
+                <div class="step-desc">The bot navigates to train results. Immediately click your class (Sleeper/AC) and click <strong>Book Now</strong>. The bot instantly injects all passengers!</div>
+            </div>
+        </div>
+        <div class="step-row">
+            <div class="step-num">5</div>
+            <div>
+                <div class="step-title">Solve Captcha & Complete Payment</div>
+                <div class="step-desc">Type the Captcha, select your preferred payment mode (UPI/Card), and approve payment on your phone to confirm your ticket!</div>
+            </div>
+        </div>
+    </div>
 
-        <div class="info-card warning">
-            <div class="info-card-title">⚠️ Important Note</div>
-            <div class="info-card-text">Swift Seat automates form-filling only. You must have a valid IRCTC account and complete the CAPTCHA and payment manually. We do not store your payment or banking details.</div>
+    <div class="callout">
+        <div class="callout-icon">💡</div>
+        <div>
+            <div class="callout-title">Pro-Tip for Maximum Speed</div>
+            <div class="callout-text">Keep your UPI app (GPay / PhonePe / Paytm) open on your smartphone before starting. Once you submit the payment step on IRCTC, approve the UPI request immediately!</div>
         </div>
+    </div>
 
-        <div class="divider"></div>
+    <div class="section-header">
+        <div class="section-title">Frequently Asked Questions</div>
+        <div class="section-badge">FAQ</div>
+    </div>
 
-        <div class="section-header" style="margin-bottom: 16px;">
-            <div class="section-tag">FAQ</div>
-            <div class="section-title">Common Questions</div>
+    <div class="faq-grid">
+        <div class="faq-card">
+            <div class="faq-q">Are my credentials safe?</div>
+            <div class="faq-a">Yes. Password & passenger data are stored strictly on your local device. We never transmit or store your login info on external servers.</div>
         </div>
-
-        <div class="faq-item">
-            <div class="faq-q">Is my IRCTC password safe?</div>
-            <div class="faq-a">Yes. Your credentials are stored locally in your browser's encrypted storage. They are never sent to our servers.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">Can I use it on multiple devices?</div>
-            <div class="faq-a">Each license key is tied to one browser/device for security. Contact support if you need to transfer your license.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">What happens after 30 days?</div>
-            <div class="faq-a">Your subscription expires and the extension stops working. Simply renew for another ₹99 to continue using Swift Seat.</div>
-        </div>
-        <div class="faq-item">
+        <div class="faq-card">
             <div class="faq-q">Which browsers are supported?</div>
-            <div class="faq-a">Google Chrome and Microsoft Edge. We recommend using Edge for the best compatibility with IRCTC.</div>
+            <div class="faq-a">Google Chrome and Microsoft Edge on Windows, macOS, and Linux desktop operating systems.</div>
         </div>
-
-        <div style="flex-grow: 1;"></div>
-
-        <div class="contact-bar">
-            <div class="contact-item">
-                📧 <strong>hikershorizon@gmail.com</strong>
-            </div>
-            <div class="contact-item">
-                🌐 <strong>hikershorizon.in/swiftseat</strong>
-            </div>
-            <div class="contact-item">
-                ⚡ <strong>Swift Seat v2.0</strong>
-            </div>
+        <div class="faq-card">
+            <div class="faq-q">What if the page hangs?</div>
+            <div class="faq-a">If IRCTC servers slow down, simply press F5 to reload. The bot resumes automation automatically from the current step.</div>
         </div>
+        <div class="faq-card">
+            <div class="faq-q">How long does ₹99 subscription last?</div>
+            <div class="faq-a">Your license key remains active for 30 days with unlimited ticket bookings during the subscription period.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div>Swift Seat v2.0 — IRCTC Tatkal Automation</div>
+        <div>Web: <a href="https://hikershorizon.in/swiftseat" class="footer-link">hikershorizon.in/swiftseat</a></div>
+        <div>Support: hikershorizon@gmail.com</div>
     </div>
 
 </body>
