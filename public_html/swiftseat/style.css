@@ -735,6 +735,25 @@ select option:checked {
   color: #60a5fa !important;
 }
 
+/* License Key Input Group & Status Feed Styling */
+.license-key-group {
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.license-status-feed {
+  font-size: 0.78rem;
+  color: var(--secondary-accent);
+  padding: 0.35rem 0.25rem 0.25rem 0.25rem;
+  line-height: 1.45;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--transition-speed) ease;
+}
+
+
 
 .form-group.floating .form-label {
   position: absolute;
