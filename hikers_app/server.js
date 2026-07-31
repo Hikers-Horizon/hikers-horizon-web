@@ -27,8 +27,8 @@ process.on('unhandledRejection', (reason, promise) => {
 
 // --- RAZORPAY SETUP ---
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_SZlpa8uIx6lupM',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'MdjBfSzlLOYRU3MHFxEpz3vO',
 });
 
 // --- DATABASE SETUP (MySQL) ---
