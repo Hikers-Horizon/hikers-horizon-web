@@ -721,6 +721,21 @@ body::after {
   pointer-events: none;
 }
 
+/* Fix dropdown options visibility on Windows/Chrome popover */
+select option {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  padding: 8px 12px;
+}
+
+select option:hover,
+select option:focus,
+select option:checked {
+  background-color: #1e293b !important;
+  color: #60a5fa !important;
+}
+
+
 .form-group.floating .form-label {
   position: absolute;
   left: 2.75rem;
