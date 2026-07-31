@@ -508,21 +508,10 @@ app.post('/api/start-tatkal', async (req, res) => {
         // Start screenshot capture
         captureLoop();
 
-        // ─── STEP 1: Navigate (With Robust Timeout & Cloud Protection Bypass) ───
+        // ─── STEP 1: Navigate to IRCTC ───
         emitLog('Connecting to IRCTC portal...', 'info');
         
         try {
-            // Set browser stealth headers to ensure smooth Cloudflare/Akamai passage on cloud servers
-            try {
-                await page.setExtraHTTPHeaders({
-                    'Accept-Language': 'en-US,en;q=0.9,hi;q=0.8',
-                    'Upgrade-Insecure-Requests': '1',
-                    'Sec-Ch-Ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
-                    'Sec-Ch-Ua-Mobile': '?0',
-                    'Sec-Ch-Ua-Platform': '"Windows"'
-                });
-            } catch(hErr) {}
-
             const currentUrl = page.url() || '';
             if (currentUrl.includes('irctc.co.in/nget/train-search')) {
                 emitLog('Already on IRCTC search page, skipping navigation ✓', 'success');
@@ -531,16 +520,18 @@ app.post('/api/start-tatkal', async (req, res) => {
             } else {
                 emitLog('Opening https://www.irctc.co.in/nget/train-search ...', 'info');
                 
-                // Use commit + 35s timeout to prevent premature aborts on AWS server IPs
-                await page.goto('https://www.irctc.co.in/nget/train-search', {
-                    waitUntil: 'commit',
-                    timeout: 35000
-                }).catch(async (navErr) => {
-                    emitLog(`Initial HTTP commit notice: ${navErr.message || navErr}`, 'warning');
-                });
-
-                emitLog('Connection response received, loading page assets...', 'info');
-                await page.waitForLoadState('domcontentloaded', { timeout: 30000 }).catch(() => {});
+                try {
+                    await page.goto('https://www.irctc.co.in/nget/train-search', {
+                        waitUntil: 'domcontentloaded',
+                        timeout: 30000
+                    });
+                } catch (navErr) {
+                    emitLog(`Initial load note: ${navErr.message || navErr}. Retrying load...`, 'warning');
+                    await page.goto('https://www.irctc.co.in/nget/train-search', {
+                        waitUntil: 'load',
+                        timeout: 30000
+                    }).catch(() => {});
+                }
             }
 
             // Wait for user or bot to be on search page (up to 45s)
@@ -550,7 +541,7 @@ app.post('/api/start-tatkal', async (req, res) => {
 
             emitLog('IRCTC Page Detected! Taking control...', 'success');
         } catch (e) {
-            emitLog(`Navigation warning: ${e.message || e}`, 'warning');
+            emitLog(`Navigation status: ${e.message || e}`, 'warning');
         }
 
         emitLog('IRCTC app ready', 'success');
