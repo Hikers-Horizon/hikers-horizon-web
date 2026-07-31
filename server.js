@@ -383,7 +383,7 @@ app.post('/api/start-tatkal', async (req, res) => {
                 
                 // 2. Try launching their main Chrome profile folder directly (Only works if Chrome is closed)
                 const isLinuxHeadless = process.platform === 'linux' && !process.env.DISPLAY;
-                const headlessOption = isLinuxHeadless ? 'new' : false;
+                const headlessOption = isLinuxHeadless ? true : false;
                 const commonArgs = [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -394,6 +394,9 @@ app.post('/api/start-tatkal', async (req, res) => {
                     '--disable-blink-features=AutomationControlled',
                     '--window-size=1920,1080'
                 ];
+                if (isLinuxHeadless) {
+                    commonArgs.push('--headless=new');
+                }
 
                 try {
                     browser = await chromium.launchPersistentContext(mainUserDataDir, {
