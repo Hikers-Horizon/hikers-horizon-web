@@ -383,14 +383,16 @@ app.post('/api/start-tatkal', async (req, res) => {
                 
                 // 2. Try launching their main Chrome profile folder directly (Only works if Chrome is closed)
                 const isLinuxHeadless = process.platform === 'linux' && !process.env.DISPLAY;
-                const headlessOption = isLinuxHeadless ? true : false;
+                const headlessOption = isLinuxHeadless ? 'new' : false;
                 const commonArgs = [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                     '--disable-dev-shm-usage',
                     '--disable-gpu',
                     '--disable-infobars',
-                    '--start-maximized'
+                    '--start-maximized',
+                    '--disable-blink-features=AutomationControlled',
+                    '--window-size=1920,1080'
                 ];
 
                 try {
@@ -477,8 +479,16 @@ app.post('/api/start-tatkal', async (req, res) => {
                 }
 
                 if (!page) {
-                    page = allPages.length > 0 ? allPages[0] : await browser.newPage();
+                    page = await browser.newPage();
                 }
+
+                // Ensure anti-detection is applied to active page object
+                await page.addInitScript(() => {
+                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+                    window.navigator.chrome = { runtime: {} };
+                    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3, 4, 5] });
+                    Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
+                });
             }
         } else {
             // Ensure we have a valid page if the old one was closed
@@ -497,7 +507,7 @@ app.post('/api/start-tatkal', async (req, res) => {
                     } catch (err) {}
                 }
                 if (!page) {
-                    page = allPages.length > 0 ? allPages[0] : (browser.newPage ? await browser.newPage() : await context.newPage());
+                    page = await browser.newPage();
                 }
             }
         }
