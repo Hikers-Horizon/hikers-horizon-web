@@ -1552,3 +1552,45 @@ body::after {
   width: 14px;
   height: 14px;
 }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem 1rem 2.5rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.75rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all var(--transition-speed) ease;
+}
+
+.footer-link:hover {
+  color: var(--primary-accent);
+  background: rgba(59, 130, 246, 0.06);
+  border-color: rgba(59, 130, 246, 0.2);
+}
