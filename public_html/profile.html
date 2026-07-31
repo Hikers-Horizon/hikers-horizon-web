@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile - Hikers Horizon</title>
+  <style>
+    :root {
+      --primary-color: #FFFFFF;
+      --secondary-color: #FFFFFF;
+      --text-light: #B0B0B0;
+      --bg-dark: #000000;
+      --glass-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    
+            -webkit-tap-highlight-color: transparent; }
+
+    body {
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Open Sans', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    video#bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: -1;
+    }
+
+    main { flex: 1 0 auto; padding: 4rem 1rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 2.5rem;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+    }
+
+    .dashboard-header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      font-weight: 800;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-edit { background: #FFFFFF; color: #000000; }
+    .btn-logout { background: rgba(255, 255, 255, 0.1); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.5rem;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .stat-label {
+      color: #B0B0B0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.3rem;
+      color: #FFFFFF;
+      font-weight: 800;
+      word-break: break-all;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 1.5rem;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); }
+
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { color: #B0B0B0; padding: 1.2rem; text-align: left; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    td { padding: 1.2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: #FFFFFF; font-size: 0.95rem; }
+
+    .badge { display: inline-block; padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
+    .verified { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
+    .unverified { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); }
+    .modal-content { background: rgba(255, 255, 255, 0.03); margin: 10% auto; padding: 3rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; width: 90%; max-width: 450px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .modal-header h2 { font-family: 'Montserrat', sans-serif; color: #FFFFFF; text-transform: uppercase; font-size: 1.4rem; }
+    .close { color: #FFFFFF; font-size: 2rem; cursor: pointer; border: none; background: none; opacity: 0.5; }
+
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; color: #FFFFFF; margin-bottom: 0.75rem; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; }
+    .form-group input { width: 100%; padding: 1.2rem; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; background: rgba(255, 255, 255, 0.05); color: white; }
+    .save-btn { background: #FFFFFF; color: #000000; border: none; padding: 1.2rem; border-radius: 12px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-weight: 800; text-transform: uppercase; width: 100%; }
+
+    .no-data { text-align: center; color: #B0B0B0; padding: 3rem; }
+
+    .footer { padding: 4rem 1rem; background: #000000; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto; }
+    .footer-container { max-width: 85rem; margin: 0 auto; text-align: center; }
+    .footer-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .footer-links a { color: var(--text-light); text-decoration: none; font-size: 0.95rem; }
+    .social-links { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; }
+    .social-links svg { width: 1.8rem; height: 1.8rem; fill: currentColor; }
+
+    @media (max-width: 768px) {
+      .dashboard-header { flex-direction: column; gap: 1.5rem; padding: 1.5rem 1rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    }
+  </style>
+  <link rel="stylesheet" href="auth-navigation.css?v=12">
+</head>
+
+<body>
+  <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+    <source src="/img/BG.webp" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+
+  <header id="global-header"></header>
+  <script src="/global-header.js"></script>
+
+  <main>
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>My Profile</h1>
+        <div class="header-btns">
+          <button class="btn btn-edit" onclick="openEditModal()">Edit Profile</button>
+          <button class="btn btn-logout" onclick="logout()">Logout</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Username</div>
+          <div class="stat-value" id="username-display">Loading...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Email</div>
+          <div class="stat-value" id="email-display">Loading...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Member Since</div>
+          <div class="stat-value" id="joined-date">Loading...</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Verification Status</div>
+          <div class="stat-value" id="verification-status">Loading...</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">My Bookings</h2>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Trek Name</th>
+                <th>Booking Date</th>
+                <th>Participants</th>
+                <th>Total Cost</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-container">
+              <tr><td colspan="4" class="no-data">Loading your bookings...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-links">
+        <a href="/About">About Us</a>
+        <a href="/Privacy">Privacy Policy</a>
+        <a href="/Terms">Terms and Conditions</a>
+        <a href="/Cancellation">Cancellation and Refund</a>
+        <a href="/Contact">Contact Us</a>
+      </div>
+      <p class="footer-copyright">© 2026 Hikers Horizon. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Profile</h2>
+        <button class="close" onclick="closeEditModal()">&times;</button>
+      </div>
+      <form id="editForm">
+        <div class="form-group">
+          <label for="editUsername">Username:</label>
+          <input type="text" id="editUsername" required>
+        </div>
+        <button type="submit" class="save-btn">Save Changes</button>
+        <div id="editError" style="color: #ff6b6b; margin-top: 1rem; font-size: 0.9rem;"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentUserEmail = localStorage.getItem('userEmail');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!currentUserEmail) {
+        alert('Please log in first');
+        window.location.href = 'login.html';
+      } else {
+        loadProfile();
+      }
+    });
+
+    function loadProfile() {
+      fetch(`/api/profile/${encodeURIComponent(currentUserEmail)}`)
+        .then(res => {
+          if (res.status === 503) throw new Error('Database is connecting. Please refresh in a moment.');
+          if (!res.ok) throw new Error('Could not fetch profile data.');
+          return res.json();
+        })
+        .then(data => {
+          if (data.message && !data.user) throw new Error(data.message);
+          
+          const { user, bookings } = data;
+          document.getElementById('username-display').textContent = user.username || 'N/A';
+          document.getElementById('email-display').textContent = user.email || 'N/A';
+          document.getElementById('joined-date').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A';
+
+          const statusSpan = document.getElementById('verification-status');
+          if (user.verified) {
+            statusSpan.innerHTML = '<span class="badge verified">✓ Verified</span>';
+          } else {
+            statusSpan.innerHTML = '<span class="badge unverified">⚠ Not Verified</span>';
+          }
+
+          displayBookings(bookings || []);
+        })
+        .catch(err => {
+          console.error('Error:', err);
+          const fields = ['username-display', 'email-display', 'joined-date', 'verification-status'];
+          fields.forEach(id => document.getElementById(id).textContent = 'Error Loading');
+          document.getElementById('bookings-container').innerHTML = `<tr><td colspan="4" class="no-data" style="color: #ff6b6b;">${err.message}</td></tr>`;
+        });
+    }
+
+    function displayBookings(bookings) {
+      const container = document.getElementById('bookings-container');
+      if (bookings.length === 0) {
+        container.innerHTML = '<tr><td colspan="4" class="no-data">No bookings yet. Start your adventure with us!</td></tr>';
+      } else {
+        container.innerHTML = bookings.map(booking => `
+          <tr>
+            <td>${booking.trekName}</td>
+            <td>${new Date(booking.bookingDate).toLocaleDateString()}</td>
+            <td>${booking.participants}</td>
+            <td>₹${booking.totalCost}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function openEditModal() {
+      document.getElementById('editUsername').value = document.getElementById('username-display').textContent;
+      document.getElementById('editModal').style.display = 'block';
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+      document.getElementById('editError').textContent = '';
+    }
+
+    document.getElementById('editForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newUsername = document.getElementById('editUsername').value;
+
+      try {
+        const response = await fetch(`/api/profile/${encodeURIComponent(currentUserEmail)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: newUsername })
+        });
+
+        if (response.ok) {
+          alert('Profile updated successfully!');
+          localStorage.setItem('userName', newUsername);
+          closeEditModal();
+          loadProfile();
+        } else {
+          document.getElementById('editError').textContent = 'Error updating profile';
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        document.getElementById('editError').textContent = 'Error updating profile';
+      }
+    });
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('editModal');
+      if (event.target === modal) modal.style.display = 'none';
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Hampi Explore - Hikers Horizon</title>
+  <meta name="description" content="Book your Hampi Explore with Hikers Horizon. Secure online payment via Razorpay.">
+  <link rel="stylesheet" href="booking-premium.css">
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+</head>
+<body class="booking-page">
+  <video class="video-bg" data-autoplay="true" muted playsinline loop poster="/img/back.jpg" preload="none">
+    <source src="/img/BG.webp" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+    <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+  <main class="booking-main">
+    <div class="booking-card">
+      <div class="booking-card-inner">
+        <div class="trek-header">
+          <div class="trek-badge">🏛️ Heritage</div>
+          <h1>Hampi Explore</h1>
+          <p class="trek-subtitle">Ancient ruins & boulder landscapes</p>
+        </div>
+        <div id="booking-form-container"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="booking-razorpay.js"></script>
+  <script>
+    BookingEngine.init({
+      trekName: 'Hampi Explore',
+      pricingType: 'fixed',
+      basePrice: 4999,
+      transportInclusive: true
+    });
+  </script></body>
+</html>

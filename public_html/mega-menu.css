@@ -1,0 +1,200 @@
+/* Shared Mega Menu Styles */
+.dropdown {
+  position: static;
+}
+
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: 90vw;
+  max-width: 1100px;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
+  border-bottom: 3px solid #FFFFFF;
+  border-radius: 0 0 1.5rem 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2000;
+  padding: 2.5rem 0;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  text-align: left;
+}
+
+.dropdown:hover .mega-menu,
+.dropdown.open .mega-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.mega-menu-container {
+  max-width: 85rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 250px 1fr 300px;
+  gap: 3rem;
+  padding: 0 2rem;
+}
+
+.mega-column-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #B0B0B0;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.category-list {
+  list-style: none;
+}
+
+.category-item {
+  padding: 0.75rem 0;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.3s;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.category-item:hover,
+.category-item.active {
+  color: #ffd700;
+}
+
+.trek-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 2rem;
+  list-style: none;
+  transition: opacity 0.3s ease;
+}
+
+.trek-list-item a {
+  color: #B0B0B0;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.trek-list-item a:hover {
+  color: #FFFFFF;
+  padding-left: 5px;
+}
+
+.featured-trek {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.featured-trek img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.featured-trek-content {
+  padding: 1.2rem;
+}
+
+.featured-trek-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.featured-trek-btn {
+  display: inline-block;
+  color: #000000;
+  background: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-link .arrow {
+  font-size: 0.7rem;
+  margin-left: 3px;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.dropdown:hover .arrow,
+.dropdown.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .dropdown {
+    position: static !important;
+  }
+
+  .mega-menu {
+    position: absolute !important;
+    top: 0 !important;
+    right: 100% !important; /* Forces right edge exactly at the left edge of the sidebar */
+    width: calc(100vw - 280px) !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    padding: 2rem 1rem !important;
+    overflow-y: auto !important;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    display: block !important;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(20px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .dropdown.open .mega-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .mega-menu-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0;
+  }
+
+  .mega-column-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+    color: #FFD700;
+  }
+
+  .mega-menu-column:last-child {
+    display: none;
+  }
+
+  .category-item {
+    padding: 0.6rem 0;
+    font-size: 0.9rem;
+  }
+}

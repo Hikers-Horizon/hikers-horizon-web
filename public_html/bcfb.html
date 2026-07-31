@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skandagiri Trek Details | Hikers Horizon</title>
+    <meta name="description" content="Explore the Skandagiri Day Adventure with Hikers Horizon. Discover trek details, itinerary, pricing, and more. Book now for an unforgettable sunrise trek!">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #121212;
+            color: #FFFFFF;
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        nav {
+            background: #E7C153; color: #121212;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0.5rem 1rem;
+        }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .navbar-logo img {
+            height: 48px;
+            width: auto;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+        .navbar-logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+.nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.07rem;
+            padding: 0.5rem 0.7rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+.dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropbtn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.07rem;
+            cursor: pointer;
+            padding: 0.5rem 0.7rem;
+            border-radius: 4px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #285e44;
+            min-width: 150px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+            z-index: 1;
+            border-radius: 0 0 8px 8px;
+        }
+        .dropdown-content a {
+            color: #fff;
+            padding: 0.7rem 1rem;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #23503a;
+        }
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #FFFFFF;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+        .hamburger span {
+            height: 4px;
+            width: 26px;
+            background: #1E1E1E;
+            margin: 3px 0;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        @media (max-width: 900px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: row;
+                align-items: center;
+                padding: 0.5rem;
+            }
+.nav-links.open {
+                max-height: 400px;
+                padding-bottom: 1rem;
+            }
+.dropdown-content {
+                min-width: 100%;
+                left: 0;
+                position: static;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .navbar-logo img {
+                height: 32px;
+            }
+            .navbar-logo span {
+                font-size: 1.1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .detail-grid, .pickup-grid, .price-cards, .gallery-grid, .other-treks-list {
+                grid-template-columns: 1fr;
+            }
+            .things-to-carry {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            .trek-title {
+                font-size: 1.8rem;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+        header {
+            background: #E7C153; color: #121212;
+            color: #fff;
+            padding: 2rem 1rem 1rem 1rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+        header p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .container {
+            flex: 1 0 auto;
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .trek-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .trek-title {
+            color: #FFFFFF;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .trek-header p {
+            color: #B0B0B0;
+            font-size: 1.1rem;
+        }
+        .gallery-section {
+            margin: 2rem 0;
+        }
+        .gallery-title {
+            font-size: 1.5rem;
+            color: #FFFFFF;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .gallery-grid img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            transition: transform 0.2s;
+        }
+        .gallery-grid img:hover {
+            transform: scale(1.04);
+        }
+        .detail-card {
+            background: #1E1E1E;
+            border-radius: 24px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .section-title {
+            color: #FFFFFF;
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            border-bottom: 2px solid #285e44;
+            padding-bottom: 0.5rem;
+        }
+        .detail-grid, .pickup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .detail-item, .pickup-item {
+            margin-bottom: 0.75rem;
+        }
+        .detail-item strong {
+            color: #FFFFFF;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        .itinerary-list {
+            list-style: none;
+        }
+        .itinerary-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .itinerary-list li::before {
+            content: '➔';
+            color: #285e44;
+            position: absolute;
+            left: 0;
+        }
+        .price-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .price-card {
+            background: #1E1E1E;
+            padding: 1.25rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #e0e0e0;
+        }
+        .price-card h3 {
+            color: #FFFFFF;
+            margin-bottom: 0.5rem;
+        }
+        .price-amount {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin: 0.5rem 0;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .offer-price {
+            color: #285e44;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .guidelines-list {
+            columns: 2;
+            list-style: none;
+            margin: 1rem 0;
+        }
+        .guidelines-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .guidelines-list li::before {
+            content: '•';
+            color: #285e44;
+            position: absolute;
+            left: 0.5rem;
+        }
+        .things-to-carry {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            list-style: none;
+        }
+        .item-card {
+            background: #121212;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .other-treks-section {
+            background: #1E1E1E;
+            border-radius: 24px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            padding: 2rem 1.5rem;
+            margin: 2rem 0 0 0;
+        }
+        .other-treks-title {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        .other-treks-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .other-trek-card {
+            background: #121212;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            transition: box-shadow 0.2s;
+        }
+        .other-trek-card:hover {
+            box-shadow: 0 4px 16px rgba(40,94,68,0.12);
+        }
+        .other-trek-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+        .other-trek-card h4 {
+            margin: 0.5rem 0 0.2rem 0;
+            color: #285e44;
+            font-size: 1.1rem;
+        }
+        .other-trek-card p {
+            font-size: 0.95rem;
+            color: #555;
+        }
+        .other-trek-card a {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: #FFFFFF;
+            text-decoration: underline;
+            font-weight: 500;
+            font-size: 0.97rem;
+        }
+        /* Book Now Bar */
+        .book-now-bar {
+            width: 100%;
+           
+            box-shadow: 0 -2px 12px rgba(40,94,68,0.04);
+            padding: 1.2rem 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .book-now-bar .cta-button {
+            background: #ffb300;
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem 2.5rem;
+            margin: 0;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+            transition: background 0.2s, color 0.2s;
+            border: none;
+            display: inline-block;
+        }
+        .book-now-bar .cta-button:hover {
+           
+            color: #285e44;
+        }
+        /* Footer */
+        .footer {
+            flex-shrink: 0;
+            background: #E7C153; color: #121212;
+            color: #fff;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: 0;
+        }
+        .footer-content p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        /* Fixed Book Now Button */
+        .fixed-book-now {
+            position: fixed;
+            bottom: 160px;
+            right: 22px;
+            z-index: 1001;
+        }
+
+        .fixed-book-now .cta-button {
+            background: #ffb300;
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .fixed-book-now .cta-button:hover {
+            background: #e6a700;
+            color: #285e44;
+        }
+
+        /* WhatsApp Button */
+        .enquiry-button {
+            position: fixed;
+            background: #E7C153; color: #121212;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: move;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            bottom: 90px;
+            right: 22px;
+        }
+
+        .enquiry-button.dragging {
+            transition: none;
+        }
+
+        .whatsapp-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .enquiry-text {
+            position: absolute;
+            white-space: nowrap;
+            right: 60px;
+            opacity: 0;
+            background: #E7C153; color: #121212;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .enquiry-button:hover {
+            transform: scale(1.1);
+        }
+
+        .enquiry-button:hover .enquiry-text {
+            opacity: 1;
+            right: 70px;
+        }
+
+         /* CTA Button */
+        .cta-button {
+            background: #E7C153; color: #121212;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: #285e44;
+        }
+        @media (max-width: 700px) {
+            .enquiry-button {
+                width: 46px;
+                height: 46px;
+                bottom: 85px;
+                right: 12px;
+            }
+            .enquiry-button .whatsapp-icon {
+                width: 22px;
+                height: 22px;
+            }
+            .enquiry-button .enquiry-text {
+                font-size: 0.93rem;
+                right: 55px;
+            }
+            .book-now-bar .cta-button {
+                font-size: 1rem;
+                padding: 0.8rem 1.5rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .enquiry-button {
+                width: 40px;
+                height: 40px;
+                bottom: 78px;
+                right: 7px;
+            }
+            .enquiry-button .whatsapp-icon {
+                width: 18px;
+                height: 18px;
+            }
+            .enquiry-button .enquiry-text {
+                font-size: 0.85rem;
+                right: 45px;
+            }
+        }
+    </style>
+  
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="navbar">
+            <a href="../" class="navbar-logo" aria-label="Hikers Horizon Home">
+                <img src="/img/lo.png" alt="Hikers Horizon Logo">
+                <span>Hikers Horizon</span>
+            </a>
+            <div class="hamburger" id="hamburger-menu" aria-label="Menu" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <div class="dropdown">
+                    <button class="dropbtn">More ▾</button>
+                    <div class="dropdown-content">
+                        <a href="#">Terms & Conditions</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">FAQs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Skandagiri Day Adventure Header -->
+    <div class="container">
+        <div class="trek-header">
+            <h1 class="trek-title">Skandagiri Day Adventure</h1>
+            <p>Conquer the peaks, explore historical ruins, and soak in the majestic sunrise from above the clouds</p>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="gallery-section">
+            <div class="gallery-title">Skandagiri Trek Gallery</div>
+            <div class="gallery-grid">
+                <img src="/img/skandagiri1.jpg" alt="Skandagiri Sunrise View">
+                <img src="/img/Skandagiri1.jpg" alt="Skandagiri Trekking Trail">
+                <img src="/img/Skandagiri1.jpg" alt="Skandagiri Peak">
+                <img src="/img/Skandagiri Group.jpg" alt="Skandagiri Group Adventure">
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="section-title">About The Trek</h2>
+            <div class="detail-grid">
+                <div class="detail-item"><strong>Location</strong>Skandagiri, Bangalore</div>
+                <div class="detail-item"><strong>Start Time</strong>11:30 PM</div>
+                <div class="detail-item"><strong>End Time</strong>12:30 PM</div>
+                <div class="detail-item"><strong>Duration</strong>13 hours (approx.)</div>
+                <div class="detail-item"><strong>Height</strong>4,757 ft.</div>
+                <div class="detail-item"><strong>Distance</strong>4 km</div>
+                <div class="detail-item"><strong>Difficulty</strong>Moderate</div>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="section-title">Itinerary</h2>
+            <ul class="itinerary-list">
+                <li>11:30 PM - Pick up from Bengaluru</li>
+                <li>03:30 AM - Reach Skandagiri Base point</li>
+                <li>04:00 AM - Start trek to Skandagiri Hill and Rappelling, 8km up and down</li>
+                <li>09:30 AM - Breakfast at Breakfast point</li>
+                <li>10:30 AM - Start back to Bangalore</li>
+                <li>12:30 PM - Reach back to Bangalore</li>
+            </ul>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="section-title">Pickup Points</h2>
+            <ul class="itinerary-list">
+                <li>11:00 PM - Gopalan Arcade Mall RR Nagar</li>
+                <li>11:15 PM - Kathriguppe Circle</li>
+                <li>11:35 PM - Banashankari Bus Stop</li>
+                <li>11:50 PM - BTM Udupi Garden</li>
+                <li>12:00 AM - SilkBoard Bust Stop</li>
+                <li>12:30 AM - Bellanduru Near Shell Petrol Pump</li>
+                <li>01:00 AM - Kalamandir Marathahalli</li>
+                <li>01:20 AM - Tin Factory near HP patrol Pump</li>
+                <li>01:40 AM - Hebbal opposite Esteem Mal</li>
+            </ul>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="section-title">Know Before You Go</h2>
+            <ul class="guidelines-list">
+                <li>Timings for meals will be specific and informed by the guide</li>
+                <li>Basic level of fitness is compulsory</li>
+                <li>Follow instructor guidelines carefully</li>
+                <li>Avoid using earphones during trek</li>
+                <li>Timings account for Bangalore traffic</li>
+                <li>No valuables or expensive jewelry</li>
+                <li>Alcohol and intoxicants prohibited</li>
+            </ul>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="section-title">Things to Carry</h2>
+            <ul class="things-to-carry">
+                <li class="item-card">Backpack</li>
+                <li class="item-card">Raincoat</li>
+                <li class="item-card">Water Bottles</li>
+                <li class="item-card">Energy Food</li>
+                <li class="item-card">Personal Medication</li>
+                <li class="item-card">Sweater</li>
+                <li class="item-card">Extra Clothing</li>
+                <li class="item-card">Trekking Shoes</li>
+                <li class="item-card">Flashlight</li>
+                <li class="item-card">Camera (optional)</li>
+            </ul>
+        </div>
+
+        <div class="detail-card">
+            <h2 class="section-title">Pricing</h2>
+            <div class="price-cards">
+                <div class="price-card">
+                    <h3>Without Transport</h3>
+                    <div class="price-amount">
+                        <span class="original-price">₹1,399</span>
+                        <span class="offer-price">₹999</span>
+                    </div>
+                    <p>Includes breakfast, trek guide, permits, and rappelling</p>
+                <a href="Skandawithout">
+                        <button class="cta-button">Book Now</button>
+                    </a>
+                </div>    
+                <div class="price-card">
+                    <h3>With Transport</h3>
+                    <div class="price-amount">
+                        <span class="original-price">₹1,899</span>
+                        <span class="offer-price">₹1,399</span>
+                    </div>
+                    <p>Includes transport, breakfast, trek guide, permits, and rappelling</p>
+                     <a href="Skandawith">
+                        <button class="cta-button">Book Now</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Other Treks Section -->
+        <div class="other-treks-section">
+            <div class="other-treks-title">Other Trek Adventures</div>
+            <ul class="other-treks-list">
+                <li class="other-trek-card">
+                    <img src="/img/Nandihills.jpg" alt="Nandi Hills Trek">
+                    <h4>Nandi Hills Sunrise Trek</h4>
+                    <p>Witness breathtaking sunrise views and lush greenery at the iconic Nandi Hills.</p>
+                    <a href="#">View Details</a>
+                </li>
+                <li class="other-trek-card">
+                    <img src="/img/savandurga.jpg" alt="Savandurga Trek">
+                    <h4>Savandurga Trek</h4>
+                    <p>Climb Asia's largest monolith and enjoy panoramic vistas from the summit.</p>
+                    <a href="#">View Details</a>
+                </li>
+                <li class="other-trek-card">
+                    <img src="/img/anthargange.jpg" alt="Anthargange Night Trek">
+                    <h4>Anthargange Night Trek</h4>
+                    <p>Explore volcanic rock caves and experience a thrilling night trek adventure.</p>
+                    <a href="#">View Details</a>
+                </li>
+                <li class="other-trek-card">
+                    <img src="/img/Kuntibetta.jpg" alt="Kunti Betta Trek">
+                    <h4>Kunti Betta Trek</h4>
+                    <p>Perfect for beginners, this trek offers scenic beauty and a touch of mythology.</p>
+                    <a href="#">View Details</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+        <!-- Fixed Book Now Button -->
+    <div class="fixed-book-now">
+        <a href="Skandawith" class="cta-button">Book Now</a>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/919902653393" class="enquiry-button" id="enquiryButton" aria-label="Chat on WhatsApp">
+        <span class="enquiry-text">Chat on WhatsApp</span>
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.17-.25.25-.41c.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.07-.10-.23-.16-.48-.27z"/>
+        </svg>
+    </a>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Hikers Horizon. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Hamburger Menu Script -->
+    <!-- JavaScript -->
+    <script>
+        // Optimized WhatsApp Drag Functionality (Zero-Jank, Mobile-Safe)
+        (function() {
+            const btn = document.getElementById('enquiryButton');
+            if (!btn) return;
+            let isDragging = false;
+            let startX, startY, initialRight, initialBottom;
+            let hasMoved = false;
+            const dragThreshold = 5;
+
+            function constrainPosition() {
+                const rect = btn.getBoundingClientRect();
+                const maxX = window.innerWidth - rect.width;
+                const maxY = window.innerHeight - rect.height;
+                let currentRight = parseFloat(btn.style.right || '30px');
+                let currentBottom = parseFloat(btn.style.bottom || '30px');
+                currentRight = Math.max(0, Math.min(currentRight, maxX));
+                currentBottom = Math.max(0, Math.min(currentBottom, maxY));
+                btn.style.right = currentRight + 'px';
+                btn.style.bottom = currentBottom + 'px';
+            }
+
+            function startDrag(e) {
+                isDragging = true;
+                hasMoved = false;
+                btn.style.transition = 'none';
+                const computedStyle = window.getComputedStyle(btn);
+                initialRight = parseFloat(computedStyle.right);
+                initialBottom = parseFloat(computedStyle.bottom);
+
+                if (e.type === 'touchstart') {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    document.addEventListener('touchmove', doDrag, { passive: false });
+                    document.addEventListener('touchend', stopDrag, { passive: true });
+                    document.addEventListener('touchcancel', stopDrag, { passive: true });
+                } else {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    document.addEventListener('mousemove', doDrag);
+                    document.addEventListener('mouseup', stopDrag);
+                }
+            }
+
+            function doDrag(e) {
+                if (!isDragging) return;
+                let currentX, currentY;
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                } else {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
+                const deltaX = startX - currentX;
+                const deltaY = currentY - startY;
+
+                if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+                    hasMoved = true;
+                    btn.style.right = (initialRight + deltaX) + 'px';
+                    btn.style.bottom = (initialBottom - deltaY) + 'px';
+                    constrainPosition();
+                }
+            }
+
+            function stopDrag(e) {
+                if (!isDragging) return;
+                if (!hasMoved) {
+                    window.open(btn.href, '_blank');
+                }
+                isDragging = false;
+                btn.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                
+                document.removeEventListener('mousemove', doDrag);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchmove', doDrag);
+                document.removeEventListener('touchend', stopDrag);
+                document.removeEventListener('touchcancel', stopDrag);
+            }
+
+            btn.addEventListener('mousedown', startDrag);
+            btn.addEventListener('touchstart', startDrag, { passive: true });
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Create Your Adventure Account | Hikers Horizon</title>
+  <meta name="description"
+    content="Join the Hikers Horizon community! Create an account to begin your trekking journey, receive event updates, and book premium adventures near Bangalore.">
+  <meta name="keywords"
+    content="Hikers Horizon sign up, create trekker account, Bangalore adventure community, join trekking club India">
+  <link rel="canonical" href="https://hikershorizon.in/signup.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="theme.css?v=6">
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+  <style>
+    :root {
+      --primary-color: #ffd700;
+      --secondary-color: #FFFFFF;
+      --text-light: #B0B0B0;
+      --bg-dark: #000000;
+      --accent: #ffd700;
+    }
+
+    
+            -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    video#bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.5;
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.9));
+      z-index: -1;
+    }
+main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7rem 1.5rem 4rem;
+    }
+
+    .signup-container {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+      animation: fadeInSignup 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInSignup {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .signup-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .signup-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      text-align: left;
+    }
+
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 0.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+    }
+
+    .signup-button {
+      width: 100%;
+      padding: 1.1rem;
+      margin-top: 1rem;
+      background: var(--accent);
+      color: #000000;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .signup-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+      background: #FFFFFF;
+    }
+
+    .footer-link {
+      margin-top: 2rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.85rem;
+    }
+
+    .footer-link a {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-link a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .signup-container {
+        padding: 2.5rem 1.75rem;
+      }
+}
+  </style>
+  <link rel="stylesheet" href="auth-navigation.css?v=11">
+</head>
+
+<body>
+  <!-- Background Video -->
+  <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+    <source src="/img/BG.webp" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="video-overlay"></div>
+    <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+  <main>
+    <div class="signup-container">
+      <h1 class="signup-title">Join Adventure</h1>
+      <form id="signup-form" class="signup-form">
+        <div class="form-group">
+          <label for="username" class="form-label">Trekker Name</label>
+          <input type="text" id="username" name="username" class="form-input" placeholder="e.g. Alex" required>
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Email Handle</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="alex@gmail.com" required>
+        </div>
+        <div class="form-group">
+          <label for="mobile" class="form-label">Mobile Contact</label>
+          <input type="tel" id="mobile" name="mobile" class="form-input" placeholder="9876543210" required>
+        </div>
+        <div class="form-group">
+          <label for="password" class="form-label">Secure Password</label>
+          <div class="input-wrapper" style="position: relative;">
+            <input type="password" id="password" name="password" class="form-input" placeholder="Min. 8 chars" required
+              style="padding-right: 4.5rem;">
+            <button type="button" class="toggle-password" id="togglePassword"
+              style="position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--accent); opacity: 0.9; cursor: pointer; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; transition: all 0.3s ease; z-index: 10;">Show</button>
+          </div>
+        </div>
+        <button type="submit" class="signup-button" id="signupBtn">Request Access</button>
+      </form>
+
+      <!-- OTP Form Container -->
+      <div id="otp-container" style="display: none;">
+        <h3
+          style="color: #FFFFFF; margin-bottom: 1rem; font-family: 'Montserrat', sans-serif; text-transform: uppercase;">
+          Verify Your Account</h3>
+        <p style="color: #B0B0B0; margin-bottom: 1.5rem; font-size: 0.9rem;">Please enter the 6-digit OTP sent to your
+          registered <strong>email ID</strong>.</p>
+        <form id="otp-form" class="signup-form">
+          <div class="form-group">
+            <label for="otp" class="form-label">OTP Verification Code</label>
+            <input type="text" id="otp" name="otp" class="form-input" required pattern="[0-9]{6}"
+              title="Enter the 6-digit OTP code">
+          </div>
+          <button type="submit" class="signup-button">Verify OTP</button>
+          <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: #FFFFFF;">
+            Didn't receive code? <a id="resend-link" href="#" onclick="resendOtp(); return false;"
+              style="color: #B0B0B0; text-decoration: underline; font-weight: 700;">Resend OTP</a>
+          </p>
+        </form>
+      </div>
+
+      <div class="footer-link" id="footer-link-auth" style="margin-top: 2rem; color: #B0B0B0; font-size: 0.95rem;">
+        <p>Already have an account? <a href="/login.html" style="color: #FFFFFF; font-weight: 700;">Log In</a></p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    document.getElementById('signup-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const mobile = document.getElementById('mobile').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, mobile, password })
+        });
+
+        const contentType = response.headers.get("content-type");
+        const isJson = contentType && contentType.includes("application/json");
+        const data = isJson ? await response.json() : null;
+
+        if (response.ok && isJson) {
+          let msg = 'OTP sent to your email! Please check your inbox.';
+          if (data.testUrl) {
+            console.log('Ethereal Test Mail URL:', data.testUrl);
+            msg += '\n(Test Mail generated here: ' + data.testUrl + ')';
+          }
+          alert(msg);
+
+          document.getElementById('signup-form').style.display = 'none';
+          document.getElementById('footer-link-auth').style.display = 'none';
+          document.getElementById('otp-container').style.display = 'block';
+          window.pendingEmail = email;
+        } else {
+          // If the response is not OK
+          if (!isJson) {
+            alert(`Server error (${response.status}). This usually means the Node.js process is stopped or misconfigured.`);
+          } else {
+            alert('Error: ' + (data.message || 'Unknown error occurred'));
+          }
+        }
+      } catch (err) {
+        console.error('Signup fetch error:', err);
+        alert('Could not connect to the server. Please check your internet connection or server status.');
+      }
+    });
+
+    let resendTimer = 0;
+    async function resendOtp() {
+      if (resendTimer > 0) return;
+
+      const email = window.pendingEmail;
+      if (!email) {
+        alert('Email not found. Please try to sign up again.');
+        return;
+      }
+
+      const response = await fetch('/api/resend-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      if (response.ok) {
+        alert('A new OTP has been sent to your email and mobile.');
+        startResendTimer(60);
+      } else {
+        const errorText = await response.text();
+        alert('Failed to resend OTP: ' + errorText);
+      }
+    }
+
+    function startResendTimer(seconds) {
+      resendTimer = seconds;
+      const resendLink = document.getElementById('resend-link');
+      const originalText = resendLink.innerHTML;
+
+      const interval = setInterval(() => {
+        resendTimer--;
+        if (resendTimer <= 0) {
+          clearInterval(interval);
+          resendLink.innerHTML = "Resend OTP";
+          resendLink.style.opacity = "1";
+          resendLink.style.cursor = "pointer";
+        } else {
+          resendLink.innerHTML = `Wait ${resendTimer}s to Resend`;
+          resendLink.style.opacity = "0.6";
+          resendLink.style.cursor = "not-allowed";
+        }
+      }, 1000);
+    }
+
+    document.getElementById('otp-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const otp = document.getElementById('otp').value;
+      const email = window.pendingEmail;
+
+      const response = await fetch('/api/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
+      });
+
+      if (response.ok) {
+        alert('Number/Email Verified successfully! You can now log in.');
+        window.location.href = '/login.html';
+      } else {
+        const errorText = await response.text();
+        alert('Error: ' + errorText);
+      }
+    });
+  </script></body>
+
+</html>
