@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/hikersho/public_html/
-    - /bin/rsync -arv --exclude=.git* --exclude=.cpanel.yml --exclude=node_modules ./public_html/ $DEPLOYPATH

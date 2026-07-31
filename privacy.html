@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Swift Seat Mobile Bot</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        h1 { color: #111; font-size: 28px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { color: #222; font-size: 20px; margin-top: 30px; }
+        p, li { font-size: 15px; color: #555; }
+        ul { padding-left: 20px; }
+        .last-updated { font-size: 13px; color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Privacy Policy for Swift Seat Mobile Bot</h1>
+        <p class="last-updated">Last Updated: July 31, 2026</p>
+
+        <p>This Privacy Policy explains how <strong>Swift Seat Mobile Bot</strong> ("we", "our", or "us") handles user information when you use our Chrome Extension.</p>
+
+        <h2>1. Local Data Storage</h2>
+        <p>Swift Seat Mobile Bot stores all user-entered booking configuration details—including station codes, train numbers, journey dates, passenger details, and license keys—<strong>strictly locally on your device</strong> using the browser's <code>chrome.storage.local</code> API.</p>
+
+        <h2>2. Data Collection and Transmission</h2>
+        <p>We do <strong>not</strong> collect, track, sell, or transmit your personal data, credentials, browsing history, or payment information to external servers. The extension only sends HTTPS REST API requests to <code>https://hikershorizon.in/api/activate-license</code> to validate user-purchased subscription keys and device registration IDs.</p>
+
+        <h2>3. Use of Permissions</h2>
+        <ul>
+            <li><strong>storage:</strong> Used solely to save your booking configuration locally so you do not need to re-enter details repeatedly.</li>
+            <li><strong>activeTab:</strong> Used exclusively to inject passenger details into supported booking forms (irctc.co.in and aranyavihaara.karnataka.gov.in) when you initiate automation.</li>
+            <li><strong>host_permissions:</strong> Used strictly to verify subscription license keys via our secure API endpoint.</li>
+        </ul>
+
+        <h2>4. Data Security</h2>
+        <p>Your authentication credentials and passenger preferences remain contained within your local browser environment. We implement industry-standard encryption practices for license validation calls.</p>
+
+        <h2>5. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. Any updates will be posted directly on this page.</p>
+
+        <h2>6. Contact Us</h2>
+        <p>If you have any questions regarding this Privacy Policy, please contact us at support@hikershorizon.in.</p>
+    </div>
+</body>
+</html>
