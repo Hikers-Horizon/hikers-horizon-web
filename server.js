@@ -392,7 +392,6 @@ app.post('/api/start-tatkal', async (req, res) => {
                     '--disable-infobars',
                     '--start-maximized',
                     '--disable-blink-features=AutomationControlled',
-                    '--disable-http2',
                     '--ignore-certificate-errors',
                     '--window-size=1920,1080'
                 ];
@@ -535,26 +534,21 @@ app.post('/api/start-tatkal', async (req, res) => {
             } else {
                 emitLog('Opening https://www.irctc.co.in/nget/train-search ...', 'info');
                 
-                try {
-                    await page.goto('https://www.irctc.co.in/nget/train-search', {
-                        waitUntil: 'domcontentloaded',
-                        timeout: 30000
-                    });
-                } catch (navErr) {
-                    emitLog(`Initial load note: ${navErr.message || navErr}. Retrying load...`, 'warning');
-                    await page.goto('https://www.irctc.co.in/nget/train-search', {
-                        waitUntil: 'load',
-                        timeout: 30000
-                    }).catch(() => {});
-                }
+                // Fast non-blocking load: commit initial HTTP headers in 15 seconds
+                await page.goto('https://www.irctc.co.in/nget/train-search', {
+                    waitUntil: 'commit',
+                    timeout: 15000
+                }).catch((navErr) => {
+                    emitLog(`Initial handshake note: ${navErr.message || navErr}`, 'warning');
+                });
             }
 
-            // Wait for user or bot to be on search page (up to 45s)
+            // Wait for main IRCTC page DOM/URL readiness (up to 30s)
             await page.waitForFunction(() => {
-                return window.location.href.includes('irctc.co.in/nget/train-search');
-            }, { timeout: 45000, polling: 1000 }).catch(() => {});
+                return window.location.href.includes('irctc.co.in');
+            }, { timeout: 30000, polling: 500 }).catch(() => {});
 
-            emitLog('IRCTC Page Detected! Taking control...', 'success');
+            emitLog('IRCTC Page Loaded! Taking control...', 'success');
         } catch (e) {
             emitLog(`Navigation status: ${e.message || e}`, 'warning');
         }
