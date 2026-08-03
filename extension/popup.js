@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const deviceId = await getOrCreateDeviceId();
 
         try {
-            const response = await fetch('https://hikershorizon.in/api/activate-license', {
+            const response = await fetch('https://swiftseat.shop/api/activate-license', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ licenseKey: key, deviceId })
