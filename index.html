@@ -445,6 +445,61 @@
 
             <!-- Operations Right Column -->
             <div class="dashboard-col right-col">
+                <!-- Checkout license key subscription portal (PRIMARY) -->
+                <section class="card fade-in" id="subscription-portal-card" style="border-color: rgba(20, 184, 166, 0.35); box-shadow: 0 0 30px rgba(20, 184, 166, 0.12), 0 10px 40px rgba(0, 0, 0, 0.35);">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="card-icon" style="background: rgba(20, 184, 166, 0.1); border-color: rgba(20, 184, 166, 0.25); color: #14B8A6;">
+                                <i data-lucide="credit-card"></i>
+                            </div>
+                            <div>
+                                <div class="card-title">SaaS Licensing Portal</div>
+                                <div class="card-subtitle">Unlock Unlimited Bookings for ₹99/Month</div>
+                            </div>
+                        </div>
+                        <div class="bot-card-badge" style="background: rgba(20, 184, 166, 0.15); border-color: rgba(20, 184, 166, 0.3); color: #14B8A6; position: static;">INSTANT ACTIVATION</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="email" class="form-input" id="sub-email" placeholder=" ">
+                            <label class="form-label">Email Address</label>
+                            <i data-lucide="mail" class="input-inline-icon"></i>
+                        </div>
+                        <div class="form-group select-container">
+                            <label class="select-label">Payment Gateway</label>
+                            <select class="form-select" id="sub-payment-method">
+                                <option value="UPI" selected>UPI (GPay / PhonePe / Paytm)</option>
+                                <option value="Card">Visa / Master Debit Cards</option>
+                                <option value="NetBanking">Net Banking Portal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-pay-premium" id="btn-pay-subscribe">
+                        <i data-lucide="sparkles" class="btn-action-icon"></i> ACTIVATE INSTANT ACCESS (₹99)
+                    </button>
+
+                    <!-- Successful Transaction Result Output Window -->
+                    <div id="sub-result" class="payment-success-card" style="display: none;">
+                        <div class="success-header-row">
+                            <i data-lucide="check-circle-2"></i>
+                            <div>
+                                <span class="success-title">Payment Completed Successfully!</span>
+                                <span class="txn-code-lbl">Transaction Reference: <code id="sub-txn-id"></code></span>
+                            </div>
+                        </div>
+                        <hr class="success-divider">
+                        <span class="success-instruction-details">
+                            Your billing license key has been verified and registered. Paste this code into your Swift Seat browser extension popup dashboard:
+                        </span>
+                        <div class="txn-license-copy-box">
+                            <input type="text" id="sub-key-value" class="copy-license-entry" readonly>
+                            <button class="btn btn-secondary btn-copy-code" id="btn-copy-sub-key"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy</button>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Live Browser Monitor Stream -->
                 <section class="card monitor-section" id="monitor-card">
                     <div class="card-header">
@@ -541,60 +596,7 @@
                             <i data-lucide="download"></i> Get Swift Seat Chrome Extension
                         </a>
                     </div>
-                </section>
-
-                <!-- Checkout license key subscription portal -->
-                <section class="card fade-in" id="subscription-portal-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i data-lucide="credit-card"></i>
-                        </div>
-                        <div>
-                            <div class="card-title">SaaS Licensing Portal</div>
-                            <div class="card-subtitle">Unlock Unlimited Bookings for ₹99/Month</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group floating">
-                            <input type="email" class="form-input" id="sub-email" placeholder=" ">
-                            <label class="form-label">Email Address</label>
-                            <i data-lucide="mail" class="input-inline-icon"></i>
-                        </div>
-                        <div class="form-group select-container">
-                            <label class="select-label">Payment Gateway</label>
-                            <select class="form-select" id="sub-payment-method">
-                                <option value="UPI" selected>UPI (GPay / PhonePe / Paytm)</option>
-                                <option value="Card">Visa / Master Debit Cards</option>
-                                <option value="NetBanking">Net Banking Portal</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-primary btn-pay-premium" id="btn-pay-subscribe">
-                        <i data-lucide="sparkles" class="btn-action-icon"></i> ACTIVATE INSTANT ACCESS (₹99)
-                    </button>
-
-                    <!-- Successful Transaction Result Output Window -->
-                    <div id="sub-result" class="payment-success-card" style="display: none;">
-                        <div class="success-header-row">
-                            <i data-lucide="check-circle-2"></i>
-                            <div>
-                                <span class="success-title">Payment Completed Successfully!</span>
-                                <span class="txn-code-lbl">Transaction Reference: <code id="sub-txn-id"></code></span>
-                            </div>
-                        </div>
-                        <hr class="success-divider">
-                        <span class="success-instruction-details">
-                            Your billing license key has been verified and registered. Paste this code into your Swift Seat browser extension popup dashboard:
-                        </span>
-                        <div class="txn-license-copy-box">
-                            <input type="text" id="sub-key-value" class="copy-license-entry" readonly>
-                            <button class="btn btn-secondary btn-copy-code" id="btn-copy-sub-key"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy</button>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                </section>            </div>
         </div>
 
         <footer class="footer">
