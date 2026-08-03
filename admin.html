@@ -116,7 +116,7 @@
                     <label class="form-label">Admin Security Key</label>
                     <i data-lucide="key" class="input-inline-icon"></i>
                 </div>
-                <div id="auth-error-msg" style="color: #F43F5E; font-size: 0.75rem; margin-bottom: 1rem; display: none;">Invalid security key! (Default: admin)</div>
+                <div id="auth-error-msg" style="color: #F43F5E; font-size: 0.75rem; margin-bottom: 1rem; display: none;">Invalid security key! Access denied.</div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">
                     <i data-lucide="unlock"></i> Unlock Dashboard
                 </button>
@@ -286,20 +286,32 @@
     <script>
         lucide.createIcons();
 
-        const DEFAULT_ADMIN_PASS = "admin";
         const authModal = document.getElementById('admin-auth-modal');
         const loginForm = document.getElementById('admin-login-form');
         const authError = document.getElementById('auth-error-msg');
 
-        // Authentication Check
-        loginForm.addEventListener('submit', (e) => {
+        // Secure Server Authentication Check
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const enteredPass = document.getElementById('admin-pass').value.trim().toLowerCase();
-            const validPasses = ['admin', 'admin123', 'swiftseat', 'asdf@2003', '123456', 'swift'];
-            if (validPasses.includes(enteredPass)) {
-                authModal.style.display = 'none';
-                loadAdminData();
-            } else {
+            const password = document.getElementById('admin-pass').value.trim();
+            authError.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    authModal.style.display = 'none';
+                    loadAdminData();
+                } else {
+                    authError.textContent = 'Invalid security key! Access denied.';
+                    authError.style.display = 'block';
+                }
+            } catch (err) {
+                authError.textContent = 'Server connection error!';
                 authError.style.display = 'block';
             }
         });

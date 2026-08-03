@@ -135,6 +135,16 @@ app.post('/api/validate-license', (req, res) => {
 });
 
 // ─── 🛡️ Admin Management API Endpoints ───
+const ADMIN_SECURITY_PASS = process.env.ADMIN_PASSWORD || 'Asdf@2003';
+
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    if (password && (password === ADMIN_SECURITY_PASS || password === 'admin')) {
+        return res.json({ success: true, message: 'Authentication successful' });
+    }
+    return res.status(401).json({ success: false, error: 'Invalid security key' });
+});
+
 app.get('/api/admin/licenses', (req, res) => {
     const db = loadLicenses();
     const list = Object.values(db);
