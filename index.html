@@ -39,21 +39,88 @@
                     <span class="metric-label" id="status-text">Ready</span>
                 </div>
                 <div class="metric-item">
+                    <i data-lucide="clock" class="metric-icon"></i>
+                    <span class="metric-label">System Time:</span>
+                    <span class="metric-val text-mono" id="nav-system-time" style="color: var(--success); font-family: monospace; font-weight: bold;">00:00:00</span>
+                </div>
+                <div class="metric-item">
                     <i data-lucide="shield" class="metric-icon"></i>
                     <span class="metric-label">License Key:</span>
                     <span class="metric-val" id="nav-key-status">Checking...</span>
                 </div>
             </div>
             
-            <div class="nav-actions">
-                <button class="nav-action-btn" title="System Settings">
-                    <i data-lucide="settings"></i>
-                </button>
-                <div class="user-profile">
-                    <div class="avatar">TF</div>
+            <div class="nav-actions" style="display: flex; gap: 8px; align-items: center;">
+                <a href="./swift-seat-guide.html" target="_blank" class="nav-action-btn" title="User Guide" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="book-open"></i>
+                </a>
+                <div class="settings-wrapper" id="settings-wrapper">
+                    <button class="nav-action-btn" title="System Settings" id="btn-settings-toggle">
+                        <i data-lucide="settings"></i>
+                    </button>
+                    <div class="settings-dropdown" id="settings-dropdown">
+                        <div class="settings-dropdown-header">System Settings</div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="book-open" class="settings-item-icon"></i>
+                                <a href="./swift-seat-guide.html" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">Executive User Guide</a>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="file-text" class="settings-item-icon"></i>
+                                <a href="./Swift_Seat_Customer_Guide.pdf" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">Download PDF Guide</a>
+                            </div>
+                        </div>
+                        <div class="settings-divider"></div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="volume-2" class="settings-item-icon"></i>
+                                <span>Sound Alerts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-sound" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="save" class="settings-item-icon"></i>
+                                <span>Auto-Save Form</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-autosave" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="bell" class="settings-item-icon"></i>
+                                <span>Desktop Notifications</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-notifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="monitor" class="settings-item-icon"></i>
+                                <span>Live Stream Quality</span>
+                            </div>
+                            <select class="settings-select" id="setting-stream-quality">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="settings-divider"></div>
+                        <button class="settings-action-btn" id="btn-clear-data">
+                            <i data-lucide="trash-2" class="settings-item-icon"></i> Reset All Data
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
 
     <div id="app">
@@ -206,24 +273,18 @@
                     <!-- Station Info Routing Display -->
                     <div id="train-details-container">
                         <div class="route-display-wrapper" id="route-display">
-                            <div class="route-station-node">
-                                <span class="route-code-text" id="from-code">YNK</span>
-                                <span class="route-name">Yelahanka</span>
+                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
+                                <label class="select-label">From Station</label>
+                                <input type="text" class="form-input text-mono" id="from-code" value="YNK" placeholder="e.g. YNK" maxLength="5" oninput="this.value = this.value.toUpperCase()">
                             </div>
                             
-                            <div class="route-visual-path">
-                                <div class="path-line"></div>
-                                <button type="button" class="route-swap" id="swap-btn" title="Swap Route Direction">
-                                    <i data-lucide="arrow-left-right"></i>
-                                </button>
-                                <div class="train-icon-node">
-                                    <i data-lucide="train"></i>
-                                </div>
-                            </div>
+                            <button type="button" class="route-swap-btn" id="swap-btn" title="Swap Stations">
+                                <i data-lucide="arrow-left-right"></i>
+                            </button>
                             
-                            <div class="route-station-node">
-                                <span class="route-code-text" id="to-code">YG</span>
-                                <span class="route-name">Yadgiri</span>
+                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
+                                <label class="select-label">To Station</label>
+                                <input type="text" class="form-input text-mono" id="to-code" value="YG" placeholder="e.g. YG" maxLength="5" oninput="this.value = this.value.toUpperCase()">
                             </div>
                         </div>
 
@@ -521,11 +582,96 @@
         </div>
 
         <footer class="footer">
-            <div class="footer-text">Swift Seat Engine Corp · Secure AES Encryption · Speed booking YNK ↔ YG</div>
+            <div class="footer-text">Swift Seat Engine Corp · Secure AES Encryption</div>
+            <div class="footer-links">
+                <a href="/swiftseat/privacy/" class="footer-link" id="privacy-link">
+                    <i data-lucide="shield" style="width: 14px; height: 14px;"></i> Privacy Policy
+                </a>
+            </div>
         </footer>
     </div>
 
-    <!-- Load Main Dashboard Controller Script -->
+    <!-- Initialize Lucide Icons & Custom Passwords toggle scripts -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Hydrate Icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            // Sync Nav status text key indication
+            setInterval(() => {
+                const licenseInfoText = document.getElementById('dashboard-license-info');
+                const navKeyText = document.getElementById('nav-key-status');
+                if (licenseInfoText && navKeyText) {
+                    if (licenseInfoText.textContent.includes('Expired')) {
+                        navKeyText.textContent = 'Expired';
+                        navKeyText.className = 'metric-val key-expired';
+                    } else if (licenseInfoText.textContent.includes('Active')) {
+                        navKeyText.textContent = 'Active';
+                        navKeyText.className = 'metric-val key-active';
+                    } else {
+                        navKeyText.textContent = 'Inactive';
+                        navKeyText.className = 'metric-val key-inactive';
+                    }
+                }
+            }, 1000);
+
+            // Toggle passwords
+            const toggleBtn = document.getElementById('btn-toggle-password');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const passInput = document.getElementById('irctc-pass');
+                    const icon = toggleBtn.querySelector('i');
+                    if (passInput.type === 'password') {
+                        passInput.type = 'text';
+                        toggleBtn.innerHTML = '<i data-lucide="eye-off"></i>';
+                    } else {
+                        passInput.type = 'password';
+                        toggleBtn.innerHTML = '<i data-lucide="eye"></i>';
+                    }
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                });
+            }
+
+            // Settings dropdown toggle
+            const settingsBtn = document.getElementById('btn-settings-toggle');
+            const settingsDropdown = document.getElementById('settings-dropdown');
+            if (settingsBtn && settingsDropdown) {
+                settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    settingsDropdown.classList.toggle('open');
+                    settingsBtn.classList.toggle('active');
+                    if (window.lucide) lucide.createIcons();
+                });
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#settings-wrapper')) {
+                        settingsDropdown.classList.remove('open');
+                        settingsBtn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Reset All Data button
+            const clearBtn = document.getElementById('btn-clear-data');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to reset all form data?')) {
+                        document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"]').forEach(input => {
+                            if (!['journey-date', 'from-code', 'to-code', 'train-number'].includes(input.id)) {
+                                input.value = '';
+                            }
+                        });
+                        localStorage.clear();
+                        settingsDropdown.classList.remove('open');
+                        settingsBtn.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
     <script src="./main.js"></script>
 </body>
 
