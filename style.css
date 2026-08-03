@@ -499,6 +499,15 @@ body::after {
   line-height: 1.4;
 }
 
+.mode-btn.disabled,
+.mode-btn.disabled:hover {
+  opacity: 0.45 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 /* Hover & Active selection states */
 .mode-btn:hover {
   transform: translateY(-2px);
