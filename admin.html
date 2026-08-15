@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Seat — Executive Admin Dashboard</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .admin-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 7, 13, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-modal-card {
+            background: rgba(14, 17, 28, 0.9);
+            border: 1px solid rgba(124, 58, 237, 0.25);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(124, 58, 237, 0.15);
+            text-align: center;
+        }
+
+        .admin-badge-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(99, 102, 241, 0.1));
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #A78BFA;
+            margin: 0 auto 1.25rem;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            text-align: left;
+        }
+
+        .admin-table th {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.85rem 1rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.7rem;
+        }
+
+        .admin-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge-active {
+            background: rgba(20, 184, 166, 0.12);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            color: #14B8A6;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+
+        .status-badge-revoked {
+            background: rgba(244, 63, 94, 0.12);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            color: #F43F5E;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🔒 Admin Access Auth Modal -->
+    <div class="admin-modal-overlay" id="admin-auth-modal">
+        <div class="admin-modal-card">
+            <div class="admin-badge-icon">
+                <i data-lucide="shield-check" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.35rem;">Admin Access Portal</h2>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Enter security credentials to access the Swift Seat management portal.</p>
+            
+            <form id="admin-login-form">
+                <div class="form-group floating" style="margin-bottom: 1.25rem;">
+                    <input type="password" class="form-input" id="admin-pass" placeholder=" " required autofocus>
+                    <label class="form-label">Admin Security Key</label>
+                    <i data-lucide="key" class="input-inline-icon"></i>
+                </div>
+                <div id="auth-error-msg" style="color: #F43F5E; font-size: 0.75rem; margin-bottom: 1rem; display: none;">Invalid security key! Access denied.</div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i data-lucide="unlock"></i> Unlock Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon-svg">
+                    <i data-lucide="shield"></i>
+                </div>
+                <div class="logo-text">Swift<span class="logo-text-highlight">Seat</span> <span class="logo-badge">ADMIN v2.0</span></div>
+            </div>
+            
+            <div class="nav-actions">
+                <a href="./index.html" class="footer-link" style="text-decoration: none;">
+                    <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Back to Web App
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app">
+        <!-- Dashboard Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+            <div>
+                <h1 style="font-size: 1.6rem; font-weight: 800;">Executive Admin Portal</h1>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">Manage license keys, subscriber accounts, and system operations.</p>
+            </div>
+            <button class="btn btn-secondary" id="btn-refresh-admin" style="width: auto; padding: 0 1rem; height: 2.6rem;">
+                <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Refresh Data
+            </button>
+        </div>
+
+        <!-- Metrics Overview Grid -->
+        <div class="dashboard-stats-grid">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon purple">
+                    <i data-lucide="key"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val" id="stat-total-keys">0</div>
+                    <div class="dash-stat-label">Total Licenses Issued</div>
+                </div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon teal">
+                    <i data-lucide="check-circle"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val" id="stat-active-keys">0</div>
+                    <div class="dash-stat-label">Active Subscriptions</div>
+                </div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon amber">
+                    <i data-lucide="indian-rupee"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val" id="stat-estimated-revenue">₹0</div>
+                    <div class="dash-stat-label">Estimated Sales (₹99/mo)</div>
+                </div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon blue">
+                    <i data-lucide="server"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val">Online</div>
+                    <div class="dash-stat-label">Server & Database State</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Workspace Grid -->
+        <div class="main-grid">
+            <!-- Left Column: Key Generator -->
+            <div class="dashboard-col left-col">
+                <section class="card fade-in">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i data-lucide="plus-circle"></i>
+                        </div>
+                        <div>
+                            <div class="card-title">Generate Custom License Key</div>
+                            <div class="card-subtitle">Issue instant activation code for customer</div>
+                        </div>
+                    </div>
+
+                    <form id="gen-key-form">
+                        <div class="form-group floating">
+                            <input type="email" class="form-input" id="gen-email" placeholder=" " required>
+                            <label class="form-label">Customer Email</label>
+                            <i data-lucide="mail" class="input-inline-icon"></i>
+                        </div>
+
+                        <div class="form-group select-container">
+                            <label class="select-label">Plan Duration</label>
+                            <select class="form-select" id="gen-days">
+                                <option value="30" selected>30 Days (Standard Pro — ₹99)</option>
+                                <option value="90">90 Days (Quarterly Access)</option>
+                                <option value="365">365 Days (Annual VIP Pass)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i data-lucide="sparkles"></i> Generate & Issue License Key
+                        </button>
+                    </form>
+
+                    <!-- Generated Key Output Box -->
+                    <div id="gen-result-box" style="margin-top: 1.25rem; padding: 1rem; background: rgba(20, 184, 166, 0.08); border: 1px solid rgba(20, 184, 166, 0.25); border-radius: 12px; display: none;">
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #14B8A6; margin-bottom: 0.35rem;">NEW LICENSE KEY GENERATED</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <input type="text" id="gen-key-output" class="copy-license-entry" readonly style="font-family: var(--font-mono); background: #0A0C15; height: 2.6rem;">
+                            <button class="btn btn-secondary btn-copy-code" id="btn-copy-gen-key" style="height: 2.6rem;">Copy</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: License Directory Table -->
+            <div class="dashboard-col right-col">
+                <section class="card fade-in">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="card-icon">
+                                <i data-lucide="database"></i>
+                            </div>
+                            <div>
+                                <div class="card-title">Registered License Keys</div>
+                                <div class="card-subtitle">Live subscriber database</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>License Key</th>
+                                    <th>Customer Email</th>
+                                    <th>Status</th>
+                                    <th>Expires At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="licenses-table-body">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading registered licenses...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-text">Swift Seat Admin Console · Security Controlled Portal</div>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const authModal = document.getElementById('admin-auth-modal');
+        const loginForm = document.getElementById('admin-login-form');
+        const authError = document.getElementById('auth-error-msg');
+
+        // Secure Server Authentication Check
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('admin-pass').value.trim();
+            authError.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    authModal.style.display = 'none';
+                    loadAdminData();
+                } else {
+                    authError.textContent = 'Invalid security key! Access denied.';
+                    authError.style.display = 'block';
+                }
+            } catch (err) {
+                authError.textContent = 'Server connection error!';
+                authError.style.display = 'block';
+            }
+        });
+
+        // Load Licenses from Server
+        async function loadAdminData() {
+            try {
+                const res = await fetch('/api/admin/licenses');
+                const data = await res.json();
+                const licenses = data.licenses || [];
+
+                document.getElementById('stat-total-keys').textContent = licenses.length;
+                const activeCount = licenses.filter(l => l.status === 'active' && new Date(l.expiresAt) > new Date()).length;
+                document.getElementById('stat-active-keys').textContent = activeCount;
+                document.getElementById('stat-estimated-revenue').textContent = `₹${activeCount * 99}`;
+
+                const tbody = document.getElementById('licenses-table-body');
+                if (licenses.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No licenses generated yet.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = licenses.map(item => {
+                    const isActive = item.status === 'active' && new Date(item.expiresAt) > new Date();
+                    const statusTag = isActive 
+                        ? `<span class="status-badge-active">ACTIVE</span>` 
+                        : `<span class="status-badge-revoked">${item.status.toUpperCase()}</span>`;
+                    const expiryStr = new Date(item.expiresAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                    return `
+                        <tr>
+                            <td style="font-family: var(--font-mono); font-weight: 700; color: #A78BFA;">${item.licenseKey}</td>
+                            <td>${item.userEmail || 'N/A'}</td>
+                            <td>${statusTag}</td>
+                            <td style="color: var(--text-secondary);">${expiryStr}</td>
+                            <td>
+                                ${isActive ? `<button onclick="revokeKey('${item.licenseKey}')" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); color: #F43F5E; padding: 0.2rem 0.5rem; border-radius: 6px; cursor: pointer; font-size: 0.72rem; font-weight: 700;">Revoke</button>` : `<span style="color: var(--text-muted); font-size: 0.72rem;">—</span>`}
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error('Error fetching admin stats:', err);
+            }
+        }
+
+        // Generate License Key
+        document.getElementById('gen-key-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('gen-email').value.trim();
+            const days = document.getElementById('gen-days').value;
+
+            try {
+                const res = await fetch('/api/admin/create-license', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, days })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('gen-key-output').value = data.license.licenseKey;
+                    document.getElementById('gen-result-box').style.display = 'block';
+                    loadAdminData();
+                }
+            } catch (err) {
+                alert('Error generating key');
+            }
+        });
+
+        // Revoke License Key
+        async function revokeKey(key) {
+            if (!confirm(`Are you sure you want to revoke key ${key}?`)) return;
+            try {
+                const res = await fetch('/api/admin/revoke-license', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ licenseKey: key })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadAdminData();
+                }
+            } catch (err) {
+                alert('Error revoking key');
+            }
+        }
+
+        // Copy Key Button
+        document.getElementById('btn-copy-gen-key').addEventListener('click', () => {
+            const input = document.getElementById('gen-key-output');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert('License key copied to clipboard!');
+        });
+
+        // Refresh Button
+        document.getElementById('btn-refresh-admin').addEventListener('click', loadAdminData);
+    </script>
+</body>
+</html>

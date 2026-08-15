@@ -12,17 +12,19 @@ const API_BASE = window.location.origin;
 let liveViewInterval = null;
 let autoStartTimer = null;
 let currentBotMode = 'desktop'; // 'desktop' or 'mobile'
+let timeOffset = 0;
 
 // ─── INIT ───
 function init() {
-    if (window.lucide) {
-        try { lucide.createIcons(); } catch (e) {}
-    }
     setDefaultDate();
-    startCountdown();
+    syncTimeOffset().then(() => {
+        startSystemClock();
+        startCountdown();
+    });
+    setInterval(syncTimeOffset, 30000);
     attachEvents();
 
-    const savedKey = localStorage.getItem('dashboard_license_key') || 'TF-TEST-TRIAL-KEY';
+    const savedKey = localStorage.getItem('dashboard_license_key') || '';
     const keyInput = document.getElementById('dashboard-license-key');
     if (keyInput) {
         keyInput.value = savedKey;
@@ -64,24 +66,54 @@ function setDefaultDate() {
     document.getElementById('journey-date').value = dateStr;
 }
 
+// ─── SYSTEM LIVE CLOCK ───
+function startSystemClock() {
+    const updateTime = () => {
+        const now = new Date(Date.now() + timeOffset);
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        const systemTimeEl = document.getElementById('nav-system-time');
+        if (systemTimeEl) {
+            systemTimeEl.textContent = `${hrs}:${mins}:${secs}`;
+        }
+    };
+    updateTime();
+    setInterval(updateTime, 100);
+}
+
+// ─── CLOCK SYNC WITH RUNNER DEVICE ───
+async function syncTimeOffset() {
+    try {
+        const start = Date.now();
+        const res = await fetch(`${API_BASE}/api/system-time`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const latency = (Date.now() - start) / 2;
+        const serverTime = data.timestamp + latency;
+        timeOffset = serverTime - Date.now();
+    } catch (e) {
+        console.warn('Failed to sync system time:', e);
+    }
+}
+
 // ─── COUNTDOWN TIMER ───
 function startCountdown() {
     const update = () => {
-        const now = new Date();
+        const now = new Date(Date.now() + timeOffset);
         const cls = journeyClassSelect.value;
-        const targetHour = (cls === 'SL') ? 11 : 10;
-
-        // Update tag
-        document.getElementById('target-class-tag').textContent = cls;
-        document.getElementById('countdown-target-text').textContent =
-            cls === 'SL' ? 'Targeting Sleeper Window' : 'Targeting AC Window';
+        
+        // Target in IST: Sleeper is 11:00, AC is 10:00
+        const isSleeper = (cls === 'SL');
+        const targetHourUtc = isSleeper ? 5 : 4;
+        const targetMinUtc = 30;
 
         let target = new Date(now);
-        target.setHours(targetHour, 0, 0, 0);
+        target.setUTCHours(targetHourUtc, targetMinUtc, 0, 0);
 
-        // If past today's window, target tomorrow
+        // If today's target is already past in UTC, target tomorrow
         if (now >= target) {
-            target.setDate(target.getDate() + 1);
+            target.setUTCDate(target.getUTCDate() + 1);
         }
 
         const diff = target - now;
@@ -94,11 +126,11 @@ function startCountdown() {
         document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
 
         // Auto-start check
-        checkAutoStart(now, targetHour);
+        checkAutoStart(now, isSleeper ? 11 : 10);
     };
 
     update();
-    setInterval(update, 1000);
+    setInterval(update, 100);
 }
 
 // ─── AUTO-START ───
@@ -109,12 +141,19 @@ function checkAutoStart(now, targetHour) {
     const modeHour = mode === 'auto-10' ? 10 : 11;
     if (modeHour !== targetHour) return;
 
-    // Start 2 seconds before window opens (pre-login)
+    // Start 30 seconds before window opens (pre-login)
+    const targetHourUtc = modeHour === 11 ? 5 : 4;
+    const targetMinUtc = 30;
+
     const windowTime = new Date(now);
-    windowTime.setHours(modeHour, 0, 0, 0);
+    windowTime.setUTCHours(targetHourUtc, targetMinUtc, 0, 0);
+    
+    // If today's window is already past in UTC, target tomorrow's window
+    if (now > windowTime + 30000) {
+        windowTime.setUTCDate(windowTime.getUTCDate() + 1);
+    }
 
     const msUntil = windowTime - now;
-    // 30 seconds before: launch browser and login
     if (msUntil > 0 && msUntil <= 30000 && !autoStartTimer) {
         autoStartTimer = true;
         addLog(`⚡ AUTO-START: Launching ${Math.ceil(msUntil / 1000)}s before window!`, 'warning');
@@ -124,16 +163,6 @@ function checkAutoStart(now, targetHour) {
 
 // ─── EVENTS ───
 function attachEvents() {
-    const toggleBtn = document.getElementById('btn-toggle-password');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            const passInput = document.getElementById('irctc-pass');
-            if (passInput) {
-                passInput.type = passInput.type === 'password' ? 'text' : 'password';
-            }
-        });
-    }
-
     btnStart.addEventListener('click', () => {
         if (currentBotMode === 'mobile') startMobileSequence();
         else startSequence();
@@ -146,19 +175,12 @@ function attachEvents() {
     swapBtn.addEventListener('click', () => {
         const fromEl = document.getElementById('from-code');
         const toEl = document.getElementById('to-code');
-        const fromParent = fromEl.parentElement;
-        const toParent = toEl.parentElement;
 
-        const tempCode = fromEl.textContent;
-        const tempName = fromParent.querySelector('.route-name').textContent;
+        const tempCode = fromEl.value;
+        fromEl.value = toEl.value;
+        toEl.value = tempCode;
 
-        fromEl.textContent = toEl.textContent;
-        fromParent.querySelector('.route-name').textContent = toParent.querySelector('.route-name').textContent;
-
-        toEl.textContent = tempCode;
-        toParent.querySelector('.route-name').textContent = tempName;
-
-        addLog(`Route swapped: ${fromEl.textContent} → ${toEl.textContent}`, 'info');
+        addLog(`Route swapped: ${fromEl.value} → ${toEl.value}`, 'info');
     });
 
     journeyClassSelect.addEventListener('change', () => {
@@ -192,6 +214,7 @@ function attachEvents() {
     // ─── Mode Toggle ───
     document.querySelectorAll('.mode-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            if (btn.classList.contains('disabled')) return;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentBotMode = btn.dataset.mode;
@@ -389,8 +412,8 @@ async function startSequence() {
     const payload = {
         username: document.getElementById('irctc-user').value,
         password: document.getElementById('irctc-pass').value,
-        from: document.getElementById('from-code').textContent,
-        to: document.getElementById('to-code').textContent,
+        from: document.getElementById('from-code').value,
+        to: document.getElementById('to-code').value,
         date: document.getElementById('journey-date').value,
         trainNum: document.getElementById('train-number').value,
         className: journeyClassSelect.value,
@@ -483,8 +506,8 @@ async function startMobileSequence() {
     const payload = {
         username: document.getElementById('irctc-user').value,
         password: document.getElementById('irctc-pass').value,
-        from: document.getElementById('from-code').textContent,
-        to: document.getElementById('to-code').textContent,
+        from: document.getElementById('from-code').value,
+        to: document.getElementById('to-code').value,
         date: document.getElementById('journey-date').value,
         trainNum: document.getElementById('train-number').value,
         className: journeyClassSelect.value,

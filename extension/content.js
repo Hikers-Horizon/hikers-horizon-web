@@ -15,7 +15,7 @@
     let subscriptionActive = false;
     if (state.licenseStatus && state.licenseStatus.active) {
         try {
-            const response = await fetch('https://hikershorizon.in/api/validate-license', {
+            const response = await fetch('https://swiftseat.shop/api/validate-license', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

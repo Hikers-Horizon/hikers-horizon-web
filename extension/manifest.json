@@ -10,8 +10,8 @@
   "host_permissions": [
     "http://localhost:3005/*",
     "http://127.0.0.1:3005/*",
-    "https://hikershorizon.in/*",
-    "http://hikershorizon.in/*"
+    "https://swiftseat.shop/*",
+    "http://swiftseat.shop/*"
   ],
   "icons": {
     "16": "icon16.png",

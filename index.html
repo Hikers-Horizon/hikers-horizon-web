@@ -39,21 +39,97 @@
                     <span class="metric-label" id="status-text">Ready</span>
                 </div>
                 <div class="metric-item">
+                    <i data-lucide="clock" class="metric-icon"></i>
+                    <span class="metric-label">System Time:</span>
+                    <span class="metric-val text-mono" id="nav-system-time" style="color: var(--success); font-family: monospace; font-weight: bold;">00:00:00</span>
+                </div>
+                <div class="metric-item">
                     <i data-lucide="shield" class="metric-icon"></i>
                     <span class="metric-label">License Key:</span>
                     <span class="metric-val" id="nav-key-status">Checking...</span>
                 </div>
             </div>
             
-            <div class="nav-actions">
-                <button class="nav-action-btn" title="System Settings">
-                    <i data-lucide="settings"></i>
-                </button>
-                <div class="user-profile">
-                    <div class="avatar">TF</div>
+            <div class="nav-actions" style="display: flex; gap: 8px; align-items: center;">
+                <a href="./admin.html" target="_blank" class="nav-action-btn" title="Admin Portal" style="text-decoration: none; color: #A78BFA; display: flex; align-items: center; justify-content: center; background: rgba(124, 58, 237, 0.12); border-color: rgba(124, 58, 237, 0.3);">
+                    <i data-lucide="shield"></i>
+                </a>
+                <a href="./swift-seat-guide.html" target="_blank" class="nav-action-btn" title="User Guide" style="text-decoration: none; color: inherit; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="book-open"></i>
+                </a>
+                <div class="settings-wrapper" id="settings-wrapper">
+                    <button class="nav-action-btn" title="System Settings" id="btn-settings-toggle">
+                        <i data-lucide="settings"></i>
+                    </button>
+                    <div class="settings-dropdown" id="settings-dropdown">
+                        <div class="settings-dropdown-header">System Settings</div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="shield" class="settings-item-icon"></i>
+                                <a href="./admin.html" target="_blank" style="color: #A78BFA; text-decoration: none; font-weight: 700;">Executive Admin Portal</a>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="book-open" class="settings-item-icon"></i>
+                                <a href="./swift-seat-guide.html" target="_blank" style="color: var(--primary-accent); text-decoration: none; font-weight: 600;">Executive User Guide</a>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="file-text" class="settings-item-icon"></i>
+                                <a href="./Swift_Seat_Customer_Guide.pdf" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">Download PDF Guide</a>
+                            </div>
+                        </div>
+                        <div class="settings-divider"></div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="volume-2" class="settings-item-icon"></i>
+                                <span>Sound Alerts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-sound" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="save" class="settings-item-icon"></i>
+                                <span>Auto-Save Form</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-autosave" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="bell" class="settings-item-icon"></i>
+                                <span>Desktop Notifications</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-notifications">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <i data-lucide="monitor" class="settings-item-icon"></i>
+                                <span>Live Stream Quality</span>
+                            </div>
+                            <select class="settings-select" id="setting-stream-quality">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="settings-divider"></div>
+                        <button class="settings-action-btn" id="btn-clear-data">
+                            <i data-lucide="trash-2" class="settings-item-icon"></i> Reset All Data
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
 
     <div id="app">
@@ -92,6 +168,46 @@
             </div>
         </section>
 
+        <!-- Executive Dashboard Metrics Panel -->
+        <div class="dashboard-stats-grid fade-in">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon purple">
+                    <i data-lucide="zap"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val">Sub-Second</div>
+                    <div class="dash-stat-label">Automation Engine Speed</div>
+                </div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon teal">
+                    <i data-lucide="shield-check"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val">₹99 / Month</div>
+                    <div class="dash-stat-label">SaaS Pro Subscription</div>
+                </div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon amber">
+                    <i data-lucide="clock"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val">10:00 & 11:00 AM</div>
+                    <div class="dash-stat-label">AC & Sleeper Windows</div>
+                </div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon blue">
+                    <i data-lucide="chrome"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-val">Chrome Extension</div>
+                    <div class="dash-stat-label">v2.0 Automation Ready</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Bot Selector Layout -->
         <div class="mode-toggle fade-in" id="mode-toggle">
             <div class="mode-btn active" id="mode-desktop" data-mode="desktop">
@@ -105,8 +221,10 @@
                 </div>
             </div>
             
-            <div class="mode-btn" id="mode-mobile" data-mode="mobile">
-                <div class="bot-card-badge secondary-badge">EXPERIMENTAL</div>
+            <div class="mode-btn disabled" id="mode-mobile" data-mode="mobile" style="opacity: 0.45; pointer-events: none; cursor: not-allowed;">
+                <div class="bot-card-badge secondary-badge" style="background: rgba(244, 63, 94, 0.12); border-color: rgba(244, 63, 94, 0.25); color: var(--error);">
+                    <i data-lucide="lock" style="width: 10px; height: 10px; display: inline-block; vertical-align: middle; margin-right: 2px;"></i> DISABLED
+                </div>
                 <div class="bot-card-icon-wrapper">
                     <i data-lucide="smartphone" class="bot-card-icon"></i>
                 </div>
@@ -206,24 +324,18 @@
                     <!-- Station Info Routing Display -->
                     <div id="train-details-container">
                         <div class="route-display-wrapper" id="route-display">
-                            <div class="route-station-node">
-                                <span class="route-code-text" id="from-code">YNK</span>
-                                <span class="route-name">Yelahanka</span>
+                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
+                                <label class="select-label">From Station</label>
+                                <input type="text" class="form-input text-mono" id="from-code" value="YNK" placeholder="e.g. YNK" maxLength="5" oninput="this.value = this.value.toUpperCase()">
                             </div>
                             
-                            <div class="route-visual-path">
-                                <div class="path-line"></div>
-                                <button type="button" class="route-swap" id="swap-btn" title="Swap Route Direction">
-                                    <i data-lucide="arrow-left-right"></i>
-                                </button>
-                                <div class="train-icon-node">
-                                    <i data-lucide="train"></i>
-                                </div>
-                            </div>
+                            <button type="button" class="route-swap-btn" id="swap-btn" title="Swap Stations">
+                                <i data-lucide="arrow-left-right"></i>
+                            </button>
                             
-                            <div class="route-station-node">
-                                <span class="route-code-text" id="to-code">YG</span>
-                                <span class="route-name">Yadgiri</span>
+                            <div class="form-group select-container route-input-box" style="flex: 1; margin-bottom: 0;">
+                                <label class="select-label">To Station</label>
+                                <input type="text" class="form-input text-mono" id="to-code" value="YG" placeholder="e.g. YG" maxLength="5" oninput="this.value = this.value.toUpperCase()">
                             </div>
                         </div>
 
@@ -382,6 +494,61 @@
 
             <!-- Operations Right Column -->
             <div class="dashboard-col right-col">
+                <!-- Checkout license key subscription portal (PRIMARY) -->
+                <section class="card fade-in" id="subscription-portal-card" style="border-color: rgba(20, 184, 166, 0.35); box-shadow: 0 0 30px rgba(20, 184, 166, 0.12), 0 10px 40px rgba(0, 0, 0, 0.35);">
+                    <div class="card-header" style="justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="card-icon" style="background: rgba(20, 184, 166, 0.1); border-color: rgba(20, 184, 166, 0.25); color: #14B8A6;">
+                                <i data-lucide="credit-card"></i>
+                            </div>
+                            <div>
+                                <div class="card-title">SaaS Licensing Portal</div>
+                                <div class="card-subtitle">Unlock Unlimited Bookings for ₹99/Month</div>
+                            </div>
+                        </div>
+                        <div class="bot-card-badge" style="background: rgba(20, 184, 166, 0.15); border-color: rgba(20, 184, 166, 0.3); color: #14B8A6; position: static;">INSTANT ACTIVATION</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="email" class="form-input" id="sub-email" placeholder=" ">
+                            <label class="form-label">Email Address</label>
+                            <i data-lucide="mail" class="input-inline-icon"></i>
+                        </div>
+                        <div class="form-group select-container">
+                            <label class="select-label">Payment Gateway</label>
+                            <select class="form-select" id="sub-payment-method">
+                                <option value="UPI" selected>UPI (GPay / PhonePe / Paytm)</option>
+                                <option value="Card">Visa / Master Debit Cards</option>
+                                <option value="NetBanking">Net Banking Portal</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-pay-premium" id="btn-pay-subscribe">
+                        <i data-lucide="sparkles" class="btn-action-icon"></i> ACTIVATE INSTANT ACCESS (₹99)
+                    </button>
+
+                    <!-- Successful Transaction Result Output Window -->
+                    <div id="sub-result" class="payment-success-card" style="display: none;">
+                        <div class="success-header-row">
+                            <i data-lucide="check-circle-2"></i>
+                            <div>
+                                <span class="success-title">Payment Completed Successfully!</span>
+                                <span class="txn-code-lbl">Transaction Reference: <code id="sub-txn-id"></code></span>
+                            </div>
+                        </div>
+                        <hr class="success-divider">
+                        <span class="success-instruction-details">
+                            Your billing license key has been verified and registered. Paste this code into your Swift Seat browser extension popup dashboard:
+                        </span>
+                        <div class="txn-license-copy-box">
+                            <input type="text" id="sub-key-value" class="copy-license-entry" readonly>
+                            <button class="btn btn-secondary btn-copy-code" id="btn-copy-sub-key"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy</button>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Live Browser Monitor Stream -->
                 <section class="card monitor-section" id="monitor-card">
                     <div class="card-header">
@@ -457,75 +624,121 @@
                     </div>
 
                     <div class="booking-control-row">
-                        <button class="btn btn-primary" id="btn-start">
-                            <i data-lucide="play" class="btn-action-icon"></i> START SEQUENCE
+                        <button class="btn btn-primary" id="btn-start" disabled style="opacity: 0.5; cursor: not-allowed;">
+                            <i data-lucide="lock" class="btn-action-icon"></i> START SEQUENCE (Use Extension Only)
                         </button>
                         <button class="btn btn-secondary" id="btn-stop" disabled>
                             <i data-lucide="square" class="btn-action-icon text-error"></i> ABORT BOT
                         </button>
                     </div>
-                </section>
 
-                <!-- Checkout license key subscription portal -->
-                <section class="card fade-in" id="subscription-portal-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i data-lucide="credit-card"></i>
+                    <!-- Chrome Extension Requirement Notice -->
+                    <div class="extension-notice-banner" style="background: rgba(124, 58, 237, 0.08); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 12px; padding: 16px; margin-top: 16px; text-align: center;">
+                        <div style="font-weight: 700; color: #A78BFA; font-size: 15px; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i data-lucide="chrome" style="width: 20px; height: 20px;"></i>
+                            <span>Please Use Official Chrome Extension</span>
                         </div>
-                        <div>
-                            <div class="card-title">SaaS Licensing Portal</div>
-                            <div class="card-subtitle">Unlock Unlimited Bookings for ₹99/Month</div>
-                        </div>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.5;">
+                            Automated Tatkal bookings are supported exclusively via our official Chrome Extension. Install the extension to enable 1-click booking automation.
+                        </p>
+                        <a href="https://chromewebstore.google.com/detail/swift-seat-mobile-bot/ebgimfckollnebpapgadnbklnpkplkag" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 10px 20px; font-weight: 700;">
+                            <i data-lucide="download"></i> Get Swift Seat Chrome Extension
+                        </a>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group floating">
-                            <input type="email" class="form-input" id="sub-email" placeholder=" ">
-                            <label class="form-label">Email Address</label>
-                            <i data-lucide="mail" class="input-inline-icon"></i>
-                        </div>
-                        <div class="form-group select-container">
-                            <label class="select-label">Payment Gateway</label>
-                            <select class="form-select" id="sub-payment-method">
-                                <option value="UPI" selected>UPI (GPay / PhonePe / Paytm)</option>
-                                <option value="Card">Visa / Master Debit Cards</option>
-                                <option value="NetBanking">Net Banking Portal</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="btn btn-primary btn-pay-premium" id="btn-pay-subscribe">
-                        <i data-lucide="sparkles" class="btn-action-icon"></i> ACTIVATE INSTANT ACCESS (₹99)
-                    </button>
-
-                    <!-- Successful Transaction Result Output Window -->
-                    <div id="sub-result" class="payment-success-card" style="display: none;">
-                        <div class="success-header-row">
-                            <i data-lucide="check-circle-2"></i>
-                            <div>
-                                <span class="success-title">Payment Completed Successfully!</span>
-                                <span class="txn-code-lbl">Transaction Reference: <code id="sub-txn-id"></code></span>
-                            </div>
-                        </div>
-                        <hr class="success-divider">
-                        <span class="success-instruction-details">
-                            Your billing license key has been verified and registered. Paste this code into your Swift Seat browser extension popup dashboard:
-                        </span>
-                        <div class="txn-license-copy-box">
-                            <input type="text" id="sub-key-value" class="copy-license-entry" readonly>
-                            <button class="btn btn-secondary btn-copy-code" id="btn-copy-sub-key"><i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copy</button>
-                        </div>
-                    </div>
-                </section>
-            </div>
+                </section>            </div>
         </div>
 
         <footer class="footer">
-            <div class="footer-text">Swift Seat Engine Corp · Secure AES Encryption · Speed booking YNK ↔ YG</div>
+            <div class="footer-text">Swift Seat Engine Corp · Secure AES Encryption</div>
+            <div class="footer-links">
+                <a href="/swiftseat/privacy/" class="footer-link" id="privacy-link">
+                    <i data-lucide="shield" style="width: 14px; height: 14px;"></i> Privacy Policy
+                </a>
+            </div>
         </footer>
     </div>
 
-    <!-- Load Main Dashboard Controller Script -->
+    <!-- Initialize Lucide Icons & Custom Passwords toggle scripts -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Hydrate Icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            // Sync Nav status text key indication
+            setInterval(() => {
+                const licenseInfoText = document.getElementById('dashboard-license-info');
+                const navKeyText = document.getElementById('nav-key-status');
+                if (licenseInfoText && navKeyText) {
+                    if (licenseInfoText.textContent.includes('Expired')) {
+                        navKeyText.textContent = 'Expired';
+                        navKeyText.className = 'metric-val key-expired';
+                    } else if (licenseInfoText.textContent.includes('Active')) {
+                        navKeyText.textContent = 'Active';
+                        navKeyText.className = 'metric-val key-active';
+                    } else {
+                        navKeyText.textContent = 'Inactive';
+                        navKeyText.className = 'metric-val key-inactive';
+                    }
+                }
+            }, 1000);
+
+            // Toggle passwords
+            const toggleBtn = document.getElementById('btn-toggle-password');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const passInput = document.getElementById('irctc-pass');
+                    const icon = toggleBtn.querySelector('i');
+                    if (passInput.type === 'password') {
+                        passInput.type = 'text';
+                        toggleBtn.innerHTML = '<i data-lucide="eye-off"></i>';
+                    } else {
+                        passInput.type = 'password';
+                        toggleBtn.innerHTML = '<i data-lucide="eye"></i>';
+                    }
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                });
+            }
+
+            // Settings dropdown toggle
+            const settingsBtn = document.getElementById('btn-settings-toggle');
+            const settingsDropdown = document.getElementById('settings-dropdown');
+            if (settingsBtn && settingsDropdown) {
+                settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    settingsDropdown.classList.toggle('open');
+                    settingsBtn.classList.toggle('active');
+                    if (window.lucide) lucide.createIcons();
+                });
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#settings-wrapper')) {
+                        settingsDropdown.classList.remove('open');
+                        settingsBtn.classList.remove('active');
+                    }
+                });
+            }
+
+            // Reset All Data button
+            const clearBtn = document.getElementById('btn-clear-data');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to reset all form data?')) {
+                        document.querySelectorAll('input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"]').forEach(input => {
+                            if (!['journey-date', 'from-code', 'to-code', 'train-number'].includes(input.id)) {
+                                input.value = '';
+                            }
+                        });
+                        localStorage.clear();
+                        settingsDropdown.classList.remove('open');
+                        settingsBtn.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
     <script src="./main.js"></script>
 </body>
 

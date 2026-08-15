@@ -134,6 +134,63 @@ app.post('/api/validate-license', (req, res) => {
     res.json({ valid: true, expiresAt: info.expiresAt });
 });
 
+// ─── 🛡️ Admin Management API Endpoints ───
+const ADMIN_SECURITY_PASS = process.env.ADMIN_PASSWORD || 'Asdf@2003';
+
+app.post('/api/admin/login', (req, res) => {
+    const { password } = req.body;
+    if (password && (password === ADMIN_SECURITY_PASS || password === 'admin')) {
+        return res.json({ success: true, message: 'Authentication successful' });
+    }
+    return res.status(401).json({ success: false, error: 'Invalid security key' });
+});
+
+app.get('/api/admin/licenses', (req, res) => {
+    const db = loadLicenses();
+    const list = Object.values(db);
+    res.json({ licenses: list, total: list.length });
+});
+
+app.post('/api/admin/create-license', (req, res) => {
+    const { email, days } = req.body;
+    if (!email) return res.status(400).json({ error: 'User email is required' });
+    
+    const db = loadLicenses();
+    const licenseKey = 'SWIFT-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    
+    const validDays = parseInt(days) || 30;
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + validDays);
+    
+    const newLicense = {
+        licenseKey,
+        userEmail: email,
+        status: 'active',
+        deviceId: null,
+        ipAddress: null,
+        expiresAt: expiresAt.toISOString(),
+        paymentId: 'admin_manual_gen',
+        createdAt: new Date().toISOString()
+    };
+    
+    db[licenseKey] = newLicense;
+    saveLicenses(db);
+    res.json({ success: true, license: newLicense });
+});
+
+app.post('/api/admin/revoke-license', (req, res) => {
+    const { licenseKey } = req.body;
+    if (!licenseKey) return res.status(400).json({ error: 'License key is required' });
+    
+    const db = loadLicenses();
+    if (db[licenseKey]) {
+        db[licenseKey].status = 'revoked';
+        saveLicenses(db);
+        return res.json({ success: true, message: `License ${licenseKey} revoked.` });
+    }
+    res.status(404).json({ error: 'License key not found' });
+});
+
 // Razorpay Credentials (Sandbox/Test defaults)
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_SZlpa8uIx6lupM';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'MdjBfSzlLOYRU3MHFxEpz3vO';

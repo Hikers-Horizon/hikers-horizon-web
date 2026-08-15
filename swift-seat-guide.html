@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Seat — Executive Product Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: #eef2ff;
+            color: #1e293b;
+            line-height: 1.45;
+            font-size: 11.5px;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        .pdf-page {
+            width: 210mm;
+            height: 297mm;
+            padding: 14mm 14mm 12mm;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            page-break-after: always;
+            break-after: page;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.10) 0%, transparent 28%),
+                radial-gradient(circle at 0% 100%, rgba(34, 197, 94, 0.08) 0%, transparent 30%),
+                linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        .pdf-page:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        /* Top Header */
+        .hero-banner {
+            background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 12px 22px rgba(37, 99, 235, 0.28);
+        }
+
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: #93c5fd;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: #dbeafe;
+            margin-top: 3px;
+        }
+
+        .pricing-badge {
+            text-align: right;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            padding: 8px 16px;
+            border-radius: 10px;
+        }
+
+        .price-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #dcfce7;
+            line-height: 1;
+        }
+
+        .price-sub {
+            font-size: 9px;
+            color: #dbeafe;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* Headings */
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-tag {
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #1d4ed8;
+            background: #dbeafe;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #dbe4f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+            page-break-inside: avoid;
+        }
+
+        .card-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .card-icon.blue { background: #dbeafe; color: #2563eb; }
+        .card-icon.green { background: #dcfce7; color: #16a34a; }
+        .card-icon.orange { background: #ffedd5; color: #d97706; }
+        .card-icon.purple { background: #f3e8ff; color: #7c3aed; }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 3px;
+        }
+
+        .card-desc {
+            font-size: 10.5px;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        /* Roles Hybrid Box */
+        .roles-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .role-box {
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+
+        .role-box.bot {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid #bbf7d0;
+        }
+
+        .role-box.user {
+            background: rgba(245, 158, 11, 0.06);
+            border: 1px solid #fed7aa;
+        }
+
+        .role-heading {
+            font-size: 11.5px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-box.bot .role-heading { color: #047857; }
+        .role-box.user .role-heading { color: #b45309; }
+
+        .role-list {
+            padding-left: 16px;
+            font-size: 10.5px;
+        }
+
+        .role-box.bot .role-list li { color: #14532d; margin-bottom: 3px; }
+        .role-box.user .role-list li { color: #92400e; margin-bottom: 3px; }
+
+        /* Comparison Table */
+        .table-box {
+            border: 1px solid #dbe4f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        th {
+            background: #eff6ff;
+            color: #475569;
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #334155;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .check-badge {
+            color: #166534;
+            font-weight: 700;
+            background: #dcfce7;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+
+        .cross-badge {
+            color: #b91c1c;
+            font-weight: 600;
+            background: #fee2e2;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+
+        /* Step List */
+        .steps-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #dbe4f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            background: #ffffff;
+            page-break-inside: avoid;
+        }
+
+        .step-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 11px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-heading {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .step-text {
+            font-size: 10.5px;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        /* Callout */
+        .tip-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        .tip-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1d4ed8;
+            margin-bottom: 2px;
+        }
+
+        .tip-desc {
+            font-size: 10.5px;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        /* FAQ Grid */
+        .faq-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .faq-box {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid #dbe4f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            background: #ffffff;
+            page-break-inside: avoid;
+        }
+
+        .faq-question {
+            font-size: 11px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 3px;
+        }
+
+        .faq-answer {
+            font-size: 10px;
+            color: #475569;
+            line-height: 1.35;
+        }
+
+        /* Footer */
+        .pdf-footer {
+            border-top: 1px solid #cbd5e1;
+            padding-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        .pdf-footer a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media print {
+            body { background: #eef2ff; }
+            .pdf-page { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1 OF 2 -->
+    <div class="pdf-page">
+        <div>
+            <!-- Hero Banner -->
+            <div class="hero-banner">
+                <div class="brand-box">
+                    <div class="brand-icon">⚡</div>
+                    <div>
+                        <div class="brand-name">Swift<span>Seat</span></div>
+                        <div class="brand-sub">IRCTC Tatkal Ticket Booking Automation Engine</div>
+                    </div>
+                </div>
+                <div class="pricing-badge">
+                    <div class="price-val">₹99 / Month</div>
+                    <div class="price-sub">Unlimited Bookings</div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="section-head">
+                <div class="section-title">⚡ Key Features & Capabilities</div>
+                <div class="section-tag">High Speed</div>
+            </div>
+
+            <div class="features-grid">
+                <div class="card">
+                    <div class="card-icon blue">🚀</div>
+                    <div class="card-title">Instant Passenger Autofill</div>
+                    <div class="card-desc">Fills names, ages, genders, berth preferences, and mobile numbers in under 2 seconds automatically.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon green">⏱️</div>
+                    <div class="card-title">30-Second Auto-Start</div>
+                    <div class="card-desc">Launches automatically 30s before the Tatkal window opens (10:00 AM AC / 11:00 AM Sleeper).</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon orange">🔐</div>
+                    <div class="card-title">Auto Credentials & Focus</div>
+                    <div class="card-desc">Injects login credentials safely and auto-focuses the CAPTCHA field so you only type the code.</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon purple">📺</div>
+                    <div class="card-title">Live Monitor Streaming</div>
+                    <div class="card-desc">Watch the entire automation live in real-time from your web dashboard monitor stream.</div>
+                </div>
+            </div>
+
+            <!-- Hybrid Workflow -->
+            <div class="section-head">
+                <div class="section-title">🔄 Automation Workflow</div>
+                <div class="section-tag">Hybrid Engine</div>
+            </div>
+
+            <div class="roles-container">
+                <div class="role-box bot">
+                    <div class="role-heading">🤖 Bot Automates (Instant)</div>
+                    <ul class="role-list">
+                        <li>Fills station codes (YNK → YG) & dates.</li>
+                        <li>Searches train list & picks target train.</li>
+                        <li>Injects all passenger data in 1 click.</li>
+                        <li>Directs you to final payment portal.</li>
+                    </ul>
+                </div>
+                <div class="role-box user">
+                    <div class="role-heading">👤 You Perform (Manual)</div>
+                    <ul class="role-list">
+                        <li>Type login CAPTCHA (if prompted).</li>
+                        <li>Click Sleeper/AC class & 'Book Now'.</li>
+                        <li>Type payment CAPTCHA text.</li>
+                        <li>Approve UPI request on mobile phone.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="section-head">
+                <div class="section-title">📊 Speed Comparison</div>
+                <div class="section-tag">Performance</div>
+            </div>
+
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature / Task</th>
+                            <th>Manual Booking</th>
+                            <th>Swift Seat ⚡</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Passenger Entry Time</td>
+                            <td>45 – 90 Seconds</td>
+                            <td><span class="check-badge">Under 2 Seconds</span></td>
+                        </tr>
+                        <tr>
+                            <td>Search & Date Setup</td>
+                            <td>20 – 30 Seconds</td>
+                            <td><span class="check-badge">Instant / Auto</span></td>
+                        </tr>
+                        <tr>
+                            <td>Time to Payment Portal</td>
+                            <td>2 – 4 Minutes</td>
+                            <td><span class="check-badge">Under 30 Seconds</span></td>
+                        </tr>
+                        <tr>
+                            <td>Tatkal Confirmation Rate</td>
+                            <td>~15% Success</td>
+                            <td><span class="check-badge">~85%+ Success</span></td>
+                        </tr>
+                        <tr>
+                            <td>30s Pre-Start Window</td>
+                            <td><span class="cross-badge">Not Supported</span></td>
+                            <td><span class="check-badge">Supported</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="pdf-footer">
+            <div>Swift Seat Automation Engine v2.0</div>
+            <div>Page 1 of 2</div>
+            <div>Web: <a href="https://swiftseat.shop">swiftseat.shop</a></div>
+        </div>
+    </div>
+
+    <!-- PAGE 2 OF 2 -->
+    <div class="pdf-page">
+        <div>
+            <!-- Header for Page 2 -->
+            <div class="section-head" style="margin-top: 4px;">
+                <div class="section-title">📋 Step-by-Step User Guide</div>
+                <div class="section-tag">Simple Setup</div>
+            </div>
+
+            <div class="steps-wrapper">
+                <div class="step-card">
+                    <div class="step-icon">1</div>
+                    <div>
+                        <div class="step-heading">Get License Key & Activate</div>
+                        <div class="step-text">Visit <strong>swiftseat.shop</strong>, enter your email and complete ₹99 payment. Copy your license key and activate it in the extension/dashboard.</div>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">2</div>
+                    <div>
+                        <div class="step-heading">Configure Form & Passenger Details</div>
+                        <div class="step-text">Fill in IRCTC login credentials, stations (e.g. YNK to YG), train number, travel class, journey date, and list of passengers into the form.</div>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">3</div>
+                    <div>
+                        <div class="step-heading">Start Automation or Enable Auto-Start</div>
+                        <div class="step-text">Click <strong>Start Sequence</strong> or enable <strong>Auto-Start</strong> mode (launches 30 seconds before 10:00 AM / 11:00 AM Tatkal window).</div>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">4</div>
+                    <div>
+                        <div class="step-heading">Select Class & Click Book Now</div>
+                        <div class="step-text">The bot navigates to train results. Click your preferred class (Sleeper / AC) and click <strong>Book Now</strong>. The bot instantly injects all passenger details!</div>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">5</div>
+                    <div>
+                        <div class="step-heading">Type Payment CAPTCHA & Approve UPI</div>
+                        <div class="step-text">Type the CAPTCHA code into the box, choose your UPI payment method (GPay/PhonePe/Paytm), and approve the transaction on your smartphone.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pro Tip Callout -->
+            <div class="tip-box">
+                <span style="font-size: 18px;">💡</span>
+                <div>
+                    <div class="tip-title">Pro-Tip for Fast Payment</div>
+                    <div class="tip-desc">Open your UPI app (Google Pay, PhonePe, or Paytm) on your smartphone before starting. The moment you hit Submit on IRCTC, approve the payment notification immediately!</div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="section-head">
+                <div class="section-title">❓ Frequently Asked Questions</div>
+                <div class="section-tag">Support</div>
+            </div>
+
+            <div class="faq-wrapper">
+                <div class="faq-box">
+                    <div class="faq-question">Are my login credentials safe?</div>
+                    <div class="faq-answer">Yes. Credentials and passenger details are saved only on your local browser. No data is stored on remote servers.</div>
+                </div>
+                <div class="faq-box">
+                    <div class="faq-question">Which browsers are supported?</div>
+                    <div class="faq-answer">Google Chrome and Microsoft Edge on Windows, macOS, and Linux desktop operating systems.</div>
+                </div>
+                <div class="faq-box">
+                    <div class="faq-question">What if IRCTC site slows down?</div>
+                    <div class="faq-answer">If the website hangs, press F5 (Reload). The bot will automatically resume from the step you were on.</div>
+                </div>
+                <div class="faq-box">
+                    <div class="faq-question">How long does the license last?</div>
+                    <div class="faq-answer">Your ₹99 license key gives 30 days of active subscription with unlimited Tatkal ticket bookings.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pdf-footer">
+            <div>Swift Seat Customer & User Guide</div>
+            <div>Page 2 of 2</div>
+            <div>Support: swiftseatbot@gmail.com</div>
+        </div>
+    </div>
+
+</body>
+</html>
