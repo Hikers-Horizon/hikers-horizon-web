@@ -407,6 +407,63 @@
             font-weight: 600;
         }
 
+        /* Included/Excluded Section */
+        .inc-exc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .inc-exc-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .inc-exc-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .inc-exc-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #e0e0e0;
+        }
+
+        .inc-exc-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .inc-exc-icon.included {
+            background: rgba(46, 213, 115, 0.15);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+
+        .inc-exc-icon.excluded {
+            background: rgba(255, 71, 87, 0.15);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .inc-exc-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
         /* Footer */
         footer {
             background: #000000;
@@ -756,6 +813,100 @@
                 </div>
             </div>
 
+            <!-- Included/Excluded -->
+            <div class="glass-card">
+                <h2 class="section-title">Included/Excluded</h2>
+                <div class="inc-exc-grid">
+                    <!-- Included Column -->
+                    <div class="inc-exc-column">
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon included">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>To and fro transport from Bengaluru (Non-A/c)</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon included">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>Only Veg Food (2 Breakfast, 1 Dinner, Packed lunch on Trek day)</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon included">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>Dorms/Tents (to Camp)</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon included">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>Trek Leads from the Tripbae Team</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon included">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </span>
+                            <span>Basic First Aid Kit</span>
+                        </div>
+                    </div>
+
+                    <!-- Excluded Column -->
+                    <div class="inc-exc-column">
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon excluded">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </span>
+                            <span>Forest Permits excluded and are subject to availability</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon excluded">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </span>
+                            <span>Any kind of Insurance</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon excluded">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </span>
+                            <span>Sightseeing Entry charges</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon excluded">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </span>
+                            <span>Any Eatables (snacks, mineral water, etc)</span>
+                        </div>
+                        <div class="inc-exc-item">
+                            <span class="inc-exc-icon excluded">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                            </span>
+                            <span>Anything not included in the included section</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Boutique Packages -->
             <div class="glass-card">
                 <h2 class="section-title">Kudremukh Pricing Packages</h2>
@@ -769,7 +920,6 @@
                         <ul class="modern-list" style="text-align: left; margin-bottom: 2rem; font-size: 0.9rem;">
                             <li>• Homestay Stay (1 Night)</li>
                             <li>• 5 High-Energy Meals</li>
-                            <li>• Forest Clearance & Guide Fees</li>
                             <li>• Jeep Transfers to Base</li>
                             <li>• Group Transport (Bangalore-Bangalore)</li>
                         </ul>
