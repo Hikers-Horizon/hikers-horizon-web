@@ -27,8 +27,8 @@ process.on('unhandledRejection', (reason, promise) => {
 
 // --- RAZORPAY SETUP ---
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_SZlpa8uIx6lupM',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'MdjBfSzlLOYRU3MHFxEpz3vO',
+  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_live_TR5yp3DpMvYThs',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || '9u4vmK5YU9ZhSPGopEXwEGIn',
 });
 
 // --- DATABASE SETUP (MySQL) ---
@@ -336,21 +336,22 @@ app.post(['/create-order', '/api/create-order'], async (req, res) => {
         res.json({
             orderId: order.id,
             amount: order.amount,
-            razorpayKeyId: process.env.RAZORPAY_KEY_ID
+            razorpayKeyId: process.env.RAZORPAY_KEY_ID || 'rzp_live_TR5yp3DpMvYThs'
         });
     } catch (err) {
         console.error('[CREATE ORDER ERROR]', err);
         res.status(500).send('Error creating Razorpay order');
     }
 });
+
 app.post(['/verify-payment', '/api/verify-payment'], async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingData } = req.body;
     
     // Normalize email to lowercase
-    const normalizedEmail = bookingData.userEmail.toLowerCase().trim();
+    const normalizedEmail = (bookingData?.userEmail || '').toLowerCase().trim();
 
     // Verify signature
-    const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
+    const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || '9u4vmK5YU9ZhSPGopEXwEGIn');
     hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
     const generatedSignature = hmac.digest('hex');
 
