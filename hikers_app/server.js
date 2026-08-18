@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
@@ -8,7 +9,6 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 const crypto = require('crypto');
 const Razorpay = require('razorpay');
-const path = require('path');
 const fs = require('fs');
 
 const app = express();
