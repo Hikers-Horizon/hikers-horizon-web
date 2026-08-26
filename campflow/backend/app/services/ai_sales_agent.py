@@ -382,65 +382,20 @@ def run_sales_agent(
     inbound_text: str,
     recent_messages: list[dict],
 ) -> str:
-    """Runs the AI sales agent for a single inbound message, returning the text reply to send.
-
-    Uses OpenAI function-calling with a tool loop: if the LLM returns tool calls,
-    they are executed against the DB and results fed back until a final text response
-    is produced.
-    """
-    if not settings.OPENAI_API_KEY:
-        return _fallback_reply(inbound_text)
-
+    """Runs the AI sales agent for a single inbound message, returning the text reply to send."""
     system_prompt = build_sales_system_prompt(org)
 
-    # Build message history
     messages = [{"role": "system", "content": system_prompt}]
     for m in recent_messages:
         role = "user" if m["direction"] == "INBOUND" else "assistant"
         messages.append({"role": role, "content": m["body"]})
-    # Ensure the latest inbound is the last user message
     if not messages or messages[-1].get("role") != "user":
         messages.append({"role": "user", "content": inbound_text})
 
-    # Tool-calling loop (max 5 iterations to prevent infinite loops)
-    for _iteration in range(5):
-        try:
-            response = _call_openai(messages)
-        except Exception:
-            logger.exception("OpenAI API call failed in sales agent")
-            return _fallback_reply(inbound_text)
-
-        choice = response.get("choices", [{}])[0]
-        msg = choice.get("message", {})
-
-        # If no tool calls, return the text content
-        tool_calls = msg.get("tool_calls")
-        if not tool_calls:
-            return msg.get("content", "").strip() or _fallback_reply(inbound_text)
-
-        # Append assistant message with tool calls
-        messages.append(msg)
-
-        # Execute each tool call and add results
-        for tc in tool_calls:
-            fn_name = tc["function"]["name"]
+    # 1. Try OpenAI if key is present
+    if settings.OPENAI_API_KEY:
+        for _iteration in range(5):
             try:
-                fn_args = json.loads(tc["function"]["arguments"])
-            except json.JSONDecodeError:
-                fn_args = {}
-
-            executor = TOOL_EXECUTORS.get(fn_name)
-            if executor:
-                try:
-                    result = executor(db, org, customer, lead, fn_args)
-                except Exception:
-                    logger.exception(f"Tool execution failed: {fn_name}")
-                    result = json.dumps({"error": "Tool execution failed. Please try again."})
-            else:
-                result = json.dumps({"error": f"Unknown tool: {fn_name}"})
-
-            messages.append({
-                "role": "tool",
                 response = _call_openai(messages)
                 choice = response.get("choices", [{}])[0]
                 msg = choice.get("message", {})
