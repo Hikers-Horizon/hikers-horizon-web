@@ -32,3 +32,11 @@ android-app/app/build/
 android-app/.gradle/
 
 
+
+# CampFlow CRM
+campflow/**/.env
+campflow/**/__pycache__/
+campflow/**/.venv/
+campflow/frontend/node_modules/
+campflow/frontend/.next/
+campflow/frontend/out/

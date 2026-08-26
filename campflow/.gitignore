@@ -1,0 +1,25 @@
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env*.local
+
+# Python / FastAPI
+backend/__pycache__/
+backend/*/__pycache__/
+backend/*/*/__pycache__/
+backend/.venv/
+backend/venv/
+backend/env/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment secrets
+backend/.env
+*.env
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
