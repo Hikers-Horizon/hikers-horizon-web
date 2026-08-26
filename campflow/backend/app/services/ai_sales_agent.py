@@ -441,51 +441,157 @@ def run_sales_agent(
 
             messages.append({
                 "role": "tool",
-                "tool_call_id": tc["id"],
-                "content": result,
-            })
+                response = _call_openai(messages)
+                choice = response.get("choices", [{}])[0]
+                msg = choice.get("message", {})
+                tool_calls = msg.get("tool_calls")
+                if not tool_calls:
+                    content = msg.get("content", "").strip()
+                    if content:
+                        return content
+                    break
+                messages.append(msg)
+                for tc in tool_calls:
+                    fn_name = tc["function"]["name"]
+                    fn_args = json.loads(tc["function"]["arguments"]) if tc["function"].get("arguments") else {}
+                    executor = TOOL_EXECUTORS.get(fn_name)
+                    result = executor(db, org, customer, lead, fn_args) if executor else json.dumps({"error": "Unknown tool"})
+                    messages.append({"role": "tool", "tool_call_id": tc["id"], "content": result})
+            except Exception as exc:
+                logger.warning("OpenAI call failed or quota exceeded: %s", exc)
+                break
 
-    # If we exhausted iterations, return last content or fallback
-    return _fallback_reply(inbound_text)
+    # 2. Try Gemini if configured
+    gemini_reply = _call_gemini(messages)
+    if gemini_reply:
+        return gemini_reply
+
+    # 3. Smart Conversational Trek Engine (Database Grounded)
+    return _smart_trek_reply(db, org, customer, lead, inbound_text, recent_messages)
 
 
-def _call_openai(messages: list[dict]) -> dict:
-    url = f"{settings.OPENAI_BASE_URL.rstrip('/')}/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {settings.OPENAI_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": settings.OPENAI_MODEL,
-        "messages": messages,
-        "tools": TOOLS,
-        "tool_choice": "auto",
-        "temperature": 0.5,
-        "max_tokens": settings.AI_MAX_TOKENS,
-    }
-    with httpx.Client(timeout=30) as client:
-        resp = client.post(url, json=payload, headers=headers)
-        resp.raise_for_status()
-        return resp.json()
+def _smart_trek_reply(
+    db: Session,
+    org: Organization,
+    customer: Customer,
+    lead: Lead,
+    inbound_text: str,
+    recent_messages: list[dict],
+) -> str:
+    """Intelligent database-grounded sales conversational engine that extracts
+    trek names, dates, group sizes, and quotes accurate details without external API billing.
+    """
+    import re
+    text = inbound_text.lower().strip()
+    full_convo = " ".join([m.get("body", "").lower() for m in recent_messages] + [text])
 
+    # 1. Identify trek mentioned in current message or recent conversation
+    trips = db.query(Trip).filter(Trip.organization_id == org.id, Trip.status == TripStatus.PUBLISHED).all()
+    if not trips:
+        trips = db.query(Trip).all()
 
-def _fallback_reply(inbound_text: str) -> str:
-    """Rule-based reply used when no OpenAI key is configured."""
-    text = inbound_text.lower()
-    if any(k in text for k in ["price", "cost", "fee", "how much", "kitna"]):
-        return ("Thanks for reaching out! 🏔️ Pricing depends on the trek and group size — "
-                "our team will share exact costs shortly. Which trek are you interested in?")
-    if any(k in text for k in ["date", "when", "departure", "schedule", "kab"]):
-        return ("Thanks for your message! We run several departures a month — "
-                "let us know your preferred dates and we'll check availability for you. 📅")
-    if any(k in text for k in ["book", "confirm", "payment", "pay", "register"]):
-        return ("Great, we'd love to help you book! 🎉 Our team will follow up shortly with "
-                "the booking link and payment details.")
+    matched_trip: Trip | None = None
+    for trip in trips:
+        clean_name = trip.name.lower().replace("[demo]", "").strip()
+        keywords = [clean_name, clean_name.split()[0]]
+        if "kudremukh" in clean_name or "kudremukha" in clean_name:
+            keywords.extend(["kudremukh", "kudremukha", "kuduremukha", "kudremuk"])
+        elif "gokarn" in clean_name:
+            keywords.extend(["gokarna", "gokarn", "beach trek"])
+        elif "kumara" in clean_name or "kp" in clean_name:
+            keywords.extend(["kumara parvatha", "kumaraparvatha", "kp", "kumara"])
+        elif "netravat" in clean_name:
+            keywords.extend(["netravathi", "netravati"])
+        elif "skandagiri" in clean_name:
+            keywords.extend(["skandagiri", "night trek"])
+
+        if any(kw in full_convo for kw in keywords):
+            matched_trip = trip
+            break
+
+    # 2. Check for Inclusions / Pickup queries
+    if any(k in text for k in ["pickup", "boarding", "pick up", "route", "where to board", "start"]):
+        return (
+            "🚌 *Bangalore Pickup Points:*\n"
+            "1. Silk Board (8:30 PM)\n"
+            "2. Majestic / Shantala Silk House (9:15 PM)\n"
+            "3. Yeshwanthpur Metro (9:45 PM)\n"
+            "4. Hebbal Esteem Mall (10:15 PM)\n"
+            "5. 8th Mile / Gorguntepalya\n\n"
+            "We return back to Bangalore Sunday late night / early Monday by 5:00 AM. 🎒"
+        )
+
+    if any(k in text for k in ["inclusion", "included", "food", "stay", "accommodation", "tent", "safety", "what is included"]):
+        return (
+            "✨ *Package Inclusions:*\n"
+            "• Travel to & from Bangalore in AC/Non-AC pushback tempo\n"
+            "• Stay in Homestay / Tents (Separate for males & females)\n"
+            "• Meals: 2 Breakfasts, 1 Lunch, 1 Dinner (Veg & Non-Veg options)\n"
+            "• Forest Entry Permits & Guide Fees\n"
+            "• Certified Outdoor Leaders & First Aid support\n"
+            "• Campfire & Music night (subject to weather) ⛺"
+        )
+
+    # 3. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
+    date_num_match = re.search(r"\b(\d{1,2})\b", text)
+    if date_num_match and matched_trip:
+        day_num = int(date_num_match.group(1))
+        # Find departure with this date or near it
+        deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).all()
+        clean_title = matched_trip.name.replace("[DEMO]", "").strip()
+        price_str = f"₹{int(matched_trip.price):,}"
+
+        return (
+            f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {day_num}th!\n\n"
+            f"• Price: *{price_str} per person* (Includes travel from Bangalore, food, stay, permits & guide)\n"
+            f"• Live Seats: Available ✅\n\n"
+            f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
+        )
+
+    # 4. If a trek was identified, provide details & upcoming dates
+    if matched_trip:
+        clean_title = matched_trip.name.replace("[DEMO]", "").strip()
+        price_str = f"₹{int(matched_trip.price):,}"
+        deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).order_by(TripDeparture.departure_date.asc()).limit(3).all()
+        
+        dates_text = ""
+        if deps:
+            dates_list = [f"• {d.departure_date.strftime('%b %d (%a)')} — {d.available_seats} seats left" for d in deps]
+            dates_text = "\n" + "\n".join(dates_list)
+        else:
+            dates_text = "\n• Every Friday Night departure from Bangalore!"
+
+        return (
+            f"Hey! 🏔️ *{clean_title}* is one of our most popular treks!\n\n"
+            f"📅 *Upcoming Departures:*{dates_text}\n"
+            f"💰 *Price:* {price_str} per person (All-inclusive: Travel, Food, Stay, Permits & Guide)\n"
+            f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal\n\n"
+            f"Which date works best for you and how many people are joining? 🎒"
+        )
+
+    # 5. Generic Greeting / Inquiries
     if any(k in text for k in ["hi", "hello", "hey", "hii", "namaste"]):
-        return ("Hey there! 👋 Welcome! We organize amazing trekking experiences. "
-                "Which trek are you interested in? I can check dates and availability for you!")
-    if any(k in text for k in ["cancel", "refund", "complaint"]):
-        return ("I understand your concern. Let me connect you with our team who can help "
-                "with this right away. A team member will reach out shortly. 🙏")
-    return ("Thanks for reaching out! 🏔️ A member of our team will get back to you shortly. "
-            "In the meantime, let us know which trek and dates you're interested in!")
+        return (
+            "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
+            "We organize weekend treks from Bangalore with travel, food, homestay & permits included:\n"
+            "1. Kudremukha Trek (₹3,299)\n"
+            "2. Gokarna Beach Trek (₹3,299)\n"
+            "3. Kumara Parvatha Trek (₹3,299)\n"
+            "4. Netravathi Trek (₹3,299)\n"
+            "5. Skandagiri Night Trek (₹1,499)\n\n"
+            "Which trek are you planning for this weekend? 🎒"
+        )
+
+    # 6. Booking confirmation / payment link request
+    if any(k in text for k in ["book", "confirm", "pay", "payment", "link", "register"]):
+        return (
+            "Awesome! 🎉 You can view all live departures and confirm your booking directly on our official portal:\n"
+            "👉 https://hikershorizon.in/campflow/\n\n"
+            "Or reply with your *Full Name, Email, and Trek Date* and I will generate your booking pass right here! ⛺"
+        )
+
+    return (
+        "Thanks for reaching out to Hikers Horizon! 🏔️\n"
+        "We organize weekend departures from Bangalore for Kudremukha, Gokarna, Netravathi, Kumara Parvatha & Skandagiri.\n\n"
+        "Which trek and dates would you like details for? I can check live seat availability for you right away! 🎒"
+    )

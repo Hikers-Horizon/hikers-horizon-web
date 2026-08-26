@@ -37,6 +37,8 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_BASE_URL: str = "https://api.openai.com/v1"
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-1.5-flash"
 
     # Payment link base URL used by AI agent when creating bookings
     BOOKING_PAYMENT_BASE_URL: str = ""  # e.g. https://yoursite.com/pay — falls back to FRONTEND_URL/pay
