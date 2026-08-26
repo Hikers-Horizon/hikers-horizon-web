@@ -389,6 +389,33 @@ def _call_openai(messages: list[dict]) -> dict:
         return resp.json()
 
 
+def _call_gemini(messages: list[dict]) -> str | None:
+    if not settings.GEMINI_API_KEY:
+        return None
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent?key={settings.GEMINI_API_KEY}"
+    contents = []
+    for m in messages:
+        if m.get("role") == "system":
+            continue
+        role = "user" if m.get("role") in ["user", "tool"] else "model"
+        contents.append({"role": role, "parts": [{"text": str(m.get("content", ""))}]})
+    
+    payload = {
+        "contents": contents,
+        "systemInstruction": {"parts": [{"text": messages[0].get("content", "")}]},
+        "generationConfig": {"temperature": 0.6, "maxOutputTokens": 300},
+    }
+    try:
+        with httpx.Client(timeout=10) as client:
+            resp = client.post(url, json=payload)
+            if resp.status_code == 200:
+                data = resp.json()
+                return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    except Exception as exc:
+        logger.warning("Gemini call failed: %s", exc)
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Main agent entry point
 # ---------------------------------------------------------------------------
