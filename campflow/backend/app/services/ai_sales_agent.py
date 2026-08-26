@@ -369,6 +369,26 @@ TOOL_EXECUTORS = {
 }
 
 
+def _call_openai(messages: list[dict]) -> dict:
+    url = f"{settings.OPENAI_BASE_URL.rstrip('/')}/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {settings.OPENAI_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": settings.OPENAI_MODEL,
+        "messages": messages,
+        "tools": TOOLS,
+        "tool_choice": "auto",
+        "temperature": 0.5,
+        "max_tokens": settings.AI_MAX_TOKENS,
+    }
+    with httpx.Client(timeout=10) as client:
+        resp = client.post(url, json=payload, headers=headers)
+        resp.raise_for_status()
+        return resp.json()
+
+
 # ---------------------------------------------------------------------------
 # Main agent entry point
 # ---------------------------------------------------------------------------
