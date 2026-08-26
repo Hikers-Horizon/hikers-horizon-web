@@ -529,9 +529,9 @@ def _smart_trek_reply(
             "• Travel to & from Bangalore in AC/Non-AC pushback tempo\n"
             "• Stay in Homestay / Tents (Separate for males & females)\n"
             "• Meals: 2 Breakfasts, 1 Lunch, 1 Dinner (Veg & Non-Veg options)\n"
-            "• Forest Entry Permits & Guide Fees\n"
             "• Certified Outdoor Leaders & First Aid support\n"
-            "• Campfire & Music night (subject to weather) ⛺"
+            "• Campfire & Music night (subject to weather) ⛺\n\n"
+            "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
     # 3. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
@@ -545,7 +545,7 @@ def _smart_trek_reply(
 
         return (
             f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {day_num}th!\n\n"
-            f"• Price: *{price_str} per person* (Includes travel from Bangalore, food, stay, permits & guide)\n"
+            f"• Price: *{price_str} per person* (Includes travel from Bangalore, food, homestay & trek guide)\n"
             f"• Live Seats: Available ✅\n\n"
             f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
         )
@@ -566,7 +566,7 @@ def _smart_trek_reply(
         return (
             f"Hey! 🏔️ *{clean_title}* is one of our most popular treks!\n\n"
             f"📅 *Upcoming Departures:*{dates_text}\n"
-            f"💰 *Price:* {price_str} per person (All-inclusive: Travel, Food, Stay, Permits & Guide)\n"
+            f"💰 *Price:* {price_str} per person (Includes Travel, Food, Homestay Stay & Trek Guide)\n"
             f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal\n\n"
             f"Which date works best for you and how many people are joining? 🎒"
         )
@@ -575,7 +575,7 @@ def _smart_trek_reply(
     if any(k in text for k in ["hi", "hello", "hey", "hii", "namaste"]):
         return (
             "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
-            "We organize weekend treks from Bangalore with travel, food, homestay & permits included:\n"
+            "We organize weekend treks from Bangalore with travel, food, homestay & trek guide included:\n"
             "1. Kudremukha Trek (₹3,299)\n"
             "2. Gokarna Beach Trek (₹3,299)\n"
             "3. Kumara Parvatha Trek (₹3,299)\n"
