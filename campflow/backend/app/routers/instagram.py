@@ -53,9 +53,12 @@ async def receive_webhook(request: Request):
     """
     raw_body = await request.body()
     if not _verify_signature(settings.INSTAGRAM_APP_SECRET, raw_body, request.headers.get("X-Hub-Signature-256")):
+        logger.warning("Invalid webhook signature received on Instagram webhook")
         raise HTTPException(status_code=403, detail="Invalid webhook signature")
 
     payload = await request.json()
+    logger.info("Received Instagram webhook event: %s", payload)
+    
     db = SessionLocal()
     try:
         for entry in payload.get("entry", []):
@@ -63,16 +66,18 @@ async def receive_webhook(request: Request):
             for messaging in entry.get("messaging", []):
                 message = messaging.get("message") or {}
                 if message.get("is_echo"):
-                    continue  # skip messages the page itself sent
+                    logger.info("Skipping echo message sent by page itself: %s", message.get("mid"))
+                    continue
                 sender_id = messaging.get("sender", {}).get("id")
                 text = message.get("text")
                 mid = message.get("mid")
+                logger.info("Processing inbound DM from sender_id: %s, text: %s", sender_id, text)
                 try:
                     _process_inbound_instagram_message(
                         db, page_id=page_id, sender_id=sender_id, text=text, mid=mid,
                     )
-                except Exception:  # noqa: BLE001 - never fail the webhook ack
-                    logger.exception("Failed to process inbound Instagram message")
+                except Exception as exc:  # noqa: BLE001
+                    logger.exception("Failed to process inbound Instagram message: %s", exc)
     finally:
         db.close()
     return {"status": "received"}
@@ -83,8 +88,8 @@ def _resolve_organization(db: Session, page_id: str | None) -> Organization | No
         org = db.query(Organization).filter(Organization.instagram_page_id == page_id).first()
         if org:
             return org
-    # Single-tenant / local-dev fallback: use the only configured org, or the first org.
-    return db.query(Organization).order_by(Organization.created_at.asc()).first()
+    # Fallback to the first active organization (e.g. Hikers Horizon)
+    return db.query(Organization).filter(Organization.is_active == True).order_by(Organization.created_at.asc()).first()
 
 
 def _process_inbound_instagram_message(
