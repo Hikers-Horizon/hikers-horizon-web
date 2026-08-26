@@ -2,8 +2,8 @@ import hashlib
 import hmac
 import datetime
 import logging
-from fastapi import APIRouter, HTTPException, Request
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi.responses import PlainTextResponse
 
 from app.database import get_db, SessionLocal
 from app.config import settings
