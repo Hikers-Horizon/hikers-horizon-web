@@ -488,7 +488,7 @@ def _smart_trek_reply(
     full_convo = " ".join([m.get("body", "").lower() for m in recent_messages] + [text])
 
     # 1. Identify trek mentioned in current message or recent conversation
-    trips = db.query(Trip).filter(Trip.organization_id == org.id, Trip.status == TripStatus.PUBLISHED).all()
+    trips = db.query(Trip).filter(Trip.organization_id == org.id).all()
     if not trips:
         trips = db.query(Trip).all()
 
