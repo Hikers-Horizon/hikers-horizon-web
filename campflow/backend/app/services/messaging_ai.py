@@ -51,33 +51,44 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
         )
         reply_text = generate_reply(inbound_text=last_inbound, context=context, system_prompt=org.ai_system_prompt)
 
+    logger.info("AI sales agent generated reply: %s", reply_text)
+
     outbound = Message(
         organization_id=org.id, customer_id=customer.id, lead_id=lead.id,
         direction=MessageDirection.OUTBOUND, channel=channel, body=reply_text, status="queued",
     )
     db.add(outbound)
+    db.commit()
+    db.refresh(outbound)
 
     whatsapp_token = org.whatsapp_access_token or settings.WHATSAPP_ACCESS_TOKEN
     instagram_token = org.instagram_access_token or settings.INSTAGRAM_ACCESS_TOKEN
 
     if channel == "whatsapp" and whatsapp_token and (org.whatsapp_phone_number_id or settings.WHATSAPP_PHONE_NUMBER_ID):
         try:
-            client = WhatsAppClient(phone_number_id=org.whatsapp_phone_number_id, access_token=whatsapp_token)
+            phone_id = org.whatsapp_phone_number_id or settings.WHATSAPP_PHONE_NUMBER_ID
+            logger.info("Dispatching WhatsApp message to %s using phone_id %s", customer.phone, phone_id)
+            client = WhatsAppClient(phone_number_id=phone_id, access_token=whatsapp_token)
             result = client.send_text_message(customer.phone, reply_text)
             outbound.whatsapp_message_id = result.get("messages", [{}])[0].get("id")
             outbound.status = "sent"
-        except Exception:  # noqa: BLE001
+            logger.info("Successfully sent WhatsApp reply to %s: %s", customer.phone, result)
+        except Exception as exc:  # noqa: BLE001
             outbound.status = "failed"
-            logger.exception("Failed to send AI-generated WhatsApp reply")
+            logger.exception("Failed to send AI-generated WhatsApp reply: %s", exc)
     elif channel == "instagram" and instagram_token and customer.instagram_id and (org.instagram_page_id or settings.INSTAGRAM_PAGE_ID):
         try:
-            client = InstagramClient(page_id=org.instagram_page_id, access_token=instagram_token)
-            client.send_text_message(customer.instagram_id, reply_text)
+            page_id = org.instagram_page_id or settings.INSTAGRAM_PAGE_ID
+            logger.info("Dispatching Instagram message to %s using page_id %s", customer.instagram_id, page_id)
+            client = InstagramClient(page_id=page_id, access_token=instagram_token)
+            result = client.send_text_message(customer.instagram_id, reply_text)
             outbound.status = "sent"
-        except Exception:  # noqa: BLE001
+            logger.info("Successfully sent Instagram reply to %s: %s", customer.instagram_id, result)
+        except Exception as exc:  # noqa: BLE001
             outbound.status = "failed"
-            logger.exception("Failed to send AI-generated Instagram reply")
+            logger.exception("Failed to send AI-generated Instagram reply: %s", exc)
     else:
+        logger.warning("Channel %s not configured with token or credentials (org.whatsapp_phone_number_id=%s)", channel, org.whatsapp_phone_number_id)
         outbound.status = "not_configured"
 
     db.add(LeadActivity(

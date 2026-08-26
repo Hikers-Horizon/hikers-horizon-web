@@ -37,11 +37,15 @@ class WhatsAppClient:
 
     def send_text_message(self, to_phone: str, body: str) -> dict:
         if not self.access_token or not self.phone_number_id:
+            logger.error("WhatsApp credentials missing: phone_number_id=%s, has_token=%s", bool(self.phone_number_id), bool(self.access_token))
             raise RuntimeError("WhatsApp credentials are not configured")
+        clean_phone = "".join(c for c in to_phone if c.isdigit())
         url = f"{GRAPH_API_BASE}/{self.phone_number_id}/messages"
-        payload = {"messaging_product": "whatsapp", "to": to_phone, "type": "text", "text": {"body": body}}
+        payload = {"messaging_product": "whatsapp", "to": clean_phone, "type": "text", "text": {"body": body}}
         with httpx.Client(timeout=10) as client:
             resp = client.post(url, json=payload, headers=self._headers())
+            if resp.status_code >= 400:
+                logger.error("Meta WhatsApp send failed (HTTP %s): %s", resp.status_code, resp.text)
             resp.raise_for_status()
             return resp.json()
 
