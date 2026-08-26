@@ -20,7 +20,14 @@ class InstagramClient:
     def send_text_message(self, recipient_id: str, body: str) -> dict:
         if not self.access_token or not self.page_id:
             raise RuntimeError("Instagram credentials are not configured")
-        url = f"{GRAPH_API_BASE}/{self.page_id}/messages"
+        
+        # Support both Instagram Login tokens (IGAA...) and Facebook Page tokens (EAA...)
+        if self.access_token.startswith("IGAA") or self.access_token.startswith("IG"):
+            base_url = "https://graph.instagram.com/v20.0"
+        else:
+            base_url = "https://graph.facebook.com/v20.0"
+
+        url = f"{base_url}/{self.page_id}/messages"
         payload = {
             "recipient": {"id": recipient_id},
             "message": {"text": body},
