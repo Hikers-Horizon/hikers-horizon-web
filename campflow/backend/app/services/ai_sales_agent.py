@@ -511,7 +511,88 @@ def _smart_trek_reply(
             matched_trip = trip
             break
 
-    # 2. Check for Inclusions / Pickup queries
+    # 2. Check for Distance / Duration / "How long" / Difficulty queries
+    if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
+        if matched_trip and ("kudremukh" in matched_trip.name.lower() or "kudremukha" in matched_trip.name.lower()):
+            return (
+                "🏔️ *Kudremukha Trek Distance & Duration:*\n\n"
+                "• *Total Distance:* 22 KM (11 KM up + 11 KM down)\n"
+                "• *Duration:* Approximately 7 to 8 hours of trekking\n"
+                "• *Difficulty:* Moderate\n"
+                "• *Peak Altitude:* 1,894 meters (6,214 ft)\n\n"
+                "The trail takes you through lush Shola forests, grasslands, and scenic ridge walks. Suitable for beginners with active fitness! 🎒\n\n"
+                "Would you like to check upcoming departure dates?"
+            )
+        elif matched_trip and ("kumara" in matched_trip.name.lower() or "kp" in matched_trip.name.lower()):
+            return (
+                "⛰️ *Kumara Parvatha Trek Distance & Duration:*\n\n"
+                "• *Total Distance:* 26 KM total\n"
+                "• *Duration:* 2-Day challenging trek (10–12 hours total)\n"
+                "• *Difficulty:* Moderate to Difficult\n"
+                "• *Peak Altitude:* 1,712 meters\n\n"
+                "One of the most thrilling and adventurous treks in the Western Ghats! 🎒"
+            )
+        elif matched_trip and "netravat" in matched_trip.name.lower():
+            return (
+                "🌿 *Netravathi Peak Trek Distance & Duration:*\n\n"
+                "• *Total Distance:* 14 KM total (up & down)\n"
+                "• *Duration:* Approx 5 to 6 hours\n"
+                "• *Difficulty:* Moderate (Beginner friendly)\n\n"
+                "Known for rolling green meadows and breathtaking 360-degree views! 🎒"
+            )
+        elif matched_trip and "gokarn" in matched_trip.name.lower():
+            return (
+                "🏖️ *Gokarna Beach Trek Distance & Duration:*\n\n"
+                "• *Total Distance:* 10 KM scenic coastal trail\n"
+                "• *Duration:* 5 hours across 5 famous beaches and cliffs\n"
+                "• *Difficulty:* Easy to Moderate (Beginner friendly)\n\n"
+                "Includes beach camping, sunset views & cliff walks! 🌊"
+            )
+        elif matched_trip and "skandagiri" in matched_trip.name.lower():
+            return (
+                "🌌 *Skandagiri Night Trek Distance & Duration:*\n\n"
+                "• *Total Distance:* 8 KM total\n"
+                "• *Duration:* 4 to 5 hours (Night ascend for sunrise)\n"
+                "• *Difficulty:* Moderate\n\n"
+                "Watch the sunrise above a blanket of clouds! ☁️"
+            )
+        return (
+            "🥾 *Trek Distance & Duration:*\n"
+            "Our Western Ghats weekend treks typically cover **12 to 22 KM total** (approx 6 to 8 hours of moderate hiking) with regular rest breaks, led by certified guides. Suitable for beginners with basic fitness! 🎒"
+        )
+
+    # 3. Check for Itinerary / Schedule / Timings
+    if any(k in text for k in ["itinerary", "schedule", "plan", "when do we return", "reach", "timing", "what time", "program"]):
+        return (
+            "🗓️ *Trip Itinerary (2 Days / 1 Night):*\n"
+            "• *Friday Night:* Depart Bangalore (8:30 PM – 10:15 PM pickups)\n"
+            "• *Saturday 6:00 AM:* Reach homestay, freshen up, breakfast & start trek\n"
+            "• *Saturday 1:30 PM:* Reach summit, enjoy packed lunch & 360° views\n"
+            "• *Saturday Evening:* Descend to base, hot tea, campfire, music & dinner ⛺\n"
+            "• *Sunday:* Breakfast, explore local waterfalls/viewpoints & depart\n"
+            "• *Sunday Night:* Return to Bangalore by 10:30 PM (or early Monday morning)."
+        )
+
+    # 4. Check for Solo Female / Safety
+    if any(k in text for k in ["solo", "safe", "girl", "female", "women", "alone", "safety"]):
+        return (
+            "🌟 *Safety & Solo Trekkers:*\n"
+            "Yes, 100% safe! Over 40% of our community consists of solo travelers and solo female trekkers. We provide separate tent/room accommodations for females, certified first-aid trained trek leads, and a warm, inclusive group environment! ⛺"
+        )
+
+    # 5. Check for Things to Carry / Packing List / Shoes
+    if any(k in text for k in ["what to carry", "what to bring", "packing", "things to carry", "shoes", "clothes", "dress"]):
+        return (
+            "🎒 *Things to Carry:*\n"
+            "1. Small backpack (20–30L)\n"
+            "2. Good grip trekking shoes / sneakers\n"
+            "3. 2 pairs of quick-dry clothes + warm jacket for the night\n"
+            "4. Raincoat / Poncho (during monsoon)\n"
+            "5. 2L Water bottle & energy snacks (chocolates, dry fruits)\n"
+            "6. Personal medication & valid Govt ID proof."
+        )
+
+    # 6. Check for Inclusions / Pickup queries
     if any(k in text for k in ["pickup", "boarding", "pick up", "route", "where to board", "start"]):
         return (
             "🚌 *Bangalore Pickup Points:*\n"
@@ -523,7 +604,7 @@ def _smart_trek_reply(
             "We return back to Bangalore Sunday late night / early Monday by 5:00 AM. 🎒"
         )
 
-    if any(k in text for k in ["inclusion", "included", "food", "stay", "accommodation", "tent", "safety", "what is included"]):
+    if any(k in text for k in ["inclusion", "included", "food", "stay", "accommodation", "tent", "what is included"]):
         return (
             "✨ *Package Inclusions:*\n"
             "• Travel to & from Bangalore in AC/Non-AC pushback tempo\n"
@@ -534,11 +615,10 @@ def _smart_trek_reply(
             "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
-    # 3. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
+    # 7. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
     date_num_match = re.search(r"\b(\d{1,2})\b", text)
     if date_num_match and matched_trip:
         day_num = int(date_num_match.group(1))
-        # Find departure with this date or near it
         deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).all()
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = f"₹{int(matched_trip.price):,}"
@@ -550,7 +630,7 @@ def _smart_trek_reply(
             f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
         )
 
-    # 4. If a trek was identified, provide details & upcoming dates
+    # 8. If a trek was identified, provide details & upcoming dates
     if matched_trip:
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = f"₹{int(matched_trip.price):,}"
@@ -571,7 +651,7 @@ def _smart_trek_reply(
             f"Which date works best for you and how many people are joining? 🎒"
         )
 
-    # 5. Generic Greeting / Inquiries
+    # 9. Generic Greeting / Inquiries
     if any(k in text for k in ["hi", "hello", "hey", "hii", "namaste"]):
         return (
             "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
