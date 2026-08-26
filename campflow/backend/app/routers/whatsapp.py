@@ -68,13 +68,25 @@ def send_message(
     return {"message_id": message.id, "status": message.status, "body": body}
 
 
+from fastapi.responses import PlainTextResponse
+
 @router.get("/webhook")
-def verify_webhook(request: Request):
+def verify_webhook(request: Request, db: Session = Depends(get_db)):
     """Meta webhook verification handshake (hub.challenge)."""
     params = request.query_params
-    if params.get("hub.verify_token") == settings.WHATSAPP_WEBHOOK_VERIFY_TOKEN:
-        return int(params.get("hub.challenge", 0))
-    raise HTTPException(status_code=403, detail="Invalid verify token")
+    token = params.get("hub.verify_token")
+    challenge = params.get("hub.challenge")
+    if not token or not challenge:
+        raise HTTPException(status_code=400, detail="Missing parameters")
+
+    # If configured in .env, verify match
+    if settings.WHATSAPP_WEBHOOK_VERIFY_TOKEN and token != settings.WHATSAPP_WEBHOOK_VERIFY_TOKEN:
+        # Also check if any org has this verify token
+        org = db.query(Organization).filter(Organization.whatsapp_webhook_verify_token == token).first()
+        if not org:
+            raise HTTPException(status_code=403, detail="Invalid verify token")
+
+    return PlainTextResponse(content=challenge)
 
 
 def _verify_signature(app_secret: str, raw_body: bytes, signature_header: str | None) -> bool:
@@ -93,9 +105,12 @@ async def receive_webhook(request: Request, db: Session = Depends(get_db)):
     """
     raw_body = await request.body()
     if not _verify_signature(settings.WHATSAPP_APP_SECRET, raw_body, request.headers.get("X-Hub-Signature-256")):
+        logger.warning("Invalid webhook signature on WhatsApp webhook")
         raise HTTPException(status_code=403, detail="Invalid webhook signature")
 
     payload = await request.json()
+    logger.info("Received WhatsApp webhook event: %s", payload)
+
     for entry in payload.get("entry", []):
         for change in entry.get("changes", []):
             value = change.get("value", {})
@@ -107,14 +122,15 @@ async def receive_webhook(request: Request, db: Session = Depends(get_db)):
                 from_phone = msg.get("from")
                 body = msg.get("text", {}).get("body", "")
                 whatsapp_message_id = msg.get("id")
+                logger.info("Processing inbound WhatsApp msg from %s (name: %s): %s", from_phone, contacts.get(from_phone), body)
                 try:
                     _process_inbound_whatsapp_message(
                         db, phone_number_id=phone_number_id, from_phone=from_phone,
                         body=body, whatsapp_message_id=whatsapp_message_id,
                         contact_name=contacts.get(from_phone),
                     )
-                except Exception:  # noqa: BLE001 - never fail the webhook ack
-                    logger.exception("Failed to process inbound WhatsApp message")
+                except Exception as exc:  # noqa: BLE001
+                    logger.exception("Failed to process inbound WhatsApp message: %s", exc)
     return {"status": "received"}
 
 
@@ -123,8 +139,8 @@ def _resolve_organization(db: Session, phone_number_id: str | None) -> Organizat
         org = db.query(Organization).filter(Organization.whatsapp_phone_number_id == phone_number_id).first()
         if org:
             return org
-    # Single-tenant / local-dev fallback: use the only configured org, or the first org.
-    return db.query(Organization).order_by(Organization.created_at.asc()).first()
+    # Fallback to the first active organization (e.g. Hikers Horizon)
+    return db.query(Organization).filter(Organization.is_active == True).order_by(Organization.created_at.asc()).first()
 
 
 def _process_inbound_whatsapp_message(
