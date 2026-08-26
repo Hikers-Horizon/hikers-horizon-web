@@ -15,13 +15,25 @@ router = APIRouter(prefix="/api/instagram", tags=["instagram"])
 logger = logging.getLogger("campflow.instagram")
 
 
+from fastapi.responses import PlainTextResponse
+
 @router.get("/webhook")
-def verify_webhook(request: Request):
+def verify_webhook(request: Request, db: Session = Depends(get_db)):
     """Meta webhook verification handshake (hub.challenge)."""
     params = request.query_params
-    if params.get("hub.verify_token") == settings.INSTAGRAM_WEBHOOK_VERIFY_TOKEN:
-        return int(params.get("hub.challenge", 0))
-    raise HTTPException(status_code=403, detail="Invalid verify token")
+    token = params.get("hub.verify_token")
+    challenge = params.get("hub.challenge")
+    if not token or not challenge:
+        raise HTTPException(status_code=400, detail="Missing parameters")
+
+    # If configured in .env, verify match
+    if settings.INSTAGRAM_WEBHOOK_VERIFY_TOKEN and token != settings.INSTAGRAM_WEBHOOK_VERIFY_TOKEN:
+        # Also check if any org has this verify token
+        org = db.query(Organization).filter(Organization.whatsapp_webhook_verify_token == token).first()
+        if not org:
+            raise HTTPException(status_code=403, detail="Invalid verify token")
+
+    return PlainTextResponse(content=challenge)
 
 
 def _verify_signature(app_secret: str, raw_body: bytes, signature_header: str | None) -> bool:
