@@ -493,12 +493,12 @@ def _smart_trek_reply(
     if clean_words.issubset(greeting_words) or text in greeting_words:
         return (
             "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
-            "We organize weekend treks from Bangalore with travel, food, homestay & trek guide included:\n"
-            "1. Kudremukha Trek (₹3,299)\n"
-            "2. Gokarna Beach Trek (₹3,299)\n"
-            "3. Kumara Parvatha Trek (₹3,299)\n"
-            "4. Netravathi Trek (₹3,299)\n"
-            "5. Skandagiri Night Trek (₹1,499)\n\n"
+            "We organize weekend treks from Bangalore with transportation, food, homestay & trek guide included:\n"
+            "1. Kudremukha Trek (₹3,499 with transportation)\n"
+            "2. Gokarna Beach Trek (₹3,299 with transportation)\n"
+            "3. Kumara Parvatha Trek (₹3,299 with transportation)\n"
+            "4. Netravathi Trek (₹3,499 with transportation)\n"
+            "5. Skandagiri Night Trek (₹1,499 with transportation)\n\n"
             "Which trek are you interested in exploring? 🎒"
         )
 
@@ -553,6 +553,19 @@ def _smart_trek_reply(
             if any(kw in full_convo for kw in _get_trip_keywords(trip)):
                 matched_trip = trip
                 break
+
+    # Helper to get accurate trek pricing
+    def _get_trek_price_str(trip: Trip | None) -> str:
+        if not trip:
+            return "₹3,499"
+        name_lower = trip.name.lower()
+        if "kudremukh" in name_lower or "netravat" in name_lower:
+            return "₹3,499"
+        elif "skandagiri" in name_lower:
+            return "₹1,499"
+        elif trip.price:
+            return f"₹{int(trip.price):,}"
+        return "₹3,299"
 
     # 3. Check for Distance / Duration / "How long" / Difficulty queries
     if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
@@ -650,7 +663,7 @@ def _smart_trek_reply(
     if any(k in text for k in ["inclusion", "included", "food", "stay", "accommodation", "tent", "what is included"]):
         return (
             "✨ *Package Inclusions:*\n"
-            "• Travel to & from Bangalore in AC/Non-AC pushback tempo\n"
+            "• Travel / Transportation to & from Bangalore in AC/Non-AC pushback tempo\n"
             "• Stay in Homestay / Tents (Separate for males & females)\n"
             "• Meals: 2 Breakfasts, 1 Lunch, 1 Dinner (Veg & Non-Veg options)\n"
             "• Certified Outdoor Leaders & First Aid support\n"
@@ -667,11 +680,11 @@ def _smart_trek_reply(
             suffix = "th" if 11 <= day_num <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day_num % 10, "th")
             formatted_day = f"{day_num}{suffix}"
             clean_title = matched_trip.name.replace("[DEMO]", "").strip()
-            price_str = f"₹{int(matched_trip.price):,}"
+            price_str = _get_trek_price_str(matched_trip)
 
             return (
                 f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {formatted_day}!\n\n"
-                f"• Price: *{price_str} per person* (Includes travel from Bangalore, food, homestay & trek guide)\n"
+                f"• Price: *{price_str} per person* (Includes transportation from Bangalore, food, homestay & trek guide)\n"
                 f"• Live Seats: Available ✅\n\n"
                 f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
             )
@@ -679,7 +692,7 @@ def _smart_trek_reply(
     # 9. If a trek was identified (e.g. by name or picked option 1-5), provide details & upcoming dates
     if matched_trip:
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
-        price_str = f"₹{int(matched_trip.price):,}"
+        price_str = _get_trek_price_str(matched_trip)
         deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).order_by(TripDeparture.departure_date.asc()).limit(3).all()
         
         dates_text = ""
@@ -692,7 +705,7 @@ def _smart_trek_reply(
         return (
             f"Hey! 🏔️ *{clean_title}* is one of our most popular treks!\n\n"
             f"📅 *Upcoming Departures:*{dates_text}\n"
-            f"💰 *Price:* {price_str} per person (Includes Travel, Food, Homestay Stay & Trek Guide)\n"
+            f"💰 *Price:* {price_str} per person (Includes Transportation, Food, Homestay Stay & Trek Guide)\n"
             f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal\n\n"
             f"Which date works best for you and how many people are joining? 🎒"
         )

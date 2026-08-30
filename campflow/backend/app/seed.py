@@ -45,10 +45,16 @@ def run():
         for name, category, body in templates:
             db.add(MessageTemplate(organization_id=org.id, name=name, category=category, body=body))
 
-        trek_names = ["[DEMO] Kudremukha Trek", "[DEMO] Netravati Trek", "[DEMO] Kumara Parvatha Trek", "[DEMO] Gokarna Coastal Trek", "[DEMO] Skandagiri Night Trek"]
+        trek_configs = [
+            ("[DEMO] Kudremukha Trek", Decimal("3499")),
+            ("[DEMO] Netravati Trek", Decimal("3499")),
+            ("[DEMO] Kumara Parvatha Trek", Decimal("3299")),
+            ("[DEMO] Gokarna Coastal Trek", Decimal("3299")),
+            ("[DEMO] Skandagiri Night Trek", Decimal("1499")),
+        ]
         trips = []
-        for tname in trek_names:
-            t = Trip(organization_id=org.id, name=tname, pickup_location="[DEMO] Bengaluru", price=Decimal("3299"))
+        for tname, tprice in trek_configs:
+            t = Trip(organization_id=org.id, name=tname, pickup_location="[DEMO] Bengaluru", price=tprice)
             db.add(t)
             trips.append(t)
         db.flush()
