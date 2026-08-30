@@ -18,22 +18,25 @@ class InstagramClient:
         self.access_token = access_token or settings.INSTAGRAM_ACCESS_TOKEN
 
     def send_text_message(self, recipient_id: str, body: str) -> dict:
-        if not self.access_token or not self.page_id:
+        if not self.access_token:
             raise RuntimeError("Instagram credentials are not configured")
         
         # Support both Instagram Login tokens (IGAA...) and Facebook Page tokens (EAA...)
         if self.access_token.startswith("IGAA") or self.access_token.startswith("IG"):
-            base_url = "https://graph.instagram.com/v20.0"
+            url = "https://graph.instagram.com/v20.0/me/messages"
+        elif self.page_id:
+            url = f"https://graph.facebook.com/v20.0/{self.page_id}/messages"
         else:
-            base_url = "https://graph.facebook.com/v20.0"
+            url = "https://graph.facebook.com/v20.0/me/messages"
 
-        url = f"{base_url}/{self.page_id}/messages"
         payload = {
             "recipient": {"id": recipient_id},
             "message": {"text": body},
         }
-        params = {"access_token": self.access_token}
-        with httpx.Client(timeout=10) as client:
-            resp = client.post(url, json=payload, params=params)
+        headers = {"Authorization": f"Bearer {self.access_token}"}
+        with httpx.Client(timeout=12) as client:
+            resp = client.post(url, json=payload, headers=headers)
+            if resp.status_code != 200:
+                resp = client.post(url, json=payload, params={"access_token": self.access_token})
             resp.raise_for_status()
             return resp.json()
