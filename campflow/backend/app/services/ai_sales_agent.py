@@ -502,7 +502,17 @@ def _smart_trek_reply(
             "Which trek are you interested in exploring? 🎒"
         )
 
-    # 2. Identify Trek — Prioritize current message FIRST
+    # 1b. Check if user selected an option number (1-5) from the catalogue
+    INDEX_TO_TREK_KEY = {
+        "1": "kudremukh",
+        "2": "gokarn",
+        "3": "kumara",
+        "4": "netravat",
+        "5": "skandagiri",
+    }
+    opt_match = re.fullmatch(r"(?:option\s*|#\s*|trek\s*)?([1-5])(?:\.|\))?", text)
+
+    # 2. Identify Trek — Prioritize catalogue option / current message FIRST
     trips = db.query(Trip).filter(Trip.organization_id == org.id).all()
     if not trips:
         trips = db.query(Trip).all()
@@ -523,11 +533,19 @@ def _smart_trek_reply(
         return keywords
 
     matched_trip: Trip | None = None
-    # Check current message
-    for trip in trips:
-        if any(kw in text for kw in _get_trip_keywords(trip)):
-            matched_trip = trip
-            break
+    if opt_match:
+        chosen_key = INDEX_TO_TREK_KEY[opt_match.group(1)]
+        for trip in trips:
+            if chosen_key in trip.name.lower():
+                matched_trip = trip
+                break
+
+    # If not an option number, check current message text
+    if not matched_trip:
+        for trip in trips:
+            if any(kw in text for kw in _get_trip_keywords(trip)):
+                matched_trip = trip
+                break
 
     # If not mentioned in current message, fallback to conversation history
     if not matched_trip:
@@ -640,22 +658,25 @@ def _smart_trek_reply(
             "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
-    # 8. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
-    date_num_match = re.search(r"\b(\d{1,2})\b", text)
-    if date_num_match and matched_trip:
+    # 8. Check for specific date queries (e.g. "25", "25th", "sep 2", "this weekend")
+    # Only if NOT a catalogue option selection 1-5
+    date_num_match = re.search(r"\b(\d{1,2})(?:st|nd|rd|th)?\b", text)
+    if date_num_match and matched_trip and not opt_match:
         day_num = int(date_num_match.group(1))
-        deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).all()
-        clean_title = matched_trip.name.replace("[DEMO]", "").strip()
-        price_str = f"₹{int(matched_trip.price):,}"
+        if day_num <= 31:
+            suffix = "th" if 11 <= day_num <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day_num % 10, "th")
+            formatted_day = f"{day_num}{suffix}"
+            clean_title = matched_trip.name.replace("[DEMO]", "").strip()
+            price_str = f"₹{int(matched_trip.price):,}"
 
-        return (
-            f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {day_num}th!\n\n"
-            f"• Price: *{price_str} per person* (Includes travel from Bangalore, food, homestay & trek guide)\n"
-            f"• Live Seats: Available ✅\n\n"
-            f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
-        )
+            return (
+                f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {formatted_day}!\n\n"
+                f"• Price: *{price_str} per person* (Includes travel from Bangalore, food, homestay & trek guide)\n"
+                f"• Live Seats: Available ✅\n\n"
+                f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
+            )
 
-    # 9. If a trek was identified, provide details & upcoming dates
+    # 9. If a trek was identified (e.g. by name or picked option 1-5), provide details & upcoming dates
     if matched_trip:
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = f"₹{int(matched_trip.price):,}"
