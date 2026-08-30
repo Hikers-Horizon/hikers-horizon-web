@@ -1,9 +1,11 @@
-"""One-click migration and sync script for Lightsail production.
-Run on server: python backend/migrate_and_sync.py
-"""
 import sys
+import os
 import datetime
 import decimal
+
+# Ensure the backend directory is on the python path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from sqlalchemy import text
 from app.database import engine, SessionLocal
 from app.models import Organization, Customer, Lead, Message, FollowUp
