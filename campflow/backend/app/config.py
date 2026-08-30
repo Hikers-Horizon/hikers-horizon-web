@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     WHATSAPP_BUSINESS_ACCOUNT_ID: str = ""
     WHATSAPP_WEBHOOK_VERIFY_TOKEN: str = ""
     WHATSAPP_APP_SECRET: str = ""
+    ADMIN_NOTIFICATION_PHONE: str = "918123045828"  # Personal WhatsApp number for admin alerts
 
     # Instagram Messaging (Meta Graph API, via a connected Facebook Page)
     INSTAGRAM_ACCESS_TOKEN: str = ""

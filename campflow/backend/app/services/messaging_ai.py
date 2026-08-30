@@ -96,4 +96,39 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
         description=f"AI auto-reply ({channel}): {reply_text[:200]}",
     ))
     db.commit()
+
+    # Dispatch alert to Admin's personal WhatsApp phone
+    _dispatch_admin_phone_alert(org=org, customer=customer, inbound_body=last_inbound, reply_text=reply_text)
+
     return outbound
+
+
+def _dispatch_admin_phone_alert(*, org: Organization, customer: Customer, inbound_body: str, reply_text: str):
+    """Sends a real-time WhatsApp alert to the admin's personal mobile phone."""
+    admin_phone = settings.ADMIN_NOTIFICATION_PHONE
+    if not admin_phone:
+        return
+    admin_clean = "".join(filter(str.isdigit, admin_phone))
+    cust_clean = "".join(filter(str.isdigit, customer.phone or ""))
+    if admin_clean == cust_clean:
+        return  # Don't notify if the message is from the admin's own number
+
+    whatsapp_token = org.whatsapp_access_token or settings.WHATSAPP_ACCESS_TOKEN
+    phone_id = org.whatsapp_phone_number_id or settings.WHATSAPP_PHONE_NUMBER_ID
+    if not (whatsapp_token and phone_id):
+        return
+
+    admin_msg = (
+        f"🔔 *New Lead Message Alert!*\n\n"
+        f"👤 *Customer:* {customer.full_name or 'New Trekker'}\n"
+        f"📱 *Phone:* +{customer.phone}\n"
+        f"💬 *Customer Asked:* \"{inbound_body}\"\n\n"
+        f"🤖 *AI Replied:*\n\"{reply_text[:180]}...\"\n\n"
+        f"👉 *Open CampFlow Dashboard:*\nhttps://hikershorizon.in/campflow/"
+    )
+    try:
+        client = WhatsAppClient(phone_number_id=phone_id, access_token=whatsapp_token)
+        client.send_text_message(admin_clean, admin_msg)
+        logger.info("Dispatched WhatsApp admin alert to %s", admin_clean)
+    except Exception as exc:
+        logger.warning("Failed to dispatch WhatsApp admin alert to %s: %s", admin_clean, exc)
