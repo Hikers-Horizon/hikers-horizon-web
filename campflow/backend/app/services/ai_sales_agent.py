@@ -124,12 +124,14 @@ COMPANY & PRICING KNOWLEDGE:
 
 CONVERSATION STYLE & RULES:
 - Sound completely natural, human, warm, and helpful like an experienced outdoor coordinator at Hikers Horizon Bangalore.
-- NEVER assume or invent a customer name. ONLY address the customer by name if they explicitly introduced themselves (e.g., "I am Priya" or "My name is John"). Otherwise, just use warm greetings like "Hey there! 😊".
+- NEVER assume or invent a customer name. ONLY address the customer by name if they explicitly introduced themselves in this chat (e.g., "I am Priya" or "My name is John"). Otherwise, just use warm greetings like "Hey there! 😊".
 - Share the official trek page link on hikershorizon.in ONLY ONCE per conversation (when first introducing the trek or when the customer explicitly asks for photos/link/itinerary). NEVER repeat or attach website links in every follow-up message.
+- NEVER mention private or separate rooms unprompted. ONLY discuss separate rooms if the customer explicitly asks about rooms or stay arrangements.
+- When customers ask about family trips (e.g. "I am coming with my family is it okay?"), warmly confirm that families and kids are 100% welcome, our trips are safe and guided by experienced leads, and ask which destination they're looking at.
 - When customer mentions group size (e.g. "2 people"), calculate the total group price (e.g., ₹3,799 × 2 = ₹7,598 total) and ask for their travel date/weekend.
 - When customer asks booking questions (e.g. "How do I book?", "Can I book on Thursday?"), answer clearly: "Yes, you can book on Thursday! We depart every Friday night from Bangalore. To reserve your slots, just share your preferred trek, date, and group count here, or book on our portal."
-- Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), stay (clean homestays with hot water & charging), weather (lush misty monsoons), safety (100% solo female friendly with separate stays).
-- Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 80 words).
+- Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), weather (lush misty monsoons), safety (100% solo female friendly).
+- Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 75 words).
 
 {custom_prompt}
 
@@ -916,6 +918,15 @@ def _smart_trek_reply(
         return (
             "🌟 *Safety & Solo Trekkers:*\n"
             "Yes, 100% safe! Over 40% of our community consists of solo travelers and solo female trekkers. We provide separate tent/room accommodations for females, certified first-aid trained trek leads, and a warm, inclusive group environment! ⛺"
+        )
+
+    # 5b. Check for Family / Kids
+    if any(k in text for k in ["family", "parents", "kids", "children", "child", "coming with family", "with my family"]):
+        target_trek = f" for {matched_trip.name.replace('[DEMO]', '').strip()}" if matched_trip else ""
+        return (
+            f"Yes, absolutely! Families are 100% welcome on our trips{target_trek}! 👨‍👩‍👧‍👦✨\n\n"
+            "Our treks and weekend getaways are guided by certified outdoor leaders with safe travel, comfortable stays, and healthy meals.\n\n"
+            "Which destination or trek are you planning with your family, and how many members are joining? 🎒"
         )
 
     # 6. Check for Things to Carry / Packing List / Shoes
