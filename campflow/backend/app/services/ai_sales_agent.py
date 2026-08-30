@@ -534,6 +534,18 @@ def _smart_trek_reply(
             keywords.extend(["netravathi", "netravati"])
         elif "skandagiri" in clean_name:
             keywords.extend(["skandagiri", "night trek"])
+        elif "munnar" in clean_name:
+            keywords.extend(["munnar", "kolukkumalai"])
+        elif "wayanad" in clean_name:
+            keywords.extend(["wayanad"])
+        elif "kodaikanal" in clean_name:
+            keywords.extend(["kodaikanal", "kodai"])
+        elif "hampi" in clean_name:
+            keywords.extend(["hampi"])
+        elif "coorg" in clean_name:
+            keywords.extend(["coorg"])
+        elif "chikmagalur" in clean_name or "chikmagaluru" in clean_name:
+            keywords.extend(["chikmagalur", "chikmagaluru"])
         return keywords
 
     matched_trip: Trip | None = None
@@ -578,23 +590,35 @@ def _smart_trek_reply(
                 matched_trip = trip
                 break
 
-    # If current message mentions Kodachadri specifically and not in DB
-    if not matched_trip and "kodachadri" in text:
-        try:
-            created_trip = Trip(organization_id=org.id, name="Kodachadri Trek", pickup_location="Bengaluru", price=Decimal("3799"))
-            db.add(created_trip)
-            db.flush()
-            for d_offset in [5, 12, 19]:
-                dep = TripDeparture(
-                    organization_id=org.id, trip_id=created_trip.id,
-                    departure_date=datetime.date.today() + datetime.timedelta(days=d_offset),
-                    capacity=30, status=TripStatus.OPEN,
-                )
-                db.add(dep)
-            db.commit()
-            matched_trip = created_trip
-        except Exception:
-            matched_trip = Trip(name="Kodachadri Trek", price=Decimal("3799"))
+    # Auto-provision named trips if queried by name but not in DB
+    if not matched_trip:
+        auto_provisions = {
+            "munnar": ("Munnar & Kolukkumalai Trip", Decimal("5199")),
+            "kodachadri": ("Kodachadri Trek", Decimal("3799")),
+            "wayanad": ("Wayanad Backpacking Trip", Decimal("3699")),
+            "kodaikanal": ("Kodaikanal Hill Station Trip", Decimal("4499")),
+            "hampi": ("Hampi Heritage Trip", Decimal("4499")),
+            "coorg": ("Coorg Backpacking Trip", Decimal("3499")),
+            "chikmagalur": ("Chikmagalur Plantation Tour", Decimal("3499")),
+        }
+        for query_k, (tname, tprice) in auto_provisions.items():
+            if query_k in text:
+                try:
+                    created_trip = Trip(organization_id=org.id, name=tname, pickup_location="Bengaluru", price=tprice)
+                    db.add(created_trip)
+                    db.flush()
+                    for d_offset in [5, 12, 19]:
+                        dep = TripDeparture(
+                            organization_id=org.id, trip_id=created_trip.id,
+                            departure_date=datetime.date.today() + datetime.timedelta(days=d_offset),
+                            capacity=30, status=TripStatus.OPEN,
+                        )
+                        db.add(dep)
+                    db.commit()
+                    matched_trip = created_trip
+                except Exception:
+                    matched_trip = Trip(name=tname, price=tprice)
+                break
 
     # If not mentioned in current message and NOT an option selection, fallback to conversation history
     if not matched_trip and not opt_match:
@@ -603,14 +627,26 @@ def _smart_trek_reply(
                 matched_trip = trip
                 break
 
+    if not matched_trip and not opt_match:
+        for query_k, (tname, tprice) in auto_provisions.items():
+            if query_k in full_convo:
+                matched_trip = Trip(name=tname, price=tprice)
+                break
+
     # Helper to get accurate trek pricing
     def _get_trek_price_str(trip: Trip | None) -> str:
         if not trip:
             return "₹3,499"
         name_lower = trip.name.lower()
-        if "kodachadri" in name_lower:
+        if "munnar" in name_lower:
+            return "₹5,199"
+        elif "kodachadri" in name_lower:
             return "₹3,799"
-        elif "kudremukh" in name_lower or "netravat" in name_lower or "gokarn" in name_lower:
+        elif "kodaikanal" in name_lower or "hampi" in name_lower:
+            return "₹4,499"
+        elif "wayanad" in name_lower:
+            return "₹3,699"
+        elif "kudremukh" in name_lower or "netravat" in name_lower or "gokarn" in name_lower or "coorg" in name_lower or "chikmagalur" in name_lower:
             return "₹3,499"
         elif "skandagiri" in name_lower:
             return "₹1,499"
@@ -623,7 +659,19 @@ def _smart_trek_reply(
         if not trip:
             return "https://hikershorizon.in/Twodays/"
         name_lower = trip.name.lower()
-        if "kudremukh" in name_lower or "kuduremukha" in name_lower:
+        if "munnar" in name_lower:
+            return "https://hikershorizon.in/Backpacking/Munnar/"
+        elif "wayanad" in name_lower:
+            return "https://hikershorizon.in/Backpacking/Wayanad/"
+        elif "kodaikanal" in name_lower:
+            return "https://hikershorizon.in/Backpacking/Kodaikanal/"
+        elif "hampi" in name_lower:
+            return "https://hikershorizon.in/Backpacking/Hampi/"
+        elif "coorg" in name_lower:
+            return "https://hikershorizon.in/Backpacking/Coorg2days/"
+        elif "chikmagalur" in name_lower:
+            return "https://hikershorizon.in/Backpacking/Chikmagaluru/"
+        elif "kudremukh" in name_lower or "kuduremukha" in name_lower:
             return "https://hikershorizon.in/Twodays/Kuduremukha/"
         elif "gokarn" in name_lower:
             return "https://hikershorizon.in/Twodays/Gokarna/"
@@ -763,10 +811,35 @@ def _smart_trek_reply(
             "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
+    # 7b. Check for Passenger Count / Group size (e.g. "2 people", "2 members", "3 of us", "5 pax")
+    pax_match = re.search(r"\b(\d+)\s*(?:people|persons|members|pax|travellers|guests|guys|friends|heads|of us)\b", text)
+    if not pax_match and any(w in text for w in ["people", "person", "members", "pax", "of us", "group"]):
+        pax_match = re.search(r"\b(\d+)\b", text)
+
+    if pax_match and matched_trip:
+        count = int(pax_match.group(1))
+        if 1 <= count <= 50:
+            clean_title = matched_trip.name.replace("[DEMO]", "").strip()
+            price_str = _get_trek_price_str(matched_trip)
+            try:
+                unit_num = int(price_str.replace("₹", "").replace(",", "").strip())
+            except Exception:
+                unit_num = 3499
+            total_num = unit_num * count
+            trek_url = _get_trek_url(matched_trip)
+
+            return (
+                f"🎉 Awesome! Noted booking for *{count} {'person' if count == 1 else 'people'}* for *{clean_title}*!\n\n"
+                f"💰 *Total Package:* {price_str} × {count} = *₹{total_num:,} total* (Includes transportation from Bangalore, food, homestay & trek guide)\n"
+                f"• Live Slots: Available ✅\n\n"
+                f"🔗 *Trip Details & Gallery:*\n👉 {trek_url}\n\n"
+                f"Which date/weekend are you planning to travel, and what is your *Full Name & Email* to reserve your spots? 🎒"
+            )
+
     # 8. Check for specific date queries (e.g. "25", "25th", "sep 2", "this weekend")
-    # Only if NOT a catalogue option selection 1-5
+    # Only if NOT a catalogue option selection 1-6 and NOT a pax count
     date_num_match = re.search(r"\b(\d{1,2})(?:st|nd|rd|th)?\b", text)
-    if date_num_match and matched_trip and not opt_match:
+    if date_num_match and matched_trip and not opt_match and not pax_match:
         day_num = int(date_num_match.group(1))
         if day_num <= 31:
             suffix = "th" if 11 <= day_num <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day_num % 10, "th")
