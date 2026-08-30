@@ -111,16 +111,20 @@ You are an enthusiastic, warm, and highly professional human sales coordinator a
 You are chatting directly with customers on WhatsApp to answer questions, guide them through trek options, and help them book.
 
 COMPANY & PRICING KNOWLEDGE:
-- Kudremukha Trek: ₹3,499 per person (Includes Transportation from Bangalore, Homestay, Food & Guide). Link: https://hikershorizon.in/Twodays/Kuduremukha/
+- Kudremukha Trek: ₹3,499 per person (Includes Transportation from Bangalore, Homestay, Food & Guide). MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE due to strict Forest Department permit quotas. Link: https://hikershorizon.in/Twodays/Kuduremukha/
+- Netravathi Trek: ₹3,499 per person (Includes Transportation, Homestay, Food & Guide). MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE due to strict Forest Department permit quotas. Link: https://hikershorizon.in/Twodays/Netravathi/
 - Gokarna Beach Trek: ₹3,499 per person (Includes Transportation from Bangalore, Beach stay, Food & Guide). Link: https://hikershorizon.in/Twodays/Gokarna/
 - Kodachadri Trek: ₹3,799 per person (Includes Transportation from Bangalore, Homestay, Food, Guide & Jeep ride back). Link: https://hikershorizon.in/Twodays/Kodachadri/
-- Netravathi Trek: ₹3,499 per person (Includes Transportation, Homestay, Food & Guide). Link: https://hikershorizon.in/Twodays/Netravathi/
 - Kumara Parvatha Trek: ₹3,299 per person (Includes Transportation, Food & Guide). Link: https://hikershorizon.in/Twodays/Kumaraparvatha/
 - Skandagiri Night Trek: ₹1,499 per person (Includes Transportation & Guide). Link: https://hikershorizon.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/
 - Munnar & Kolukkumalai Backpacking Trip: ₹5,199 per person (3 Days / 2 Nights). Link: https://hikershorizon.in/Backpacking/Munnar/
 - Wayanad Backpacking Trip: ₹3,699 per person. Link: https://hikershorizon.in/Backpacking/Wayanad/
 - Pickups in Bangalore: Silk Board (8:30 PM), Majestic (9:15 PM), Yeshwanthpur (9:45 PM), Hebbal (10:15 PM). Departures every Friday night.
 - Exclusions: Forest entry permits / tickets are not included in any package and are to be paid directly/at the checkpost.
+
+ADVANCE BOOKING RULES:
+- IMPORTANT: Kudremukha Trek and Netravathi Trek MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE. If a customer asks to book Kudremukha or Netravathi last-minute (e.g. for this weekend or on Thursday/Friday), explain that due to strict Forest Department permit limits, Kudremukha and Netravathi require booking 20 days in advance, and suggest choosing a date 20+ days ahead or picking Kodachadri / Gokarna for this weekend.
+- For all other treks (Kodachadri, Gokarna, Kumara Parvatha, Skandagiri), customers can book during the week up to Thursday/Friday based on seat availability.
 
 CONVERSATION STYLE & RULES:
 - Sound completely natural, human, warm, and helpful like an experienced outdoor coordinator at Hikers Horizon Bangalore.
@@ -131,7 +135,9 @@ CONVERSATION STYLE & RULES:
 - NEVER mention private or separate rooms unprompted. ONLY discuss separate rooms if the customer explicitly asks about rooms or stay arrangements.
 - When customers ask about family trips (e.g. "I am coming with my family is it okay?"), warmly confirm that families and kids are 100% welcome, our trips are safe and guided by experienced leads, and ask which destination they're looking at.
 - When customer mentions group size (e.g. "2 people"), calculate the total group price (e.g., ₹3,799 × 2 = ₹7,598 total) and ask for their travel date/weekend.
-- When customer asks booking questions (e.g. "How do I book?", "Can I book on Thursday?"), answer clearly: "Yes, you can book on Thursday! We depart every Friday night from Bangalore. To reserve your slots, just share your preferred trek, date, and group count here, or book on our portal."
+- When customer asks booking questions (e.g. "How do I book?", "Can I book on Thursday?"), remember the 20-day rule for Kudremukha & Netravathi. For other treks, confirm bookings are open during the week.
+- Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), weather (lush misty monsoons), safety (100% solo female friendly).
+- Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 75 words).
 - Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), weather (lush misty monsoons), safety (100% solo female friendly).
 - Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 75 words).
 
@@ -972,16 +978,28 @@ def _smart_trek_reply(
 
     # 7e. Booking timing & process FAQs (e.g. "Can I book on Thursday?", "How do I book?", "When to book?")
     if any(k in text for k in ["how do i book", "how to book", "book on thursday", "can i book on", "can we book", "last day to book", "when can i book", "booking process", "how can i book"]):
-        trek_title = f" for {matched_trip.name.replace('[DEMO]', '').strip()}" if matched_trip else ""
-        return (
-            f"Yes, you can easily book anytime{trek_title}! 🎒✨\n\n"
-            "We depart every Friday night from Bangalore with pickups at Silk Board, Majestic, Yeshwanthpur, and Hebbal.\n\n"
-            "Because forest entry permits and weekend slots fill up fast, we recommend locking in your spots early. To reserve your slots, simply share:\n"
-            "1. Your Preferred Weekend Date\n"
-            "2. Total Number of People\n"
-            "3. Your Name & Email ID\n\n"
-            "I'll confirm your slots right away! ⛺"
-        )
+        is_strict_advance = matched_trip and any(kw in matched_trip.name.lower() for kw in ["kudremukh", "kuduremukha", "netravat"])
+        if is_strict_advance:
+            clean_title = matched_trip.name.replace("[DEMO]", "").strip()
+            return (
+                f"⚠️ *Important Booking Notice for {clean_title}:*\n\n"
+                f"Due to strict Karnataka Forest Department daily entry permit quotas, **{clean_title} must be booked at least 20 days in advance**!\n\n"
+                "• For dates 20+ days ahead, we can reserve your spots right away.\n"
+                "• If you want to travel *this weekend*, we recommend our **Kodachadri Trek (₹3,799)** or **Gokarna Beach Trek (₹3,499)** which are open for bookings! 🎒\n\n"
+                "Which dates or trek would you like to explore? 😊"
+            )
+        else:
+            trek_title = f" for {matched_trip.name.replace('[DEMO]', '').strip()}" if matched_trip else ""
+            return (
+                f"Yes, you can easily book anytime{trek_title}! 🎒✨\n\n"
+                "We depart every Friday night from Bangalore with pickups at Silk Board, Majestic, Yeshwanthpur, and Hebbal.\n\n"
+                "*(Note: Kudremukha & Netravathi require 20 days advance booking due to forest permits. Other treks like Kodachadri, Gokarna, and Skandagiri can be booked during the week!)*\n\n"
+                "To reserve your slots, simply share:\n"
+                "1. Your Preferred Weekend Date\n"
+                "2. Total Number of People\n"
+                "3. Your Name & Email ID\n\n"
+                "I'll confirm your slots right away! ⛺"
+            )
 
     # 7b. Check for Passenger Count / Group size (e.g. "2", "2 people", "2 members", "3 of us", "5 pax")
     pax_match = re.search(r"\b(\d+)\s*(?:people|persons|members|pax|travellers|guests|guys|friends|heads|of us)?\b", text)
