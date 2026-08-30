@@ -46,6 +46,15 @@ def list_conversations(
     """
     org_id = ctx.organization.id
 
+    # Auto-heal any Instagram/WhatsApp messages and customers in DB to this active org
+    try:
+        db.query(Customer).filter(Customer.organization_id != org_id).update({"organization_id": org_id}, synchronize_session=False)
+        db.query(Message).filter(Message.organization_id != org_id).update({"organization_id": org_id}, synchronize_session=False)
+        db.query(Lead).filter(Lead.organization_id != org_id).update({"organization_id": org_id}, synchronize_session=False)
+        db.commit()
+    except Exception:
+        db.rollback()
+
     # Subquery: latest message per customer
     latest_msg = (
         db.query(

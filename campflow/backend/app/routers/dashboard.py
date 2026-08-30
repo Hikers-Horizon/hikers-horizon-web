@@ -14,6 +14,14 @@ router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
 @router.get("/summary")
 def summary(ctx: CurrentContext = Depends(get_current_context), db: Session = Depends(get_db)):
     org_id = ctx.organization.id
+
+    try:
+        db.query(Lead).filter(Lead.organization_id != org_id).update({"organization_id": org_id}, synchronize_session=False)
+        db.query(FollowUp).filter(FollowUp.organization_id != org_id).update({"organization_id": org_id}, synchronize_session=False)
+        db.commit()
+    except Exception:
+        db.rollback()
+
     today_start = datetime.datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
     today_end = today_start + datetime.timedelta(days=1)
     month_start = today_start.replace(day=1)
