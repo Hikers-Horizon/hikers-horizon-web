@@ -76,17 +76,17 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
         except Exception as exc:  # noqa: BLE001
             outbound.status = "failed"
             logger.exception("Failed to send AI-generated WhatsApp reply: %s", exc)
-    elif channel == "instagram" and instagram_token and customer.instagram_id and (org.instagram_page_id or settings.INSTAGRAM_PAGE_ID):
+    elif channel == "instagram" and instagram_token and customer.instagram_id:
         try:
             page_id = org.instagram_page_id or settings.INSTAGRAM_PAGE_ID
-            logger.info("Dispatching Instagram message to %s using page_id %s", customer.instagram_id, page_id)
+            logger.info("Dispatching Instagram message to recipient %s", customer.instagram_id)
             client = InstagramClient(page_id=page_id, access_token=instagram_token)
             result = client.send_text_message(customer.instagram_id, reply_text)
             outbound.status = "sent"
             logger.info("Successfully sent Instagram reply to %s: %s", customer.instagram_id, result)
         except Exception as exc:  # noqa: BLE001
             outbound.status = "failed"
-            logger.exception("Failed to send AI-generated Instagram reply: %s", exc)
+            logger.exception("Failed to send AI-generated Instagram reply to %s: %s", customer.instagram_id, exc)
     else:
         logger.warning("Channel %s not configured with token or credentials (org.whatsapp_phone_number_id=%s)", channel, org.whatsapp_phone_number_id)
         outbound.status = "not_configured"

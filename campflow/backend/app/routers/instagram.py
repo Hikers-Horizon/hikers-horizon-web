@@ -65,6 +65,8 @@ async def receive_webhook(request: Request):
     try:
         for entry in payload.get("entry", []):
             page_id = entry.get("id")
+            
+            # Format 1: Messenger / Instagram standard messaging format
             for messaging in entry.get("messaging", []):
                 message = messaging.get("message") or {}
                 if message.get("is_echo"):
@@ -73,13 +75,30 @@ async def receive_webhook(request: Request):
                 sender_id = messaging.get("sender", {}).get("id")
                 text = message.get("text")
                 mid = message.get("mid")
-                logger.info("Processing inbound DM from sender_id: %s, text: %s", sender_id, text)
-                try:
-                    _process_inbound_instagram_message(
-                        db, page_id=page_id, sender_id=sender_id, text=text, mid=mid,
-                    )
-                except Exception as exc:  # noqa: BLE001
-                    logger.exception("Failed to process inbound Instagram message: %s", exc)
+                if sender_id and text:
+                    logger.info("Processing inbound Instagram DM from sender_id: %s, text: %s", sender_id, text)
+                    try:
+                        _process_inbound_instagram_message(
+                            db, page_id=page_id, sender_id=sender_id, text=text, mid=mid,
+                        )
+                    except Exception as exc:  # noqa: BLE001
+                        logger.exception("Failed to process inbound Instagram message: %s", exc)
+
+            # Format 2: Instagram Graph API changes format
+            for change in entry.get("changes", []):
+                val = change.get("value") or {}
+                if change.get("field") == "messages" or "message" in val or "text" in val:
+                    sender_id = val.get("from", {}).get("id") or val.get("sender", {}).get("id") or val.get("id")
+                    text = val.get("text") or val.get("message")
+                    mid = val.get("mid") or val.get("id")
+                    if sender_id and text:
+                        logger.info("Processing inbound Instagram DM (changes) from sender_id: %s, text: %s", sender_id, text)
+                        try:
+                            _process_inbound_instagram_message(
+                                db, page_id=page_id, sender_id=sender_id, text=text, mid=mid,
+                            )
+                        except Exception as exc:  # noqa: BLE001
+                            logger.exception("Failed to process inbound Instagram message (changes): %s", exc)
     finally:
         db.close()
     return {"status": "received"}
@@ -90,8 +109,10 @@ def _resolve_organization(db: Session, page_id: str | None) -> Organization | No
         org = db.query(Organization).filter(Organization.instagram_page_id == page_id).first()
         if org:
             return org
-    # Fallback to the first active organization (e.g. Hikers Horizon)
-    return db.query(Organization).filter(Organization.is_active == True).order_by(Organization.created_at.asc()).first()
+    org = db.query(Organization).filter(Organization.is_active == True).order_by(Organization.created_at.asc()).first()
+    if not org:
+        org = db.query(Organization).first()
+    return org
 
 
 def _process_inbound_instagram_message(
