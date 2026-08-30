@@ -769,6 +769,45 @@ def _smart_trek_reply(
             f"• *Sunday Night:* Return to Bangalore by 10:30 PM (or early Monday morning).{itinerary_link}"
         )
 
+    # 4b. Human FAQs: Food & Meals
+    if any(k in text for k in ["veg", "non veg", "non-veg", "what food", "meals", "dinner", "lunch", "breakfast"]):
+        return (
+            "🍲 *Food & Meals Included:*\n"
+            "We serve fresh, hot local cuisine at our homestay! Included in the package:\n"
+            "• Saturday Breakfast & packed trail Lunch\n"
+            "• Saturday Dinner (Both Veg and Non-Veg chicken options available!)\n"
+            "• Sunday Breakfast\n"
+            "• Hot evening tea & snacks after descending ☕"
+        )
+
+    # 4c. Human FAQs: Weather & Rain
+    if any(k in text for k in ["weather", "rain", "raining", "monsoon", "climate"]):
+        return (
+            "🌦️ *Current Weather:*\n"
+            "The Western Ghats are exceptionally lush, green, and misty right now! 🌿 Mild showers make the waterfalls and cloud beds magical. Just pack a raincoat/poncho and good grip shoes, and you're all set! 🌧️⛰️"
+        )
+
+    # 4d. Human FAQs: Beginners & Fitness
+    if any(k in text for k in ["beginner", "first time", "first-time", "can i do", "can beginners", "tough", "hard", "fitness"]):
+        return (
+            "🥾 *Beginner Friendly:*\n"
+            "Yes, 100%! Over 60% of our participants are beginners and first-time hikers. Our certified trek guides lead the entire trek with regular rest, hydration, and photography stops! 📸🎒"
+        )
+
+    # 4e. Human FAQs: Stay, Washroom & Charging Facilities
+    if any(k in text for k in ["washroom", "toilet", "restroom", "facilities", "charging", "hot water"]):
+        return (
+            "🏡 *Homestay & Facilities:*\n"
+            "We provide comfortable homestays/tents with clean Western & Indian washrooms, running hot water, changing rooms, and charging sockets for your phones and power banks! 🚿🔌"
+        )
+
+    # 4f. Human FAQs: Alcohol / Smoking policy
+    if any(k in text for k in ["alcohol", "beer", "drink", "drinking", "liquor", "smoke", "smoking"]):
+        return (
+            "🚫 *Safety Policy:*\n"
+            "To prioritize trekker safety and maintain a welcoming group atmosphere, alcohol and smoking are strictly not allowed during travel and trekking. 🌿"
+        )
+
     # 5. Check for Solo Female / Safety
     if any(k in text for k in ["solo", "safe", "girl", "female", "women", "alone", "safety"]):
         return (
@@ -835,6 +874,57 @@ def _smart_trek_reply(
                 f"🔗 *Trip Details & Gallery:*\n👉 {trek_url}\n\n"
                 f"Which date/weekend are you planning to travel, and what is your *Full Name & Email* to reserve your spots? 🎒"
             )
+
+    # 7c. Short Human Acknowledgements
+    ack_phrases = {"ok", "okay", "sure", "cool", "sounds good", "great", "done", "noted", "yes", "yeah", "yep", "alright", "perfect", "fine", "thanks", "thank you"}
+    if text in ack_phrases:
+        target_trek = matched_trip.name.replace("[DEMO]", "").strip() if matched_trip else ""
+        trek_url = _get_trek_url(matched_trip)
+        return (
+            f"Awesome! 🌟 Looking forward to having you on the trail{' for ' + target_trek if target_trek else ''}! 🏕️\n\n"
+            f"Feel free to ask if you have any questions about packing, pickups, or weather, or share your travel date to lock your booking! 🎒"
+        )
+
+    # 7d. Check for Name / Email / Personal Contact sharing
+    email_match = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", text)
+    phone_match = re.search(r"\b(?:\+?91[\-\s]?)?[6789]\d{9}\b", text)
+
+    # Check if the user is introducing themselves / providing their name
+    name_extracted = ""
+    words = text.split()
+    non_name_words = {
+        "hi", "hello", "hey", "hii", "ok", "okay", "yes", "no", "sure", "done", "noted",
+        "trek", "price", "cost", "details", "itinerary", "distance", "pickup", "food",
+        "stay", "weather", "booking", "book", "confirm", "available", "link", "thanks", "thank",
+        "option", "options", "people", "persons", "members", "pax", "travel", "good", "sounds",
+    }
+    if 1 <= len(words) <= 3 and all(w.isalpha() for w in words) and not any(w in non_name_words for w in words):
+        name_extracted = " ".join(words).title()
+    elif "my name is" in text or "i am " in text or "this is " in text or "myself " in text:
+        n_match = re.search(r"(?:my name is|i am|this is|myself)\s+([a-zA-Z\s]{2,25})", text)
+        if n_match:
+            name_extracted = n_match.group(1).strip().title()
+
+    if (name_extracted or email_match or phone_match) and not opt_match:
+        if name_extracted:
+            try:
+                customer.name = name_extracted
+                lead.name = name_extracted
+                db.commit()
+            except Exception:
+                pass
+
+        target_trek = matched_trip.name.replace("[DEMO]", "").strip() if matched_trip else "your upcoming trek"
+        pax_info = f" for {lead.num_people} people" if (lead and lead.num_people) else ""
+        trek_url = _get_trek_url(matched_trip)
+        greeting_name = f", {name_extracted}" if name_extracted else ""
+
+        return (
+            f"Nice to connect with you{greeting_name}! 😊\n\n"
+            f"I have noted your details for *{target_trek}*{pax_info}. We have slots open for upcoming weekend departures!\n\n"
+            f"🔗 *View Trip Photos & Highlights:* {trek_url}\n\n"
+            f"Which departure date (e.g. this Friday / next weekend) works best for you so I can lock your slots? 🎒"
+        )
 
     # 8. Check for specific date queries (e.g. "25", "25th", "sep 2", "this weekend")
     # Only if NOT a catalogue option selection 1-6 and NOT a pax count
