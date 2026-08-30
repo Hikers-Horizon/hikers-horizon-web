@@ -48,8 +48,8 @@ def run():
         trek_configs = [
             ("[DEMO] Kudremukha Trek", Decimal("3499")),
             ("[DEMO] Netravati Trek", Decimal("3499")),
+            ("[DEMO] Gokarna Coastal Trek", Decimal("3499")),
             ("[DEMO] Kumara Parvatha Trek", Decimal("3299")),
-            ("[DEMO] Gokarna Coastal Trek", Decimal("3299")),
             ("[DEMO] Skandagiri Night Trek", Decimal("1499")),
         ]
         trips = []

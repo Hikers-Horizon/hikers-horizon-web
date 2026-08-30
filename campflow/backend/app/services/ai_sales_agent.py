@@ -495,7 +495,7 @@ def _smart_trek_reply(
             "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
             "We organize weekend treks from Bangalore with transportation, food, homestay & trek guide included:\n"
             "1. Kudremukha Trek (₹3,499 with transportation)\n"
-            "2. Gokarna Beach Trek (₹3,299 with transportation)\n"
+            "2. Gokarna Beach Trek (₹3,499 with transportation)\n"
             "3. Kumara Parvatha Trek (₹3,299 with transportation)\n"
             "4. Netravathi Trek (₹3,499 with transportation)\n"
             "5. Skandagiri Night Trek (₹1,499 with transportation)\n\n"
@@ -559,13 +559,13 @@ def _smart_trek_reply(
         if not trip:
             return "₹3,499"
         name_lower = trip.name.lower()
-        if "kudremukh" in name_lower or "netravat" in name_lower:
+        if "kudremukh" in name_lower or "netravat" in name_lower or "gokarn" in name_lower:
             return "₹3,499"
         elif "skandagiri" in name_lower:
             return "₹1,499"
         elif trip.price:
             return f"₹{int(trip.price):,}"
-        return "₹3,299"
+        return "₹3,499"
 
     # 3. Check for Distance / Duration / "How long" / Difficulty queries
     if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
