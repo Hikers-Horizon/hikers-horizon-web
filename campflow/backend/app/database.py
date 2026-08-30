@@ -9,11 +9,17 @@ Base = declarative_base()
 
 
 def ensure_db_schema():
-    """Runs idempotent ALTER TABLE checks on startup so new columns are always present."""
+    """Runs idempotent ALTER TABLE checks on startup compatible with both SQLite and Postgres."""
     try:
         with engine.begin() as conn:
-            conn.execute(text("ALTER TABLE customers ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
-            conn.execute(text("ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
+            try:
+                conn.execute(text("ALTER TABLE customers ADD COLUMN ai_disabled BOOLEAN DEFAULT 0;"))
+            except Exception:
+                pass
+            try:
+                conn.execute(text("ALTER TABLE leads ADD COLUMN ai_disabled BOOLEAN DEFAULT 0;"))
+            except Exception:
+                pass
     except Exception:
         pass
 

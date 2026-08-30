@@ -65,25 +65,36 @@ def run_db_migrations():
     import datetime, decimal
     try:
         with engine.begin() as conn:
-            conn.execute(text("ALTER TABLE customers ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
-            conn.execute(text("ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
-            # Auto-assign any Instagram/WhatsApp messages and customers to Hikers Horizon org
-            conn.execute(text("""
-                DO $$
-                DECLARE
-                    hh_id UUID;
-                BEGIN
-                    SELECT id INTO hh_id FROM organizations WHERE slug NOT LIKE '%demo%' AND name NOT LIKE '%[DEMO]%' AND is_active = true LIMIT 1;
-                    IF hh_id IS NOT NULL THEN
-                        UPDATE customers SET organization_id = hh_id WHERE (instagram_id IS NOT NULL OR phone LIKE 'ig:%') AND organization_id != hh_id;
-                        UPDATE leads SET organization_id = hh_id WHERE customer_id IN (SELECT id FROM customers WHERE organization_id = hh_id) AND organization_id != hh_id;
-                        UPDATE messages SET organization_id = hh_id WHERE customer_id IN (SELECT id FROM customers WHERE organization_id = hh_id) AND organization_id != hh_id;
-                    END IF;
-                END $$;
-            """))
+            try:
+                conn.execute(text("ALTER TABLE customers ADD COLUMN ai_disabled BOOLEAN DEFAULT 0;"))
+            except Exception:
+                pass
+            try:
+                conn.execute(text("ALTER TABLE leads ADD COLUMN ai_disabled BOOLEAN DEFAULT 0;"))
+            except Exception:
+                pass
     except Exception as exc:
         import logging
-        logging.getLogger("campflow").warning("Startup migration notice: %s", exc)
+        logging.getLogger("campflow").warning("Startup column migration notice: %s", exc)
+
+    try:
+        db = SessionLocal()
+        hh = db.query(Organization).filter(Organization.slug == "hikers-horizon").first()
+        if not hh:
+            hh = db.query(Organization).filter(Organization.name.ilike("%hikers%")).first()
+        if not hh:
+            hh = db.query(Organization).filter(Organization.is_active == True, ~Organization.slug.contains("demo")).first()
+
+        if hh:
+            # Re-link any Instagram/WhatsApp messages and customers to Hikers Horizon
+            db.query(Customer).filter(Customer.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
+            db.query(Message).filter(Message.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
+            db.query(Lead).filter(Lead.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
+            db.commit()
+        db.close()
+    except Exception as exc:
+        import logging
+        logging.getLogger("campflow").warning("Startup org sync notice: %s", exc)
 
     # Ensure Hikers Horizon has initial active leads & chats if empty
     try:
