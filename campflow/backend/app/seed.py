@@ -49,6 +49,7 @@ def run():
             ("[DEMO] Kudremukha Trek", Decimal("3499")),
             ("[DEMO] Netravati Trek", Decimal("3499")),
             ("[DEMO] Gokarna Coastal Trek", Decimal("3499")),
+            ("[DEMO] Kodachadri Trek", Decimal("3799")),
             ("[DEMO] Kumara Parvatha Trek", Decimal("3299")),
             ("[DEMO] Skandagiri Night Trek", Decimal("1499")),
         ]

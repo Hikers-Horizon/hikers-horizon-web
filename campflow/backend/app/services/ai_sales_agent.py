@@ -496,21 +496,23 @@ def _smart_trek_reply(
             "We organize weekend treks from Bangalore with transportation, food, homestay & trek guide included:\n"
             "1. Kudremukha Trek (₹3,499 with transportation)\n"
             "2. Gokarna Beach Trek (₹3,499 with transportation)\n"
-            "3. Kumara Parvatha Trek (₹3,299 with transportation)\n"
+            "3. Kodachadri Trek (₹3,799 with transportation)\n"
             "4. Netravathi Trek (₹3,499 with transportation)\n"
-            "5. Skandagiri Night Trek (₹1,499 with transportation)\n\n"
+            "5. Kumara Parvatha Trek (₹3,299 with transportation)\n"
+            "6. Skandagiri Night Trek (₹1,499 with transportation)\n\n"
             "Which trek are you interested in exploring? 🎒"
         )
 
-    # 1b. Check if user selected an option number (1-5) from the catalogue
+    # 1b. Check if user selected an option number (1-6) from the catalogue
     INDEX_TO_TREK_KEY = {
         "1": "kudremukh",
         "2": "gokarn",
-        "3": "kumara",
+        "3": "kodachadri",
         "4": "netravat",
-        "5": "skandagiri",
+        "5": "kumara",
+        "6": "skandagiri",
     }
-    opt_match = re.fullmatch(r"(?:option\s*|#\s*|trek\s*)?([1-5])(?:\.|\))?", text)
+    opt_match = re.fullmatch(r"(?:option\s*|#\s*|trek\s*)?([1-6])(?:\.|\))?", text)
 
     # 2. Identify Trek — Prioritize catalogue option / current message FIRST
     trips = db.query(Trip).filter(Trip.organization_id == org.id).all()
@@ -524,6 +526,8 @@ def _smart_trek_reply(
             keywords.extend(["kudremukh", "kudremukha", "kuduremukha", "kudremuk"])
         elif "gokarn" in clean_name:
             keywords.extend(["gokarna", "gokarn", "beach trek"])
+        elif "kodachadri" in clean_name:
+            keywords.extend(["kodachadri", "kodachadri trek", "hidlumane", "hidlumane falls"])
         elif "kumara" in clean_name or "kp" in clean_name:
             keywords.extend(["kumara parvatha", "kumaraparvatha", "kp", "kumara"])
         elif "netravat" in clean_name:
@@ -559,7 +563,9 @@ def _smart_trek_reply(
         if not trip:
             return "₹3,499"
         name_lower = trip.name.lower()
-        if "kudremukh" in name_lower or "netravat" in name_lower or "gokarn" in name_lower:
+        if "kodachadri" in name_lower:
+            return "₹3,799"
+        elif "kudremukh" in name_lower or "netravat" in name_lower or "gokarn" in name_lower:
             return "₹3,499"
         elif "skandagiri" in name_lower:
             return "₹1,499"
@@ -577,6 +583,16 @@ def _smart_trek_reply(
                 "• *Difficulty:* Moderate\n"
                 "• *Peak Altitude:* 1,894 meters (6,214 ft)\n\n"
                 "The trail takes you through lush Shola forests, grasslands, and scenic ridge walks. Suitable for beginners with active fitness! 🎒\n\n"
+                "Would you like to check upcoming departure dates?"
+            )
+        elif matched_trip and "kodachadri" in matched_trip.name.lower():
+            return (
+                "🏔️ *Kodachadri Trek Distance & Duration:*\n\n"
+                "• *Total Distance:* 14 KM total (via Hidlumane Waterfalls)\n"
+                "• *Duration:* Approximately 6 to 7 hours of trekking\n"
+                "• *Difficulty:* Moderate (Beginner friendly)\n"
+                "• *Peak Altitude:* 1,343 meters\n\n"
+                "Features the scenic Hidlumane waterfalls trail and famous off-road Jeep ride back! 🎒\n\n"
                 "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and ("kumara" in matched_trip.name.lower() or "kp" in matched_trip.name.lower()):
