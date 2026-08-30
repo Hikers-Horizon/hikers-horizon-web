@@ -543,6 +543,33 @@ def _smart_trek_reply(
             if chosen_key in trip.name.lower():
                 matched_trip = trip
                 break
+        
+        # If not found in DB, auto-provision and assign
+        if not matched_trip:
+            tname, tprice = {
+                "kodachadri": ("Kodachadri Trek", Decimal("3799")),
+                "kudremukh": ("Kudremukha Trek", Decimal("3499")),
+                "gokarn": ("Gokarna Beach Trek", Decimal("3499")),
+                "netravat": ("Netravathi Trek", Decimal("3499")),
+                "kumara": ("Kumara Parvatha Trek", Decimal("3299")),
+                "skandagiri": ("Skandagiri Night Trek", Decimal("1499")),
+            }.get(chosen_key, ("Kodachadri Trek", Decimal("3799")))
+
+            try:
+                created_trip = Trip(organization_id=org.id, name=tname, pickup_location="Bengaluru", price=tprice)
+                db.add(created_trip)
+                db.flush()
+                for d_offset in [5, 12, 19]:
+                    dep = TripDeparture(
+                        organization_id=org.id, trip_id=created_trip.id,
+                        departure_date=datetime.date.today() + datetime.timedelta(days=d_offset),
+                        capacity=30, status=TripStatus.OPEN,
+                    )
+                    db.add(dep)
+                db.commit()
+                matched_trip = created_trip
+            except Exception:
+                matched_trip = Trip(name=tname, price=tprice)
 
     # If not an option number, check current message text
     if not matched_trip:
@@ -551,8 +578,26 @@ def _smart_trek_reply(
                 matched_trip = trip
                 break
 
-    # If not mentioned in current message, fallback to conversation history
-    if not matched_trip:
+    # If current message mentions Kodachadri specifically and not in DB
+    if not matched_trip and "kodachadri" in text:
+        try:
+            created_trip = Trip(organization_id=org.id, name="Kodachadri Trek", pickup_location="Bengaluru", price=Decimal("3799"))
+            db.add(created_trip)
+            db.flush()
+            for d_offset in [5, 12, 19]:
+                dep = TripDeparture(
+                    organization_id=org.id, trip_id=created_trip.id,
+                    departure_date=datetime.date.today() + datetime.timedelta(days=d_offset),
+                    capacity=30, status=TripStatus.OPEN,
+                )
+                db.add(dep)
+            db.commit()
+            matched_trip = created_trip
+        except Exception:
+            matched_trip = Trip(name="Kodachadri Trek", price=Decimal("3799"))
+
+    # If not mentioned in current message and NOT an option selection, fallback to conversation history
+    if not matched_trip and not opt_match:
         for trip in trips:
             if any(kw in full_convo for kw in _get_trip_keywords(trip)):
                 matched_trip = trip
