@@ -487,13 +487,27 @@ def _smart_trek_reply(
     text = inbound_text.lower().strip()
     full_convo = " ".join([m.get("body", "").lower() for m in recent_messages] + [text])
 
-    # 1. Identify trek mentioned in current message or recent conversation
+    # 1. Pure Greeting Handler (First Priority)
+    greeting_words = {"hi", "hello", "hey", "hii", "namaste", "good morning", "good evening", "heyy", "hola"}
+    clean_words = set(re.findall(r"\b\w+\b", text))
+    if clean_words.issubset(greeting_words) or text in greeting_words:
+        return (
+            "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
+            "We organize weekend treks from Bangalore with travel, food, homestay & trek guide included:\n"
+            "1. Kudremukha Trek (₹3,299)\n"
+            "2. Gokarna Beach Trek (₹3,299)\n"
+            "3. Kumara Parvatha Trek (₹3,299)\n"
+            "4. Netravathi Trek (₹3,299)\n"
+            "5. Skandagiri Night Trek (₹1,499)\n\n"
+            "Which trek are you interested in exploring? 🎒"
+        )
+
+    # 2. Identify Trek — Prioritize current message FIRST
     trips = db.query(Trip).filter(Trip.organization_id == org.id).all()
     if not trips:
         trips = db.query(Trip).all()
 
-    matched_trip: Trip | None = None
-    for trip in trips:
+    def _get_trip_keywords(trip: Trip) -> list[str]:
         clean_name = trip.name.lower().replace("[demo]", "").strip()
         keywords = [clean_name, clean_name.split()[0]]
         if "kudremukh" in clean_name or "kudremukha" in clean_name:
@@ -506,12 +520,23 @@ def _smart_trek_reply(
             keywords.extend(["netravathi", "netravati"])
         elif "skandagiri" in clean_name:
             keywords.extend(["skandagiri", "night trek"])
+        return keywords
 
-        if any(kw in full_convo for kw in keywords):
+    matched_trip: Trip | None = None
+    # Check current message
+    for trip in trips:
+        if any(kw in text for kw in _get_trip_keywords(trip)):
             matched_trip = trip
             break
 
-    # 2. Check for Distance / Duration / "How long" / Difficulty queries
+    # If not mentioned in current message, fallback to conversation history
+    if not matched_trip:
+        for trip in trips:
+            if any(kw in full_convo for kw in _get_trip_keywords(trip)):
+                matched_trip = trip
+                break
+
+    # 3. Check for Distance / Duration / "How long" / Difficulty queries
     if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
         if matched_trip and ("kudremukh" in matched_trip.name.lower() or "kudremukha" in matched_trip.name.lower()):
             return (
@@ -561,7 +586,7 @@ def _smart_trek_reply(
             "Our Western Ghats weekend treks typically cover **12 to 22 KM total** (approx 6 to 8 hours of moderate hiking) with regular rest breaks, led by certified guides. Suitable for beginners with basic fitness! 🎒"
         )
 
-    # 3. Check for Itinerary / Schedule / Timings
+    # 4. Check for Itinerary / Schedule / Timings
     if any(k in text for k in ["itinerary", "schedule", "plan", "when do we return", "reach", "timing", "what time", "program"]):
         return (
             "🗓️ *Trip Itinerary (2 Days / 1 Night):*\n"
@@ -573,14 +598,14 @@ def _smart_trek_reply(
             "• *Sunday Night:* Return to Bangalore by 10:30 PM (or early Monday morning)."
         )
 
-    # 4. Check for Solo Female / Safety
+    # 5. Check for Solo Female / Safety
     if any(k in text for k in ["solo", "safe", "girl", "female", "women", "alone", "safety"]):
         return (
             "🌟 *Safety & Solo Trekkers:*\n"
             "Yes, 100% safe! Over 40% of our community consists of solo travelers and solo female trekkers. We provide separate tent/room accommodations for females, certified first-aid trained trek leads, and a warm, inclusive group environment! ⛺"
         )
 
-    # 5. Check for Things to Carry / Packing List / Shoes
+    # 6. Check for Things to Carry / Packing List / Shoes
     if any(k in text for k in ["what to carry", "what to bring", "packing", "things to carry", "shoes", "clothes", "dress"]):
         return (
             "🎒 *Things to Carry:*\n"
@@ -592,7 +617,7 @@ def _smart_trek_reply(
             "6. Personal medication & valid Govt ID proof."
         )
 
-    # 6. Check for Inclusions / Pickup queries
+    # 7. Check for Inclusions / Pickup queries
     if any(k in text for k in ["pickup", "boarding", "pick up", "route", "where to board", "start"]):
         return (
             "🚌 *Bangalore Pickup Points:*\n"
@@ -615,7 +640,7 @@ def _smart_trek_reply(
             "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
-    # 7. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
+    # 8. Check for specific date queries (e.g. "25", "5", "this weekend", "saturday")
     date_num_match = re.search(r"\b(\d{1,2})\b", text)
     if date_num_match and matched_trip:
         day_num = int(date_num_match.group(1))
@@ -630,7 +655,7 @@ def _smart_trek_reply(
             f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
         )
 
-    # 8. If a trek was identified, provide details & upcoming dates
+    # 9. If a trek was identified, provide details & upcoming dates
     if matched_trip:
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = f"₹{int(matched_trip.price):,}"
@@ -651,20 +676,7 @@ def _smart_trek_reply(
             f"Which date works best for you and how many people are joining? 🎒"
         )
 
-    # 9. Generic Greeting / Inquiries
-    if any(k in text for k in ["hi", "hello", "hey", "hii", "namaste"]):
-        return (
-            "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
-            "We organize weekend treks from Bangalore with travel, food, homestay & trek guide included:\n"
-            "1. Kudremukha Trek (₹3,299)\n"
-            "2. Gokarna Beach Trek (₹3,299)\n"
-            "3. Kumara Parvatha Trek (₹3,299)\n"
-            "4. Netravathi Trek (₹3,299)\n"
-            "5. Skandagiri Night Trek (₹1,499)\n\n"
-            "Which trek are you planning for this weekend? 🎒"
-        )
-
-    # 6. Booking confirmation / payment link request
+    # 10. Booking confirmation / payment link request
     if any(k in text for k in ["book", "confirm", "pay", "payment", "link", "register"]):
         return (
             "Awesome! 🎉 You can view all live departures and confirm your booking directly on our official portal:\n"
