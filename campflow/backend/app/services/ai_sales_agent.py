@@ -401,7 +401,7 @@ def _call_openai(messages: list[dict]) -> dict:
 def _call_gemini(messages: list[dict]) -> str | None:
     if not settings.GEMINI_API_KEY:
         return None
-    model_name = settings.GEMINI_MODEL or "gemini-3.5-flash"
+    model_name = settings.GEMINI_MODEL or "gemini-flash-lite-latest"
     headers = {
         "Content-Type": "application/json",
         "x-goog-api-key": settings.GEMINI_API_KEY,
@@ -414,9 +414,18 @@ def _call_gemini(messages: list[dict]) -> str | None:
             continue
         role = "user" if m.get("role") in ["user", "tool"] else "model"
         text_content = str(m.get("content", "")).strip()
-        if text_content:
+        if not text_content:
+            continue
+        # Merge consecutive identical roles to adhere to Gemini's alternation requirements
+        if contents and contents[-1]["role"] == role:
+            contents[-1]["parts"][0]["text"] += "\n" + text_content
+        else:
             contents.append({"role": role, "parts": [{"text": text_content}]})
     
+    # Gemini requires first content to have role 'user'
+    while contents and contents[0]["role"] != "user":
+        contents.pop(0)
+
     if not contents:
         return None
 
@@ -427,10 +436,10 @@ def _call_gemini(messages: list[dict]) -> str | None:
     if system_instruction:
         payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
 
-    for attempt_model in [model_name, "gemini-3.6-flash"]:
+    for attempt_model in ["gemini-flash-lite-latest", "gemini-3.5-flash", "gemini-3.6-flash"]:
         try:
             req_url = f"https://generativelanguage.googleapis.com/v1beta/models/{attempt_model}:generateContent"
-            with httpx.Client(timeout=15) as client:
+            with httpx.Client(timeout=12) as client:
                 resp = client.post(req_url, json=payload, headers=headers)
                 if resp.status_code == 200:
                     data = resp.json()
@@ -495,12 +504,12 @@ def run_sales_agent(
                 logger.warning("OpenAI call failed or quota exceeded: %s", exc)
                 break
 
-    # 2. Try Gemini if configured
+    # 2. Try Gemini if configured (Primary AI)
     gemini_reply = _call_gemini(messages)
     if gemini_reply:
         return gemini_reply
 
-    # 3. Smart Conversational Trek Engine (Database Grounded)
+    # 3. Smart Conversational Trek Engine (Database Grounded Fallback)
     return _smart_trek_reply(db, org, customer, lead, inbound_text, recent_messages)
 
 
@@ -535,7 +544,54 @@ def _smart_trek_reply(
             "Which trek are you interested in exploring? 🎒"
         )
 
-    # 1b. Check if user selected an option number (1-6) from the catalogue
+    # 2. Identify Trek — Prioritize current message text FIRST
+    trips = db.query(Trip).filter(Trip.organization_id == org.id).all()
+    if not trips:
+        trips = db.query(Trip).all()
+
+    def _get_trip_keywords(trip: Trip) -> list[str]:
+        clean_name = trip.name.lower().replace("[demo]", "").strip()
+        keywords = [clean_name, clean_name.split()[0]]
+        if "kudremukh" in clean_name or "kudremukha" in clean_name:
+            keywords.extend(["kudremukh", "kudremukha", "kuduremukha", "kudremuk"])
+        elif "gokarn" in clean_name:
+            keywords.extend(["gokarna", "gokarn", "beach trek"])
+        elif "kodachadri" in clean_name:
+            keywords.extend(["kodachadri", "kodachadri trek", "hidlumane", "hidlumane falls"])
+        elif "kumara" in clean_name or "kp" in clean_name:
+            keywords.extend(["kumara parvatha", "kumaraparvatha", "kp", "kumara"])
+        elif "netravat" in clean_name:
+            keywords.extend(["netravathi", "netravati"])
+        elif "skandagiri" in clean_name:
+            keywords.extend(["skandagiri", "night trek"])
+        elif "munnar" in clean_name:
+            keywords.extend(["munnar", "kolukkumalai"])
+        elif "wayanad" in clean_name:
+            keywords.extend(["wayanad"])
+        elif "kodaikanal" in clean_name:
+            keywords.extend(["kodaikanal", "kodai"])
+        elif "hampi" in clean_name:
+            keywords.extend(["hampi"])
+        elif "coorg" in clean_name:
+            keywords.extend(["coorg"])
+        elif "chikmagalur" in clean_name or "chikmagaluru" in clean_name:
+            keywords.extend(["chikmagalur", "chikmagaluru"])
+        return keywords
+
+    matched_trip: Trip | None = None
+    for trip in trips:
+        if any(kw in text for kw in _get_trip_keywords(trip)):
+            matched_trip = trip
+            break
+
+    # If no trip matched in current message, check previous conversation context
+    if not matched_trip:
+        for trip in trips:
+            if any(kw in full_convo for kw in _get_trip_keywords(trip)):
+                matched_trip = trip
+                break
+
+    # Check for catalogue option selection (1-6) only if no existing conversation trip
     INDEX_TO_TREK_KEY = {
         "1": "kudremukh",
         "2": "gokarn",
@@ -545,11 +601,12 @@ def _smart_trek_reply(
         "6": "skandagiri",
     }
     opt_match = re.fullmatch(r"(?:option\s*|#\s*|trek\s*)?([1-6])(?:\.|\))?", text)
-
-    # 2. Identify Trek — Prioritize catalogue option / current message FIRST
-    trips = db.query(Trip).filter(Trip.organization_id == org.id).all()
-    if not trips:
-        trips = db.query(Trip).all()
+    if opt_match and not matched_trip:
+        chosen_key = INDEX_TO_TREK_KEY[opt_match.group(1)]
+        for trip in trips:
+            if chosen_key in trip.name.lower():
+                matched_trip = trip
+                break
 
     def _get_trip_keywords(trip: Trip) -> list[str]:
         clean_name = trip.name.lower().replace("[demo]", "").strip()
@@ -833,7 +890,21 @@ def _smart_trek_reply(
             "We provide comfortable homestays/tents with clean Western & Indian washrooms, running hot water, changing rooms, and charging sockets for your phones and power banks! 🚿🔌"
         )
 
-    # 4f. Human FAQs: Alcohol / Smoking policy
+    # 4f. Human FAQs: Rooms & Homestay Sharing Arrangements
+    if any(k in text for k in ["separate room", "separate rooms", "private room", "private rooms", "couple room", "couple rooms", "room", "rooms"]):
+        trek_name = matched_trip.name.replace("[DEMO]", "").strip() if matched_trip else "the trek"
+        trek_url = _get_trek_url(matched_trip)
+        return (
+            f"🏡 *Room & Stay Arrangements for {trek_name}:*\n\n"
+            "Yes, absolutely! At our homestay, we provide clean, comfortable rooms:\n"
+            "• By default, we provide sharing rooms (separate rooms for boys and girls).\n"
+            "• **Separate / Private rooms** can definitely be arranged for couples, families, or your private group upon request (subject to availability).\n"
+            "• Clean washrooms with running hot water and charging points are available.\n\n"
+            f"🔗 *View Homestay Photos & Itinerary:* {trek_url}\n\n"
+            "How many people are planning to join with you? 🎒"
+        )
+
+    # 4g. Human FAQs: Alcohol / Smoking policy
     if any(k in text for k in ["alcohol", "beer", "drink", "drinking", "liquor", "smoke", "smoking"]):
         return (
             "🚫 *Safety Policy:*\n"
@@ -871,7 +942,7 @@ def _smart_trek_reply(
             "We return back to Bangalore Sunday late night / early Monday by 5:00 AM. 🎒"
         )
 
-    if any(k in text for k in ["inclusion", "included", "food", "stay", "accommodation", "tent", "what is included"]):
+    if any(k in text for k in ["inclusion", "included", "accommodation", "tent", "what is included"]):
         return (
             "✨ *Package Inclusions:*\n"
             "• Travel / Transportation to & from Bangalore in AC/Non-AC pushback tempo\n"
@@ -882,14 +953,12 @@ def _smart_trek_reply(
             "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
-    # 7b. Check for Passenger Count / Group size (e.g. "2 people", "2 members", "3 of us", "5 pax")
-    pax_match = re.search(r"\b(\d+)\s*(?:people|persons|members|pax|travellers|guests|guys|friends|heads|of us)\b", text)
-    if not pax_match and any(w in text for w in ["people", "person", "members", "pax", "of us", "group"]):
-        pax_match = re.search(r"\b(\d+)\b", text)
-
+    # 7b. Check for Passenger Count / Group size (e.g. "2", "2 people", "2 members", "3 of us", "5 pax")
+    pax_match = re.search(r"\b(\d+)\s*(?:people|persons|members|pax|travellers|guests|guys|friends|heads|of us)?\b", text)
     if pax_match and matched_trip:
-        count = int(pax_match.group(1))
-        if 1 <= count <= 50:
+        raw_val = pax_match.group(1)
+        count = int(raw_val)
+        if 1 <= count <= 50 and (len(text.split()) <= 4 or any(w in text for w in ["people", "person", "members", "pax", "of us", "group", "we are", "joining"])):
             clean_title = matched_trip.name.replace("[DEMO]", "").strip()
             price_str = _get_trek_price_str(matched_trip)
             try:
@@ -929,6 +998,7 @@ def _smart_trek_reply(
         "trek", "price", "cost", "details", "itinerary", "distance", "pickup", "food",
         "stay", "weather", "booking", "book", "confirm", "available", "link", "thanks", "thank",
         "option", "options", "people", "persons", "members", "pax", "travel", "good", "sounds",
+        "room", "rooms", "separate", "private", "sharing",
     }
     if 1 <= len(words) <= 3 and all(w.isalpha() for w in words) and not any(w in non_name_words for w in words):
         name_extracted = " ".join(words).title()
@@ -958,11 +1028,11 @@ def _smart_trek_reply(
             f"Which departure date (e.g. this Friday / next weekend) works best for you so I can lock your slots? 🎒"
         )
 
-    # 8. Check for specific date queries (e.g. "25", "25th", "sep 2", "this weekend")
-    # Only if NOT a catalogue option selection 1-6 and NOT a pax count
-    date_num_match = re.search(r"\b(\d{1,2})(?:st|nd|rd|th)?\b", text)
-    if date_num_match and matched_trip and not opt_match and not pax_match:
-        day_num = int(date_num_match.group(1))
+    # 8. Check for specific date queries (e.g. "25th", "sep 2", "departure on 2nd", "date 25", "this weekend")
+    date_num_match = re.search(r"\b(\d{1,2})(?:st|nd|rd|th)\b|\b(?:on|date|dated|departure|sep|oct|nov|dec|jan|feb|aug|weekend)\s*(\d{1,2})\b", text)
+    if date_num_match and matched_trip:
+        raw_d = date_num_match.group(1) or date_num_match.group(2)
+        day_num = int(raw_d)
         if day_num <= 31:
             suffix = "th" if 11 <= day_num <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day_num % 10, "th")
             formatted_day = f"{day_num}{suffix}"
