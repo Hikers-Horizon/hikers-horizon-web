@@ -618,8 +618,28 @@ def _smart_trek_reply(
             return f"₹{int(trip.price):,}"
         return "₹3,499"
 
+    # Helper to get official trek page URL on hikershorizon.in
+    def _get_trek_url(trip: Trip | None) -> str:
+        if not trip:
+            return "https://hikershorizon.in/Twodays/"
+        name_lower = trip.name.lower()
+        if "kudremukh" in name_lower or "kuduremukha" in name_lower:
+            return "https://hikershorizon.in/Twodays/Kuduremukha/"
+        elif "gokarn" in name_lower:
+            return "https://hikershorizon.in/Twodays/Gokarna/"
+        elif "kodachadri" in name_lower:
+            return "https://hikershorizon.in/Twodays/Kodachadri/"
+        elif "netravat" in name_lower:
+            return "https://hikershorizon.in/Twodays/Netravathi/"
+        elif "kumara" in name_lower or "kp" in name_lower:
+            return "https://hikershorizon.in/Twodays/Kumaraparvatha/"
+        elif "skandagiri" in name_lower:
+            return "https://hikershorizon.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/"
+        return "https://hikershorizon.in/Twodays/"
+
     # 3. Check for Distance / Duration / "How long" / Difficulty queries
     if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
+        trek_url = _get_trek_url(matched_trip)
         if matched_trip and ("kudremukh" in matched_trip.name.lower() or "kudremukha" in matched_trip.name.lower()):
             return (
                 "🏔️ *Kudremukha Trek Distance & Duration:*\n\n"
@@ -628,6 +648,7 @@ def _smart_trek_reply(
                 "• *Difficulty:* Moderate\n"
                 "• *Peak Altitude:* 1,894 meters (6,214 ft)\n\n"
                 "The trail takes you through lush Shola forests, grasslands, and scenic ridge walks. Suitable for beginners with active fitness! 🎒\n\n"
+                f"🔗 *Explore Kudremukha Details:* {trek_url}\n\n"
                 "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and "kodachadri" in matched_trip.name.lower():
@@ -638,6 +659,7 @@ def _smart_trek_reply(
                 "• *Difficulty:* Moderate (Beginner friendly)\n"
                 "• *Peak Altitude:* 1,343 meters\n\n"
                 "Features the scenic Hidlumane waterfalls trail and famous off-road Jeep ride back! 🎒\n\n"
+                f"🔗 *Explore Kodachadri Details:* {trek_url}\n\n"
                 "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and ("kumara" in matched_trip.name.lower() or "kp" in matched_trip.name.lower()):
@@ -647,7 +669,9 @@ def _smart_trek_reply(
                 "• *Duration:* 2-Day challenging trek (10–12 hours total)\n"
                 "• *Difficulty:* Moderate to Difficult\n"
                 "• *Peak Altitude:* 1,712 meters\n\n"
-                "One of the most thrilling and adventurous treks in the Western Ghats! 🎒"
+                "One of the most thrilling and adventurous treks in the Western Ghats! 🎒\n\n"
+                f"🔗 *Explore Kumara Parvatha Details:* {trek_url}\n\n"
+                "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and "netravat" in matched_trip.name.lower():
             return (
@@ -655,7 +679,9 @@ def _smart_trek_reply(
                 "• *Total Distance:* 14 KM total (up & down)\n"
                 "• *Duration:* Approx 5 to 6 hours\n"
                 "• *Difficulty:* Moderate (Beginner friendly)\n\n"
-                "Known for rolling green meadows and breathtaking 360-degree views! 🎒"
+                "Known for rolling green meadows and breathtaking 360-degree views! 🎒\n\n"
+                f"🔗 *Explore Netravathi Details:* {trek_url}\n\n"
+                "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and "gokarn" in matched_trip.name.lower():
             return (
@@ -664,7 +690,7 @@ def _smart_trek_reply(
                 "• *Duration:* 5 hours across 5 famous beaches and cliffs\n"
                 "• *Difficulty:* Easy to Moderate (Beginner friendly)\n\n"
                 "Includes beach camping, sunset views, cliff walks & Murudeshwar visit! 🌊\n\n"
-                "🔗 *Explore Gokarna Page & Photos:* https://hikershorizon.in/Twodays/Gokarna/\n\n"
+                f"🔗 *Explore Gokarna Details:* {trek_url}\n\n"
                 "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and "skandagiri" in matched_trip.name.lower():
@@ -673,7 +699,9 @@ def _smart_trek_reply(
                 "• *Total Distance:* 8 KM total\n"
                 "• *Duration:* 4 to 5 hours (Night ascend for sunrise)\n"
                 "• *Difficulty:* Moderate\n\n"
-                "Watch the sunrise above a blanket of clouds! ☁️"
+                "Watch the sunrise above a blanket of clouds! ☁️\n\n"
+                f"🔗 *Explore Skandagiri Details:* {trek_url}\n\n"
+                "Would you like to check upcoming departure dates?"
             )
         return (
             "🥾 *Trek Distance & Duration:*\n"
@@ -682,7 +710,7 @@ def _smart_trek_reply(
 
     # 4. Check for Itinerary / Schedule / Timings
     if any(k in text for k in ["itinerary", "schedule", "plan", "when do we return", "reach", "timing", "what time", "program"]):
-        itinerary_link = "\n\n🔗 *Full Itinerary & Details:* https://hikershorizon.in/Twodays/Gokarna/" if (matched_trip and "gokarn" in matched_trip.name.lower()) else ""
+        itinerary_link = f"\n\n🔗 *Full Itinerary & Photos:* {_get_trek_url(matched_trip)}" if matched_trip else ""
         return (
             "🗓️ *Trip Itinerary (2 Days / 1 Night):*\n"
             "• *Friday Night:* Depart Bangalore (8:30 PM – 10:15 PM pickups)\n"
@@ -745,11 +773,13 @@ def _smart_trek_reply(
             formatted_day = f"{day_num}{suffix}"
             clean_title = matched_trip.name.replace("[DEMO]", "").strip()
             price_str = _get_trek_price_str(matched_trip)
+            trek_url = _get_trek_url(matched_trip)
 
             return (
                 f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {formatted_day}!\n\n"
                 f"• Price: *{price_str} per person* (Includes transportation from Bangalore, food, homestay & trek guide)\n"
                 f"• Live Seats: Available ✅\n\n"
+                f"🔗 *Full Trek Details:* {trek_url}\n\n"
                 f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
             )
 
@@ -758,7 +788,8 @@ def _smart_trek_reply(
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = _get_trek_price_str(matched_trip)
         deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).order_by(TripDeparture.departure_date.asc()).limit(3).all()
-        
+        trek_url = _get_trek_url(matched_trip)
+
         dates_text = ""
         if deps:
             dates_list = [f"• {d.departure_date.strftime('%b %d (%a)')} — {d.available_seats} seats left" for d in deps]
@@ -766,16 +797,13 @@ def _smart_trek_reply(
         else:
             dates_text = "\n• Every Friday Night departure from Bangalore!"
 
-        link_line = ""
-        if "gokarn" in matched_trip.name.lower():
-            link_line = "🔗 *Explore Gokarna Page & Photos:*\n👉 https://hikershorizon.in/Twodays/Gokarna/\n\n"
-
         return (
             f"Hey! 🏔️ *{clean_title}* is one of our most popular treks!\n\n"
             f"📅 *Upcoming Departures:*{dates_text}\n"
             f"💰 *Price:* {price_str} per person (Includes Transportation, Food, Homestay Stay & Trek Guide)\n"
             f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal\n\n"
-            f"{link_line}"
+            f"🔗 *Explore {clean_title} Photos & Itinerary:*\n"
+            f"👉 {trek_url}\n\n"
             f"Which date works best for you and how many people are joining? 🎒"
         )
 
