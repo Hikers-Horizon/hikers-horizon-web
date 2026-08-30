@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Numeric, Date, DateTime, ForeignKey, Enum, Text
+from sqlalchemy import Column, String, Integer, Numeric, Date, DateTime, ForeignKey, Enum, Text, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.database import Base
@@ -16,6 +16,7 @@ class Customer(Base, TimestampMixin):
     email = Column(String, nullable=True)
     notes = Column(Text, nullable=True)
     instagram_id = Column(String, nullable=True, index=True)  # Instagram-scoped user ID (IGSID)
+    ai_disabled = Column(Boolean, default=False, nullable=False)  # When True, AI auto-reply is paused for human takeover
 
     leads = relationship("Lead", back_populates="customer")
     bookings = relationship("Booking", back_populates="customer")
@@ -36,6 +37,7 @@ class Lead(Base, TimestampMixin):
     status = Column(Enum(LeadStatus), default=LeadStatus.NEW, nullable=False, index=True)
     estimated_value = Column(Numeric(12, 2), default=0, nullable=False)
     assigned_to = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    ai_disabled = Column(Boolean, default=False, nullable=False)  # When True, AI auto-reply is paused for this lead
 
     last_contact_at = Column(DateTime, nullable=True)
     next_follow_up_at = Column(DateTime, nullable=True, index=True)

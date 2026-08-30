@@ -109,10 +109,15 @@ def _resolve_organization(db: Session, page_id: str | None) -> Organization | No
         org = db.query(Organization).filter(Organization.instagram_page_id == page_id).first()
         if org:
             return org
-    org = db.query(Organization).filter(Organization.is_active == True).order_by(Organization.created_at.asc()).first()
-    if not org:
-        org = db.query(Organization).first()
-    return org
+    # Prioritize Hikers Horizon or the real active non-demo organization
+    org = db.query(Organization).filter(
+        Organization.is_active == True,
+        ~Organization.slug.contains("demo"),
+        ~Organization.name.contains("[DEMO]"),
+    ).first()
+    if org:
+        return org
+    return db.query(Organization).filter(Organization.is_active == True).first()
 
 
 def _process_inbound_instagram_message(
@@ -163,4 +168,7 @@ def _process_inbound_instagram_message(
     db.commit()
 
     if org.ai_auto_reply_enabled and settings.AI_AUTO_REPLY_ENABLED:
-        send_ai_reply(db, org=org, customer=customer, lead=lead, channel="instagram")
+        if not customer.ai_disabled and not getattr(lead, "ai_disabled", False):
+            send_ai_reply(db, org=org, customer=customer, lead=lead, channel="instagram")
+        else:
+            logger.info("AI auto-reply is paused for Instagram user %s - Human takeover active", customer.id)

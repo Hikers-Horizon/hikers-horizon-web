@@ -55,6 +55,34 @@ app.include_router(public.router)
 def health():
     return {"status": "ok", "env": settings.ENV}
 
+
+@app.on_event("startup")
+def run_db_migrations():
+    from sqlalchemy import text
+    from app.database import engine
+    try:
+        with engine.begin() as conn:
+            conn.execute(text("ALTER TABLE customers ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
+            conn.execute(text("ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
+            # Auto-assign any Instagram/WhatsApp messages and customers to Hikers Horizon org
+            conn.execute(text("""
+                DO $$
+                DECLARE
+                    hh_id UUID;
+                BEGIN
+                    SELECT id INTO hh_id FROM organizations WHERE slug NOT LIKE '%demo%' AND name NOT LIKE '%[DEMO]%' AND is_active = true LIMIT 1;
+                    IF hh_id IS NOT NULL THEN
+                        UPDATE customers SET organization_id = hh_id WHERE (instagram_id IS NOT NULL OR phone LIKE 'ig:%') AND organization_id != hh_id;
+                        UPDATE leads SET organization_id = hh_id WHERE customer_id IN (SELECT id FROM customers WHERE organization_id = hh_id) AND organization_id != hh_id;
+                        UPDATE messages SET organization_id = hh_id WHERE customer_id IN (SELECT id FROM customers WHERE organization_id = hh_id) AND organization_id != hh_id;
+                    END IF;
+                END $$;
+            """))
+    except Exception as exc:
+        import logging
+        logging.getLogger("campflow").warning("Startup migration notice: %s", exc)
+
+
 # Serve static assets (availability widget JS, etc.)
 import os
 static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")

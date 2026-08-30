@@ -18,6 +18,7 @@ from app.config import settings
 from app.models import Message, Customer, Lead, LeadActivity
 from app.models.enums import MessageDirection, LeadSource, LeadStatus
 from app.services.whatsapp import WhatsAppClient
+from app.services.instagram import InstagramClient
 
 router = APIRouter(prefix="/api/conversations", tags=["conversations"])
 logger = logging.getLogger("campflow.conversations")
@@ -41,7 +42,7 @@ def list_conversations(
 ):
     """Returns a list of customer conversation threads, ordered by most recent
     message. Each thread includes customer info, last message preview, unread
-    count, and whether AI auto-reply is active for that customer's lead.
+    count, and whether AI auto-reply is active for that customer.
     """
     org_id = ctx.organization.id
 
@@ -75,7 +76,6 @@ def list_conversations(
             .first()
         )
 
-        # Count unread (inbound messages not yet replied to — simplified)
         msg_count = (
             db.query(func.count(Message.id))
             .filter(
@@ -85,17 +85,6 @@ def list_conversations(
             .scalar()
         )
 
-        inbound_count = (
-            db.query(func.count(Message.id))
-            .filter(
-                Message.organization_id == org_id,
-                Message.customer_id == customer.id,
-                Message.direction == MessageDirection.INBOUND,
-            )
-            .scalar()
-        )
-
-        # Get active lead for this customer
         lead = (
             db.query(Lead)
             .filter(
@@ -107,6 +96,8 @@ def list_conversations(
             .first()
         )
 
+        channel = "instagram" if (customer.instagram_id or (last_message and last_message.channel == "instagram")) else "whatsapp"
+
         threads.append({
             "customer_id": str(customer.id),
             "customer_name": customer.full_name,
@@ -115,10 +106,11 @@ def list_conversations(
             "last_message_direction": last_message.direction.value if last_message else None,
             "last_message_at": last_msg_at.isoformat() if last_msg_at else None,
             "message_count": msg_count,
-            "channel": last_message.channel if last_message else "whatsapp",
+            "channel": channel,
             "lead_status": lead.status.value if lead else None,
             "trek_name": lead.trek_name if lead else None,
-            "ai_auto_reply": ctx.organization.ai_auto_reply_enabled,
+            "ai_auto_reply": ctx.organization.ai_auto_reply_enabled and not getattr(customer, "ai_disabled", False),
+            "ai_disabled": getattr(customer, "ai_disabled", False),
         })
 
     return threads
@@ -147,7 +139,6 @@ def get_messages(
         .all()
     )
 
-    # Also fetch lead activities for this customer's lead to show booking events in chat
     lead = db.query(Lead).filter(
         Lead.organization_id == ctx.organization.id, Lead.customer_id == customer_id
     ).order_by(Lead.created_at.desc()).first()
@@ -156,7 +147,7 @@ def get_messages(
     if lead:
         acts = db.query(LeadActivity).filter(
             LeadActivity.lead_id == lead.id,
-            LeadActivity.activity_type.in_(["BOOKING_CREATED", "ESCALATED_TO_HUMAN", "AI_REPLY_SENT"]),
+            LeadActivity.activity_type.in_(["BOOKING_CREATED", "ESCALATED_TO_HUMAN", "AI_REPLY_SENT", "AI_TOGGLED"]),
         ).order_by(LeadActivity.created_at.asc()).all()
         activities = [
             {
@@ -173,12 +164,15 @@ def get_messages(
             "name": customer.full_name,
             "phone": customer.phone,
             "email": customer.email,
+            "instagram_id": customer.instagram_id,
+            "ai_disabled": getattr(customer, "ai_disabled", False),
         },
         "lead": {
             "id": str(lead.id) if lead else None,
             "trek_name": lead.trek_name if lead else None,
             "status": lead.status.value if lead else None,
             "num_people": lead.num_people if lead else None,
+            "ai_disabled": getattr(lead, "ai_disabled", False) if lead else False,
         } if lead else None,
         "messages": [
             {
@@ -195,6 +189,42 @@ def get_messages(
     }
 
 
+# ── Toggle AI Auto-reply per Customer (Human Takeover) ────────────────
+
+@router.post("/{customer_id}/toggle-ai")
+def toggle_ai(
+    customer_id: uuid.UUID,
+    payload: AIToggleRequest,
+    ctx: CurrentContext = Depends(get_current_context),
+    db: Session = Depends(get_db),
+):
+    """Pauses or resumes AI auto-reply for this specific customer."""
+    customer = db.query(Customer).filter(
+        Customer.id == customer_id, Customer.organization_id == ctx.organization.id
+    ).first()
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    customer.ai_disabled = not payload.ai_enabled
+    lead = db.query(Lead).filter(
+        Lead.organization_id == ctx.organization.id, Lead.customer_id == customer.id
+    ).order_by(Lead.created_at.desc()).first()
+    if lead:
+        lead.ai_disabled = not payload.ai_enabled
+        db.add(LeadActivity(
+            organization_id=ctx.organization.id,
+            lead_id=lead.id,
+            activity_type="AI_TOGGLED",
+            description=f"AI auto-reply {'resumed' if payload.ai_enabled else 'paused (Human Takeover active)'}",
+        ))
+    db.commit()
+    return {
+        "customer_id": str(customer.id),
+        "ai_enabled": not customer.ai_disabled,
+        "status": "active" if payload.ai_enabled else "paused",
+    }
+
+
 # ── Send a manual reply ──────────────────────────────────────────────
 
 @router.post("/{customer_id}/send")
@@ -204,7 +234,7 @@ def send_manual_reply(
     ctx: CurrentContext = Depends(get_current_context),
     db: Session = Depends(get_db),
 ):
-    """Sends a manual reply from staff to a customer via WhatsApp."""
+    """Sends a manual reply from staff to a customer via WhatsApp or Instagram."""
     customer = db.query(Customer).filter(
         Customer.id == customer_id, Customer.organization_id == ctx.organization.id
     ).first()
@@ -215,18 +245,22 @@ def send_manual_reply(
         Lead.organization_id == ctx.organization.id, Lead.customer_id == customer_id
     ).order_by(Lead.created_at.desc()).first()
 
+    channel = payload.channel
+    if customer.instagram_id and channel != "whatsapp":
+        channel = "instagram"
+
     outbound = Message(
         organization_id=ctx.organization.id,
         customer_id=customer.id,
         lead_id=lead.id if lead else None,
         direction=MessageDirection.OUTBOUND,
-        channel=payload.channel,
+        channel=channel,
         body=payload.body,
         status="queued",
     )
     db.add(outbound)
 
-    if payload.channel == "whatsapp":
+    if channel == "whatsapp":
         org = ctx.organization
         token = org.whatsapp_access_token or settings.WHATSAPP_ACCESS_TOKEN
         phone_id = org.whatsapp_phone_number_id or settings.WHATSAPP_PHONE_NUMBER_ID
@@ -241,6 +275,25 @@ def send_manual_reply(
                 logger.exception("Manual WhatsApp send failed")
                 db.commit()
                 raise HTTPException(status_code=502, detail=f"WhatsApp send failed: {e}")
+        else:
+            outbound.status = "not_configured"
+
+    elif channel == "instagram":
+        org = ctx.organization
+        token = org.instagram_access_token or settings.INSTAGRAM_ACCESS_TOKEN
+        page_id = org.instagram_page_id or settings.INSTAGRAM_PAGE_ID
+        recipient_id = customer.instagram_id or customer.phone.replace("ig:", "")
+        if token and recipient_id:
+            try:
+                client = InstagramClient(access_token=token, page_id=page_id)
+                result = client.send_text_message(recipient_id, payload.body)
+                outbound.whatsapp_message_id = result.get("message_id") or result.get("id")
+                outbound.status = "sent"
+            except Exception as e:  # noqa: BLE001
+                outbound.status = "failed"
+                logger.exception("Manual Instagram send failed")
+                db.commit()
+                raise HTTPException(status_code=502, detail=f"Instagram send failed: {e}")
         else:
             outbound.status = "not_configured"
 

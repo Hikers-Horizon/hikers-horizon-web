@@ -139,8 +139,15 @@ def _resolve_organization(db: Session, phone_number_id: str | None) -> Organizat
         org = db.query(Organization).filter(Organization.whatsapp_phone_number_id == phone_number_id).first()
         if org:
             return org
-    # Fallback to the first active organization (e.g. Hikers Horizon)
-    return db.query(Organization).filter(Organization.is_active == True).order_by(Organization.created_at.asc()).first()
+    # Prioritize Hikers Horizon or the real active non-demo organization
+    org = db.query(Organization).filter(
+        Organization.is_active == True,
+        ~Organization.slug.contains("demo"),
+        ~Organization.name.contains("[DEMO]"),
+    ).first()
+    if org:
+        return org
+    return db.query(Organization).filter(Organization.is_active == True).first()
 
 
 def _process_inbound_whatsapp_message(
@@ -189,4 +196,7 @@ def _process_inbound_whatsapp_message(
     db.commit()
 
     if org.ai_auto_reply_enabled and settings.AI_AUTO_REPLY_ENABLED:
-        send_ai_reply(db, org=org, customer=customer, lead=lead, channel="whatsapp")
+        if not customer.ai_disabled and not getattr(lead, "ai_disabled", False):
+            send_ai_reply(db, org=org, customer=customer, lead=lead, channel="whatsapp")
+        else:
+            logger.info("AI auto-reply is paused for customer %s (%s) - Human takeover active", customer.id, customer.full_name)
