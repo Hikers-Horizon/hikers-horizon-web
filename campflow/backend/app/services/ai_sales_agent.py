@@ -663,7 +663,9 @@ def _smart_trek_reply(
                 "• *Total Distance:* 10 KM scenic coastal trail\n"
                 "• *Duration:* 5 hours across 5 famous beaches and cliffs\n"
                 "• *Difficulty:* Easy to Moderate (Beginner friendly)\n\n"
-                "Includes beach camping, sunset views & cliff walks! 🌊"
+                "Includes beach camping, sunset views, cliff walks & Murudeshwar visit! 🌊\n\n"
+                "🔗 *Explore Gokarna Page & Photos:* https://hikershorizon.in/Twodays/Gokarna/\n\n"
+                "Would you like to check upcoming departure dates?"
             )
         elif matched_trip and "skandagiri" in matched_trip.name.lower():
             return (
@@ -680,14 +682,15 @@ def _smart_trek_reply(
 
     # 4. Check for Itinerary / Schedule / Timings
     if any(k in text for k in ["itinerary", "schedule", "plan", "when do we return", "reach", "timing", "what time", "program"]):
+        itinerary_link = "\n\n🔗 *Full Itinerary & Details:* https://hikershorizon.in/Twodays/Gokarna/" if (matched_trip and "gokarn" in matched_trip.name.lower()) else ""
         return (
             "🗓️ *Trip Itinerary (2 Days / 1 Night):*\n"
             "• *Friday Night:* Depart Bangalore (8:30 PM – 10:15 PM pickups)\n"
-            "• *Saturday 6:00 AM:* Reach homestay, freshen up, breakfast & start trek\n"
-            "• *Saturday 1:30 PM:* Reach summit, enjoy packed lunch & 360° views\n"
-            "• *Saturday Evening:* Descend to base, hot tea, campfire, music & dinner ⛺\n"
-            "• *Sunday:* Breakfast, explore local waterfalls/viewpoints & depart\n"
-            "• *Sunday Night:* Return to Bangalore by 10:30 PM (or early Monday morning)."
+            "• *Saturday 6:00 AM:* Reach stay/homestay, freshen up, breakfast & start trek\n"
+            "• *Saturday 1:30 PM:* Explore viewpoints/summit, enjoy lunch & views\n"
+            "• *Saturday Evening:* Reach stay, sunset, hot tea, campfire, music & dinner ⛺\n"
+            "• *Sunday:* Breakfast, explore local beaches/waterfalls & depart\n"
+            f"• *Sunday Night:* Return to Bangalore by 10:30 PM (or early Monday morning).{itinerary_link}"
         )
 
     # 5. Check for Solo Female / Safety
@@ -750,7 +753,7 @@ def _smart_trek_reply(
                 f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
             )
 
-    # 9. If a trek was identified (e.g. by name or picked option 1-5), provide details & upcoming dates
+    # 9. If a trek was identified (e.g. by name or picked option 1-6), provide details & upcoming dates
     if matched_trip:
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = _get_trek_price_str(matched_trip)
@@ -763,11 +766,16 @@ def _smart_trek_reply(
         else:
             dates_text = "\n• Every Friday Night departure from Bangalore!"
 
+        link_line = ""
+        if "gokarn" in matched_trip.name.lower():
+            link_line = "🔗 *Explore Gokarna Page & Photos:*\n👉 https://hikershorizon.in/Twodays/Gokarna/\n\n"
+
         return (
             f"Hey! 🏔️ *{clean_title}* is one of our most popular treks!\n\n"
             f"📅 *Upcoming Departures:*{dates_text}\n"
             f"💰 *Price:* {price_str} per person (Includes Transportation, Food, Homestay Stay & Trek Guide)\n"
             f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal\n\n"
+            f"{link_line}"
             f"Which date works best for you and how many people are joining? 🎒"
         )
 
