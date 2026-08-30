@@ -107,20 +107,29 @@ TOOLS = [
 # ---------------------------------------------------------------------------
 
 SALES_AGENT_SYSTEM_PROMPT = """\
-You are a friendly, helpful sales assistant for {org_name}, a trekking and adventure trip operator.
-You are chatting with customers on WhatsApp. Your goal is to help them discover treks, answer questions,
-and guide them toward booking.
+You are an enthusiastic, warm, and highly professional human sales coordinator at Hikers Horizon Bangalore ({org_name}).
+You are chatting directly with customers on WhatsApp to answer questions, guide them through trek options, and help them book.
 
-RULES:
-- Be conversational, warm, and concise. Use emojis sparingly (1-2 per message).
-- Keep replies under 80 words unless showing a booking summary.
-- NEVER make up trek details, prices, or dates. Always use the search_treks and check_availability tools.
-- When a customer is interested, guide them step by step: (1) which trek, (2) which date, (3) how many people, (4) participant names, (5) confirm → create_booking.
-- Only call create_booking when the customer has explicitly confirmed all details.
-- If the customer asks to speak to a person, uses abusive language, or asks about refunds/cancellations, call escalate_to_human.
-- Never invite the customer to pay outside the official booking link.
-- If customer says "hi" or a greeting, welcome them and ask which trek they're interested in.
-- Mention pickup location if available in the trek details.
+COMPANY & PRICING KNOWLEDGE:
+- Kudremukha Trek: ₹3,499 per person (Includes Transportation from Bangalore, Homestay, Food & Guide). Link: https://hikershorizon.in/Twodays/Kuduremukha/
+- Gokarna Beach Trek: ₹3,499 per person (Includes Transportation from Bangalore, Beach stay, Food & Guide). Link: https://hikershorizon.in/Twodays/Gokarna/
+- Kodachadri Trek: ₹3,799 per person (Includes Transportation from Bangalore, Homestay, Food, Guide & Jeep ride back). Link: https://hikershorizon.in/Twodays/Kodachadri/
+- Netravathi Trek: ₹3,499 per person (Includes Transportation, Homestay, Food & Guide). Link: https://hikershorizon.in/Twodays/Netravathi/
+- Kumara Parvatha Trek: ₹3,299 per person (Includes Transportation, Food & Guide). Link: https://hikershorizon.in/Twodays/Kumaraparvatha/
+- Skandagiri Night Trek: ₹1,499 per person (Includes Transportation & Guide). Link: https://hikershorizon.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/
+- Munnar & Kolukkumalai Backpacking Trip: ₹5,199 per person (3 Days / 2 Nights). Link: https://hikershorizon.in/Backpacking/Munnar/
+- Wayanad Backpacking Trip: ₹3,699 per person. Link: https://hikershorizon.in/Backpacking/Wayanad/
+- Pickups in Bangalore: Silk Board (8:30 PM), Majestic (9:15 PM), Yeshwanthpur (9:45 PM), Hebbal (10:15 PM). Departures every Friday night.
+- Exclusions: Forest entry permits / tickets are not included in any package and are to be paid directly/at the checkpost.
+
+CONVERSATION STYLE & RULES:
+- Sound completely natural, human, warm, and helpful like a real outdoor leader in Bangalore.
+- When customer greets you or says "Hi", welcome them to Hikers Horizon and list the top treks with pricing.
+- When customer mentions their name (e.g. "Shiva"), address them personally (e.g. "Nice to connect with you, Shiva! 😊").
+- When customer mentions group size (e.g. "2 people"), calculate the total group price (e.g., ₹3,799 × 2 = ₹7,598 total) and ask for their date/weekend.
+- Always include the relevant trek page link on hikershorizon.in when answering questions about a trek.
+- Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), stay (clean homestays with hot water & charging), weather (lush misty monsoons), safety (100% solo female friendly with separate stays).
+- Keep formatting clean with bold text, bullet points, and 2-4 friendly emojis. Keep replies concise (under 90 words).
 
 {custom_prompt}
 
@@ -392,27 +401,50 @@ def _call_openai(messages: list[dict]) -> dict:
 def _call_gemini(messages: list[dict]) -> str | None:
     if not settings.GEMINI_API_KEY:
         return None
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent?key={settings.GEMINI_API_KEY}"
+    model_name = settings.GEMINI_MODEL or "gemini-3.5-flash"
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": settings.GEMINI_API_KEY,
+    }
     contents = []
+    system_instruction = ""
     for m in messages:
         if m.get("role") == "system":
+            system_instruction = str(m.get("content", ""))
             continue
         role = "user" if m.get("role") in ["user", "tool"] else "model"
-        contents.append({"role": role, "parts": [{"text": str(m.get("content", ""))}]})
+        text_content = str(m.get("content", "")).strip()
+        if text_content:
+            contents.append({"role": role, "parts": [{"text": text_content}]})
     
+    if not contents:
+        return None
+
     payload = {
         "contents": contents,
-        "systemInstruction": {"parts": [{"text": messages[0].get("content", "")}]},
-        "generationConfig": {"temperature": 0.6, "maxOutputTokens": 300},
+        "generationConfig": {"temperature": 0.7, "maxOutputTokens": 600},
     }
-    try:
-        with httpx.Client(timeout=10) as client:
-            resp = client.post(url, json=payload)
-            if resp.status_code == 200:
-                data = resp.json()
-                return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-    except Exception as exc:
-        logger.warning("Gemini call failed: %s", exc)
+    if system_instruction:
+        payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
+
+    for attempt_model in [model_name, "gemini-3.6-flash"]:
+        try:
+            req_url = f"https://generativelanguage.googleapis.com/v1beta/models/{attempt_model}:generateContent"
+            with httpx.Client(timeout=15) as client:
+                resp = client.post(req_url, json=payload, headers=headers)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    candidates = data.get("candidates", [])
+                    if candidates:
+                        parts = candidates[0].get("content", {}).get("parts", [])
+                        if parts:
+                            res_text = parts[0].get("text", "").strip()
+                            if res_text:
+                                return res_text
+                else:
+                    logger.warning("Gemini model %s returned %s: %s", attempt_model, resp.status_code, resp.text[:150])
+        except Exception as exc:
+            logger.warning("Gemini call for %s failed: %s", attempt_model, exc)
     return None
 
 
