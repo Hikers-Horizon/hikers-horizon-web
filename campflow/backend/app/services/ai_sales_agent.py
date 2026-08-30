@@ -123,23 +123,18 @@ COMPANY & PRICING KNOWLEDGE:
 - Exclusions: Forest entry permits / tickets are not included in any package and are to be paid directly/at the checkpost.
 
 ADVANCE BOOKING RULES:
-- IMPORTANT: Kudremukha Trek and Netravathi Trek MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE. If a customer asks to book Kudremukha or Netravathi last-minute (e.g. for this weekend or on Thursday/Friday), explain that due to strict Forest Department permit limits, Kudremukha and Netravathi require booking 20 days in advance, and suggest choosing a date 20+ days ahead or picking Kodachadri / Gokarna for this weekend.
-- For all other treks (Kodachadri, Gokarna, Kumara Parvatha, Skandagiri), customers can book during the week up to Thursday/Friday based on seat availability.
+- IMPORTANT: Kudremukha and Netravathi MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE (strict Forest permit limits). If asked for upcoming dates, tell them 20 days advance is required and suggest Kodachadri or Gokarna for this weekend.
+- Other treks (Kodachadri, Gokarna, Kumara Parvatha, Skandagiri) can be booked during the week up to Thursday/Friday.
 
-CONVERSATION STYLE & RULES:
-- Sound completely natural, human, warm, and helpful like an experienced outdoor coordinator at Hikers Horizon Bangalore.
-- NEVER assume or invent a customer name. ONLY address the customer by name if they explicitly introduced themselves in this chat (e.g., "I am Priya" or "My name is John"). Otherwise, just use warm greetings like "Hey there! 😊".
-- NEVER make up or invent random phone numbers or UPI IDs for PhonePe/GPay (e.g. NEVER use 9876543210).
-- For payment and booking confirmation: Direct customers to complete their booking securely on the official portal at https://hikershorizon.in/campflow/ (or share your official WhatsApp number +91 99026 53393 / 99166 27799 for payment QR code assistance).
-- Share the official trek page link on hikershorizon.in ONLY ONCE per conversation (when first introducing the trek or when the customer explicitly asks for photos/link/itinerary). NEVER repeat or attach website links in every follow-up message.
-- NEVER mention private or separate rooms unprompted. ONLY discuss separate rooms if the customer explicitly asks about rooms or stay arrangements.
-- When customers ask about family trips (e.g. "I am coming with my family is it okay?"), warmly confirm that families and kids are 100% welcome, our trips are safe and guided by experienced leads, and ask which destination they're looking at.
-- When customer mentions group size (e.g. "2 people"), calculate the total group price (e.g., ₹3,799 × 2 = ₹7,598 total) and ask for their travel date/weekend.
-- When customer asks booking questions (e.g. "How do I book?", "Can I book on Thursday?"), remember the 20-day rule for Kudremukha & Netravathi. For other treks, confirm bookings are open during the week.
-- Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), weather (lush misty monsoons), safety (100% solo female friendly).
-- Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 75 words).
-- Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), weather (lush misty monsoons), safety (100% solo female friendly).
-- Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 75 words).
+CRITICAL LENGTH & CONVERSATION RULES:
+- KEEP REPLIES ULTRA-SHORT & CRISP (strictly 2 to 3 sentences, maximum 35 words).
+- NEVER WRITE LONG PARAGRAPHS OR PASSAGES. Customers read on mobile and want fast, direct answers.
+- Answer the customer's exact question in 1-2 lines, then ask 1 short closing question.
+- NEVER assume or invent customer names.
+- NEVER invent phone numbers or UPI IDs for PhonePe/GPay. For payments, direct to https://hikershorizon.in/campflow/.
+- Share website link ONLY ONCE per conversation.
+- NEVER mention separate rooms unless explicitly asked.
+- Emojis: Use maximum 1-2 friendly emojis.
 
 {custom_prompt}
 
@@ -441,7 +436,7 @@ def _call_gemini(messages: list[dict]) -> str | None:
 
     payload = {
         "contents": contents,
-        "generationConfig": {"temperature": 0.7, "maxOutputTokens": 600},
+        "generationConfig": {"temperature": 0.5, "maxOutputTokens": 180},
     }
     if system_instruction:
         payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
@@ -543,14 +538,8 @@ def _smart_trek_reply(
     clean_words = set(re.findall(r"\b\w+\b", text))
     if clean_words.issubset(greeting_words) or text in greeting_words:
         return (
-            "Hey there! 👋 Welcome to *Hikers Horizon*! ⛰️\n\n"
-            "We organize weekend treks from Bangalore with transportation, food, homestay & trek guide included:\n"
-            "1. Kudremukha Trek (₹3,499 with transportation)\n"
-            "2. Gokarna Beach Trek (₹3,499 with transportation)\n"
-            "3. Kodachadri Trek (₹3,799 with transportation)\n"
-            "4. Netravathi Trek (₹3,499 with transportation)\n"
-            "5. Kumara Parvatha Trek (₹3,299 with transportation)\n"
-            "6. Skandagiri Night Trek (₹1,499 with transportation)\n\n"
+            "Hey! 👋 Welcome to Hikers Horizon! 🏔️\n\n"
+            "We have weekend departures from Bangalore for Kudremukha (₹3,499), Gokarna (₹3,499), Kodachadri (₹3,799), and Netravathi (₹3,499).\n\n"
             "Which trek are you interested in exploring? 🎒"
         )
 
@@ -786,190 +775,80 @@ def _smart_trek_reply(
 
     # 3. Check for Distance / Duration / "How long" / Difficulty queries
     if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
-        trek_url = _get_trek_url(matched_trip)
+        trek_url = f"\n🔗 Details: {_get_trek_url(matched_trip)}" if should_include_link else ""
         if matched_trip and ("kudremukh" in matched_trip.name.lower() or "kudremukha" in matched_trip.name.lower()):
-            return (
-                "🏔️ *Kudremukha Trek Distance & Duration:*\n\n"
-                "• *Total Distance:* 22 KM (11 KM up + 11 KM down)\n"
-                "• *Duration:* Approximately 7 to 8 hours of trekking\n"
-                "• *Difficulty:* Moderate\n"
-                "• *Peak Altitude:* 1,894 meters (6,214 ft)\n\n"
-                "The trail takes you through lush Shola forests, grasslands, and scenic ridge walks. Suitable for beginners with active fitness! 🎒\n\n"
-                f"🔗 *Explore Kudremukha Details:* {trek_url}\n\n"
-                "Would you like to check upcoming departure dates?"
-            )
+            return f"🏔️ *Kudremukha:* 22 KM total (moderate hike, 7–8 hrs) through lush green Shola forests.{trek_url}\n\nWhich date are you planning for? 🎒"
         elif matched_trip and "kodachadri" in matched_trip.name.lower():
-            return (
-                "🏔️ *Kodachadri Trek Distance & Duration:*\n\n"
-                "• *Total Distance:* 14 KM total (via Hidlumane Waterfalls)\n"
-                "• *Duration:* Approximately 6 to 7 hours of trekking\n"
-                "• *Difficulty:* Moderate (Beginner friendly)\n"
-                "• *Peak Altitude:* 1,343 meters\n\n"
-                "Features the scenic Hidlumane waterfalls trail and famous off-road Jeep ride back! 🎒\n\n"
-                f"🔗 *Explore Kodachadri Details:* {trek_url}\n\n"
-                "Would you like to check upcoming departure dates?"
-            )
-        elif matched_trip and ("kumara" in matched_trip.name.lower() or "kp" in matched_trip.name.lower()):
-            return (
-                "⛰️ *Kumara Parvatha Trek Distance & Duration:*\n\n"
-                "• *Total Distance:* 26 KM total\n"
-                "• *Duration:* 2-Day challenging trek (10–12 hours total)\n"
-                "• *Difficulty:* Moderate to Difficult\n"
-                "• *Peak Altitude:* 1,712 meters\n\n"
-                "One of the most thrilling and adventurous treks in the Western Ghats! 🎒\n\n"
-                f"🔗 *Explore Kumara Parvatha Details:* {trek_url}\n\n"
-                "Would you like to check upcoming departure dates?"
-            )
+            return f"🏔️ *Kodachadri:* 14 KM total via Hidlumane Waterfalls with a fun off-road jeep ride back!{trek_url}\n\nWhich weekend works for you? 🎒"
         elif matched_trip and "netravat" in matched_trip.name.lower():
-            return (
-                "🌿 *Netravathi Peak Trek Distance & Duration:*\n\n"
-                "• *Total Distance:* 14 KM total (up & down)\n"
-                "• *Duration:* Approx 5 to 6 hours\n"
-                "• *Difficulty:* Moderate (Beginner friendly)\n\n"
-                "Known for rolling green meadows and breathtaking 360-degree views! 🎒\n\n"
-                f"🔗 *Explore Netravathi Details:* {trek_url}\n\n"
-                "Would you like to check upcoming departure dates?"
-            )
+            return f"🌿 *Netravathi:* 14 KM moderate trek with stunning 360° rolling green ridge views!{trek_url}\n\nWhich weekend are you looking at? 🎒"
         elif matched_trip and "gokarn" in matched_trip.name.lower():
-            return (
-                "🏖️ *Gokarna Beach Trek Distance & Duration:*\n\n"
-                "• *Total Distance:* 10 KM scenic coastal trail\n"
-                "• *Duration:* 5 hours across 5 famous beaches and cliffs\n"
-                "• *Difficulty:* Easy to Moderate (Beginner friendly)\n\n"
-                "Includes beach camping, sunset views, cliff walks & Murudeshwar visit! 🌊\n\n"
-                f"🔗 *Explore Gokarna Details:* {trek_url}\n\n"
-                "Would you like to check upcoming departure dates?"
-            )
+            return f"🏖️ *Gokarna:* 10 KM scenic coastal beach trek with beach stay & sunset views!{trek_url}\n\nWhich weekend are you planning? 🌊"
         elif matched_trip and "skandagiri" in matched_trip.name.lower():
-            return (
-                "🌌 *Skandagiri Night Trek Distance & Duration:*\n\n"
-                "• *Total Distance:* 8 KM total\n"
-                "• *Duration:* 4 to 5 hours (Night ascend for sunrise)\n"
-                "• *Difficulty:* Moderate\n\n"
-                "Watch the sunrise above a blanket of clouds! ☁️\n\n"
-                f"🔗 *Explore Skandagiri Details:* {trek_url}\n\n"
-                "Would you like to check upcoming departure dates?"
-            )
-        return (
-            "🥾 *Trek Distance & Duration:*\n"
-            "Our Western Ghats weekend treks typically cover **12 to 22 KM total** (approx 6 to 8 hours of moderate hiking) with regular rest breaks, led by certified guides. Suitable for beginners with basic fitness! 🎒"
-        )
+            return f"🌌 *Skandagiri:* 8 KM night ascend to watch sunrise above the clouds!{trek_url}\n\nWhich weekend would you like to join? ☁️"
+        return "🥾 Our Western Ghats treks are 12–14 KM moderate hikes with regular rest stops, led by certified guides. Suitable for beginners! 🎒"
 
     # 4. Check for Itinerary / Schedule / Timings
     if any(k in text for k in ["itinerary", "schedule", "plan", "when do we return", "reach", "timing", "what time", "program"]):
-        itinerary_link = f"\n\n🔗 *Full Itinerary & Photos:* {_get_trek_url(matched_trip)}" if matched_trip else ""
+        itinerary_link = f"\n🔗 Full Plan: {_get_trek_url(matched_trip)}" if should_include_link else ""
         return (
-            "🗓️ *Trip Itinerary (2 Days / 1 Night):*\n"
-            "• *Friday Night:* Depart Bangalore (8:30 PM – 10:15 PM pickups)\n"
-            "• *Saturday 6:00 AM:* Reach stay/homestay, freshen up, breakfast & start trek\n"
-            "• *Saturday 1:30 PM:* Explore viewpoints/summit, enjoy lunch & views\n"
-            "• *Saturday Evening:* Reach stay, sunset, hot tea, campfire, music & dinner ⛺\n"
-            "• *Sunday:* Breakfast, explore local beaches/waterfalls & depart\n"
-            f"• *Sunday Night:* Return to Bangalore by 10:30 PM (or early Monday morning).{itinerary_link}"
+            "🗓️ *Weekend Plan:*\n"
+            "• *Fri Night:* Depart Bangalore (8:30–10:15 PM)\n"
+            "• *Sat:* Reach homestay, breakfast, summit trek, campfire & dinner ⛺\n"
+            "• *Sun:* Sightseeing / waterfalls & return to Bangalore by Sunday night!{itinerary_link}"
         )
 
     # 4b. Human FAQs: Food & Meals
     if any(k in text for k in ["veg", "non veg", "non-veg", "what food", "meals", "dinner", "lunch", "breakfast"]):
-        return (
-            "🍲 *Food & Meals Included:*\n"
-            "We serve fresh, hot local cuisine at our homestay! Included in the package:\n"
-            "• Saturday Breakfast & packed trail Lunch\n"
-            "• Saturday Dinner (Both Veg and Non-Veg chicken options available!)\n"
-            "• Sunday Breakfast\n"
-            "• Hot evening tea & snacks after descending ☕"
-        )
+        return "🍲 *Food Included:* 2 Breakfasts, 1 packed trail Lunch, and Saturday Dinner (both Veg & Non-Veg chicken options served fresh at homestay)!"
 
     # 4c. Human FAQs: Weather & Rain
     if any(k in text for k in ["weather", "rain", "raining", "monsoon", "climate"]):
-        return (
-            "🌦️ *Current Weather:*\n"
-            "The Western Ghats are exceptionally lush, green, and misty right now! 🌿 Mild showers make the waterfalls and cloud beds magical. Just pack a raincoat/poncho and good grip shoes, and you're all set! 🌧️⛰️"
-        )
+        return "🌦️ The Western Ghats are lush green and misty! Light showers make trails magical. Just carry a poncho and good grip shoes! 🌿"
 
     # 4d. Human FAQs: Beginners & Fitness
     if any(k in text for k in ["beginner", "first time", "first-time", "can i do", "can beginners", "tough", "hard", "fitness"]):
-        return (
-            "🥾 *Beginner Friendly:*\n"
-            "Yes, 100%! Over 60% of our participants are beginners and first-time hikers. Our certified trek guides lead the entire trek with regular rest, hydration, and photography stops! 📸🎒"
-        )
+        return "🥾 Yes, 100% beginner friendly! Over 60% of our trekkers are first-timers. Our certified guides lead with regular rest stops! 🎒"
 
     # 4e. Human FAQs: Stay, Washroom & Charging Facilities
     if any(k in text for k in ["washroom", "toilet", "restroom", "facilities", "charging", "hot water"]):
-        return (
-            "🏡 *Homestay & Facilities:*\n"
-            "We provide comfortable homestays/tents with clean Western & Indian washrooms, running hot water, changing rooms, and charging sockets for your phones and power banks! 🚿🔌"
-        )
+        return "🏡 We provide clean homestays with hot water, Western & Indian washrooms, and phone charging points! 🔌"
 
     # 4f. Human FAQs: Rooms & Homestay Sharing Arrangements
     if any(k in text for k in ["separate room", "separate rooms", "private room", "private rooms", "couple room", "couple rooms", "room", "rooms"]):
         trek_name = matched_trip.name.replace("[DEMO]", "").strip() if matched_trip else "the trek"
-        trek_url = _get_trek_url(matched_trip)
         return (
-            f"🏡 *Room & Stay Arrangements for {trek_name}:*\n\n"
-            "Yes, absolutely! At our homestay, we provide clean, comfortable rooms:\n"
-            "• By default, we provide sharing rooms (separate rooms for boys and girls).\n"
-            "• **Separate / Private rooms** can definitely be arranged for couples, families, or your private group upon request (subject to availability).\n"
-            "• Clean washrooms with running hot water and charging points are available.\n\n"
-            f"🔗 *View Homestay Photos & Itinerary:* {trek_url}\n\n"
-            "How many people are planning to join with you? 🎒"
+            f"🏡 For {trek_name}, standard stay is on a sharing basis (separate for boys & girls). Private rooms can be arranged upon request for couples/families!\n\n"
+            "How many people are planning to join? 🎒"
         )
 
     # 4g. Human FAQs: Alcohol / Smoking policy
     if any(k in text for k in ["alcohol", "beer", "drink", "drinking", "liquor", "smoke", "smoking"]):
-        return (
-            "🚫 *Safety Policy:*\n"
-            "To prioritize trekker safety and maintain a welcoming group atmosphere, alcohol and smoking are strictly not allowed during travel and trekking. 🌿"
-        )
+        return "🚫 To ensure trekker safety and group comfort, alcohol and smoking are strictly not allowed during travel and trekking. 🌿"
 
     # 5. Check for Solo Female / Safety
     if any(k in text for k in ["solo", "safe", "girl", "female", "women", "alone", "safety"]):
-        return (
-            "🌟 *Safety & Solo Trekkers:*\n"
-            "Yes, 100% safe! Over 40% of our community consists of solo travelers and solo female trekkers. We provide separate tent/room accommodations for females, certified first-aid trained trek leads, and a warm, inclusive group environment! ⛺"
-        )
+        return "🌟 100% safe! Over 40% are solo female travelers. We have certified leads and separate accommodations for females! ⛺"
 
     # 5b. Check for Family / Kids
     if any(k in text for k in ["family", "parents", "kids", "children", "child", "coming with family", "with my family"]):
         target_trek = f" for {matched_trip.name.replace('[DEMO]', '').strip()}" if matched_trip else ""
         return (
-            f"Yes, absolutely! Families are 100% welcome on our trips{target_trek}! 👨‍👩‍👧‍👦✨\n\n"
-            "Our treks and weekend getaways are guided by certified outdoor leaders with safe travel, comfortable stays, and healthy meals.\n\n"
-            "Which destination or trek are you planning with your family, and how many members are joining? 🎒"
+            f"Yes, families are 100% welcome{target_trek}! Our trips are safe and guided by certified leads with comfortable stays.\n\n"
+            "Which destination and date are you planning for? 🎒"
         )
 
     # 6. Check for Things to Carry / Packing List / Shoes
     if any(k in text for k in ["what to carry", "what to bring", "packing", "things to carry", "shoes", "clothes", "dress"]):
-        return (
-            "🎒 *Things to Carry:*\n"
-            "1. Small backpack (20–30L)\n"
-            "2. Good grip trekking shoes / sneakers\n"
-            "3. 2 pairs of quick-dry clothes + warm jacket for the night\n"
-            "4. Raincoat / Poncho (during monsoon)\n"
-            "5. 2L Water bottle & energy snacks (chocolates, dry fruits)\n"
-            "6. Personal medication & valid Govt ID proof."
-        )
+        return "🎒 *To Carry:* Small 20L backpack, trekking shoes, 2 pairs of clothes, warm jacket, poncho/raincoat, and water bottle!"
 
     # 7. Check for Inclusions / Pickup queries
     if any(k in text for k in ["pickup", "boarding", "pick up", "route", "where to board", "start"]):
-        return (
-            "🚌 *Bangalore Pickup Points:*\n"
-            "1. Silk Board (8:30 PM)\n"
-            "2. Majestic / Shantala Silk House (9:15 PM)\n"
-            "3. Yeshwanthpur Metro (9:45 PM)\n"
-            "4. Hebbal Esteem Mall (10:15 PM)\n"
-            "5. 8th Mile / Gorguntepalya\n\n"
-            "We return back to Bangalore Sunday late night / early Monday by 5:00 AM. 🎒"
-        )
+        return "🚌 *Friday Night Bangalore Pickups:* Silk Board (8:30 PM), Majestic (9:15 PM), Yeshwanthpur (9:45 PM), Hebbal (10:15 PM)."
 
     if any(k in text for k in ["inclusion", "included", "accommodation", "tent", "what is included"]):
         return (
-            "✨ *Package Inclusions:*\n"
-            "• Travel / Transportation to & from Bangalore in AC/Non-AC pushback tempo\n"
-            "• Stay in Homestay / Tents (Separate for males & females)\n"
-            "• Meals: 2 Breakfasts, 1 Lunch, 1 Dinner (Veg & Non-Veg options)\n"
-            "• Certified Outdoor Leaders & First Aid support\n"
-            "• Campfire & Music night (subject to weather) ⛺\n\n"
-            "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
+            "✨ *Package Includes:* Bangalore travel, Homestay accommodation, Meals (2 Breakfasts, 1 Lunch, 1 Dinner), and Certified Trek Guide! ⛺"
         )
 
     link_already_sent = any("hikershorizon.in" in m.get("body", "") for m in recent_messages)
