@@ -123,13 +123,13 @@ COMPANY & PRICING KNOWLEDGE:
 - Exclusions: Forest entry permits / tickets are not included in any package and are to be paid directly/at the checkpost.
 
 CONVERSATION STYLE & RULES:
-- Sound completely natural, human, warm, and helpful like a real outdoor leader in Bangalore.
-- When customer greets you or says "Hi", welcome them to Hikers Horizon and list the top treks with pricing.
-- When customer mentions their name (e.g. "Shiva"), address them personally (e.g. "Nice to connect with you, Shiva! 😊").
-- When customer mentions group size (e.g. "2 people"), calculate the total group price (e.g., ₹3,799 × 2 = ₹7,598 total) and ask for their date/weekend.
-- Always include the relevant trek page link on hikershorizon.in when answering questions about a trek.
+- Sound completely natural, human, warm, and helpful like an experienced outdoor coordinator at Hikers Horizon Bangalore.
+- NEVER assume or invent a customer name. ONLY address the customer by name if they explicitly introduced themselves (e.g., "I am Priya" or "My name is John"). Otherwise, just use warm greetings like "Hey there! 😊".
+- Share the official trek page link on hikershorizon.in ONLY ONCE per conversation (when first introducing the trek or when the customer explicitly asks for photos/link/itinerary). NEVER repeat or attach website links in every follow-up message.
+- When customer mentions group size (e.g. "2 people"), calculate the total group price (e.g., ₹3,799 × 2 = ₹7,598 total) and ask for their travel date/weekend.
+- When customer asks booking questions (e.g. "How do I book?", "Can I book on Thursday?"), answer clearly: "Yes, you can book on Thursday! We depart every Friday night from Bangalore. To reserve your slots, just share your preferred trek, date, and group count here, or book on our portal."
 - Answer FAQs about food (veg & non-veg dinner, breakfast, trail lunch), stay (clean homestays with hot water & charging), weather (lush misty monsoons), safety (100% solo female friendly with separate stays).
-- Keep formatting clean with bold text, bullet points, and 2-4 friendly emojis. Keep replies concise (under 90 words).
+- Keep formatting clean with bold text, bullet points, and 2-3 friendly emojis. Keep replies concise (under 80 words).
 
 {custom_prompt}
 
@@ -953,6 +953,23 @@ def _smart_trek_reply(
             "⚠️ *Note:* Forest entry permits / entry tickets are NOT included in the package and must be booked directly / paid at the base."
         )
 
+    link_already_sent = any("hikershorizon.in" in m.get("body", "") for m in recent_messages)
+    user_wants_link = any(w in text for w in ["link", "photo", "photos", "website", "itinerary", "gallery", "details", "page"])
+    should_include_link = (not link_already_sent) or user_wants_link
+
+    # 7e. Booking timing & process FAQs (e.g. "Can I book on Thursday?", "How do I book?", "When to book?")
+    if any(k in text for k in ["how do i book", "how to book", "book on thursday", "can i book on", "can we book", "last day to book", "when can i book", "booking process", "how can i book"]):
+        trek_title = f" for {matched_trip.name.replace('[DEMO]', '').strip()}" if matched_trip else ""
+        return (
+            f"Yes, you can easily book anytime{trek_title}! 🎒✨\n\n"
+            "We depart every Friday night from Bangalore with pickups at Silk Board, Majestic, Yeshwanthpur, and Hebbal.\n\n"
+            "Because forest entry permits and weekend slots fill up fast, we recommend locking in your spots early. To reserve your slots, simply share:\n"
+            "1. Your Preferred Weekend Date\n"
+            "2. Total Number of People\n"
+            "3. Your Name & Email ID\n\n"
+            "I'll confirm your slots right away! ⛺"
+        )
+
     # 7b. Check for Passenger Count / Group size (e.g. "2", "2 people", "2 members", "3 of us", "5 pax")
     pax_match = re.search(r"\b(\d+)\s*(?:people|persons|members|pax|travellers|guests|guys|friends|heads|of us)?\b", text)
     if pax_match and matched_trip:
@@ -966,13 +983,12 @@ def _smart_trek_reply(
             except Exception:
                 unit_num = 3499
             total_num = unit_num * count
-            trek_url = _get_trek_url(matched_trip)
+            trek_url = f"\n\n🔗 *Trip Details:* {_get_trek_url(matched_trip)}" if should_include_link else ""
 
             return (
                 f"🎉 Awesome! Noted booking for *{count} {'person' if count == 1 else 'people'}* for *{clean_title}*!\n\n"
                 f"💰 *Total Package:* {price_str} × {count} = *₹{total_num:,} total* (Includes transportation from Bangalore, food, homestay & trek guide)\n"
-                f"• Live Slots: Available ✅\n\n"
-                f"🔗 *Trip Details & Gallery:*\n👉 {trek_url}\n\n"
+                f"• Live Slots: Available ✅{trek_url}\n\n"
                 f"Which date/weekend are you planning to travel, and what is your *Full Name & Email* to reserve your spots? 🎒"
             )
 
@@ -980,7 +996,6 @@ def _smart_trek_reply(
     ack_phrases = {"ok", "okay", "sure", "cool", "sounds good", "great", "done", "noted", "yes", "yeah", "yep", "alright", "perfect", "fine", "thanks", "thank you"}
     if text in ack_phrases:
         target_trek = matched_trip.name.replace("[DEMO]", "").strip() if matched_trip else ""
-        trek_url = _get_trek_url(matched_trip)
         return (
             f"Awesome! 🌟 Looking forward to having you on the trail{' for ' + target_trek if target_trek else ''}! 🏕️\n\n"
             f"Feel free to ask if you have any questions about packing, pickups, or weather, or share your travel date to lock your booking! 🎒"
@@ -1018,13 +1033,12 @@ def _smart_trek_reply(
 
         target_trek = matched_trip.name.replace("[DEMO]", "").strip() if matched_trip else "your upcoming trek"
         pax_info = f" for {lead.num_people} people" if (lead and lead.num_people) else ""
-        trek_url = _get_trek_url(matched_trip)
+        trek_url = f"\n\n🔗 *View Trip Photos:* {_get_trek_url(matched_trip)}" if should_include_link else ""
         greeting_name = f", {name_extracted}" if name_extracted else ""
 
         return (
             f"Nice to connect with you{greeting_name}! 😊\n\n"
-            f"I have noted your details for *{target_trek}*{pax_info}. We have slots open for upcoming weekend departures!\n\n"
-            f"🔗 *View Trip Photos & Highlights:* {trek_url}\n\n"
+            f"I have noted your details for *{target_trek}*{pax_info}. We have slots open for upcoming weekend departures!{trek_url}\n\n"
             f"Which departure date (e.g. this Friday / next weekend) works best for you so I can lock your slots? 🎒"
         )
 
@@ -1038,13 +1052,12 @@ def _smart_trek_reply(
             formatted_day = f"{day_num}{suffix}"
             clean_title = matched_trip.name.replace("[DEMO]", "").strip()
             price_str = _get_trek_price_str(matched_trip)
-            trek_url = _get_trek_url(matched_trip)
+            trek_url = f"\n\n🔗 *Full Trek Details:* {_get_trek_url(matched_trip)}" if should_include_link else ""
 
             return (
                 f"Awesome! 🏔️ For *{clean_title}*, we have slots open for departure on the {formatted_day}!\n\n"
                 f"• Price: *{price_str} per person* (Includes transportation from Bangalore, food, homestay & trek guide)\n"
-                f"• Live Seats: Available ✅\n\n"
-                f"🔗 *Full Trek Details:* {trek_url}\n\n"
+                f"• Live Seats: Available ✅{trek_url}\n\n"
                 f"How many people are joining with you? Share your count and I'll send the instant booking confirmation link! 🎒"
             )
 
@@ -1053,7 +1066,7 @@ def _smart_trek_reply(
         clean_title = matched_trip.name.replace("[DEMO]", "").strip()
         price_str = _get_trek_price_str(matched_trip)
         deps = db.query(TripDeparture).filter(TripDeparture.trip_id == matched_trip.id).order_by(TripDeparture.departure_date.asc()).limit(3).all()
-        trek_url = _get_trek_url(matched_trip)
+        trek_url = f"\n\n🔗 *Explore {clean_title} Photos & Itinerary:*\n👉 {_get_trek_url(matched_trip)}" if should_include_link else ""
 
         dates_text = ""
         if deps:
@@ -1066,14 +1079,12 @@ def _smart_trek_reply(
             f"Hey! 🏔️ *{clean_title}* is one of our most popular treks!\n\n"
             f"📅 *Upcoming Departures:*{dates_text}\n"
             f"💰 *Price:* {price_str} per person (Includes Transportation, Food, Homestay Stay & Trek Guide)\n"
-            f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal\n\n"
-            f"🔗 *Explore {clean_title} Photos & Itinerary:*\n"
-            f"👉 {trek_url}\n\n"
+            f"📍 *Pickup:* Silk Board, Majestic, Yeshwanthpur, Hebbal{trek_url}\n\n"
             f"Which date works best for you and how many people are joining? 🎒"
         )
 
     # 10. Booking confirmation / payment link request
-    if any(k in text for k in ["book", "confirm", "pay", "payment", "link", "register"]):
+    if any(k in text for k in ["book", "confirm", "pay", "payment", "register"]):
         return (
             "Awesome! 🎉 You can view all live departures and confirm your booking directly on our official portal:\n"
             "👉 https://hikershorizon.in/campflow/\n\n"
