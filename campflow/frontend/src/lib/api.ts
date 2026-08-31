@@ -24,7 +24,7 @@ api.interceptors.response.use(
     if (typeof window !== "undefined" && err.response?.status === 401) {
       localStorage.removeItem("campflow_token");
       localStorage.removeItem("campflow_org_id");
-      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/campflow";
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? (process.env.NODE_ENV === "production" ? "/campflow" : "");
       window.location.href = `${basePath}/login`;
     }
     return Promise.reject(err);

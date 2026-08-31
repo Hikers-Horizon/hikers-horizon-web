@@ -203,7 +203,18 @@ export default function ConversationsPage() {
     return colors[status || ""] || "bg-gray-100 text-gray-600";
   }
 
-  if (loading) return <AppShell title="Conversations"><div>Loading...</div></AppShell>;
+  if (loading) {
+    return (
+      <AppShell title="Conversations">
+        <div className="flex h-[calc(100vh-140px)] items-center justify-center">
+          <div className="flex flex-col items-center gap-3 text-gray-500">
+            <span className="text-3xl animate-pulse">💬</span>
+            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">Loading conversations...</p>
+          </div>
+        </div>
+      </AppShell>
+    );
+  }
 
   const isAiDisabled = Boolean(detail?.customer.ai_disabled);
 
