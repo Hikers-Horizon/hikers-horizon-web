@@ -157,23 +157,23 @@ export default function ConversationsPage() {
 
   return (
     <AppShell title="Conversations">
-      <div className="flex h-[calc(100vh-120px)] overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-        {/* Thread List (Left Panel) */}
-        <div className="w-80 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-white dark:bg-gray-900">
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-              💬 Chats ({threads.length})
+      <div className="flex h-[calc(100vh-85px)] sm:h-[calc(100vh-105px)] md:h-[calc(100vh-120px)] overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
+        {/* Thread List (Full-width on mobile when no chat is selected; left 80-width column on desktop) */}
+        <div className={`${selectedCustomerId ? "hidden md:flex" : "flex"} w-full md:w-80 flex-shrink-0 flex-col border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-white dark:bg-gray-900`}>
+          <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm z-10">
+            <h2 className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wide flex items-center gap-1.5">
+              <span>💬</span> Chats <span className="bg-gray-100 dark:bg-gray-800 text-xs px-2 py-0.5 rounded-full text-gray-600 dark:text-gray-400">{threads.length}</span>
             </h2>
             <button
               onClick={() => loadThreads(false)}
-              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-              title="Refresh"
+              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title="Refresh conversations"
             >
               🔄
             </button>
           </div>
           {threads.length === 0 ? (
-            <div className="p-6 text-center text-sm text-gray-400">
+            <div className="p-8 text-center text-sm text-gray-400">
               No conversations yet. Incoming WhatsApp and Instagram messages will appear here.
             </div>
           ) : (
@@ -181,13 +181,13 @@ export default function ConversationsPage() {
               <button
                 key={t.customer_id}
                 onClick={() => setSelectedCustomerId(t.customer_id)}
-                className={`w-full text-left p-4 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
-                  selectedCustomerId === t.customer_id ? "bg-brand-50 dark:bg-brand-500/10 border-l-4 border-l-brand-600" : ""
+                className={`w-full text-left p-3.5 sm:p-4 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all ${
+                  selectedCustomerId === t.customer_id ? "bg-brand-50/80 dark:bg-brand-500/10 border-l-4 border-l-brand-600" : ""
                 }`}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 shadow-sm ${
                       t.channel === "instagram"
                         ? "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white"
                         : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300"
@@ -195,77 +195,95 @@ export default function ConversationsPage() {
                       {t.channel === "instagram" ? "📸" : t.customer_name.charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <div className="font-medium text-sm truncate flex items-center gap-1.5">
+                      <div className="font-semibold text-sm truncate flex items-center gap-1.5 text-gray-900 dark:text-gray-100">
                         <span>{t.customer_name}</span>
                         {t.ai_disabled && (
-                          <span className="text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-1 py-0.2 rounded font-semibold">
+                          <span className="text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-1.5 py-0.2 rounded font-bold">
                             Human
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-gray-400 truncate flex items-center gap-1">
-                        <span>{t.channel === "instagram" ? "Instagram DM" : t.customer_phone}</span>
+                      <div className="text-xs text-gray-400 truncate flex items-center gap-1 mt-0.5">
+                        <span className={t.channel === "instagram" ? "text-pink-600 dark:text-pink-400 font-medium" : ""}>
+                          {t.channel === "instagram" ? "Instagram DM" : t.customer_phone}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-400 flex-shrink-0">
+                  <div className="text-[11px] text-gray-400 flex-shrink-0">
                     {t.last_message_at ? formatTime(t.last_message_at) : ""}
                   </div>
                 </div>
-                <div className="mt-1.5 text-xs text-gray-500 truncate pl-11">
+                <div className="mt-1.5 text-xs text-gray-500 dark:text-gray-400 truncate pl-11">
                   {t.last_message_direction === "OUTBOUND" && <span className="text-gray-400">You: </span>}
                   {t.last_message}
                 </div>
-                <div className="mt-1.5 flex items-center gap-2 pl-11">
-                  {t.trek_name && <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded">🏔️ {t.trek_name}</span>}
-                  {t.lead_status && <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${statusBadgeColor(t.lead_status)}`}>{t.lead_status.replace("_", " ")}</span>}
+                <div className="mt-1.5 flex items-center gap-1.5 pl-11 flex-wrap">
+                  {t.trek_name && <span className="text-[11px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded truncate max-w-[150px]">🏔️ {t.trek_name}</span>}
+                  {t.lead_status && <span className={`text-[11px] px-1.5 py-0.5 rounded font-medium ${statusBadgeColor(t.lead_status)}`}>{t.lead_status.replace("_", " ")}</span>}
                 </div>
               </button>
             ))
           )}
         </div>
 
-        {/* Chat Area (Right Panel) */}
-        <div className="flex-1 flex flex-col bg-gray-50 dark:bg-gray-950">
+        {/* Chat Area (Right Panel on desktop, full screen on mobile when selected) */}
+        <div className={`${!selectedCustomerId ? "hidden md:flex" : "flex"} flex-1 flex-col bg-gray-50 dark:bg-gray-950 overflow-hidden`}>
           {!selectedCustomerId ? (
-            <div className="flex-1 flex items-center justify-center text-gray-400">
-              <div className="text-center">
-                <span className="text-5xl block mb-4">💬</span>
-                <p className="text-lg font-medium">Select a conversation</p>
-                <p className="text-sm mt-1">Choose a WhatsApp or Instagram customer to view their chat</p>
+            <div className="flex-1 flex items-center justify-center text-gray-400 p-6">
+              <div className="text-center max-w-sm">
+                <span className="text-5xl block mb-3">💬</span>
+                <p className="text-lg font-bold text-gray-700 dark:text-gray-300">Select a conversation</p>
+                <p className="text-xs text-gray-500 mt-1">Choose a WhatsApp or Instagram customer from the left list to start messaging</p>
               </div>
             </div>
           ) : !detail ? (
-            <div className="flex-1 flex items-center justify-center text-gray-400">Loading messages...</div>
+            <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="animate-spin text-lg">⏳</span> Loading messages...
+              </div>
+            </div>
           ) : (
             <>
-              {/* Chat Header with AI Pause/Takeover Button */}
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-between flex-wrap gap-3">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 ${
+              {/* Chat Header with Back Button (mobile) and AI Pause/Takeover Button */}
+              <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 flex items-center justify-between flex-wrap gap-2 sticky top-0 z-10">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  {/* Mobile Back Button */}
+                  <button
+                    onClick={() => setSelectedCustomerId(null)}
+                    className="md:hidden p-1.5 -ml-1 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 flex items-center gap-1 text-xs font-semibold"
+                    title="Back to all chats"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span>Chats</span>
+                  </button>
+
+                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-bold flex-shrink-0 ${
                     detail.customer.instagram_id || detail.customer.phone.startsWith("ig:")
                       ? "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white"
                       : "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300"
                   }`}>
                     {detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "📸" : detail.customer.name.charAt(0).toUpperCase()}
                   </div>
-                  <div>
-                    <div className="font-semibold flex items-center gap-2">
-                      <span>{detail.customer.name}</span>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-normal">
-                        {detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "Instagram DM" : "WhatsApp"}
+                  <div className="min-w-0">
+                    <div className="font-bold text-sm sm:text-base flex items-center gap-1.5 truncate text-gray-900 dark:text-gray-100">
+                      <span className="truncate">{detail.customer.name}</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-medium">
+                        {detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "Instagram" : "WhatsApp"}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-400">{detail.customer.phone} {detail.customer.email && `• ${detail.customer.email}`}</div>
+                    <div className="text-[11px] text-gray-400 truncate">{detail.customer.phone}</div>
                   </div>
                 </div>
 
                 {/* Right Header Actions: Bot Toggle Button */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 ml-auto">
                   {detail.lead && (
-                    <div className="hidden sm:flex items-center gap-2 text-sm">
-                      {detail.lead.trek_name && <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs">🏔️ {detail.lead.trek_name}</span>}
-                      {detail.lead.status && <span className={`px-2 py-1 rounded text-xs font-medium ${statusBadgeColor(detail.lead.status)}`}>{detail.lead.status}</span>}
+                    <div className="hidden lg:flex items-center gap-2 text-xs">
+                      {detail.lead.trek_name && <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">🏔️ {detail.lead.trek_name}</span>}
+                      {detail.lead.status && <span className={`px-2 py-1 rounded font-medium ${statusBadgeColor(detail.lead.status)}`}>{detail.lead.status}</span>}
                     </div>
                   )}
 
@@ -273,7 +291,7 @@ export default function ConversationsPage() {
                   <button
                     onClick={toggleAiForCustomer}
                     disabled={togglingAi}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm transition-all ${
+                    className={`flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all ${
                       isAiDisabled
                         ? "bg-amber-500 hover:bg-amber-600 text-white"
                         : "bg-emerald-600 hover:bg-emerald-700 text-white"
@@ -281,11 +299,11 @@ export default function ConversationsPage() {
                     title={isAiDisabled ? "Click to resume AI auto-replies for this customer" : "Click to pause AI bot and take over conversation manually"}
                   >
                     {togglingAi ? (
-                      <span>Updating...</span>
+                      <span>Saving...</span>
                     ) : isAiDisabled ? (
                       <>
-                        <span>👤 Human Takeover (Bot Paused)</span>
-                        <span className="bg-white/20 px-1.5 py-0.5 rounded ml-1">▶️ Resume Bot</span>
+                        <span>👤 Bot Paused</span>
+                        <span className="bg-white/20 px-1 py-0.5 rounded ml-1 text-[11px]">▶️ Resume</span>
                       </>
                     ) : (
                       <>
@@ -293,8 +311,9 @@ export default function ConversationsPage() {
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                         </span>
-                        <span>🤖 AI Bot Active</span>
-                        <span className="bg-white/20 px-1.5 py-0.5 rounded ml-1">⏸️ Take Over</span>
+                        <span className="hidden sm:inline">🤖 AI Bot Active</span>
+                        <span className="sm:hidden">🤖 Active</span>
+                        <span className="bg-white/20 px-1.5 py-0.5 rounded ml-0.5 sm:ml-1 text-[11px]">⏸️ Take Over</span>
                       </>
                     )}
                   </button>
@@ -303,37 +322,37 @@ export default function ConversationsPage() {
 
               {/* Notice Banner when Takeover is Active */}
               {isAiDisabled && (
-                <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/60 px-4 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-center justify-between">
+                <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/60 px-3 sm:px-4 py-2 text-xs text-amber-800 dark:text-amber-200 flex items-center justify-between">
                   <span>
-                    ⏸️ <strong>Bot replies are paused for this customer.</strong> The AI will not answer incoming messages until you click <strong>Resume Bot</strong>.
+                    ⏸️ <strong>Bot paused for this chat.</strong> Reply manually below.
                   </span>
                   <button
                     onClick={toggleAiForCustomer}
                     disabled={togglingAi}
-                    className="text-xs font-bold underline ml-2 hover:text-amber-900"
+                    className="text-xs font-bold underline ml-2 hover:text-amber-900 whitespace-nowrap"
                   >
                     Resume Bot
                   </button>
                 </div>
               )}
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+              {/* Messages Scroll Area */}
+              <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2.5 sm:space-y-3">
                 {detail.messages.map((m) => (
                   <div key={m.id} className={`flex ${m.direction === "OUTBOUND" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[70%] rounded-2xl px-4 py-2.5 text-sm ${
+                      className={`max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm ${
                         m.direction === "OUTBOUND"
-                          ? "bg-brand-600 text-white rounded-br-md"
-                          : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-md shadow-sm"
+                          ? "bg-brand-600 text-white rounded-br-sm shadow-sm"
+                          : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-700/50"
                       }`}
                     >
-                      <div className="whitespace-pre-wrap break-words">{m.body}</div>
+                      <div className="whitespace-pre-wrap break-words leading-relaxed">{m.body}</div>
                       <div className={`text-[10px] mt-1 flex items-center justify-between gap-2 ${m.direction === "OUTBOUND" ? "text-brand-200" : "text-gray-400"}`}>
                         <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                         {m.direction === "OUTBOUND" && m.status && (
                           <span>
-                            {m.status === "sent" ? "✓" : m.status === "delivered" ? "✓✓" : m.status === "read" ? "✓✓" : m.status === "failed" ? "✗" : "⏳"}
+                            {m.status === "sent" ? "✓" : m.status === "delivered" ? "✓✓" : m.status === "read" ? "✓✓" : m.status === "failed" ? "✗" : "✓"}
                           </span>
                         )}
                       </div>
@@ -343,13 +362,13 @@ export default function ConversationsPage() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Reply Input */}
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-                <div className="flex items-end gap-3">
+              {/* Manual Reply Input Bar */}
+              <div className="p-2.5 sm:p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky bottom-0">
+                <div className="flex items-end gap-2 sm:gap-3">
                   <textarea
-                    className="input flex-1 resize-none"
+                    className="input flex-1 resize-none text-xs sm:text-sm py-2 px-3 min-h-[44px]"
                     rows={2}
-                    placeholder={`Type a manual reply to send on ${detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "Instagram DM" : "WhatsApp"}...`}
+                    placeholder={`Reply on ${detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "Instagram DM" : "WhatsApp"}...`}
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     onKeyDown={(e) => {
@@ -360,17 +379,17 @@ export default function ConversationsPage() {
                     }}
                   />
                   <button
-                    className="btn-primary px-6 h-12 flex items-center justify-center font-semibold"
+                    className="btn-primary px-3.5 sm:px-6 h-[44px] sm:h-12 flex items-center justify-center font-bold text-xs sm:text-sm flex-shrink-0"
                     disabled={sending || !replyText.trim()}
                     onClick={sendReply}
                   >
-                    {sending ? "Sending..." : "Send Reply"}
+                    {sending ? "..." : "Send"}
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-[11px] text-gray-400 mt-1.5 truncate">
                   {isAiDisabled
-                    ? "👤 Human Takeover active. Replies you send go directly to the customer."
-                    : "💡 AI auto-reply is currently active. If you want to chat manually without AI responding, click 'Take Over' above."}
+                    ? "👤 Human Takeover active. Messages go directly to the customer."
+                    : "💡 AI auto-reply is active. Click 'Take Over' above to reply manually without AI."}
                 </p>
               </div>
             </>
