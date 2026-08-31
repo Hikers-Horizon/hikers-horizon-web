@@ -57,6 +57,7 @@ interface ConversationDetail {
 export default function ConversationsPage() {
   const { activeOrg } = useAuth();
   const [threads, setThreads] = useState<Thread[]>([]);
+  const [activeTab, setActiveTab] = useState<"all" | "whatsapp" | "instagram">("all");
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [detail, setDetail] = useState<ConversationDetail | null>(null);
   const [replyText, setReplyText] = useState("");
@@ -67,6 +68,15 @@ export default function ConversationsPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastMsgCountRef = useRef<number>(0);
+
+  const whatsappCount = threads.filter((t) => t.channel !== "instagram").length;
+  const instagramCount = threads.filter((t) => t.channel === "instagram").length;
+
+  const filteredThreads = threads.filter((t) => {
+    if (activeTab === "whatsapp") return t.channel !== "instagram";
+    if (activeTab === "instagram") return t.channel === "instagram";
+    return true;
+  });
 
   async function loadThreads(silent = false) {
     if (!silent) setLoading(true);
@@ -235,12 +245,66 @@ export default function ConversationsPage() {
               🔄
             </button>
           </div>
-          {threads.length === 0 ? (
+
+          {/* Channel Filter Tabs (All / WhatsApp / Instagram) */}
+          <div className="p-2 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+            <div className="grid grid-cols-3 p-1 bg-gray-200/80 dark:bg-gray-800 rounded-lg text-xs font-semibold gap-1">
+              <button
+                onClick={() => setActiveTab("all")}
+                className={`py-1.5 px-1 rounded-md text-center transition-all flex items-center justify-center gap-1 ${
+                  activeTab === "all"
+                    ? "bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm font-bold"
+                    : "text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+                }`}
+              >
+                <span>All</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-gray-100 dark:bg-gray-700 rounded-full font-medium">{threads.length}</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("whatsapp")}
+                className={`py-1.5 px-1 rounded-md text-center transition-all flex items-center justify-center gap-1 ${
+                  activeTab === "whatsapp"
+                    ? "bg-emerald-600 text-white shadow-sm font-bold"
+                    : "text-gray-600 hover:text-emerald-700 dark:text-gray-400 dark:hover:text-emerald-400"
+                }`}
+              >
+                <span>💬 WA</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-medium ${
+                  activeTab === "whatsapp" ? "bg-emerald-700 text-white" : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
+                }`}>
+                  {whatsappCount}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab("instagram")}
+                className={`py-1.5 px-1 rounded-md text-center transition-all flex items-center justify-center gap-1 ${
+                  activeTab === "instagram"
+                    ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-sm font-bold"
+                    : "text-gray-600 hover:text-pink-600 dark:text-gray-400 dark:hover:text-pink-400"
+                }`}
+              >
+                <span>📸 Insta</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-medium ${
+                  activeTab === "instagram" ? "bg-black/20 text-white" : "bg-pink-100 text-pink-800 dark:bg-pink-950/60 dark:text-pink-300"
+                }`}>
+                  {instagramCount}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {filteredThreads.length === 0 ? (
             <div className="p-8 text-center text-sm text-gray-400">
-              No conversations yet. Incoming WhatsApp and Instagram messages will appear here.
+              {activeTab === "whatsapp"
+                ? "No WhatsApp conversations yet."
+                : activeTab === "instagram"
+                ? "No Instagram conversations yet."
+                : "No conversations yet. Incoming messages will appear here."}
             </div>
           ) : (
-            threads.map((t) => (
+            filteredThreads.map((t) => (
               <button
                 key={t.customer_id}
                 onClick={() => setSelectedCustomerId(t.customer_id)}
