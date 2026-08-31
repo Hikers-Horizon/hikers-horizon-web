@@ -11,11 +11,23 @@ export default function AppShell({ children, title }: { children: ReactNode; tit
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) router.push("/login");
+    if (!loading && !user) {
+      router.replace("/login");
+    }
   }, [loading, user, router]);
 
-  if (loading) return <div className="flex h-screen items-center justify-center text-gray-500">Loading...</div>;
-  if (!user) return null;
+  if (loading) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 bg-gray-50 dark:bg-gray-950 text-gray-500">
+        <span className="text-3xl animate-bounce">⛺</span>
+        <p className="text-sm font-medium">Loading CampFlow...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950">
