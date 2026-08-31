@@ -63,34 +63,68 @@ export default function ConversationsPage() {
   const [sending, setSending] = useState(false);
   const [togglingAi, setTogglingAi] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isLiveConnected, setIsLiveConnected] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const lastMsgCountRef = useRef<number>(0);
 
   async function loadThreads(silent = false) {
     if (!silent) setLoading(true);
     try {
       const res = await api.get("/api/conversations");
       setThreads(res.data);
+      setIsLiveConnected(true);
+    } catch (err) {
+      console.error("Thread poll error", err);
     } finally {
       if (!silent) setLoading(false);
     }
   }
 
-  async function loadMessages(customerId: string) {
-    const res = await api.get(`/api/conversations/${customerId}/messages`);
-    setDetail(res.data);
-    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+  async function loadMessages(customerId: string, isPoll = false) {
+    try {
+      const res = await api.get(`/api/conversations/${customerId}/messages`);
+      const newDetail: ConversationDetail = res.data;
+      
+      setDetail(newDetail);
+      setIsLiveConnected(true);
+
+      const prevCount = lastMsgCountRef.current;
+      const newCount = newDetail.messages.length;
+      lastMsgCountRef.current = newCount;
+
+      // Scroll to bottom on initial load or when a new message arrives
+      if (!isPoll || newCount > prevCount) {
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: isPoll ? "smooth" : "auto" });
+        }, 60);
+      }
+    } catch (err) {
+      console.error("Message poll error", err);
+    }
   }
 
+  // Real-time background sync for thread list (every 3.5 seconds)
   useEffect(() => {
-    if (activeOrg) {
-      loadThreads();
-      const interval = setInterval(() => loadThreads(true), 8000);
-      return () => clearInterval(interval);
-    }
+    if (!activeOrg) return;
+    loadThreads();
+    const threadInterval = setInterval(() => loadThreads(true), 3500);
+    return () => clearInterval(threadInterval);
   }, [activeOrg]);
 
+  // Real-time background sync for active chat (every 2 seconds)
   useEffect(() => {
-    if (selectedCustomerId) loadMessages(selectedCustomerId);
+    if (!selectedCustomerId) {
+      lastMsgCountRef.current = 0;
+      return;
+    }
+
+    loadMessages(selectedCustomerId, false);
+    const msgInterval = setInterval(() => {
+      loadMessages(selectedCustomerId, true);
+    }, 2000);
+
+    return () => clearInterval(msgInterval);
   }, [selectedCustomerId]);
 
   async function toggleAiForCustomer() {
@@ -102,7 +136,7 @@ export default function ConversationsPage() {
       await api.post(`/api/conversations/${selectedCustomerId}/toggle-ai`, {
         ai_enabled: newEnabledState,
       });
-      await loadMessages(selectedCustomerId);
+      await loadMessages(selectedCustomerId, false);
       await loadThreads(true);
     } catch (err) {
       console.error("Failed to toggle AI", err);
@@ -113,16 +147,34 @@ export default function ConversationsPage() {
 
   async function sendReply() {
     if (!replyText.trim() || !selectedCustomerId || !detail) return;
+    const textToSend = replyText.trim();
     setSending(true);
+    setReplyText("");
+
+    // Optimistic message append
+    const optimisticMsg: Msg = {
+      id: `temp-${Date.now()}`,
+      direction: "OUTBOUND",
+      channel: detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "instagram" : "whatsapp",
+      body: textToSend,
+      status: "sent",
+      created_at: new Date().toISOString(),
+    };
+    setDetail((prev) => prev ? { ...prev, messages: [...prev.messages, optimisticMsg] } : prev);
+    setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+
     try {
       const channel = detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "instagram" : "whatsapp";
       await api.post(`/api/conversations/${selectedCustomerId}/send`, {
-        body: replyText,
+        body: textToSend,
         channel,
       });
-      setReplyText("");
-      await loadMessages(selectedCustomerId);
+      await loadMessages(selectedCustomerId, true);
       await loadThreads(true);
+    } catch (err) {
+      console.error("Failed to send reply", err);
+      // Revert if error
+      await loadMessages(selectedCustomerId, false);
     } finally {
       setSending(false);
     }
@@ -272,6 +324,10 @@ export default function ConversationsPage() {
                       <span className="truncate">{detail.customer.name}</span>
                       <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-medium">
                         {detail.customer.instagram_id || detail.customer.phone.startsWith("ig:") ? "Instagram" : "WhatsApp"}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded-full">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Live
                       </span>
                     </div>
                     <div className="text-[11px] text-gray-400 truncate">{detail.customer.phone}</div>
