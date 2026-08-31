@@ -131,7 +131,7 @@ CRITICAL LENGTH & CONVERSATION RULES:
 - NEVER WRITE LONG PARAGRAPHS OR PASSAGES. Customers read on mobile and want fast, direct answers.
 - Answer the customer's exact question in 1-2 lines, then ask 1 short closing question.
 - NEVER assume or invent customer names.
-- NEVER invent phone numbers or UPI IDs for PhonePe/GPay. For payments, direct to https://hikershorizon.in/campflow/.
+- NEVER invent phone numbers or UPI IDs for PhonePe/GPay. For website bookings, direct to our official website https://hikershorizon.in or https://hikershorizon.in/Twodays/. NEVER send /campflow/ links to customers (that is the internal admin portal).
 - Share website link ONLY ONCE per conversation.
 - NEVER mention separate rooms unless explicitly asked.
 - Emojis: Use maximum 1-2 friendly emojis.
@@ -996,9 +996,8 @@ def _smart_trek_reply(
     # 10. Booking confirmation / payment link request
     if any(k in text for k in ["book", "confirm", "pay", "payment", "register"]):
         return (
-            "Awesome! 🎉 You can view all live departures and confirm your booking directly on our official portal:\n"
-            "👉 https://hikershorizon.in/campflow/\n\n"
-            "Or reply with your *Full Name, Email, and Trek Date* and I will generate your booking pass right here! ⛺"
+            "Awesome! 🎉 You can book directly on our website: https://hikershorizon.in/Twodays/\n\n"
+            "Or let me know your preferred dates and number of people, and our team will guide you right away!"
         )
 
     return (
