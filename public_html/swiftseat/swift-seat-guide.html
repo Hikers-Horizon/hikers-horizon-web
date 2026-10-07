@@ -8,7 +8,7 @@
     <style>
         @page {
             size: A4;
-            margin: 0;
+            margin: 10mm;
         }
 
         * {
@@ -19,8 +19,8 @@
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            background: #090d16;
-            color: #f1f5f9;
+            background: #eef2ff;
+            color: #1e293b;
             line-height: 1.45;
             font-size: 11.5px;
             -webkit-print-color-adjust: exact !important;
@@ -30,7 +30,7 @@
         .pdf-page {
             width: 210mm;
             height: 297mm;
-            padding: 14mm 16mm;
+            padding: 14mm 14mm 12mm;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -38,9 +38,10 @@
             justify-content: space-between;
             page-break-after: always;
             break-after: page;
-            background: radial-gradient(circle at 90% 10%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
-                        radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
-                        #090d16;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.10) 0%, transparent 28%),
+                radial-gradient(circle at 0% 100%, rgba(34, 197, 94, 0.08) 0%, transparent 30%),
+                linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         }
 
         .pdf-page:last-child {
@@ -50,14 +51,14 @@
 
         /* Top Header */
         .hero-banner {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
+            background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+            border-radius: 16px;
             padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 14px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
         }
 
         .brand-box {
@@ -69,13 +70,13 @@
         .brand-icon {
             width: 44px;
             height: 44px;
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 22px rgba(37, 99, 235, 0.28);
         }
 
         .brand-name {
@@ -88,19 +89,19 @@
         }
 
         .brand-name span {
-            color: #60a5fa;
+            color: #93c5fd;
         }
 
         .brand-sub {
             font-size: 11px;
-            color: #94a3b8;
+            color: #dbeafe;
             margin-top: 3px;
         }
 
         .pricing-badge {
             text-align: right;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.22);
             padding: 8px 16px;
             border-radius: 10px;
         }
@@ -109,13 +110,13 @@
             font-family: 'Space Grotesk', sans-serif;
             font-size: 20px;
             font-weight: 700;
-            color: #34d399;
+            color: #dcfce7;
             line-height: 1;
         }
 
         .price-sub {
             font-size: 9px;
-            color: #94a3b8;
+            color: #dbeafe;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-top: 2px;
@@ -133,7 +134,7 @@
             font-family: 'Space Grotesk', sans-serif;
             font-size: 15px;
             font-weight: 700;
-            color: #f8fafc;
+            color: #0f172a;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -144,8 +145,8 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            color: #60a5fa;
-            background: rgba(59, 130, 246, 0.12);
+            color: #1d4ed8;
+            background: #dbeafe;
             padding: 2px 8px;
             border-radius: 4px;
         }
@@ -160,9 +161,11 @@
 
         .card {
             background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid #dbe4f0;
             border-radius: 12px;
             padding: 12px 14px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+            page-break-inside: avoid;
         }
 
         .card-icon {
@@ -176,21 +179,21 @@
             margin-bottom: 6px;
         }
 
-        .card-icon.blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-        .card-icon.green { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-        .card-icon.orange { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-        .card-icon.purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+        .card-icon.blue { background: #dbeafe; color: #2563eb; }
+        .card-icon.green { background: #dcfce7; color: #16a34a; }
+        .card-icon.orange { background: #ffedd5; color: #d97706; }
+        .card-icon.purple { background: #f3e8ff; color: #7c3aed; }
 
         .card-title {
             font-size: 12px;
             font-weight: 700;
-            color: #f1f5f9;
+            color: #0f172a;
             margin-bottom: 3px;
         }
 
         .card-desc {
             font-size: 10.5px;
-            color: #94a3b8;
+            color: #475569;
             line-height: 1.4;
         }
 
@@ -209,12 +212,12 @@
 
         .role-box.bot {
             background: rgba(16, 185, 129, 0.06);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid #bbf7d0;
         }
 
         .role-box.user {
             background: rgba(245, 158, 11, 0.06);
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            border: 1px solid #fed7aa;
         }
 
         .role-heading {
@@ -226,24 +229,25 @@
             gap: 6px;
         }
 
-        .role-box.bot .role-heading { color: #34d399; }
-        .role-box.user .role-heading { color: #fbbf24; }
+        .role-box.bot .role-heading { color: #047857; }
+        .role-box.user .role-heading { color: #b45309; }
 
         .role-list {
             padding-left: 16px;
             font-size: 10.5px;
         }
 
-        .role-box.bot .role-list li { color: #a7f3d0; margin-bottom: 3px; }
-        .role-box.user .role-list li { color: #fde68a; margin-bottom: 3px; }
+        .role-box.bot .role-list li { color: #14532d; margin-bottom: 3px; }
+        .role-box.user .role-list li { color: #92400e; margin-bottom: 3px; }
 
         /* Comparison Table */
         .table-box {
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid #dbe4f0;
             border-radius: 12px;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.6);
+            background: #ffffff;
             margin-bottom: 14px;
+            page-break-inside: avoid;
         }
 
         table {
@@ -253,8 +257,8 @@
         }
 
         th {
-            background: rgba(30, 41, 59, 0.8);
-            color: #94a3b8;
+            background: #eff6ff;
+            color: #475569;
             font-size: 9.5px;
             font-weight: 700;
             text-transform: uppercase;
@@ -267,7 +271,7 @@
         td {
             padding: 8px 12px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            color: #cbd5e1;
+            color: #334155;
         }
 
         tr:last-child td {
@@ -275,18 +279,18 @@
         }
 
         .check-badge {
-            color: #34d399;
+            color: #166534;
             font-weight: 700;
-            background: rgba(16, 185, 129, 0.15);
+            background: #dcfce7;
             padding: 2px 7px;
             border-radius: 4px;
             font-size: 10px;
         }
 
         .cross-badge {
-            color: #f87171;
+            color: #b91c1c;
             font-weight: 600;
-            background: rgba(239, 68, 68, 0.15);
+            background: #fee2e2;
             padding: 2px 7px;
             border-radius: 4px;
             font-size: 10px;
@@ -305,9 +309,11 @@
             align-items: flex-start;
             gap: 12px;
             background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid #dbe4f0;
             border-radius: 10px;
             padding: 10px 12px;
+            background: #ffffff;
+            page-break-inside: avoid;
         }
 
         .step-icon {
@@ -327,38 +333,39 @@
         .step-heading {
             font-size: 11.5px;
             font-weight: 700;
-            color: #f1f5f9;
+            color: #0f172a;
             margin-bottom: 2px;
         }
 
         .step-text {
             font-size: 10.5px;
-            color: #94a3b8;
+            color: #475569;
             line-height: 1.4;
         }
 
         /* Callout */
         .tip-box {
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
             border-radius: 10px;
             padding: 10px 14px;
             display: flex;
             align-items: flex-start;
             gap: 10px;
             margin-bottom: 14px;
+            page-break-inside: avoid;
         }
 
         .tip-title {
             font-size: 11px;
             font-weight: 700;
-            color: #60a5fa;
+            color: #1d4ed8;
             margin-bottom: 2px;
         }
 
         .tip-desc {
             font-size: 10.5px;
-            color: #93c5fd;
+            color: #475569;
             line-height: 1.4;
         }
 
@@ -372,27 +379,29 @@
 
         .faq-box {
             background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid #dbe4f0;
             border-radius: 10px;
             padding: 10px 12px;
+            background: #ffffff;
+            page-break-inside: avoid;
         }
 
         .faq-question {
             font-size: 11px;
             font-weight: 700;
-            color: #f1f5f9;
+            color: #0f172a;
             margin-bottom: 3px;
         }
 
         .faq-answer {
             font-size: 10px;
-            color: #94a3b8;
+            color: #475569;
             line-height: 1.35;
         }
 
         /* Footer */
         .pdf-footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid #cbd5e1;
             padding-top: 10px;
             display: flex;
             align-items: center;
@@ -408,7 +417,8 @@
         }
 
         @media print {
-            body { background: #090d16; }
+            body { background: #eef2ff; }
+            .pdf-page { box-shadow: none; }
         }
     </style>
 </head>
