@@ -107,18 +107,18 @@ TOOLS = [
 # ---------------------------------------------------------------------------
 
 SALES_AGENT_SYSTEM_PROMPT = """\
-You are an enthusiastic, warm, and highly professional human sales coordinator at Hikers Horizon Bangalore ({org_name}).
+You are an enthusiastic, warm, and highly professional human sales coordinator at Bengaluru Trails ({org_name}).
 You are chatting directly with customers on WhatsApp to answer questions, guide them through trek options, and help them book.
 
 COMPANY & PRICING KNOWLEDGE:
-- Kudremukha Trek: ₹3,499 per person (Includes Transportation from Bangalore, Homestay, Food & Guide). MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE due to strict Forest Department permit quotas. Link: https://hikershorizon.in/Twodays/Kuduremukha/
-- Netravathi Trek: ₹3,499 per person (Includes Transportation, Homestay, Food & Guide). MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE due to strict Forest Department permit quotas. Link: https://hikershorizon.in/Twodays/Netravathi/
-- Gokarna Beach Trek: ₹3,499 per person (Includes Transportation from Bangalore, Beach stay, Food & Guide). Link: https://hikershorizon.in/Twodays/Gokarna/
-- Kodachadri Trek: ₹3,799 per person (Includes Transportation from Bangalore, Homestay, Food, Guide & Jeep ride back). Link: https://hikershorizon.in/Twodays/Kodachadri/
-- Kumara Parvatha Trek: ₹3,299 per person (Includes Transportation, Food & Guide). Link: https://hikershorizon.in/Twodays/Kumaraparvatha/
-- Skandagiri Night Trek: ₹1,499 per person (Includes Transportation & Guide). Link: https://hikershorizon.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/
-- Munnar & Kolukkumalai Backpacking Trip: ₹5,199 per person (3 Days / 2 Nights). Link: https://hikershorizon.in/Backpacking/Munnar/
-- Wayanad Backpacking Trip: ₹3,699 per person. Link: https://hikershorizon.in/Backpacking/Wayanad/
+- Kudremukha Trek: ₹3,499 per person (Includes Transportation from Bangalore, Homestay, Food & Guide). MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE due to strict Forest Department permit quotas. Link: https://bengalurutrails.in/Twodays/Kuduremukha/
+- Netravathi Trek: ₹3,499 per person (Includes Transportation, Homestay, Food & Guide). MUST BE BOOKED AT LEAST 20 DAYS IN ADVANCE due to strict Forest Department permit quotas. Link: https://bengalurutrails.in/Twodays/Netravathi/
+- Gokarna Beach Trek: ₹3,499 per person (Includes Transportation from Bangalore, Beach stay, Food & Guide). Link: https://bengalurutrails.in/Twodays/Gokarna/
+- Kodachadri Trek: ₹3,799 per person (Includes Transportation from Bangalore, Homestay, Food, Guide & Jeep ride back). Link: https://bengalurutrails.in/Twodays/Kodachadri/
+- Kumara Parvatha Trek: ₹3,299 per person (Includes Transportation, Food & Guide). Link: https://bengalurutrails.in/Twodays/Kumaraparvatha/
+- Skandagiri Night Trek: ₹1,499 per person (Includes Transportation & Guide). Link: https://bengalurutrails.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/
+- Munnar & Kolukkumalai Backpacking Trip: ₹5,499 per person (3 Days / 2 Nights). Link: https://bengalurutrails.in/Backpacking/Munnar/
+- Wayanad Backpacking Trip: ₹3,699 per person. Link: https://bengalurutrails.in/Backpacking/Wayanad/
 - Pickups in Bangalore: Silk Board (8:30 PM), Majestic (9:15 PM), Yeshwanthpur (9:45 PM), Hebbal (10:15 PM). Departures every Friday night.
 - Exclusions: Forest entry permits / tickets are not included in any package and are to be paid directly/at the checkpost.
 
@@ -131,7 +131,7 @@ CRITICAL LENGTH & CONVERSATION RULES:
 - NEVER WRITE LONG PARAGRAPHS OR PASSAGES. Customers read on mobile and want fast, direct answers.
 - Answer the customer's exact question in 1-2 lines, then ask 1 short closing question.
 - NEVER assume or invent customer names.
-- NEVER invent phone numbers or UPI IDs for PhonePe/GPay. For website bookings, direct to our official website https://hikershorizon.in or https://hikershorizon.in/Twodays/. NEVER send /campflow/ links to customers (that is the internal admin portal).
+- NEVER invent phone numbers or UPI IDs for PhonePe/GPay. For website bookings, direct to our official website https://bengalurutrails.in or https://bengalurutrails.in/Twodays/. NEVER send /campflow/ links to customers (that is the internal admin portal).
 - Share website link ONLY ONCE per conversation.
 - NEVER mention separate rooms unless explicitly asked.
 - Emojis: Use maximum 1-2 friendly emojis.
@@ -538,7 +538,7 @@ def _smart_trek_reply(
     clean_words = set(re.findall(r"\b\w+\b", text))
     if clean_words.issubset(greeting_words) or text in greeting_words:
         return (
-            "Hey! 👋 Welcome to Hikers Horizon! 🏔️\n\n"
+            "Hey! 👋 Welcome to Bengaluru Trails! 🏔️\n\n"
             "We have weekend departures from Bangalore for Kudremukha (₹3,499), Gokarna (₹3,499), Kodachadri (₹3,799), and Netravathi (₹3,499).\n\n"
             "Which trek are you interested in exploring? 🎒"
         )
@@ -681,13 +681,25 @@ def _smart_trek_reply(
     # Auto-provision named trips if queried by name but not in DB
     if not matched_trip:
         auto_provisions = {
-            "munnar": ("Munnar & Kolukkumalai Trip", Decimal("5199")),
+            "munnar": ("Munnar & Kolukkumalai Trip", Decimal("5499")),
             "kodachadri": ("Kodachadri Trek", Decimal("3799")),
             "wayanad": ("Wayanad Backpacking Trip", Decimal("3699")),
             "kodaikanal": ("Kodaikanal Hill Station Trip", Decimal("4499")),
             "hampi": ("Hampi Heritage Trip", Decimal("4499")),
             "coorg": ("Coorg Backpacking Trip", Decimal("3499")),
             "chikmagalur": ("Chikmagalur Plantation Tour", Decimal("3499")),
+            "netravat": ("Netravathi Peak Trek", Decimal("2299")),
+            "nethravat": ("Netravathi Peak Trek", Decimal("2299")),
+            "kudremukh": ("Kudremukha Peak Trek", Decimal("3499")),
+            "kuduremukha": ("Kudremukha Peak Trek", Decimal("3499")),
+            "gokarn": ("Gokarna Beach Trek", Decimal("3499")),
+            "kumara": ("Kumara Parvatha Trek", Decimal("3299")),
+            "kp": ("Kumara Parvatha Trek", Decimal("3299")),
+            "tadiandamol": ("Tadiandamol Peak Trek", Decimal("2299")),
+            "skandagiri": ("Skandagiri Sunrise Trek", Decimal("1299")),
+            "uttari": ("Uttaribetta Sunrise Trek", Decimal("999")),
+            "kunti": ("Kuntibetta Sunrise Trek", Decimal("1199")),
+            "anthargange": ("Anthargange Sunrise Trek", Decimal("1099")),
         }
         for query_k, (tname, tprice) in auto_provisions.items():
             if query_k in text:
@@ -727,51 +739,63 @@ def _smart_trek_reply(
             return "₹3,499"
         name_lower = trip.name.lower()
         if "munnar" in name_lower:
-            return "₹5,199"
+            return "₹5,499"
         elif "kodachadri" in name_lower:
             return "₹3,799"
         elif "kodaikanal" in name_lower or "hampi" in name_lower:
             return "₹4,499"
         elif "wayanad" in name_lower:
             return "₹3,699"
-        elif "kudremukh" in name_lower or "netravat" in name_lower or "gokarn" in name_lower or "coorg" in name_lower or "chikmagalur" in name_lower:
+        elif "kudremukh" in name_lower or "netravat" in name_lower or "nethravat" in name_lower or "gokarn" in name_lower or "coorg" in name_lower or "chikmagalur" in name_lower:
             return "₹3,499"
         elif "skandagiri" in name_lower:
-            return "₹1,499"
+            return "₹1,299"
+        elif "uttari" in name_lower:
+            return "₹999"
+        elif "kunti" in name_lower or "anthargange" in name_lower:
+            return "₹1,199"
         elif trip.price:
             return f"₹{int(trip.price):,}"
         return "₹3,499"
 
-    # Helper to get official trek page URL on hikershorizon.in
+    # Helper to get official trek page URL on bengalurutrails.in
     def _get_trek_url(trip: Trip | None) -> str:
         if not trip:
-            return "https://hikershorizon.in/Twodays/"
+            return "https://bengalurutrails.in/Twodays/"
         name_lower = trip.name.lower()
         if "munnar" in name_lower:
-            return "https://hikershorizon.in/Backpacking/Munnar/"
+            return "https://bengalurutrails.in/Backpacking/Munnar/"
         elif "wayanad" in name_lower:
-            return "https://hikershorizon.in/Backpacking/Wayanad/"
+            return "https://bengalurutrails.in/Backpacking/Wayanad/"
         elif "kodaikanal" in name_lower:
-            return "https://hikershorizon.in/Backpacking/Kodaikanal/"
+            return "https://bengalurutrails.in/Backpacking/Kodaikanal/"
         elif "hampi" in name_lower:
-            return "https://hikershorizon.in/Backpacking/Hampi/"
+            return "https://bengalurutrails.in/Backpacking/Hampi/"
         elif "coorg" in name_lower:
-            return "https://hikershorizon.in/Backpacking/Coorg2days/"
+            return "https://bengalurutrails.in/Backpacking/Coorg2days/"
         elif "chikmagalur" in name_lower:
-            return "https://hikershorizon.in/Backpacking/Chikmagaluru/"
+            return "https://bengalurutrails.in/Backpacking/Chikmagaluru/"
         elif "kudremukh" in name_lower or "kuduremukha" in name_lower:
-            return "https://hikershorizon.in/Twodays/Kuduremukha/"
+            return "https://bengalurutrails.in/Twodays/Kuduremukha/"
         elif "gokarn" in name_lower:
-            return "https://hikershorizon.in/Twodays/Gokarna/"
+            return "https://bengalurutrails.in/Twodays/Gokarna/"
         elif "kodachadri" in name_lower:
-            return "https://hikershorizon.in/Twodays/Kodachadri/"
-        elif "netravat" in name_lower:
-            return "https://hikershorizon.in/Twodays/Netravathi/"
+            return "https://bengalurutrails.in/Twodays/Kodachadri/"
+        elif "netravat" in name_lower or "nethravat" in name_lower:
+            return "https://bengalurutrails.in/Twodays/Netravathi/"
         elif "kumara" in name_lower or "kp" in name_lower:
-            return "https://hikershorizon.in/Twodays/Kumaraparvatha/"
+            return "https://bengalurutrails.in/Twodays/Kumaraparvatha/"
+        elif "tadiandamol" in name_lower:
+            return "https://bengalurutrails.in/Twodays/Tadiandamol/"
         elif "skandagiri" in name_lower:
-            return "https://hikershorizon.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/"
-        return "https://hikershorizon.in/Twodays/"
+            return "https://bengalurutrails.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/"
+        elif "uttari" in name_lower:
+            return "https://bengalurutrails.in/Sunrise/Uttaribetta-sunrise-trek/"
+        elif "kunti" in name_lower:
+            return "https://bengalurutrails.in/Sunrise/Kuntibetta-sunrise-trek/"
+        elif "anthargange" in name_lower:
+            return "https://bengalurutrails.in/Sunrise/Anthargange-trek/"
+        return "https://bengalurutrails.in/Twodays/"
 
     # 3. Check for Distance / Duration / "How long" / Difficulty queries
     if any(k in text for k in ["how long", "distance", "duration", "how many hours", "how many km", "total km", "difficulty", "hard", "easy", "moderate", "level", "fitness", "time taken", "hours", "km"]):
@@ -780,7 +804,7 @@ def _smart_trek_reply(
             return f"🏔️ *Kudremukha:* 22 KM total (moderate hike, 7–8 hrs) through lush green Shola forests.{trek_url}\n\nWhich date are you planning for? 🎒"
         elif matched_trip and "kodachadri" in matched_trip.name.lower():
             return f"🏔️ *Kodachadri:* 14 KM total via Hidlumane Waterfalls with a fun off-road jeep ride back!{trek_url}\n\nWhich weekend works for you? 🎒"
-        elif matched_trip and "netravat" in matched_trip.name.lower():
+        elif matched_trip and ("netravat" in matched_trip.name.lower() or "nethravat" in matched_trip.name.lower()):
             return f"🌿 *Netravathi:* 14 KM moderate trek with stunning 360° rolling green ridge views!{trek_url}\n\nWhich weekend are you looking at? 🎒"
         elif matched_trip and "gokarn" in matched_trip.name.lower():
             return f"🏖️ *Gokarna:* 10 KM scenic coastal beach trek with beach stay & sunset views!{trek_url}\n\nWhich weekend are you planning? 🌊"
@@ -851,13 +875,13 @@ def _smart_trek_reply(
             "✨ *Package Includes:* Bangalore travel, Homestay accommodation, Meals (2 Breakfasts, 1 Lunch, 1 Dinner), and Certified Trek Guide! ⛺"
         )
 
-    link_already_sent = any("hikershorizon.in" in m.get("body", "") for m in recent_messages)
+    link_already_sent = any("bengalurutrails.in" in m.get("body", "") for m in recent_messages)
     user_wants_link = any(w in text for w in ["link", "photo", "photos", "website", "itinerary", "gallery", "details", "page"])
     should_include_link = (not link_already_sent) or user_wants_link
 
     # 7e. Booking timing & process FAQs (e.g. "Can I book on Thursday?", "How do I book?", "When to book?")
     if any(k in text for k in ["how do i book", "how to book", "book on thursday", "can i book on", "can we book", "last day to book", "when can i book", "booking process", "how can i book"]):
-        is_strict_advance = matched_trip and any(kw in matched_trip.name.lower() for kw in ["kudremukh", "kuduremukha", "netravat"])
+        is_strict_advance = matched_trip and any(kw in matched_trip.name.lower() for kw in ["kudremukh", "kuduremukha", "netravat", "nethravat"])
         if is_strict_advance:
             clean_title = matched_trip.name.replace("[DEMO]", "").strip()
             return (
@@ -996,12 +1020,12 @@ def _smart_trek_reply(
     # 10. Booking confirmation / payment link request
     if any(k in text for k in ["book", "confirm", "pay", "payment", "register"]):
         return (
-            "Awesome! 🎉 You can book directly on our website: https://hikershorizon.in/Twodays/\n\n"
+            "Awesome! 🎉 You can book directly on our website: https://bengalurutrails.in/Twodays/\n\n"
             "Or let me know your preferred dates and number of people, and our team will guide you right away!"
         )
 
     return (
-        "Thanks for reaching out to Hikers Horizon! 🏔️\n"
+        "Thanks for reaching out to Bengaluru Trails! 🏔️\n"
         "We organize weekend departures from Bangalore for Kudremukha, Gokarna, Netravathi, Kumara Parvatha & Skandagiri.\n\n"
         "Which trek and dates would you like details for? I can check live seat availability for you right away! 🎒"
     )
