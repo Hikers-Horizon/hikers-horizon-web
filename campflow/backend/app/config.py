@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
+from pathlib import Path
 from functools import lru_cache
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -63,7 +64,8 @@ class Settings(BaseSettings):
     EMAIL_FROM: str = "no-reply@campflow.app"
 
     class Config:
-        env_file = ".env"
+        env_file = str(Path(__file__).resolve().parent.parent / ".env")
+        extra = "ignore"
 
 
 @lru_cache

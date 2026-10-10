@@ -3,8 +3,9 @@ import os
 import datetime
 import decimal
 
-# Ensure the backend directory is on the python path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, backend_dir)
+os.chdir(backend_dir)
 
 from sqlalchemy import text
 from app.database import engine, SessionLocal
