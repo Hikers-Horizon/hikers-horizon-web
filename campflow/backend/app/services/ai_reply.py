@@ -10,12 +10,10 @@ import httpx
 from app.config import settings
 
 SYSTEM_PROMPT_DEFAULT = (
-    "You are a friendly, concise customer support assistant for a trekking and adventure-trip "
-    "operator. You reply to enquiries received over WhatsApp/Instagram. Always be helpful, "
-    "accurate, and encourage the customer toward booking. Keep replies under 60 words, "
-    "no markdown, plain conversational text suitable for a chat message. If you don't know "
-    "specific trip details, ask a clarifying question instead of making facts up. Never invite "
-    "the customer to pay outside the official booking flow."
+    "You are a calm, helpful human sales coordinator replying to customer DMs for Bengaluru Trails. "
+    "Never use marketing hype, bullet lists, or long explanations. "
+    "Answer only the specific question asked in 1 or 2 short sentences (under 25 words). "
+    "Sound like a polite, real human texting on Instagram or WhatsApp."
 )
 
 
@@ -64,8 +62,8 @@ def _generate_with_openai(inbound_text: str, context: str, system_prompt: str | 
             {"role": "system", "content": f"Context:\n{context}"},
             {"role": "user", "content": inbound_text},
         ],
-        "temperature": 0.5,
-        "max_tokens": 150,
+        "temperature": 0.3,
+        "max_tokens": 100,
     }
     with httpx.Client(timeout=20) as client:
         resp = client.post(url, json=payload, headers=headers)
@@ -76,15 +74,13 @@ def _generate_with_openai(inbound_text: str, context: str, system_prompt: str | 
 
 def _fallback_reply(inbound_text: str) -> str:
     """Rule-based reply used when no OpenAI key is configured, so replies still go out."""
-    text = inbound_text.lower()
+    text = inbound_text.lower().strip()
+    if any(k in text for k in ["hi", "hello", "hey", "hii"]):
+        return "Hey! How can I help you today?"
     if any(k in text for k in ["price", "cost", "fee", "how much"]):
-        return ("Thanks for reaching out! Pricing depends on the trek and group size — "
-                "our team will share exact costs shortly. Which trek are you interested in?")
+        return "Treks start at ₹3,499 per person, including Bangalore travel, stay, and meals. Which trek are you looking for?"
     if any(k in text for k in ["date", "when", "departure", "schedule"]):
-        return ("Thanks for your message! We run several departures a month — "
-                "let us know your preferred dates and we'll check availability for you.")
+        return "We have departures every Friday night from Bangalore. Which weekend are you looking for?"
     if any(k in text for k in ["book", "confirm", "payment", "pay"]):
-        return ("Great, we'd love to help you book! Our team will follow up shortly with "
-                "the booking link and payment details.")
-    return ("Thanks for reaching out! A member of our team will get back to you shortly. "
-            "In the meantime, let us know which trek and dates you're interested in.")
+        return "You can book directly at https://bengalurutrails.in/Twodays/ or let me know your date and group size."
+    return "Hey! Which trek or destination are you looking for?"
