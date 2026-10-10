@@ -4,10 +4,13 @@ Docs: https://developers.facebook.com/docs/messenger-platform/instagram
 Sending requires the Page's Instagram professional account to be connected and the
 `instagram_manage_messages` permission granted to the access token.
 """
+import logging
 import httpx
 from app.config import settings
 
-GRAPH_API_BASE = "https://graph.facebook.com/v19.0"
+logger = logging.getLogger("campflow.instagram")
+
+GRAPH_API_BASE = "https://graph.facebook.com/v20.0"
 
 
 class InstagramClient:
@@ -20,23 +23,45 @@ class InstagramClient:
     def send_text_message(self, recipient_id: str, body: str) -> dict:
         if not self.access_token:
             raise RuntimeError("Instagram credentials are not configured")
-        
-        # Support both Instagram Login tokens (IGAA...) and Facebook Page tokens (EAA...)
+
+        urls_to_try = []
         if self.access_token.startswith("IGAA") or self.access_token.startswith("IG"):
-            url = "https://graph.instagram.com/v20.0/me/messages"
-        elif self.page_id:
-            url = f"https://graph.facebook.com/v20.0/{self.page_id}/messages"
+            # Instagram User/Login access tokens MUST be sent to graph.instagram.com
+            urls_to_try.append("https://graph.instagram.com/v20.0/me/messages")
         else:
-            url = "https://graph.facebook.com/v20.0/me/messages"
+            # Facebook Page access tokens (EAA...) are sent to graph.facebook.com
+            if self.page_id:
+                urls_to_try.append(f"https://graph.facebook.com/v20.0/{self.page_id}/messages")
+            urls_to_try.append("https://graph.facebook.com/v20.0/me/messages")
 
         payload = {
             "recipient": {"id": recipient_id},
             "message": {"text": body},
         }
         headers = {"Authorization": f"Bearer {self.access_token}"}
-        with httpx.Client(timeout=12) as client:
-            resp = client.post(url, json=payload, headers=headers)
-            if resp.status_code != 200:
-                resp = client.post(url, json=payload, params={"access_token": self.access_token})
-            resp.raise_for_status()
-            return resp.json()
+
+        last_resp = None
+        for url in urls_to_try:
+            try:
+                with httpx.Client(timeout=12) as client:
+                    resp = client.post(url, json=payload, headers=headers)
+                    if resp.status_code == 200:
+                        return resp.json()
+
+                    # Fallback query param mode if Bearer header didn't work
+                    resp = client.post(url, json=payload, params={"access_token": self.access_token})
+                    if resp.status_code == 200:
+                        return resp.json()
+
+                    last_resp = resp
+                    logger.warning(
+                        "Instagram send attempt returned %s for URL %s: %s",
+                        resp.status_code, url, resp.text[:250]
+                    )
+            except Exception as exc:
+                logger.warning("Error attempting Instagram send to %s: %s", url, exc)
+
+        if last_resp is not None:
+            last_resp.raise_for_status()
+        raise RuntimeError("Failed to send Instagram message: all endpoints failed")
+

@@ -85,8 +85,19 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
             outbound.status = "sent"
             logger.info("Successfully sent Instagram reply to %s: %s", customer.instagram_id, result)
         except Exception as exc:  # noqa: BLE001
-            outbound.status = "failed"
-            logger.exception("Failed to send AI-generated Instagram reply to %s: %s", customer.instagram_id, exc)
+            if settings.INSTAGRAM_ACCESS_TOKEN and instagram_token != settings.INSTAGRAM_ACCESS_TOKEN:
+                logger.warning("Org Instagram token failed (%s), trying platform fallback token", exc)
+                try:
+                    fallback_client = InstagramClient(page_id=settings.INSTAGRAM_PAGE_ID, access_token=settings.INSTAGRAM_ACCESS_TOKEN)
+                    result = fallback_client.send_text_message(customer.instagram_id, reply_text)
+                    outbound.status = "sent"
+                    logger.info("Successfully sent Instagram reply via platform token to %s: %s", customer.instagram_id, result)
+                except Exception as fb_exc:  # noqa: BLE001
+                    outbound.status = "failed"
+                    logger.exception("Platform fallback Instagram token also failed: %s", fb_exc)
+            else:
+                outbound.status = "failed"
+                logger.exception("Failed to send AI-generated Instagram reply to %s: %s", customer.instagram_id, exc)
     else:
         logger.warning("Channel %s not configured with token or credentials (org.whatsapp_phone_number_id=%s)", channel, org.whatsapp_phone_number_id)
         outbound.status = "not_configured"

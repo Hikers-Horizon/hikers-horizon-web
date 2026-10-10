@@ -299,10 +299,23 @@ def send_manual_reply(
                 outbound.whatsapp_message_id = result.get("message_id") or result.get("id")
                 outbound.status = "sent"
             except Exception as e:  # noqa: BLE001
-                outbound.status = "failed"
-                logger.exception("Manual Instagram send failed")
-                db.commit()
-                raise HTTPException(status_code=502, detail=f"Instagram send failed: {e}")
+                if settings.INSTAGRAM_ACCESS_TOKEN and token != settings.INSTAGRAM_ACCESS_TOKEN:
+                    logger.warning("Manual Instagram reply failed with org token, attempting platform fallback: %s", e)
+                    try:
+                        fallback_client = InstagramClient(access_token=settings.INSTAGRAM_ACCESS_TOKEN, page_id=settings.INSTAGRAM_PAGE_ID)
+                        result = fallback_client.send_text_message(recipient_id, payload.body)
+                        outbound.whatsapp_message_id = result.get("message_id") or result.get("id")
+                        outbound.status = "sent"
+                    except Exception as fb_e:
+                        outbound.status = "failed"
+                        logger.exception("Manual Instagram send fallback failed: %s", fb_e)
+                        db.commit()
+                        raise HTTPException(status_code=502, detail=f"Instagram send failed: {fb_e}")
+                else:
+                    outbound.status = "failed"
+                    logger.exception("Manual Instagram send failed")
+                    db.commit()
+                    raise HTTPException(status_code=502, detail=f"Instagram send failed: {e}")
         else:
             outbound.status = "not_configured"
 

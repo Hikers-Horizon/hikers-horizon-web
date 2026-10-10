@@ -441,7 +441,10 @@ def _call_gemini(messages: list[dict]) -> str | None:
     if system_instruction:
         payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
 
-    for attempt_model in ["gemini-flash-lite-latest", "gemini-3.5-flash", "gemini-3.6-flash"]:
+    candidate_models = [settings.GEMINI_MODEL, "gemini-3.8-flash", "gemini-3.5-flash", "gemini-flash-lite-latest", "gemini-3.6-flash"]
+    attempt_models = [m for m in dict.fromkeys(candidate_models) if m]
+
+    for attempt_model in attempt_models:
         try:
             req_url = f"https://generativelanguage.googleapis.com/v1beta/models/{attempt_model}:generateContent"
             with httpx.Client(timeout=12) as client:

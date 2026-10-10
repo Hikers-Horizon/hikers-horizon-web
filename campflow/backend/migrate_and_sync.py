@@ -42,6 +42,19 @@ def run():
 
         print(f"[+] Active Organization: {hh.name} (ID: {hh.id})")
 
+        # Verify AI auto-reply is enabled for the organization
+        if not hh.ai_auto_reply_enabled:
+            hh.ai_auto_reply_enabled = True
+            db.commit()
+            print(f"[+] Enabled ai_auto_reply_enabled for {hh.name}!")
+
+        # Check if the DB Instagram token is expired or broken (legacy token that expired in August 2026)
+        if hh.instagram_access_token and (hh.instagram_access_token.startswith("EAFZC2lreDqngBS") or "EAFZC" in hh.instagram_access_token):
+            print(f"[!] Clearing expired legacy Instagram token from {hh.name} to allow platform fallback from .env...")
+            hh.instagram_access_token = None
+            db.commit()
+            print("[+] Expired Instagram token cleared successfully! System will use INSTAGRAM_ACCESS_TOKEN from .env.")
+
         # Re-link all customers, messages, and leads to Hikers Horizon
         cust_updated = db.query(Customer).filter(Customer.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
         msg_updated = db.query(Message).filter(Message.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)

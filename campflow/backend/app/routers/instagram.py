@@ -28,11 +28,22 @@ def verify_webhook(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Missing parameters")
 
     expected_token = settings.INSTAGRAM_WEBHOOK_VERIFY_TOKEN or "campflow_webhook_verify_token"
-    if token != expected_token and token != settings.WHATSAPP_WEBHOOK_VERIFY_TOKEN and token != "campflow_webhook_verify_token":
-        # Also check if any org has this verify token
-        org = db.query(Organization).filter(Organization.whatsapp_webhook_verify_token == token).first()
+    allowed_tokens = {
+        expected_token,
+        settings.WHATSAPP_WEBHOOK_VERIFY_TOKEN,
+        "campflow_webhook_verify_token",
+        "campflow-webhook-token-2026",
+        "campflow_webhook_verify_token_2026",
+    }
+    allowed_tokens = {t for t in allowed_tokens if t}
+
+    if token not in allowed_tokens:
+        # Also check if any org has this verify token or page id
+        org = db.query(Organization).filter(
+            (Organization.whatsapp_webhook_verify_token == token) | (Organization.instagram_page_id == token)
+        ).first()
         if not org:
-            logger.warning("Instagram webhook verification failed. Token received: %s, expected: %s", token, expected_token)
+            logger.warning("Instagram webhook verification failed. Token received: %s, expected one of: %s", token, allowed_tokens)
             raise HTTPException(status_code=403, detail="Invalid verify token")
 
     logger.info("Instagram webhook successfully verified with challenge: %s", challenge)
@@ -64,7 +75,7 @@ async def receive_webhook(request: Request):
     db = SessionLocal()
     try:
         for entry in payload.get("entry", []):
-            page_id = entry.get("id")
+            page_id = str(entry.get("id")) if entry.get("id") else None
             
             # Format 1: Messenger / Instagram standard messaging format
             for messaging in entry.get("messaging", []):
@@ -72,9 +83,19 @@ async def receive_webhook(request: Request):
                 if message.get("is_echo"):
                     logger.info("Skipping echo message sent by page itself: %s", message.get("mid"))
                     continue
-                sender_id = messaging.get("sender", {}).get("id")
-                text = message.get("text")
-                mid = message.get("mid")
+                sender_id = str(messaging.get("sender", {}).get("id")) if messaging.get("sender", {}).get("id") else None
+                # Skip if sender is the page itself (prevent echo loops)
+                if sender_id and (sender_id == page_id or (settings.INSTAGRAM_PAGE_ID and sender_id == str(settings.INSTAGRAM_PAGE_ID))):
+                    logger.info("Skipping echo message where sender is page itself: %s", sender_id)
+                    continue
+
+                text = (
+                    message.get("text")
+                    or (message.get("quick_reply", {}).get("payload") if isinstance(message.get("quick_reply"), dict) else None)
+                    or (messaging.get("postback", {}).get("title") if isinstance(messaging.get("postback"), dict) else None)
+                    or (messaging.get("postback", {}).get("payload") if isinstance(messaging.get("postback"), dict) else None)
+                )
+                mid = message.get("mid") or (messaging.get("postback", {}).get("mid") if isinstance(messaging.get("postback"), dict) else None)
                 if sender_id and text:
                     logger.info("Processing inbound Instagram DM from sender_id: %s, text: %s", sender_id, text)
                     try:
@@ -88,8 +109,20 @@ async def receive_webhook(request: Request):
             for change in entry.get("changes", []):
                 val = change.get("value") or {}
                 if change.get("field") == "messages" or "message" in val or "text" in val:
-                    sender_id = val.get("from", {}).get("id") or val.get("sender", {}).get("id") or val.get("id")
-                    text = val.get("text") or val.get("message")
+                    raw_sender = val.get("from", {}).get("id") or val.get("sender", {}).get("id") or val.get("id")
+                    sender_id = str(raw_sender) if raw_sender else None
+                    if sender_id and (sender_id == page_id or (settings.INSTAGRAM_PAGE_ID and sender_id == str(settings.INSTAGRAM_PAGE_ID))):
+                        logger.info("Skipping echo message (changes) where sender is page itself: %s", sender_id)
+                        continue
+
+                    raw_msg = val.get("message")
+                    text = (
+                        val.get("text")
+                        or (raw_msg if isinstance(raw_msg, str) else (raw_msg.get("text") if isinstance(raw_msg, dict) else None))
+                        or (val.get("quick_reply", {}).get("payload") if isinstance(val.get("quick_reply"), dict) else None)
+                        or (val.get("postback", {}).get("title") if isinstance(val.get("postback"), dict) else None)
+                        or (val.get("postback", {}).get("payload") if isinstance(val.get("postback"), dict) else None)
+                    )
                     mid = val.get("mid") or val.get("id")
                     if sender_id and text:
                         logger.info("Processing inbound Instagram DM (changes) from sender_id: %s, text: %s", sender_id, text)
