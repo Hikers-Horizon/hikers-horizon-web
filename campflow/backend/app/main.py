@@ -109,9 +109,9 @@ def run_db_migrations():
             db.flush()
 
             m1 = Message(organization_id=hh.id, customer_id=c1.id, direction=MessageDirection.INBOUND, channel="whatsapp", body="Hello in Kodachadri trekking will get 2 separate rooms ?...", status="received")
-            m2 = Message(organization_id=hh.id, customer_id=c1.id, direction=MessageDirection.OUTBOUND, channel="whatsapp", body="Hey! Standard stay is sharing (separate for boys & girls). Private rooms can be arranged upon request for couples/families!\n\nHow many people are joining? 🎒", status="delivered")
+            m2 = Message(organization_id=hh.id, customer_id=c1.id, direction=MessageDirection.OUTBOUND, channel="whatsapp", body="Hey! Standard stay is sharing basis. Private rooms can be arranged on request.", status="delivered")
             m3 = Message(organization_id=hh.id, customer_id=c2.id, direction=MessageDirection.INBOUND, channel="instagram", body="Hey! What is the price for Gokarna beach trek?", status="received")
-            m4 = Message(organization_id=hh.id, customer_id=c2.id, direction=MessageDirection.OUTBOUND, channel="instagram", body="Hey! 🏖️ Gokarna Beach Trek is ₹3,499 per person (includes Bangalore transport, beach stay, meals & guide). Which weekend are you planning for? 🌊", status="delivered")
+            m4 = Message(organization_id=hh.id, customer_id=c2.id, direction=MessageDirection.OUTBOUND, channel="instagram", body="Gokarna is \u20b93,499 per person, all inclusive.", status="delivered")
             db.add_all([m1, m2, m3, m4])
 
             l1 = Lead(organization_id=hh.id, customer_id=c1.id, trek_name="Kodachadri Trek", num_people=2, source=LeadSource.WHATSAPP, status=LeadStatus.INTERESTED, score=LeadScore.HOT, estimated_value=decimal.Decimal("7598"))

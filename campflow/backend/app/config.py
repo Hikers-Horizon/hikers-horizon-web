@@ -42,6 +42,11 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-flash-lite-latest"
 
+    # Human-like delay (avoids instant bot replies, mimics real reading and typing speed)
+    AI_REPLY_DELAY_ENABLED: bool = True
+    AI_REPLY_DELAY_MIN_SECONDS: float = 7.0
+    AI_REPLY_DELAY_MAX_SECONDS: float = 14.0
+
     # Payment link base URL used by AI agent when creating bookings
     BOOKING_PAYMENT_BASE_URL: str = ""  # e.g. https://yoursite.com/pay — falls back to FRONTEND_URL/pay
 

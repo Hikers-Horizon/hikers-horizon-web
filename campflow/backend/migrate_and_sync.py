@@ -56,6 +56,24 @@ def run():
             db.commit()
             print("[+] Expired Instagram token cleared successfully! System will use INSTAGRAM_ACCESS_TOKEN from .env.")
 
+        # Update ai_system_prompt to enforce human-like, no-overaction tone
+        HUMAN_TONE_PROMPT = (
+            "You are a real human trekking coordinator texting customers on WhatsApp / Instagram for Hikers Horizon (hikershorizon.in). "
+            "You are NOT an AI. Location: Yelahanka, Bangalore. Contact: +91 9902653393.\n\n"
+            "CRITICAL RULES:\n"
+            "1. ZERO OVERACTION: No 'Awesome!', 'Exciting!', 'Perfect!', 'Great choice!', 'Welcome!', 'I'd love to help!', or any bot-like hype.\n"
+            "2. ANSWER AND STOP: Answer the question asked. Do NOT append forced follow-up questions like 'Which weekend?' or 'How many people?' to every reply.\n"
+            "3. KEEP IT SHORT: 1-2 sentences, under 25 words. Text casually like a real person on a phone. No bullet points, no markdown bold.\n"
+            "4. At most 0-1 simple emoji per message.\n"
+            "5. Use simple trek names: 'Munnar', 'Kudremukh', 'Gokarna' — not formal full names.\n\n"
+            "TREK CATEGORIES: Sunrise (Rs.600-999), 2-Day (Rs.2499-3299), Backpacking (Rs.2550-4000).\n"
+            "Cancellation: 30+ days = 75% refund, 15-30 days = 50% credit, <15 days = no refund."
+        )
+        if hh.ai_system_prompt != HUMAN_TONE_PROMPT:
+            hh.ai_system_prompt = HUMAN_TONE_PROMPT
+            db.commit()
+            print("[+] Updated ai_system_prompt to human-like, no-overaction tone.")
+
         # Re-link all customers, messages, and leads to Hikers Horizon
         cust_updated = db.query(Customer).filter(Customer.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
         msg_updated = db.query(Message).filter(Message.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
@@ -75,9 +93,9 @@ def run():
             db.flush()
 
             m1 = Message(organization_id=hh.id, customer_id=c1.id, direction=MessageDirection.INBOUND, channel="whatsapp", body="Hello in Kodachadri trekking will get 2 separate rooms ?...", status="received")
-            m2 = Message(organization_id=hh.id, customer_id=c1.id, direction=MessageDirection.OUTBOUND, channel="whatsapp", body="Hey! Standard stay is sharing. Private rooms can be arranged upon request!\n\nHow many people are joining? 🎒", status="delivered")
+            m2 = Message(organization_id=hh.id, customer_id=c1.id, direction=MessageDirection.OUTBOUND, channel="whatsapp", body="Hey! Standard stay is sharing basis. Private rooms can be arranged on request.", status="delivered")
             m3 = Message(organization_id=hh.id, customer_id=c2.id, direction=MessageDirection.INBOUND, channel="instagram", body="Hey! What is the price for Gokarna beach trek?", status="received")
-            m4 = Message(organization_id=hh.id, customer_id=c2.id, direction=MessageDirection.OUTBOUND, channel="instagram", body="Hey! 🏖️ Gokarna Beach Trek is ₹3,499 per person. Which weekend are you planning for? 🌊", status="delivered")
+            m4 = Message(organization_id=hh.id, customer_id=c2.id, direction=MessageDirection.OUTBOUND, channel="instagram", body="Gokarna is \u20b93,499 per person, all inclusive.", status="delivered")
             db.add_all([m1, m2, m3, m4])
 
             l1 = Lead(organization_id=hh.id, customer_id=c1.id, trek_name="Kodachadri Trek", num_people=2, source=LeadSource.WHATSAPP, status=LeadStatus.INTERESTED, score=LeadScore.HOT, estimated_value=decimal.Decimal("7598"))

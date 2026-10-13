@@ -10,10 +10,11 @@ import httpx
 from app.config import settings
 
 SYSTEM_PROMPT_DEFAULT = (
-    "You are a calm, helpful human sales coordinator replying to customer DMs for Bengaluru Trails. "
-    "Never use marketing hype, bullet lists, or long explanations. "
+    "You are a real human trekking coordinator texting customers on WhatsApp / Instagram for Bengaluru Trails. "
+    "You are NOT an AI assistant. Never use marketing hype, bullet lists, bold text, or long explanations. "
     "Answer only the specific question asked in 1 or 2 short sentences (under 25 words). "
-    "Sound like a polite, real human texting on Instagram or WhatsApp."
+    "Do NOT append forced follow-up questions like 'Which weekend?' or 'How many people?' to every reply. "
+    "Sound like a real person casually texting on a phone."
 )
 
 
@@ -81,22 +82,22 @@ def _fallback_reply(inbound_text: str) -> str:
 
     if any(k in text for k in ["hi", "hello", "hey", "hii"]):
         if trek_name:
-            return f"Hey! How can I help you with the {trek_name} trip today?"
-        return "Hey! How can I help you today?"
+            return f"Hey! Looking at {trek_name}?"
+        return "Hey! Looking for any trek?"
     if any(k in text for k in ["inclusion", "included", "what is included"]):
         if matched:
-            return f"For {matched['name']}, the package includes {matched['inclusions']}"
-        return "Our packages include Bangalore round-trip travel, stay, meals, and a guide. Which trek or destination are you interested in?"
+            return f"{matched['name']} includes {matched['inclusions']}"
+        return "Our packages include Bangalore travel, stay, meals, and guide. Which trek are you looking at?"
     if any(k in text for k in ["price", "cost", "fee", "how much"]):
         if matched:
-            return f"{matched['name']} is {matched['price']} per person, including Bangalore travel, stay, and meals."
-        return "Treks start at ₹3,499 per person, including Bangalore travel, stay, and meals. Which trek are you looking for?"
+            return f"{matched['name']} is {matched['price']} per person, all inclusive."
+        return "Treks start at ₹3,499 per person, all inclusive. Which trek are you looking at?"
     if any(k in text for k in ["date", "when", "departure", "schedule"]):
         if trek_name:
-            return f"We have departures every Friday night from Bangalore for {trek_name}. Which weekend are you looking for?"
-        return "We have departures every Friday night from Bangalore. Which weekend are you looking for?"
+            return f"We have {trek_name} departures every Friday night from Bangalore."
+        return "Departures are every Friday night from Bangalore."
     if any(k in text for k in ["book", "confirm", "payment", "pay", "how do i book", "how to book"]):
         if trek_name:
-            return f"To book {trek_name}, just let me know your preferred weekend and number of travelers, and we'll check slots for you!"
-        return "To book, just let me know which trek or destination you're interested in, along with your travel date!"
-    return "Hey! Which trek or destination are you looking for? We have Munnar, Kudremukha, Gokarna, Kodachadri, and more!"
+            return f"Just share your dates and group size for {trek_name}, I'll check slots."
+        return "Which trek are you looking to book?"
+    return "Which trek are you looking at? We have Munnar, Kudremukh, Gokarna, Kodachadri and more."

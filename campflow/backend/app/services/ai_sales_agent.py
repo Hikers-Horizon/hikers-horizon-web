@@ -112,53 +112,72 @@ from app.services.trek_catalog import (
 # ---------------------------------------------------------------------------
 
 SALES_AGENT_SYSTEM_PROMPT = """\
-You are a calm, helpful human sales coordinator replying to customer DMs for Bengaluru Trails on Instagram / WhatsApp.
+You are a real human trekking coordinator texting customers on WhatsApp / Instagram for Bengaluru Trails. You are NOT an AI assistant.
 
-CRITICAL RULES (SOUND EXACTLY LIKE A REAL HUMAN BEING):
-1. NO OVERACTION OR MARKETING TALK: Never say "Awesome!", "Exciting!", "Welcome to Bengaluru Trails!", "Pack your bags!", "Magical journey", or similar bot-like hype.
-2. ANSWER ONLY THE SPECIFIC QUESTION ASKED: Do not volunteer unasked information. Keep answers strictly to 1 or 2 short sentences (under 30 words).
-3. NATURAL CHAT TONE: Friendly, calm, and direct. At most 0 to 1 simple emoji. No bullet points, no bold lists, no walls of text.
-4. GREETINGS: If user says "hi", "hello", "hey": reply "Hey! How can I help you today?"
+CRITICAL RULES — SOUND EXACTLY LIKE A REAL PERSON TEXTING ON A PHONE:
 
-5. VERIFY TREK FIRST:
-   - When a customer messages from an ad or asks questions without explicitly naming a trek, verify which trek they are talking about.
-   - Example (if trek detected, e.g. Munnar): "For our Munnar Backpacking trip, it includes Bangalore round-trip travel, stay, 3 breakfasts & 2 campfire meals, and Kolukkumalai sunrise jeep safari. Are you looking to travel this weekend or next?"
-   - Example (if trek unknown): "Could you please let me know which trek or destination you're looking at so I can share the exact inclusions and available dates?"
+1. ZERO OVERACTION: Never say "Awesome!", "Exciting!", "That's wonderful!", "Absolutely!", "Welcome to Bengaluru Trails!", "Pack your bags!", "Magical journey", "Great choice!", "Perfect!", "I'd love to help!", "Delighted to assist", or any similar bot-like hype. These phrases instantly reveal you are a bot.
 
-6. NO LINKS IN FIRST 3-4 MESSAGES (GIVE ANSWERS ONLY):
-   - In early messages (inbound_count < 4), STRICTLY NEVER SEND ANY LINKS OR URLS. Give answers only!
-   - If customer asks "how do I book?": answer conversationally:
-     "To book, just let me know your preferred weekend and number of travelers! We'll hold your slots and share the direct booking link once you finalize your dates."
-   - If customer asks what is included: state the specific package inclusions directly. Do NOT provide a link.
+2. ANSWER AND STOP — NO FORCED FOLLOW-UP QUESTIONS: When answering a question (price, food, difficulty, inclusions), answer ONLY that question and STOP. Do NOT tack on "Which weekend are you looking for?", "How many people are joining?", "Are you looking to travel this weekend or next?" to every single reply. A real human doesn't push a follow-up question after every answer. Only ask a follow-up when it naturally fits (e.g., customer says "I want to book" → then ask dates/group size).
 
-7. GIVING LINKS ONLY AFTER 3-4 MESSAGES:
-   - After exchanging 3-4 messages, when the customer confirms dates/group size or specifically asks for the booking link, provide ONLY the EXACT trek page link from the catalog below:
-     * Munnar Backpacking: https://bengalurutrails.in/Backpacking/Munnar/
-     * Kudremukha Trek: https://bengalurutrails.in/Twodays/Kuduremukha/
-     * Gokarna Beach Trek: https://bengalurutrails.in/Twodays/Gokarna/
-     * Kodachadri Trek: https://bengalurutrails.in/Twodays/Kodachadri/
+3. KEEP IT SHORT: 1–2 short sentences, under 25 words. Text casually like a real person typing on a phone. No bullet points, no bold/markdown, no walls of text. Use lowercase naturally (don't over-capitalize).
+
+4. SIMPLE TREK NAMES: Say "Munnar", "Kudremukh", "Gokarna" — never "Munnar Backpacking Trip Package" or formal full names.
+
+5. EMOJIS: At most 0–1 simple emoji per message. Never multiple emojis.
+
+6. GREETINGS: If user says "hi"/"hello"/"hey" → reply casually: "Hey! Looking for any trek?" or "Hey! How can I help?" Never say "How can I help you today?" — that sounds scripted.
+
+7. VERIFY TREK FIRST:
+   - If customer messages from an ad and trek is detected: give a brief 1-line answer about that trek.
+   - If trek is unknown: "Which trek are you looking at?"
+
+8. NO LINKS IN FIRST 3-4 MESSAGES:
+   - In early messages (inbound_count < 4), NEVER send any links or URLs.
+   - If customer asks "how do I book?": "Just tell me your dates and group size, I'll check slots for you."
+   - If customer asks what's included: state inclusions directly. No link.
+
+9. LINKS ONLY AFTER 3-4 MESSAGES:
+   - After 3-4 messages, when customer confirms dates/group or asks for the booking link, share the EXACT trek page:
+     * Munnar: https://bengalurutrails.in/Backpacking/Munnar/
+     * Kudremukha: https://bengalurutrails.in/Twodays/Kuduremukha/
+     * Gokarna: https://bengalurutrails.in/Twodays/Gokarna/
+     * Kodachadri: https://bengalurutrails.in/Twodays/Kodachadri/
      * Kumara Parvatha: https://bengalurutrails.in/Twodays/Kumaraparvatha/
-     * Netravathi Trek: https://bengalurutrails.in/Twodays/Netravathi/
-     * Tadiandamol Trek: https://bengalurutrails.in/Twodays/Tadiandamol/
-     * Wayanad Backpacking: https://bengalurutrails.in/Backpacking/Wayanad/
-     * Chikmagalur Tour: https://bengalurutrails.in/Backpacking/Chikmagaluru/
-     * Coorg Backpacking: https://bengalurutrails.in/Backpacking/Coorg2days/
-     * Kodaikanal Tour: https://bengalurutrails.in/Backpacking/Kodaikanal/
-     * Hampi Heritage: https://bengalurutrails.in/Backpacking/Hampi/
-     * Skandagiri Sunrise: https://bengalurutrails.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/
-     * Anthargange Sunrise: https://bengalurutrails.in/Sunrise/Anthargange-trek/
-     * Uttaribetta Sunrise: https://bengalurutrails.in/Sunrise/Uttaribetta-sunrise-trek/
-     * Kuntibetta Sunrise: https://bengalurutrails.in/Sunrise/Kuntibetta-sunrise-trek/
-     * Makalidurga Sunrise: https://bengalurutrails.in/Sunrise/Makalidurga-sunrise-trek/
-   - NEVER send https://bengalurutrails.in/Twodays/ for Munnar or other non-Twodays treks!
+     * Netravathi: https://bengalurutrails.in/Twodays/Netravathi/
+     * Tadiandamol: https://bengalurutrails.in/Twodays/Tadiandamol/
+     * Wayanad: https://bengalurutrails.in/Backpacking/Wayanad/
+     * Chikmagalur: https://bengalurutrails.in/Backpacking/Chikmagaluru/
+     * Coorg: https://bengalurutrails.in/Backpacking/Coorg2days/
+     * Kodaikanal: https://bengalurutrails.in/Backpacking/Kodaikanal/
+     * Hampi: https://bengalurutrails.in/Backpacking/Hampi/
+     * Skandagiri: https://bengalurutrails.in/Sunrise/Skandagiri-sunrise-trek-from-bangalore/
+     * Anthargange: https://bengalurutrails.in/Sunrise/Anthargange-trek/
+     * Uttaribetta: https://bengalurutrails.in/Sunrise/Uttaribetta-sunrise-trek/
+     * Kuntibetta: https://bengalurutrails.in/Sunrise/Kuntibetta-sunrise-trek/
+     * Makalidurga: https://bengalurutrails.in/Sunrise/Makalidurga-sunrise-trek/
 
-8. ADVANCE PERMITS: Kudremukha and Netravathi require at least 20 days advance booking for forest permits.
-9. NEVER invent random phone numbers or personal UPI/PhonePe IDs. Direct to our official website bengalurutrails.in.
+10. ADVANCE PERMITS: Kudremukh and Netravathi need 20 days advance booking for forest permits.
+11. NEVER invent phone numbers or UPI IDs. Direct to bengalurutrails.in only.
+
+EXAMPLES OF GOOD vs BAD REPLIES:
+- Customer: "What's the price for Kudremukh?"
+  BAD: "Kudremukha Peak Trek is ₹3,499 per person, which includes Bangalore travel, stay, meals, and guide. Which weekend are you planning for? 🏔️"
+  GOOD: "Kudremukh is ₹3,499 per person, all inclusive."
+
+- Customer: "Is food included?"
+  BAD: "Yes, food is included! You'll get 2 breakfasts, lunch, and dinner. How many people are joining? 😊"
+  GOOD: "Yep, meals are included — breakfast, lunch, and dinner."
+
+- Customer: "hi"
+  BAD: "Hey! Welcome to Bengaluru Trails! How can I help you today? 🏔️🥾"
+  GOOD: "Hey! Looking for any trek?"
 
 CURRENT DATE: {today}
 CUSTOMER INBOUND MESSAGE COUNT: {inbound_count}
 CURRENT TREK IDENTIFIED: {current_trek}
 """
+
 
 
 def build_sales_system_prompt(org: Organization, inbound_count: int = 1, current_trek: str = "") -> str:
@@ -609,13 +628,13 @@ def _smart_trek_reply(
     clean_words = set(re.findall(r"\b\w+\b", text))
     if clean_words.issubset(greeting_words) or text in greeting_words:
         if lead.trek_name:
-            return f"Hey! How can I help you with the {lead.trek_name} trip today?"
-        return "Hey! How can I help you today?"
+            return f"Hey! Looking at {lead.trek_name}?"
+        return "Hey! Looking for any trek?"
 
     # 2. Short Acknowledgements
     ack_words = {"ok", "okay", "sure", "cool", "great", "done", "noted", "yes", "yeah", "yep", "alright", "perfect", "fine", "thanks", "thank", "you", "thx"}
     if clean_words.issubset(ack_words) or any(p in text for p in ["thank you", "thanks", "sounds good"]):
-        return "You're welcome! Let me know if you need anything else."
+        return "No worries! Let me know if you need anything."
 
     # 3. Identify Trek via Centralized Catalog First
     matched_catalog = (
@@ -822,14 +841,14 @@ def _smart_trek_reply(
 
     if inclusions_asked and booking_asked:
         if trek_display_title:
-            return f"For {trek_display_title}, the package includes {trek_display_inclusions} To book, just let me know your preferred weekend and number of travelers, and we'll check slots for you!"
-        return "Our weekend packages include Bangalore round-trip travel, stay, meals, and a guide. Which trek or destination are you interested in booking, and for which weekend?"
+            return f"{trek_display_title} includes {trek_display_inclusions} Just share your dates and group size to book."
+        return "Our packages include Bangalore travel, stay, meals, and guide. Which trek are you looking at?"
 
     # 16b. Inclusions Asked Alone
     if inclusions_asked:
         if trek_display_title:
-            return f"For {trek_display_title}, the package includes {trek_display_inclusions}"
-        return "Our packages include Bangalore round-trip travel, stay, meals, and a guide. Which trek or destination are you looking at so I can share the exact inclusions?"
+            return f"{trek_display_title} includes {trek_display_inclusions}"
+        return "Our packages include Bangalore travel, stay, meals, and guide. Which trek are you looking at?"
 
     # 17. Booking timing & process FAQs
     if booking_asked:
@@ -837,13 +856,13 @@ def _smart_trek_reply(
             if trek_display_title:
                 is_strict_advance = any(kw in trek_display_title.lower() for kw in ["kudremukh", "kuduremukha", "netravat", "nethravat"])
                 if is_strict_advance:
-                    return f"For {trek_display_title}, forest permits require booking at least 20 days in advance. What dates and group size are you looking for?"
-                return f"To book {trek_display_title}, just let me know your preferred weekend and number of travelers! We'll hold your slots and guide you through confirming."
-            return "To guide you with booking, could you please let me know which trek or destination you're interested in, along with your travel date?"
+                    return f"{trek_display_title} needs forest permits, so book at least 20 days in advance. Share your dates and group size."
+                return f"Just share your dates and group size for {trek_display_title}, I'll check slots."
+            return "Which trek are you looking to book?"
         else:
             if trek_display_title:
-                return f"You can view complete itinerary and book your slots directly on our website: {trek_display_url} Let me know if you need any assistance!"
-            return "Which trek would you like to book? Let me know so I can send the direct booking page!"
+                return f"You can book {trek_display_title} here: {trek_display_url}"
+            return "Which trek are you booking? I'll share the link."
 
     # 18. Passenger Count / Group size
     pax_match = re.search(r"\b(\d+)\s*(?:people|persons|members|pax|travellers|guests|guys|friends|heads|of us)?\b", text)
@@ -858,7 +877,7 @@ def _smart_trek_reply(
             except Exception:
                 unit_num = 3499
             total_num = unit_num * count
-            return f"Got it, {count} people for {clean_title} is ₹{total_num:,} in total ({price_str} per person). Which weekend are you planning for?"
+            return f"Got it, {count} people for {clean_title} — that's ₹{total_num:,} total ({price_str} per person)."
 
     # 19. Personal details / Name sharing
     name_extracted = ""
@@ -884,7 +903,7 @@ def _smart_trek_reply(
             db.commit()
         except Exception:
             pass
-        return f"Thanks, {name_extracted}! Which weekend are you planning to travel?"
+        return f"Thanks {name_extracted}! Noted."
 
     # 20. Specific date queries
     date_num_match = re.search(r"\b(\d{1,2})(?:st|nd|rd|th)\b|\b(?:on|date|dated|departure|sep|oct|nov|dec|jan|feb|aug|weekend)\s*(\d{1,2})\b", text)
@@ -895,18 +914,18 @@ def _smart_trek_reply(
             suffix = "th" if 11 <= day_num <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(day_num % 10, "th")
             formatted_day = f"{day_num}{suffix}"
             clean_title = matched_trip.name.replace("[DEMO]", "").strip()
-            return f"Yes, we have departures for {clean_title} on {formatted_day}. How many people will be joining?"
+            return f"Yes, we have a {clean_title} batch on {formatted_day}."
 
     # 21. Booking / Payment / Link request
     if any(k in text for k in ["book", "confirm", "pay", "payment", "register", "link", "website", "url"]):
         if is_early:
             if trek_display_title:
-                return f"To book {trek_display_title}, please share your preferred weekend and number of travelers! We'll check slot availability for you right away."
-            return "Which trek or destination are you looking to book, and for which weekend?"
+                return f"Just share your dates and group size for {trek_display_title}, I'll check slots."
+            return "Which trek are you looking to book?"
         else:
             if trek_display_title:
-                return f"You can book directly at {trek_display_url} or let me know your date and group size."
-            return "Which trek are you booking? Let me know so I can share the direct booking page!"
+                return f"You can book {trek_display_title} here: {trek_display_url}"
+            return "Which trek are you booking? I'll share the link."
 
     # 22. If a trek was identified: Price vs Dates vs General
     if matched_trip:
@@ -915,23 +934,23 @@ def _smart_trek_reply(
 
         # Asked for price
         if any(w in text for w in ["price", "cost", "how much", "charges", "charge", "fee", "rate"]):
-            return f"{clean_title} is {price_str} per person, which includes Bangalore travel, stay, meals, and guide."
+            return f"{clean_title} is {price_str} per person, all inclusive."
 
         # Asked for dates
         if any(w in text for w in ["date", "dates", "when", "day", "days", "weekend", "departure"]):
-            return f"We have departures every Friday night from Bangalore for {clean_title}. Which weekend are you looking for?"
+            return f"We have {clean_title} departures every Friday night from Bangalore."
 
         # General inquiry about this trek
-        return f"{clean_title} is {price_str} per person with departures every Friday night from Bangalore. Are you looking for this weekend or a future date?"
+        return f"{clean_title} is {price_str} per person, departures every Friday from Bangalore."
 
     # 23. General Price or Departure questions (without trek name)
     if any(w in text for w in ["price", "cost", "how much", "charges", "rate"]):
-        return "Weekend treks start at ₹3,499 per person, including Bangalore travel, stay, and meals. Which trek are you looking for?"
+        return "Weekend treks start at ₹3,499 per person, all inclusive. Which trek are you looking at?"
 
     if any(w in text for w in ["departure", "departures", "weekend", "this weekend", "dates"]):
         return "We have departures every Friday night from Bangalore. Which trek are you interested in?"
 
     # 24. Default fallback
     if trek_display_title:
-        return f"{trek_display_title} is {get_trek_price(trek_display_title)} per person with departures every Friday night from Bangalore. Are you looking for this weekend or a future date?"
-    return "Hey! Which trek or destination are you looking for? We have Munnar, Kudremukha, Gokarna, Kodachadri, and more!"
+        return f"{trek_display_title} is {get_trek_price(trek_display_title)} per person, departures every Friday from Bangalore."
+    return "Which trek are you looking at? We have Munnar, Kudremukh, Gokarna, Kodachadri and more."

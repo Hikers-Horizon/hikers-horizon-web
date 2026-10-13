@@ -53,6 +53,21 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
 
     logger.info("AI sales agent generated reply: %s", reply_text)
 
+    # Human-like delay: wait a few seconds before sending so it doesn't look
+    # like an instant bot reply.  Scales slightly with reply length to mimic
+    # reading the inbound message + typing the response.
+    if settings.AI_REPLY_DELAY_ENABLED:
+        import random, time
+        base_delay = random.uniform(
+            settings.AI_REPLY_DELAY_MIN_SECONDS,
+            settings.AI_REPLY_DELAY_MAX_SECONDS,
+        )
+        # Add ~1 s per 40 chars of reply to simulate typing speed
+        typing_extra = min(len(reply_text) / 40.0, 5.0)
+        total_delay = base_delay + typing_extra
+        logger.info("Human-like delay: sleeping %.1f s before sending reply", total_delay)
+        time.sleep(total_delay)
+
     outbound = Message(
         organization_id=org.id, customer_id=customer.id, lead_id=lead.id,
         direction=MessageDirection.OUTBOUND, channel=channel, body=reply_text, status="queued",
@@ -63,6 +78,7 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
 
     whatsapp_token = org.whatsapp_access_token or settings.WHATSAPP_ACCESS_TOKEN
     instagram_token = org.instagram_access_token or settings.INSTAGRAM_ACCESS_TOKEN
+
 
     if channel == "whatsapp" and whatsapp_token and (org.whatsapp_phone_number_id or settings.WHATSAPP_PHONE_NUMBER_ID):
         try:
