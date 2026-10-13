@@ -53,19 +53,18 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
 
     logger.info("AI sales agent generated reply: %s", reply_text)
 
-    # Human-like delay: wait a few seconds before sending so it doesn't look
-    # like an instant bot reply.  Scales slightly with reply length to mimic
-    # reading the inbound message + typing the response.
+    # Human-like delay: wait briefly before sending, strictly capped at maximum 4 seconds
     if settings.AI_REPLY_DELAY_ENABLED:
         import random, time
         base_delay = random.uniform(
             settings.AI_REPLY_DELAY_MIN_SECONDS,
             settings.AI_REPLY_DELAY_MAX_SECONDS,
         )
-        # Add ~1 s per 40 chars of reply to simulate typing speed
-        typing_extra = min(len(reply_text) / 40.0, 5.0)
-        total_delay = base_delay + typing_extra
-        logger.info("Human-like delay: sleeping %.1f s before sending reply", total_delay)
+        # Add slight typing delay but cap strictly so total delay never exceeds 4.0s
+        typing_extra = min(len(reply_text) / 60.0, 1.0)
+        total_delay = min(base_delay + typing_extra, 4.0)
+        total_delay = max(0.5, total_delay)
+        logger.info("Human-like delay: sleeping %.1f s before sending reply (max 4.0s)", total_delay)
         time.sleep(total_delay)
 
     outbound = Message(

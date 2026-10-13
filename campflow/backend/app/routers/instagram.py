@@ -2,7 +2,8 @@ import hashlib
 import hmac
 import datetime
 import logging
-from fastapi import APIRouter, HTTPException, Request, Depends
+import collections
+from fastapi import APIRouter, HTTPException, Request, Depends, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 
@@ -14,6 +15,9 @@ from app.services.messaging_ai import send_ai_reply
 
 router = APIRouter(prefix="/api/instagram", tags=["instagram"])
 logger = logging.getLogger("campflow.instagram")
+
+# In-memory LRU tracking to immediately drop duplicate webhook deliveries
+_PROCESSED_MIDS = collections.OrderedDict()
 
 
 from fastapi.responses import PlainTextResponse
@@ -110,10 +114,51 @@ def _extract_ad_referral(obj: dict) -> dict:
     return info
 
 
+def _async_dispatch_reply(org_id, customer_id, lead_id, channel: str):
+    """Executes AI auto-reply asynchronously in a separate DB session so webhook returns in <50ms.
+    Includes strict debounce checking to prevent duplicate reply spam.
+    """
+    db = SessionLocal()
+    try:
+        org = db.query(Organization).filter(Organization.id == org_id).first()
+        customer = db.query(Customer).filter(Customer.id == customer_id).first()
+        lead = db.query(Lead).filter(Lead.id == lead_id).first()
+        if not org or not customer or not lead:
+            return
+        if not org.ai_auto_reply_enabled or not settings.AI_AUTO_REPLY_ENABLED:
+            logger.info("AI auto-reply disabled globally, skipping background reply")
+            return
+        if customer.ai_disabled or getattr(lead, "ai_disabled", False):
+            logger.info("AI auto-reply disabled for customer, skipping background reply")
+            return
+
+        # Debounce: check if an outbound message was sent to this customer in the last 4 seconds
+        last_outbound = (
+            db.query(Message)
+            .filter(
+                Message.customer_id == customer.id,
+                Message.direction == MessageDirection.OUTBOUND,
+            )
+            .order_by(Message.created_at.desc())
+            .first()
+        )
+        if last_outbound and last_outbound.created_at:
+            delta = (datetime.datetime.utcnow() - last_outbound.created_at).total_seconds()
+            if delta < 4.0:
+                logger.info("Debouncing AI reply for customer %s (replied %.1fs ago) - skipping duplicate reply", customer.id, delta)
+                return
+
+        send_ai_reply(db, org=org, customer=customer, lead=lead, channel=channel)
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Error in background AI reply dispatch: %s", exc)
+    finally:
+        db.close()
+
+
 @router.post("/webhook")
-async def receive_webhook(request: Request):
-    """Receives inbound Instagram DM events from Meta and, when enabled,
-    automatically drafts and sends an AI-generated reply back to the customer.
+async def receive_webhook(request: Request, background_tasks: BackgroundTasks):
+    """Receives inbound Instagram DM events from Meta and responds immediately.
+    AI replies are queued in BackgroundTasks to prevent Meta 5s timeouts and webhook retries.
     """
     raw_body = await request.body()
     if not _verify_signature(settings.INSTAGRAM_APP_SECRET, raw_body, request.headers.get("X-Hub-Signature-256")):
@@ -122,12 +167,12 @@ async def receive_webhook(request: Request):
 
     payload = await request.json()
     logger.info("Received Instagram webhook event: %s", payload)
-    
+
     db = SessionLocal()
     try:
         for entry in payload.get("entry", []):
             page_id = str(entry.get("id")) if entry.get("id") else None
-            
+
             # Format 1: Messenger / Instagram standard messaging format
             for messaging in entry.get("messaging", []):
                 message = messaging.get("message") or {}
@@ -150,10 +195,11 @@ async def receive_webhook(request: Request):
                 ad_info = _extract_ad_referral(messaging)
 
                 if sender_id and text:
-                    logger.info("Processing inbound Instagram DM from sender_id: %s, text: %s, ad: %s", sender_id, text, ad_info.get("detected_trek"))
+                    logger.info("Processing inbound Instagram DM from sender_id: %s, text: %s, mid: %s", sender_id, text, mid)
                     try:
                         _process_inbound_instagram_message(
                             db, page_id=page_id, sender_id=sender_id, text=text, mid=mid, ad_info=ad_info,
+                            background_tasks=background_tasks,
                         )
                     except Exception as exc:  # noqa: BLE001
                         logger.exception("Failed to process inbound Instagram message: %s", exc)
@@ -180,10 +226,11 @@ async def receive_webhook(request: Request):
                     ad_info = _extract_ad_referral(val)
 
                     if sender_id and text:
-                        logger.info("Processing inbound Instagram DM (changes) from sender_id: %s, text: %s, ad: %s", sender_id, text, ad_info.get("detected_trek"))
+                        logger.info("Processing inbound Instagram DM (changes) from sender_id: %s, text: %s, mid: %s", sender_id, text, mid)
                         try:
                             _process_inbound_instagram_message(
                                 db, page_id=page_id, sender_id=sender_id, text=text, mid=mid, ad_info=ad_info,
+                                background_tasks=background_tasks,
                             )
                         except Exception as exc:  # noqa: BLE001
                             logger.exception("Failed to process inbound Instagram message (changes): %s", exc)
@@ -210,13 +257,26 @@ def _resolve_organization(db: Session, page_id: str | None) -> Organization | No
 
 def _process_inbound_instagram_message(
     db: Session, *, page_id: str | None, sender_id: str | None, text: str | None, mid: str | None,
-    ad_info: dict | None = None,
+    ad_info: dict | None = None, background_tasks: BackgroundTasks | None = None,
 ):
     if not sender_id or not text:
         return
     org = _resolve_organization(db, page_id)
     if not org:
         return
+
+    # Message deduplication: eliminate Meta webhook retries and duplicate events
+    if mid:
+        if mid in _PROCESSED_MIDS:
+            logger.info("Skipping in-memory duplicate Instagram mid: %s", mid)
+            return
+        existing_msg = db.query(Message).filter(Message.whatsapp_message_id == mid).first()
+        if existing_msg:
+            logger.info("Skipping DB duplicate Instagram mid: %s", mid)
+            return
+        _PROCESSED_MIDS[mid] = datetime.datetime.utcnow()
+        if len(_PROCESSED_MIDS) > 2000:
+            _PROCESSED_MIDS.popitem(last=False)
 
     from app.services.trek_catalog import detect_trek
     detected_trek = None
@@ -283,6 +343,9 @@ def _process_inbound_instagram_message(
 
     if org.ai_auto_reply_enabled and settings.AI_AUTO_REPLY_ENABLED:
         if not customer.ai_disabled and not getattr(lead, "ai_disabled", False):
-            send_ai_reply(db, org=org, customer=customer, lead=lead, channel="instagram")
+            if background_tasks:
+                background_tasks.add_task(_async_dispatch_reply, org.id, customer.id, lead.id, "instagram")
+            else:
+                _async_dispatch_reply(org.id, customer.id, lead.id, "instagram")
         else:
             logger.info("AI auto-reply is paused for Instagram user %s - Human takeover active", customer.id)

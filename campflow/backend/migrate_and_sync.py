@@ -9,8 +9,9 @@ os.chdir(backend_dir)
 
 from sqlalchemy import text
 from app.database import engine, SessionLocal
-from app.models import Organization, Customer, Lead, Message, FollowUp
-from app.models.enums import LeadStatus, LeadSource, LeadScore, FollowUpStatus, MessageDirection
+from app.models import Organization, Customer, Lead, Message, FollowUp, User, OrganizationMember
+from app.models.enums import LeadStatus, LeadSource, LeadScore, FollowUpStatus, MessageDirection, UserRole
+from app.security import hash_password
 
 def run():
     print("[*] Running database migration...")
@@ -50,11 +51,43 @@ def run():
 
         print(f"[+] Active Organization: {hh.name} (ID: {hh.id})")
 
-        # Verify AI auto-reply is enabled for the organization
-        if not hh.ai_auto_reply_enabled:
-            hh.ai_auto_reply_enabled = True
+        # Ensure AI auto-reply is turned OFF (per user request: "i dont want agent as of now")
+        hh.ai_auto_reply_enabled = False
+        db.commit()
+        print(f"[+] AI auto-reply turned OFF for {hh.name}!")
+
+        # Ensure admin user hikershorizon@gmail.com exists with verified credentials
+        admin_user = db.query(User).filter(User.email == "hikershorizon@gmail.com").first()
+        if not admin_user:
+            admin_user = User(
+                email="hikershorizon@gmail.com",
+                full_name="Hikers Horizon Admin",
+                hashed_password=hash_password("Asdf@2003"),
+                is_email_verified=True,
+                is_active=True,
+            )
+            db.add(admin_user)
+            db.flush()
+            print("[+] Created admin user hikershorizon@gmail.com with password Asdf@2003")
+        else:
+            admin_user.is_active = True
+            admin_user.is_email_verified = True
+            admin_user.hashed_password = hash_password("Asdf@2003")
+            db.flush()
+            print(f"[+] Updated password for {admin_user.email} to Asdf@2003!")
+
+        member = db.query(OrganizationMember).filter(
+            OrganizationMember.organization_id == hh.id,
+            OrganizationMember.user_id == admin_user.id,
+        ).first()
+        if not member:
+            member = OrganizationMember(organization_id=hh.id, user_id=admin_user.id, role=UserRole.OWNER)
+            db.add(member)
             db.commit()
-            print(f"[+] Enabled ai_auto_reply_enabled for {hh.name}!")
+            print(f"[+] Linked {admin_user.email} as OWNER of {hh.name}!")
+        else:
+            member.role = UserRole.OWNER
+            db.commit()
 
         # Check if the DB Instagram token is expired or broken (legacy token that expired in August 2026)
         if hh.instagram_access_token and (hh.instagram_access_token.startswith("EAFZC2lreDqngBS") or "EAFZC" in hh.instagram_access_token):

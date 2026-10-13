@@ -17,7 +17,13 @@ export default function LoginPage() {
     try {
       await login(email, password);
     } catch (err: any) {
-      setError(err?.response?.data?.detail || "Login failed");
+      const msg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        (err?.message === "Network Error"
+          ? "Unable to connect to server. Please try again."
+          : "Invalid email or password");
+      setError(msg);
     } finally {
       setLoading(false);
     }

@@ -21,7 +21,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (typeof window !== "undefined" && err.response?.status === 401) {
+    const isLoginEndpoint = err.config?.url?.includes("/auth/login");
+    const isAlreadyOnLogin = typeof window !== "undefined" && window.location.pathname.endsWith("/login");
+    if (typeof window !== "undefined" && err.response?.status === 401 && !isLoginEndpoint && !isAlreadyOnLogin) {
       localStorage.removeItem("campflow_token");
       localStorage.removeItem("campflow_org_id");
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? (process.env.NODE_ENV === "production" ? "/campflow" : "");

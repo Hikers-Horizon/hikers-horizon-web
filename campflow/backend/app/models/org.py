@@ -20,7 +20,7 @@ class Organization(Base, TimestampMixin):
     subscription_status = Column(Enum(SubscriptionStatus), default=SubscriptionStatus.TRIALING, nullable=False)
 
     # AI auto-reply: when enabled, inbound WhatsApp/Instagram messages are answered automatically.
-    ai_auto_reply_enabled = Column(Boolean, default=True, nullable=False)
+    ai_auto_reply_enabled = Column(Boolean, default=False, nullable=False)
     ai_system_prompt = Column(String, nullable=True)  # optional per-org customization of the assistant persona
 
     # Per-org channel identifiers used to route inbound webhook events to the right tenant

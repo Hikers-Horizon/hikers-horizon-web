@@ -65,6 +65,7 @@ export default function ConversationsPage() {
   const [togglingAi, setTogglingAi] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLiveConnected, setIsLiveConnected] = useState(true);
+  const [globalAiEnabled, setGlobalAiEnabled] = useState<boolean | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastMsgCountRef = useRef<number>(0);
@@ -81,8 +82,12 @@ export default function ConversationsPage() {
   async function loadThreads(silent = false) {
     if (!silent) setLoading(true);
     try {
-      const res = await api.get("/api/conversations");
+      const [res, aiRes] = await Promise.all([
+        api.get("/api/conversations"),
+        api.get("/api/organizations/ai-settings").catch(() => null),
+      ]);
       setThreads(res.data);
+      if (aiRes) setGlobalAiEnabled(aiRes.data.ai_auto_reply_enabled);
       setIsLiveConnected(true);
     } catch (err) {
       console.error("Thread poll error", err);
@@ -294,6 +299,13 @@ export default function ConversationsPage() {
               </button>
             </div>
           </div>
+
+          {globalAiEnabled === false && (
+            <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-900/60 p-2.5 text-xs text-amber-800 dark:text-amber-300 flex items-center justify-between gap-2">
+              <span className="font-semibold">🛑 Agent Messages are OFF</span>
+              <span className="text-[11px] text-amber-700 dark:text-amber-400">Human manual mode</span>
+            </div>
+          )}
 
           {filteredThreads.length === 0 ? (
             <div className="p-8 text-center text-sm text-gray-400">

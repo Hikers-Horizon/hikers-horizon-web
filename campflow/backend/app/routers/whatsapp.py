@@ -3,10 +3,11 @@ import datetime
 import hashlib
 import hmac
 import logging
-from fastapi import APIRouter, Depends, HTTPException, Request
+import collections
+from fastapi import APIRouter, Depends, HTTPException, Request, BackgroundTasks
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from app.database import get_db, SessionLocal
 from app.deps import get_current_context, CurrentContext
 from app.config import settings
 from app.models import Message, MessageTemplate, Lead, Customer, Organization, LeadActivity
@@ -16,6 +17,9 @@ from app.services.messaging_ai import send_ai_reply
 
 router = APIRouter(prefix="/api/whatsapp", tags=["whatsapp"])
 logger = logging.getLogger("campflow.whatsapp")
+
+# In-memory LRU tracking to drop duplicate WhatsApp webhook deliveries
+_PROCESSED_WA_IDS = collections.OrderedDict()
 
 
 @router.get("/templates")
@@ -98,10 +102,51 @@ def _verify_signature(app_secret: str, raw_body: bytes, signature_header: str | 
     return hmac.compare_digest(expected, signature_header.split("=", 1)[1])
 
 
+def _async_dispatch_whatsapp_reply(org_id, customer_id, lead_id, channel: str):
+    """Executes AI auto-reply asynchronously in a separate DB session so webhook returns in <50ms.
+    Includes strict debounce checking to prevent duplicate reply spam.
+    """
+    db = SessionLocal()
+    try:
+        org = db.query(Organization).filter(Organization.id == org_id).first()
+        customer = db.query(Customer).filter(Customer.id == customer_id).first()
+        lead = db.query(Lead).filter(Lead.id == lead_id).first()
+        if not org or not customer or not lead:
+            return
+        if not org.ai_auto_reply_enabled or not settings.AI_AUTO_REPLY_ENABLED:
+            logger.info("AI auto-reply disabled globally, skipping background WhatsApp reply")
+            return
+        if customer.ai_disabled or getattr(lead, "ai_disabled", False):
+            logger.info("AI auto-reply disabled for customer, skipping background WhatsApp reply")
+            return
+
+        # Debounce: check if an outbound message was sent to this customer in the last 4 seconds
+        last_outbound = (
+            db.query(Message)
+            .filter(
+                Message.customer_id == customer.id,
+                Message.direction == MessageDirection.OUTBOUND,
+            )
+            .order_by(Message.created_at.desc())
+            .first()
+        )
+        if last_outbound and last_outbound.created_at:
+            delta = (datetime.datetime.utcnow() - last_outbound.created_at).total_seconds()
+            if delta < 4.0:
+                logger.info("Debouncing WhatsApp AI reply for customer %s (replied %.1fs ago) - skipping duplicate reply", customer.id, delta)
+                return
+
+        send_ai_reply(db, org=org, customer=customer, lead=lead, channel=channel)
+    except Exception as exc:  # noqa: BLE001
+        logger.exception("Error in background WhatsApp AI reply dispatch: %s", exc)
+    finally:
+        db.close()
+
+
 @router.post("/webhook")
-async def receive_webhook(request: Request, db: Session = Depends(get_db)):
-    """Receives inbound WhatsApp messages/status updates from Meta and, when enabled,
-    automatically drafts and sends an AI-generated reply back to the customer.
+async def receive_webhook(request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    """Receives inbound WhatsApp messages/status updates from Meta and responds immediately.
+    AI replies are queued in BackgroundTasks to prevent Meta 5s timeouts and webhook retries.
     """
     raw_body = await request.body()
     if not _verify_signature(settings.WHATSAPP_APP_SECRET, raw_body, request.headers.get("X-Hub-Signature-256")):
@@ -143,12 +188,13 @@ async def receive_webhook(request: Request, db: Session = Depends(get_db)):
                     referral.get("description"),
                     referral.get("source_id"),
                 ]))
-                logger.info("Processing inbound WhatsApp msg (%s) from %s (name: %s): %s", msg_type, from_phone, contacts.get(from_phone), body)
+                logger.info("Processing inbound WhatsApp msg (%s) from %s (name: %s, id: %s): %s", msg_type, from_phone, contacts.get(from_phone), whatsapp_message_id, body)
                 try:
                     _process_inbound_whatsapp_message(
                         db, phone_number_id=phone_number_id, from_phone=from_phone,
                         body=body, whatsapp_message_id=whatsapp_message_id,
                         contact_name=contacts.get(from_phone), referral_text=ref_text,
+                        background_tasks=background_tasks,
                     )
                 except Exception as exc:  # noqa: BLE001
                     logger.exception("Failed to process inbound WhatsApp message: %s", exc)
@@ -174,12 +220,26 @@ def _resolve_organization(db: Session, phone_number_id: str | None) -> Organizat
 def _process_inbound_whatsapp_message(
     db: Session, *, phone_number_id: str | None, from_phone: str, body: str,
     whatsapp_message_id: str | None, contact_name: str | None, referral_text: str | None = None,
+    background_tasks: BackgroundTasks | None = None,
 ):
     if not from_phone or not body:
         return
     org = _resolve_organization(db, phone_number_id)
     if not org:
         return
+
+    # Message deduplication: eliminate Meta webhook retries and duplicate events
+    if whatsapp_message_id:
+        if whatsapp_message_id in _PROCESSED_WA_IDS:
+            logger.info("Skipping in-memory duplicate WhatsApp msg id: %s", whatsapp_message_id)
+            return
+        existing_msg = db.query(Message).filter(Message.whatsapp_message_id == whatsapp_message_id).first()
+        if existing_msg:
+            logger.info("Skipping DB duplicate WhatsApp msg id: %s", whatsapp_message_id)
+            return
+        _PROCESSED_WA_IDS[whatsapp_message_id] = datetime.datetime.utcnow()
+        if len(_PROCESSED_WA_IDS) > 2000:
+            _PROCESSED_WA_IDS.popitem(last=False)
 
     from app.services.trek_catalog import detect_trek
     detected_trek = None
@@ -248,6 +308,9 @@ def _process_inbound_whatsapp_message(
 
     if org.ai_auto_reply_enabled and settings.AI_AUTO_REPLY_ENABLED:
         if not customer.ai_disabled and not getattr(lead, "ai_disabled", False):
-            send_ai_reply(db, org=org, customer=customer, lead=lead, channel="whatsapp")
+            if background_tasks:
+                background_tasks.add_task(_async_dispatch_whatsapp_reply, org.id, customer.id, lead.id, "whatsapp")
+            else:
+                _async_dispatch_whatsapp_reply(org.id, customer.id, lead.id, "whatsapp")
         else:
             logger.info("AI auto-reply is paused for customer %s (%s) - Human takeover active", customer.id, customer.full_name)

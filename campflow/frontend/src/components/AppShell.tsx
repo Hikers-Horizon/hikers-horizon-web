@@ -2,12 +2,15 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
+import { api } from "@/lib/api";
 import Sidebar from "./Sidebar";
 import GlobalSearch from "./GlobalSearch";
 
 export default function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   const { user, loading, activeOrg } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [aiEnabled, setAiEnabled] = useState<boolean | null>(null);
+  const [togglingAi, setTogglingAi] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -15,6 +18,32 @@ export default function AppShell({ children, title }: { children: ReactNode; tit
       router.replace("/login");
     }
   }, [loading, user, router]);
+
+  useEffect(() => {
+    if (activeOrg) {
+      api.get("/api/organizations/ai-settings")
+        .then((res) => {
+          setAiEnabled(res.data.ai_auto_reply_enabled ?? false);
+        })
+        .catch(() => {});
+    }
+  }, [activeOrg]);
+
+  const toggleGlobalAi = async () => {
+    if (togglingAi || aiEnabled === null) return;
+    setTogglingAi(true);
+    const nextState = !aiEnabled;
+    try {
+      await api.put("/api/organizations/ai-settings", {
+        ai_auto_reply_enabled: nextState,
+      });
+      setAiEnabled(nextState);
+    } catch (err) {
+      console.error("Failed to update AI agent settings:", err);
+    } finally {
+      setTogglingAi(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -35,7 +64,7 @@ export default function AppShell({ children, title }: { children: ReactNode; tit
       
       <div className="flex flex-1 flex-col overflow-y-auto">
         <header className="flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 sm:px-6 dark:border-gray-800 dark:bg-gray-900 sticky top-0 z-20">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setMobileMenuOpen(true)}
               className="md:hidden p-2 -ml-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 focus:outline-none"
@@ -47,8 +76,38 @@ export default function AppShell({ children, title }: { children: ReactNode; tit
             </button>
             <h1 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white truncate">{title}</h1>
           </div>
-          <div className="w-44 sm:w-72">
-            <GlobalSearch />
+
+          <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            {aiEnabled !== null && (
+              <button
+                type="button"
+                onClick={toggleGlobalAi}
+                disabled={togglingAi}
+                className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                  aiEnabled
+                    ? "bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-700"
+                    : "bg-red-50 text-red-800 border-red-300 hover:bg-red-100 dark:bg-red-950/40 dark:text-red-300 dark:border-red-700"
+                }`}
+                title={aiEnabled ? "Agent is currently replying. Click to Turn OFF" : "Agent is currently OFF. Click to Turn ON"}
+              >
+                <span className={`w-2 h-2 rounded-full ${aiEnabled ? "bg-emerald-500 animate-pulse" : "bg-red-500"}`}></span>
+                <span className="hidden sm:inline font-bold">
+                  {aiEnabled ? "Agent Messages: ON" : "Agent Messages: OFF"}
+                </span>
+                <span className="sm:hidden font-bold">
+                  {aiEnabled ? "Agent ON" : "Agent OFF"}
+                </span>
+                <span className={`px-1.5 py-0.5 rounded text-[10px] uppercase font-bold text-white transition-colors ${
+                  aiEnabled ? "bg-red-600 hover:bg-red-700" : "bg-emerald-600 hover:bg-emerald-700"
+                }`}>
+                  {togglingAi ? "..." : aiEnabled ? "Turn Off" : "Turn On"}
+                </span>
+              </button>
+            )}
+
+            <div className="w-36 sm:w-64">
+              <GlobalSearch />
+            </div>
           </div>
         </header>
 

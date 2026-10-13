@@ -13,7 +13,18 @@ def hash_password(password: str) -> str:
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    if not plain or not hashed:
+        return False
+    try:
+        return pwd_context.verify(plain, hashed)
+    except Exception:
+        # Fallback to direct bcrypt check if passlib fails on certain salt formats
+        try:
+            import bcrypt
+            hashed_bytes = hashed.encode("utf-8") if isinstance(hashed, str) else hashed
+            return bcrypt.checkpw(plain.encode("utf-8"), hashed_bytes)
+        except Exception:
+            return False
 
 
 def create_access_token(user_id: str, organization_id: Optional[str] = None, role: Optional[str] = None) -> str:

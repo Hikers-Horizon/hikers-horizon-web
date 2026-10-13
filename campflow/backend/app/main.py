@@ -60,8 +60,9 @@ def health():
 def run_db_migrations():
     from sqlalchemy import text
     from app.database import engine, SessionLocal
-    from app.models import Organization, Customer, Lead, Message, FollowUp
-    from app.models.enums import LeadStatus, LeadSource, LeadScore, FollowUpStatus, MessageDirection
+    from app.models import Organization, Customer, Lead, Message, FollowUp, User, OrganizationMember
+    from app.models.enums import LeadStatus, LeadSource, LeadScore, FollowUpStatus, MessageDirection, UserRole
+    from app.security import hash_password
     import datetime, decimal
     try:
         with engine.begin() as conn:
@@ -90,6 +91,35 @@ def run_db_migrations():
             db.query(Customer).filter(Customer.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
             db.query(Message).filter(Message.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
             db.query(Lead).filter(Lead.organization_id != hh.id).update({"organization_id": hh.id}, synchronize_session=False)
+
+            # Ensure admin user hikershorizon@gmail.com exists with verified credentials
+            admin_user = db.query(User).filter(User.email == "hikershorizon@gmail.com").first()
+            if not admin_user:
+                admin_user = User(
+                    email="hikershorizon@gmail.com",
+                    full_name="Hikers Horizon Admin",
+                    hashed_password=hash_password("Asdf@2003"),
+                    is_email_verified=True,
+                    is_active=True,
+                )
+                db.add(admin_user)
+                db.flush()
+            else:
+                admin_user.is_active = True
+                admin_user.is_email_verified = True
+                admin_user.hashed_password = hash_password("Asdf@2003")
+                db.flush()
+
+            member = db.query(OrganizationMember).filter(
+                OrganizationMember.organization_id == hh.id,
+                OrganizationMember.user_id == admin_user.id,
+            ).first()
+            if not member:
+                member = OrganizationMember(organization_id=hh.id, user_id=admin_user.id, role=UserRole.OWNER)
+                db.add(member)
+            else:
+                member.role = UserRole.OWNER
+
             db.commit()
         db.close()
     except Exception as exc:
