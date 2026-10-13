@@ -1,5 +1,5 @@
 /**
- * Hikers Horizon — Premium Booking Engine with Razorpay
+ * BENGALURU TRAILS — Premium Booking Engine with Razorpay
  * Drop-in module for any trek booking page.
  *
  * USAGE:
@@ -107,7 +107,7 @@ const BookingEngine = (() => {
           </svg>
         </div>
         <h2>Book Your Trek</h2>
-        <p>Choose how you would like to proceed with your booking. Log in to your Hikers Horizon account for a faster checkout, or book without logging in.</p>
+        <p>Choose how you would like to proceed with your booking. Log in to your BENGALURU TRAILS account for a faster checkout, or book without logging in.</p>
         <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
           <a href="/login.html" class="btn-login" style="margin-bottom: 0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 0.5rem;"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
@@ -155,7 +155,26 @@ const BookingEngine = (() => {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     const icons = { success: '✓', error: '✕', info: 'ℹ' };
-    toast.innerHTML = `<span>${icons[type] || 'ℹ'}</span><span>${msg}</span>`;
+    
+    // Sanitize message: if HTML is received (e.g. Nginx error page), extract clean text
+    let cleanMsg = msg;
+    if (typeof msg === 'string' && (msg.includes('<html') || msg.includes('<!DOCTYPE') || msg.includes('<center>') || msg.includes('<h1>'))) {
+      if (msg.includes('502 Bad Gateway')) {
+        cleanMsg = 'Server temporarily unavailable (502 Bad Gateway). Please try again shortly.';
+      } else if (msg.includes('504 Gateway Time-out')) {
+        cleanMsg = 'Server request timed out (504). Please try again shortly.';
+      } else {
+        const doc = new DOMParser().parseFromString(msg, 'text/html');
+        cleanMsg = (doc.body.textContent || '').trim().replace(/\s+/g, ' ') || 'An unexpected error occurred';
+      }
+    }
+
+    const iconSpan = document.createElement('span');
+    iconSpan.textContent = icons[type] || 'ℹ';
+    const textSpan = document.createElement('span');
+    textSpan.textContent = cleanMsg;
+    toast.appendChild(iconSpan);
+    toast.appendChild(textSpan);
     container.appendChild(toast);
     setTimeout(() => {
       toast.style.opacity = '0';
@@ -295,8 +314,21 @@ const BookingEngine = (() => {
       });
 
       if (!orderRes.ok) {
-        const errText = await orderRes.text();
-        throw new Error(errText || 'Failed to create payment order');
+        let errMessage = 'Failed to create payment order. Please try again.';
+        try {
+          const errText = await orderRes.text();
+          if (errText && !errText.includes('<html') && !errText.includes('<!DOCTYPE')) {
+            try {
+              const parsed = JSON.parse(errText);
+              errMessage = parsed.message || parsed.error || errText;
+            } catch (_) {
+              errMessage = errText;
+            }
+          } else if (orderRes.status === 502 || orderRes.status === 504) {
+            errMessage = 'Server temporarily unavailable (502 Bad Gateway). Please try again in a few moments.';
+          }
+        } catch (_) {}
+        throw new Error(errMessage);
       }
 
       const orderData = await orderRes.json();
@@ -306,18 +338,18 @@ const BookingEngine = (() => {
         key: orderData.razorpayKeyId,
         amount: orderData.amount,
         currency: 'INR',
-        name: 'Hikers Horizon',
+        name: 'BENGALURU TRAILS',
         description: config.trekName + ' — Trek Booking',
         order_id: orderData.orderId,
-        image: 'img/lo.png',
+        image: '/img/lo.png',
         prefill: {
           name: bookingData.fullName,
           email: userEmail,
           contact: bookingData.mobileNumber
         },
         theme: {
-          color: '#0a1a2e',
-          backdrop_color: 'rgba(10, 26, 46, 0.85)'
+          color: '#0a120e',
+          backdrop_color: 'rgba(10, 18, 14, 0.85)'
         },
         handler: async function (response) {
           // Step 3: Verify payment on server
@@ -494,7 +526,7 @@ const BookingEngine = (() => {
 
     const receiptText = `
 ═══════════════════════════════════════
-       HIKERS HORIZON — BOOKING RECEIPT
+       BENGALURU TRAILS — BOOKING RECEIPT
 ═══════════════════════════════════════
 
   Trek:          ${data.trekName}
@@ -515,9 +547,9 @@ const BookingEngine = (() => {
   Booked On:     ${new Date().toLocaleString('en-IN')}
 
 ═══════════════════════════════════════
-  Thank you for choosing Hikers Horizon!
+  Thank you for choosing BENGALURU TRAILS!
   ${isFullPay ? 'Your booking is fully paid.' : 'Note: Settle balance on departure day.'}
-  For support: hikershorizon@gmail.com
+  For support: bengalurutrails2026@gmail.com
 ═══════════════════════════════════════
     `.trim();
 

@@ -59,6 +59,57 @@ def _verify_signature(app_secret: str, raw_body: bytes, signature_header: str | 
     return hmac.compare_digest(expected, signature_header.split("=", 1)[1])
 
 
+def _extract_ad_referral(obj: dict) -> dict:
+    info = {
+        "ad_id": None,
+        "ad_title": None,
+        "source": None,
+        "ref": None,
+        "media_url": None,
+        "detected_trek": None,
+    }
+    referral = (
+        obj.get("referral")
+        or obj.get("message", {}).get("referral")
+        or obj.get("postback", {}).get("referral")
+        or {}
+    )
+    if referral:
+        info["ad_id"] = referral.get("ad_id")
+        info["source"] = referral.get("source")
+        info["ref"] = referral.get("ref")
+        ads_ctx = referral.get("ads_context_data") or {}
+        info["ad_title"] = ads_ctx.get("ad_title") or referral.get("ad_title")
+        info["media_url"] = ads_ctx.get("video_url") or ads_ctx.get("photo_url")
+
+    # Check attachments (shares / reels / stories)
+    attachments = (
+        obj.get("message", {}).get("attachments")
+        or obj.get("attachments")
+        or []
+    )
+    for att in attachments:
+        p = att.get("payload") or {}
+        if isinstance(p, dict):
+            if p.get("title") and not info["ad_title"]:
+                info["ad_title"] = p.get("title")
+            if p.get("url") and not info["media_url"]:
+                info["media_url"] = p.get("url")
+
+    reply_to = obj.get("message", {}).get("reply_to") or {}
+    story = reply_to.get("story") or {}
+    if story.get("url") and not info["media_url"]:
+        info["media_url"] = story.get("url")
+
+    from app.services.trek_catalog import detect_trek
+    search_str = " ".join(filter(None, [info["ad_title"], info["ref"], info["media_url"]]))
+    m = detect_trek(search_str)
+    if m:
+        info["detected_trek"] = m["name"]
+
+    return info
+
+
 @router.post("/webhook")
 async def receive_webhook(request: Request):
     """Receives inbound Instagram DM events from Meta and, when enabled,
@@ -96,11 +147,13 @@ async def receive_webhook(request: Request):
                     or (messaging.get("postback", {}).get("payload") if isinstance(messaging.get("postback"), dict) else None)
                 )
                 mid = message.get("mid") or (messaging.get("postback", {}).get("mid") if isinstance(messaging.get("postback"), dict) else None)
+                ad_info = _extract_ad_referral(messaging)
+
                 if sender_id and text:
-                    logger.info("Processing inbound Instagram DM from sender_id: %s, text: %s", sender_id, text)
+                    logger.info("Processing inbound Instagram DM from sender_id: %s, text: %s, ad: %s", sender_id, text, ad_info.get("detected_trek"))
                     try:
                         _process_inbound_instagram_message(
-                            db, page_id=page_id, sender_id=sender_id, text=text, mid=mid,
+                            db, page_id=page_id, sender_id=sender_id, text=text, mid=mid, ad_info=ad_info,
                         )
                     except Exception as exc:  # noqa: BLE001
                         logger.exception("Failed to process inbound Instagram message: %s", exc)
@@ -124,11 +177,13 @@ async def receive_webhook(request: Request):
                         or (val.get("postback", {}).get("payload") if isinstance(val.get("postback"), dict) else None)
                     )
                     mid = val.get("mid") or val.get("id")
+                    ad_info = _extract_ad_referral(val)
+
                     if sender_id and text:
-                        logger.info("Processing inbound Instagram DM (changes) from sender_id: %s, text: %s", sender_id, text)
+                        logger.info("Processing inbound Instagram DM (changes) from sender_id: %s, text: %s, ad: %s", sender_id, text, ad_info.get("detected_trek"))
                         try:
                             _process_inbound_instagram_message(
-                                db, page_id=page_id, sender_id=sender_id, text=text, mid=mid,
+                                db, page_id=page_id, sender_id=sender_id, text=text, mid=mid, ad_info=ad_info,
                             )
                         except Exception as exc:  # noqa: BLE001
                             logger.exception("Failed to process inbound Instagram message (changes): %s", exc)
@@ -155,12 +210,22 @@ def _resolve_organization(db: Session, page_id: str | None) -> Organization | No
 
 def _process_inbound_instagram_message(
     db: Session, *, page_id: str | None, sender_id: str | None, text: str | None, mid: str | None,
+    ad_info: dict | None = None,
 ):
     if not sender_id or not text:
         return
     org = _resolve_organization(db, page_id)
     if not org:
         return
+
+    from app.services.trek_catalog import detect_trek
+    detected_trek = None
+    if ad_info and ad_info.get("detected_trek"):
+        detected_trek = ad_info["detected_trek"]
+    if not detected_trek:
+        m = detect_trek(text)
+        if m:
+            detected_trek = m["name"]
 
     customer = db.query(Customer).filter(
         Customer.organization_id == org.id, Customer.instagram_id == sender_id
@@ -170,24 +235,40 @@ def _process_inbound_instagram_message(
             organization_id=org.id, full_name=f"Instagram user {sender_id}",
             phone=f"ig:{sender_id}", instagram_id=sender_id,
         )
+        if ad_info and (ad_info.get("ad_title") or detected_trek):
+            customer.notes = f"Engaged via Ad: {ad_info.get('ad_title') or detected_trek}"
         db.add(customer)
         db.flush()
+    else:
+        if ad_info and (ad_info.get("ad_title") or detected_trek) and not customer.notes:
+            customer.notes = f"Engaged via Ad: {ad_info.get('ad_title') or detected_trek}"
 
     lead = db.query(Lead).filter(
         Lead.organization_id == org.id, Lead.customer_id == customer.id,
         Lead.status.notin_([LeadStatus.CONFIRMED, LeadStatus.COMPLETED, LeadStatus.LOST]),
     ).order_by(Lead.created_at.desc()).first()
+
     if not lead:
+        notes = "Auto-created from inbound Instagram message"
+        if ad_info and (ad_info.get("ad_title") or ad_info.get("ad_id")):
+            notes = f"Ad Referral: {ad_info.get('ad_title') or detected_trek} (Ad ID: {ad_info.get('ad_id')})"
+
         lead = Lead(
             organization_id=org.id, customer_id=customer.id, source=LeadSource.INSTAGRAM,
-            status=LeadStatus.NEW, notes="Auto-created from inbound Instagram message",
+            status=LeadStatus.NEW, trek_name=detected_trek, notes=notes,
         )
         db.add(lead)
         db.flush()
         db.add(LeadActivity(
             organization_id=org.id, lead_id=lead.id, activity_type="CREATED",
-            description="Lead auto-created from inbound Instagram message",
+            description=f"Lead auto-created from inbound Instagram DM" + (f" [Ad: {ad_info.get('ad_title') or detected_trek}]" if ad_info and (ad_info.get('ad_title') or detected_trek) else ""),
         ))
+    else:
+        if detected_trek and not lead.trek_name:
+            lead.trek_name = detected_trek
+        if ad_info and (ad_info.get("ad_title") or ad_info.get("ad_id")):
+            if not lead.notes or "Ad" not in lead.notes:
+                lead.notes = (lead.notes or "") + f" [Ad: {ad_info.get('ad_title') or detected_trek}]"
 
     inbound = Message(
         organization_id=org.id, customer_id=customer.id, lead_id=lead.id,

@@ -74,13 +74,29 @@ def _generate_with_openai(inbound_text: str, context: str, system_prompt: str | 
 
 def _fallback_reply(inbound_text: str) -> str:
     """Rule-based reply used when no OpenAI key is configured, so replies still go out."""
+    from app.services.trek_catalog import detect_trek
     text = inbound_text.lower().strip()
+    matched = detect_trek(text)
+    trek_name = matched["name"] if matched else ""
+
     if any(k in text for k in ["hi", "hello", "hey", "hii"]):
+        if trek_name:
+            return f"Hey! How can I help you with the {trek_name} trip today?"
         return "Hey! How can I help you today?"
+    if any(k in text for k in ["inclusion", "included", "what is included"]):
+        if matched:
+            return f"For {matched['name']}, the package includes {matched['inclusions']}"
+        return "Our packages include Bangalore round-trip travel, stay, meals, and a guide. Which trek or destination are you interested in?"
     if any(k in text for k in ["price", "cost", "fee", "how much"]):
+        if matched:
+            return f"{matched['name']} is {matched['price']} per person, including Bangalore travel, stay, and meals."
         return "Treks start at ₹3,499 per person, including Bangalore travel, stay, and meals. Which trek are you looking for?"
     if any(k in text for k in ["date", "when", "departure", "schedule"]):
+        if trek_name:
+            return f"We have departures every Friday night from Bangalore for {trek_name}. Which weekend are you looking for?"
         return "We have departures every Friday night from Bangalore. Which weekend are you looking for?"
-    if any(k in text for k in ["book", "confirm", "payment", "pay"]):
-        return "You can book directly at https://bengalurutrails.in/Twodays/ or let me know your date and group size."
-    return "Hey! Which trek or destination are you looking for?"
+    if any(k in text for k in ["book", "confirm", "payment", "pay", "how do i book", "how to book"]):
+        if trek_name:
+            return f"To book {trek_name}, just let me know your preferred weekend and number of travelers, and we'll check slots for you!"
+        return "To book, just let me know which trek or destination you're interested in, along with your travel date!"
+    return "Hey! Which trek or destination are you looking for? We have Munnar, Kudremukha, Gokarna, Kodachadri, and more!"

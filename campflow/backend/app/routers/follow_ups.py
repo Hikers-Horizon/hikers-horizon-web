@@ -87,3 +87,12 @@ def _get_or_404(db: Session, ctx: CurrentContext, follow_up_id: uuid.UUID) -> Fo
     if not fu:
         raise HTTPException(status_code=404, detail="Follow-up not found")
     return fu
+
+
+@router.post("/process-automation")
+def trigger_automated_follow_ups(db: Session = Depends(get_db)):
+    """Triggers the automated 2-week follow-up engine for customers who have not replied or booked."""
+    from app.services.follow_up_engine import process_automated_follow_ups
+    stats = process_automated_follow_ups(db)
+    return {"status": "success", "results": stats}
+

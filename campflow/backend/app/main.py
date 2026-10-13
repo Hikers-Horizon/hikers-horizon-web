@@ -131,6 +131,26 @@ def run_db_migrations():
         import logging
         logging.getLogger("campflow").warning("Startup seed notice: %s", exc)
 
+    # Start background daemon thread for 2-week automated follow-up engine
+    import threading, time
+    def _follow_up_worker():
+        time.sleep(10)  # Initial delay after server boot
+        while True:
+            try:
+                from app.services.follow_up_engine import process_automated_follow_ups
+                db_worker = SessionLocal()
+                try:
+                    process_automated_follow_ups(db_worker)
+                finally:
+                    db_worker.close()
+            except Exception as e:
+                import logging
+                logging.getLogger("campflow").warning("Follow-up background worker notice: %s", e)
+            time.sleep(900)  # Check every 15 minutes
+
+    worker_thread = threading.Thread(target=_follow_up_worker, daemon=True, name="follow_up_worker")
+    worker_thread.start()
+
 
 # Serve static assets (availability widget JS, etc.)
 import os

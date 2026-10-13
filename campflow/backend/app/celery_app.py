@@ -14,4 +14,8 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.notify_upcoming_departure_balances",
         "schedule": crontab(hour=8, minute=30),
     },
+    "process-automated-follow-ups-periodic": {
+        "task": "app.tasks.process_automated_follow_ups",
+        "schedule": crontab(minute="*/30"),
+    },
 }

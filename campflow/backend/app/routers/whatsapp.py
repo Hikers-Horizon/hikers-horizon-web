@@ -122,12 +122,14 @@ async def receive_webhook(request: Request, db: Session = Depends(get_db)):
                 from_phone = msg.get("from")
                 body = msg.get("text", {}).get("body", "")
                 whatsapp_message_id = msg.get("id")
+                referral = msg.get("referral") or {}
+                ref_text = " ".join(filter(None, [referral.get("headline"), referral.get("body"), referral.get("source_url")]))
                 logger.info("Processing inbound WhatsApp msg from %s (name: %s): %s", from_phone, contacts.get(from_phone), body)
                 try:
                     _process_inbound_whatsapp_message(
                         db, phone_number_id=phone_number_id, from_phone=from_phone,
                         body=body, whatsapp_message_id=whatsapp_message_id,
-                        contact_name=contacts.get(from_phone),
+                        contact_name=contacts.get(from_phone), referral_text=ref_text,
                     )
                 except Exception as exc:  # noqa: BLE001
                     logger.exception("Failed to process inbound WhatsApp message: %s", exc)
@@ -152,7 +154,7 @@ def _resolve_organization(db: Session, phone_number_id: str | None) -> Organizat
 
 def _process_inbound_whatsapp_message(
     db: Session, *, phone_number_id: str | None, from_phone: str, body: str,
-    whatsapp_message_id: str | None, contact_name: str | None,
+    whatsapp_message_id: str | None, contact_name: str | None, referral_text: str | None = None,
 ):
     if not from_phone or not body:
         return
@@ -160,29 +162,53 @@ def _process_inbound_whatsapp_message(
     if not org:
         return
 
+    from app.services.trek_catalog import detect_trek
+    detected_trek = None
+    if referral_text:
+        m = detect_trek(referral_text)
+        if m:
+            detected_trek = m["name"]
+    if not detected_trek:
+        m = detect_trek(body)
+        if m:
+            detected_trek = m["name"]
+
     customer = db.query(Customer).filter(
         Customer.organization_id == org.id, Customer.phone == from_phone
     ).first()
     if not customer:
         customer = Customer(organization_id=org.id, full_name=contact_name or from_phone, phone=from_phone)
+        if detected_trek:
+            customer.notes = f"Engaged via Ad: {detected_trek}"
         db.add(customer)
         db.flush()
+    else:
+        if detected_trek and not customer.notes:
+            customer.notes = f"Engaged via Ad: {detected_trek}"
 
     lead = db.query(Lead).filter(
         Lead.organization_id == org.id, Lead.customer_id == customer.id,
         Lead.status.notin_([LeadStatus.CONFIRMED, LeadStatus.COMPLETED, LeadStatus.LOST]),
     ).order_by(Lead.created_at.desc()).first()
     if not lead:
+        notes = "Auto-created from inbound WhatsApp message"
+        if detected_trek:
+            notes = f"Ad Referral: {detected_trek}"
         lead = Lead(
             organization_id=org.id, customer_id=customer.id, source=LeadSource.WHATSAPP,
-            status=LeadStatus.NEW, notes="Auto-created from inbound WhatsApp message",
+            status=LeadStatus.NEW, trek_name=detected_trek, notes=notes,
         )
         db.add(lead)
         db.flush()
         db.add(LeadActivity(
             organization_id=org.id, lead_id=lead.id, activity_type="CREATED",
-            description="Lead auto-created from inbound WhatsApp message",
+            description=f"Lead auto-created from inbound WhatsApp message" + (f" (Ad: {detected_trek})" if detected_trek else ""),
         ))
+    else:
+        if detected_trek and not lead.trek_name:
+            lead.trek_name = detected_trek
+        if detected_trek and (not lead.notes or "Ad" not in lead.notes):
+            lead.notes = (lead.notes or "") + f" [Ad: {detected_trek}]"
 
     inbound = Message(
         organization_id=org.id, customer_id=customer.id, lead_id=lead.id,

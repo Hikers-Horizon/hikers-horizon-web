@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Munnar & Kolukkumalai Adventure | Hikers Horizon</title>
+    <title>Munnar & Kolukkumalai Adventure | BENGALURU TRAILS</title>
     <meta name="description"
         content="Experience a stunning 2-day Munnar & Kolukkumalai tour from Bangalore. Misty trails, world's highest tea estate sunrise, and cultural show. Book for ₹5,499!">
-    <meta name="keywords" content="munnar tour, kolukkumalai trek, kolukkumalai sunrise, munnar trip from bangalore, munnar tea garden, hikers horizon">
-    <link rel="canonical" href="https://hikershorizon.in/Backpacking/Munnar" />
+    <meta name="keywords" content="munnar tour, kolukkumalai trek, kolukkumalai sunrise, munnar trip from bangalore, munnar tea garden, BENGALURU TRAILS">
+    <link rel="canonical" href="https://bengalurutrails.in/Backpacking/Munnar" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -566,6 +566,106 @@
                 gap: 3rem;
             }
         }
+
+        /* Inclusions & Exclusions Tabs */
+        .inc-exc-container {
+            margin-top: 0.5rem;
+        }
+
+        .inc-exc-tabs-wrapper {
+            margin-bottom: 2rem;
+        }
+
+        .inc-exc-tabs {
+            display: inline-flex;
+            background: #ffefe6;
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .inc-exc-tab {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #222222;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 8px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+
+        .inc-exc-tab.active {
+            background: #f25c27;
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(242, 92, 39, 0.4);
+        }
+
+        .inc-exc-panel {
+            display: none;
+            animation: incExcFadeIn 0.3s ease;
+        }
+
+        .inc-exc-panel.active {
+            display: block;
+        }
+
+        @keyframes incExcFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .inc-exc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .inc-exc-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            line-height: 1.65;
+            font-size: 0.98rem;
+            color: #f1f5f9;
+        }
+
+        .inc-icon, .exc-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .inc-icon {
+            background: #22c55e;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+        }
+
+        .exc-icon {
+            background: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+        }
+
+        .inc-icon svg, .exc-icon svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 3.2;
+        }
     
     </style>
     <link rel="stylesheet" href="../../auth-navigation.css?v=12">
@@ -716,6 +816,141 @@
                             </ul>
                             <p style="color: #b0b0b0; margin-top: 1rem;">Please bear in mind that this itinerary is subject to change based on weather conditions, traffic and other variables. The timings provided are approximate.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inclusions & Exclusions -->
+            <div class="glass-card">
+                <h2 class="section-title">Inclusions & Exclusions</h2>
+                <div class="inc-exc-container">
+                    <div class="inc-exc-tabs-wrapper">
+                        <div class="inc-exc-tabs" role="tablist">
+                            <button type="button" class="inc-exc-tab active" id="tab-inclusion" onclick="switchIncExc('inclusion')" role="tab" aria-selected="true">Inclusion</button>
+                            <button type="button" class="inc-exc-tab" id="tab-exclusion" onclick="switchIncExc('exclusion')" role="tab" aria-selected="false">Exclusion</button>
+                        </div>
+                    </div>
+
+                    <!-- Inclusion Panel -->
+                    <div id="inclusion-panel" class="inc-exc-panel active" role="tabpanel" aria-labelledby="tab-inclusion">
+                        <ul class="inc-exc-list">
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Transportation (Non-AC)</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>2 Breakfast</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>1 Dinner</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Panthom Hill Sunset Point | Visit Jaguar Rock's viewpoint | Tea Factory | Chocolate Factory | Kalari Kshetra Visit | Eravikulam National Park | Attukad Waterfall | Lockhart View Point | Periyakanal Waterfalls Visit</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Trip Captain</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Accommodation Tent Stay</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span>Campfire (Depends On Weather)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Exclusion Panel -->
+                    <div id="exclusion-panel" class="inc-exc-panel" role="tabpanel" aria-labelledby="tab-exclusion">
+                        <ul class="inc-exc-list">
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>Kolukkumalai Trek (Jeep Safari)</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>All Entry Charges for any sightseeing areas</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>Kayaking, Zip-line, Elephant ride</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>Saturday & Sunday Lunch</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>Anything Not Mentioned Includes</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span>Entry charges for any sightseeing area.</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -886,14 +1121,14 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Hikers Horizon. All rights reserved.</p>
+                <p class="footer-copyright">© 2026 BENGALURU TRAILS. All rights reserved.</p>
                 <div class="social-links">
-                    <a href="https://facebook.com/hikershorizon" aria-label="Facebook">
+                    <a href="https://facebook.com/bengalurutrails" aria-label="Facebook">
                         <svg viewBox="0 0 24 24">
                             <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                         </svg>
                     </a>
-                    <a href="https://instagram.com/hikershorizon" aria-label="Instagram">
+                    <a href="https://instagram.com/bengalurutrails" aria-label="Instagram">
                         <svg viewBox="0 0 24 24">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -919,7 +1154,7 @@
         "@context": "https://schema.org",
         "@type": "Event",
         "name": "Munnar & Kolukkumalai Adventure from Bangalore",
-        "description": "Join Hikers Horizon for a 2-day Munnar and Kolukkumalai trip starting at ₹5,499. Visit Kolukkumalai Sunrise point, Mattupetty Dam, Signal Point, and enjoy a Kalaripayattu Show.",
+        "description": "Join BENGALURU TRAILS for a 2-day Munnar and Kolukkumalai trip starting at ₹5,499. Visit Kolukkumalai Sunrise point, Mattupetty Dam, Signal Point, and enjoy a Kalaripayattu Show.",
         "startDate": "2025-10-24T20:00:00+05:30",
         "endDate": "2025-10-26T23:00:00+05:30",
         "location": {
@@ -934,14 +1169,14 @@
         },
         "organizer": {
             "@type": "Organization",
-            "name": "Hikers Horizon",
-            "url": "https://hikershorizon.in"
+            "name": "BENGALURU TRAILS",
+            "url": "https://bengalurutrails.in"
         },
         "offers": {
             "@type": "Offer",
             "price": "5499",
             "priceCurrency": "INR",
-            "url": "https://hikershorizon.in/Backpacking/Munnar",
+            "url": "https://bengalurutrails.in/Backpacking/Munnar",
             "availability": "https://schema.org/InStock"
         }
     }
@@ -957,6 +1192,31 @@
             });
             if (!isActive) {
                 item.classList.add('active');
+            }
+        }
+
+        function switchIncExc(type) {
+            const incTab = document.getElementById('tab-inclusion');
+            const excTab = document.getElementById('tab-exclusion');
+            const incPanel = document.getElementById('inclusion-panel');
+            const excPanel = document.getElementById('exclusion-panel');
+
+            if (type === 'inclusion') {
+                incTab.classList.add('active');
+                incTab.setAttribute('aria-selected', 'true');
+                excTab.classList.remove('active');
+                excTab.setAttribute('aria-selected', 'false');
+
+                incPanel.classList.add('active');
+                excPanel.classList.remove('active');
+            } else {
+                excTab.classList.add('active');
+                excTab.setAttribute('aria-selected', 'true');
+                incTab.classList.remove('active');
+                incTab.setAttribute('aria-selected', 'false');
+
+                excPanel.classList.add('active');
+                incPanel.classList.remove('active');
             }
         }
     </script>

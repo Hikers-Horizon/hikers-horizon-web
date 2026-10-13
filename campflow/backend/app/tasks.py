@@ -55,3 +55,14 @@ def notify_upcoming_departure_balances():
         db.commit()
     finally:
         db.close()
+
+
+@celery_app.task(name="app.tasks.process_automated_follow_ups")
+def process_automated_follow_ups():
+    """Celery scheduled task to check and run the 2-week automated follow-up sequence."""
+    from app.services.follow_up_engine import process_automated_follow_ups as run_engine
+    db = SessionLocal()
+    try:
+        run_engine(db)
+    finally:
+        db.close()
