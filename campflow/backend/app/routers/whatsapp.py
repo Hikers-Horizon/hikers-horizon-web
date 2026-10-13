@@ -117,14 +117,33 @@ async def receive_webhook(request: Request, db: Session = Depends(get_db)):
             phone_number_id = value.get("metadata", {}).get("phone_number_id")
             contacts = {c.get("wa_id"): c.get("profile", {}).get("name") for c in value.get("contacts", [])}
             for msg in value.get("messages", []):
-                if msg.get("type") != "text":
+                msg_type = msg.get("type")
+                body = ""
+                if msg_type == "text":
+                    body = msg.get("text", {}).get("body", "")
+                elif msg_type == "button":
+                    body = msg.get("button", {}).get("text", "")
+                elif msg_type == "interactive":
+                    interactive = msg.get("interactive", {})
+                    body = (
+                        interactive.get("button_reply", {}).get("title")
+                        or interactive.get("list_reply", {}).get("title")
+                        or ""
+                    )
+                if not body:
                     continue
+
                 from_phone = msg.get("from")
-                body = msg.get("text", {}).get("body", "")
                 whatsapp_message_id = msg.get("id")
-                referral = msg.get("referral") or {}
-                ref_text = " ".join(filter(None, [referral.get("headline"), referral.get("body"), referral.get("source_url")]))
-                logger.info("Processing inbound WhatsApp msg from %s (name: %s): %s", from_phone, contacts.get(from_phone), body)
+                referral = msg.get("referral") or msg.get("context", {}).get("referral") or {}
+                ref_text = " ".join(filter(None, [
+                    referral.get("headline"),
+                    referral.get("body"),
+                    referral.get("source_url"),
+                    referral.get("description"),
+                    referral.get("source_id"),
+                ]))
+                logger.info("Processing inbound WhatsApp msg (%s) from %s (name: %s): %s", msg_type, from_phone, contacts.get(from_phone), body)
                 try:
                     _process_inbound_whatsapp_message(
                         db, phone_number_id=phone_number_id, from_phone=from_phone,
@@ -185,6 +204,10 @@ def _process_inbound_whatsapp_message(
     else:
         if detected_trek and not customer.notes:
             customer.notes = f"Engaged via Ad: {detected_trek}"
+        elif not detected_trek and customer.notes:
+            m = detect_trek(customer.notes)
+            if m:
+                detected_trek = m["name"]
 
     lead = db.query(Lead).filter(
         Lead.organization_id == org.id, Lead.customer_id == customer.id,
@@ -205,7 +228,9 @@ def _process_inbound_whatsapp_message(
             description=f"Lead auto-created from inbound WhatsApp message" + (f" (Ad: {detected_trek})" if detected_trek else ""),
         ))
     else:
-        if detected_trek and not lead.trek_name:
+        if not detected_trek and lead.trek_name:
+            detected_trek = lead.trek_name
+        elif detected_trek and not lead.trek_name:
             lead.trek_name = detected_trek
         if detected_trek and (not lead.notes or "Ad" not in lead.notes):
             lead.notes = (lead.notes or "") + f" [Ad: {detected_trek}]"
