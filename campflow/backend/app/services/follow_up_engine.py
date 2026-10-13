@@ -279,10 +279,16 @@ def process_automated_follow_ups(db: Session) -> dict:
                     next_stage, customer.full_name, channel
                 )
             else:
-                logger.warning(
-                    "Failed to dispatch follow-up stage %d to customer %s",
-                    next_stage, customer.id
-                )
+                # Dispatch failed (e.g. Meta 24-hour window closed or user ID unavailable)
+                lead.last_contact_at = now
+                db.add(LeadActivity(
+                    organization_id=org.id,
+                    lead_id=lead.id,
+                    activity_type="AI_FOLLOW_UP_SKIPPED",
+                    description=f"Auto follow-up stage {next_stage} skipped ({channel} window closed or user unavailable)",
+                ))
+                db.commit()
+                results["skipped"] += 1
 
     return results
 
@@ -295,20 +301,34 @@ def _dispatch_follow_up_message(
     instagram_token = org.instagram_access_token or settings.INSTAGRAM_ACCESS_TOKEN
 
     if channel == "instagram" and customer.instagram_id and instagram_token:
+        page_id = org.instagram_page_id or settings.INSTAGRAM_PAGE_ID
         try:
-            page_id = org.instagram_page_id or settings.INSTAGRAM_PAGE_ID
             client = InstagramClient(page_id=page_id, access_token=instagram_token)
             client.send_text_message(customer.instagram_id, text)
             return True
         except Exception as exc:
-            logger.warning("Org Instagram token failed for follow-up (%s), trying fallback", exc)
+            err_str = str(exc)
+            if "outside of allowed window" in err_str or "2534022" in err_str:
+                logger.info("Instagram 24h window closed for customer %s. Cannot send freeform follow-up.", customer.id)
+                return False
+            if "cannot be found" in err_str or "2534014" in err_str:
+                logger.info("Instagram customer %s not found.", customer.id)
+                return False
+
+            logger.info("Org Instagram token did not deliver follow-up (%s), trying fallback", exc)
             if settings.INSTAGRAM_ACCESS_TOKEN and instagram_token != settings.INSTAGRAM_ACCESS_TOKEN:
                 try:
                     fallback_client = InstagramClient(page_id=settings.INSTAGRAM_PAGE_ID, access_token=settings.INSTAGRAM_ACCESS_TOKEN)
                     fallback_client.send_text_message(customer.instagram_id, text)
                     return True
                 except Exception as fb_exc:
-                    logger.exception("Fallback Instagram token also failed for follow-up: %s", fb_exc)
+                    fb_err = str(fb_exc)
+                    if "outside of allowed window" in fb_err or "2534022" in fb_err:
+                        logger.info("Instagram 24h window closed for customer %s on fallback.", customer.id)
+                    elif "cannot be found" in fb_err or "2534014" in fb_err:
+                        logger.info("Instagram customer %s not found on fallback.", customer.id)
+                    else:
+                        logger.warning("Fallback Instagram token failed for follow-up: %s", fb_exc)
             return False
 
     elif channel == "whatsapp" and customer.phone and whatsapp_token:
@@ -318,7 +338,7 @@ def _dispatch_follow_up_message(
             client.send_text_message(customer.phone, text)
             return True
         except Exception as exc:
-            logger.exception("Failed to dispatch WhatsApp follow-up: %s", exc)
+            logger.warning("Failed to dispatch WhatsApp follow-up for %s: %s", customer.phone, exc)
             return False
 
     return False

@@ -53,6 +53,18 @@ class InstagramClient:
                     if resp.status_code == 200:
                         return resp.json()
 
+                    # If Meta rejects due to 24-hour window, attempt with HUMAN_AGENT message tag
+                    if resp.status_code == 403 and ("outside of allowed window" in resp.text or "2534022" in resp.text):
+                        tag_payload = {
+                            "recipient": {"id": recipient_id},
+                            "message": {"text": body},
+                            "messaging_type": "MESSAGE_TAG",
+                            "tag": "HUMAN_AGENT",
+                        }
+                        tag_resp = client.post(url, json=tag_payload, headers=headers)
+                        if tag_resp.status_code == 200:
+                            return tag_resp.json()
+
                     last_resp = resp
                     logger.warning(
                         "Instagram send attempt returned %s for URL %s: %s",
