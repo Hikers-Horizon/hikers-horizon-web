@@ -14,10 +14,17 @@ from app.models.enums import LeadStatus, LeadSource, LeadScore, FollowUpStatus, 
 
 def run():
     print("[*] Running database migration...")
+    is_sqlite = engine.dialect.name == "sqlite"
     with engine.begin() as conn:
-        conn.execute(text("ALTER TABLE customers ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
-        conn.execute(text("ALTER TABLE leads ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
-    print("[+] Columns verified on PostgreSQL!")
+        for tbl in ["customers", "leads"]:
+            if is_sqlite:
+                try:
+                    conn.execute(text(f"ALTER TABLE {tbl} ADD COLUMN ai_disabled BOOLEAN DEFAULT 0;"))
+                except Exception:
+                    pass
+            else:
+                conn.execute(text(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS ai_disabled BOOLEAN DEFAULT FALSE;"))
+    print("[+] Columns verified!")
 
     db = SessionLocal()
     try:
