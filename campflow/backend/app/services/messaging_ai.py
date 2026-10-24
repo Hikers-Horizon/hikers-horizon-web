@@ -23,6 +23,10 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
     """Generates an AI reply grounded in recent conversation history and sends it
     over the given channel ("whatsapp" or "instagram"), logging the result.
     """
+    if channel == "whatsapp" and not getattr(settings, "WHATSAPP_AI_AUTO_REPLY", False):
+        logger.info("send_ai_reply skipped: WhatsApp AI bot is disabled.")
+        return
+
     recent = db.query(Message).filter(
         Message.organization_id == org.id, Message.customer_id == customer.id, Message.channel == channel,
     ).order_by(Message.created_at.desc()).limit(10).all()
@@ -53,20 +57,6 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
 
     logger.info("AI sales agent generated reply: %s", reply_text)
 
-    # Human-like delay: wait briefly before sending, strictly capped at maximum 4 seconds
-    if settings.AI_REPLY_DELAY_ENABLED:
-        import random, time
-        base_delay = random.uniform(
-            settings.AI_REPLY_DELAY_MIN_SECONDS,
-            settings.AI_REPLY_DELAY_MAX_SECONDS,
-        )
-        # Add slight typing delay but cap strictly so total delay never exceeds 4.0s
-        typing_extra = min(len(reply_text) / 60.0, 1.0)
-        total_delay = min(base_delay + typing_extra, 4.0)
-        total_delay = max(0.5, total_delay)
-        logger.info("Human-like delay: sleeping %.1f s before sending reply (max 4.0s)", total_delay)
-        time.sleep(total_delay)
-
     outbound = Message(
         organization_id=org.id, customer_id=customer.id, lead_id=lead.id,
         direction=MessageDirection.OUTBOUND, channel=channel, body=reply_text, status="queued",
@@ -77,7 +67,6 @@ def send_ai_reply(db: Session, *, org: Organization, customer: Customer, lead: L
 
     whatsapp_token = org.whatsapp_access_token or settings.WHATSAPP_ACCESS_TOKEN
     instagram_token = org.instagram_access_token or settings.INSTAGRAM_ACCESS_TOKEN
-
 
     if channel == "whatsapp" and whatsapp_token and (org.whatsapp_phone_number_id or settings.WHATSAPP_PHONE_NUMBER_ID):
         try:

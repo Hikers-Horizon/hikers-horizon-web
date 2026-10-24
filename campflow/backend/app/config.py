@@ -33,19 +33,16 @@ class Settings(BaseSettings):
     INSTAGRAM_APP_SECRET: str = ""
 
     # AI auto-reply (used to draft/send automatic responses to inbound WhatsApp/Instagram messages)
-    AI_AUTO_REPLY_ENABLED: bool = False  # Turned OFF by default (user request)
-    AI_SALES_AGENT_ENABLED: bool = False  # Turned OFF by default
+    AI_AUTO_REPLY_ENABLED: bool = True
+    WHATSAPP_AI_AUTO_REPLY: bool = False  # Disabled: user replies manually on WhatsApp; no bot
+    INSTAGRAM_AI_AUTO_REPLY: bool = True  # Keep AI bot on Instagram
+    AI_SALES_AGENT_ENABLED: bool = True  # full conversational booking agent (requires AI_AUTO_REPLY_ENABLED)
     AI_MAX_TOKENS: int = 500  # richer responses for sales conversations
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
     OPENAI_BASE_URL: str = "https://api.openai.com/v1"
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-flash-lite-latest"
-
-    # Human-like delay: strictly capped at maximum 4 seconds
-    AI_REPLY_DELAY_ENABLED: bool = True
-    AI_REPLY_DELAY_MIN_SECONDS: float = 1.0
-    AI_REPLY_DELAY_MAX_SECONDS: float = 3.0
 
     # Payment link base URL used by AI agent when creating bookings
     BOOKING_PAYMENT_BASE_URL: str = ""  # e.g. https://yoursite.com/pay — falls back to FRONTEND_URL/pay
