@@ -429,7 +429,8 @@
                 { name: 'Hampi Heritage Trail', link: '/Backpacking/Hampi/index.html' },
                 { name: 'Wayanad Expedition', link: '/Backpacking/Wayanad/index.html' },
                 { name: 'Kodaikanal Retreat', link: '/Backpacking/Kodaikanal/index.html' },
-                { name: 'Munnar & Kolukkumalai', link: '/Backpacking/Munnar/index.html' }
+                { name: 'Munnar & Kolukkumalai', link: '/Backpacking/Munnar/index.html' },
+                { name: 'Dandeli & Dudhsagar Adventure', link: '/Backpacking/Dandeli/index.html' }
             ]
         };
 

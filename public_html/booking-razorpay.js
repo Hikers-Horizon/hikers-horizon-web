@@ -71,13 +71,28 @@ const BookingEngine = (() => {
     };
 
     try {
-      await fetch('/api/leads', {
+      await apiFetch('/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadData)
       });
     } catch (err) {
       console.error('Failed to sync lead:', err);
+    }
+  }
+
+  // Robust fetch helper: tries root path first, falls back to /api prefix if 404
+  async function apiFetch(endpoint, options) {
+    const primary = endpoint.startsWith('/') ? endpoint : ('/' + endpoint);
+    const fallback = primary.startsWith('/api/') ? primary.replace('/api/', '/') : ('/api' + primary);
+    try {
+      const res = await fetch(primary, options);
+      if (res.status === 404) {
+        return await fetch(fallback, options);
+      }
+      return res;
+    } catch (err) {
+      return await fetch(fallback, options);
     }
   }
 
@@ -307,7 +322,7 @@ const BookingEngine = (() => {
 
     try {
       // Step 1: Create Razorpay Order on server
-      const orderRes = await fetch('/api/create-order', {
+      const orderRes = await apiFetch('/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: totalCost, paymentMode, bookingData })
@@ -338,7 +353,7 @@ const BookingEngine = (() => {
         key: orderData.razorpayKeyId,
         amount: orderData.amount,
         currency: 'INR',
-        name: 'BENGALURU TRAILS',
+        name: 'HIKERS HORIZON',
         description: config.trekName + ' — Trek Booking',
         order_id: orderData.orderId,
         image: '/img/lo.png',
@@ -356,7 +371,7 @@ const BookingEngine = (() => {
           payBtn.innerHTML = '<span class="spinner"></span> Verifying...';
           
           try {
-            const verifyRes = await fetch('/api/verify-payment', {
+            const verifyRes = await apiFetch('/verify-payment', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

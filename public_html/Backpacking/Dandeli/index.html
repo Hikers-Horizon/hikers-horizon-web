@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dudhsagar Falls Trek & Dandeli Adventure | Hikers Horizon</title>
+    <meta name="description"
+        content="Experience the legendary Dudhsagar Falls Trek and Dandeli adventure from Bangalore. Explore milky cascading waterfalls, jungle trails, Supa Dam, and thrilling Kali river water sports!">
+    <meta name="keywords"
+        content="dudhsagar trek, dandeli adventure, dudhsagar falls trek from bangalore, dandeli river rafting, dudhsagar monsoon trek, supa dam backwaters, dandeli backpacking, hikers horizon">
+    <link rel="canonical" href="https://hikershorizon.in/Backpacking/Dandeli" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&family=Outfit:wght@600;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FFFFFF;
+            --secondary-color: #FFFFFF;
+            --text-light: #B0B0B0;
+            --bg-dark: #000000;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #000000;
+            color: #ffffff;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            overscroll-behavior-x: none;
+            scroll-behavior: smooth;
+        }
+
+        /* Fixed Background Video */
+        video#bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.35;
+            filter: grayscale(100%);
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: -1;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: clamp(4rem, 10vw, 8rem) 1rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 5.5vw, 3.8rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom, #ffffff, #dcdcdc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            max-width: 850px;
+            margin: 0 auto;
+            font-weight: 600;
+        }
+
+        /* Main Container */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto 8rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            padding: clamp(1.5rem, 4vw, 3rem);
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Detail Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #ffd700;
+            letter-spacing: 0.1em;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Gallery System */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            .gallery-image {
+                width: 100%;
+                padding-bottom: 100%;
+                height: 0;
+                position: relative;
+                border-radius: 12px;
+            }
+        }
+
+        .gallery-image {
+            border-radius: 16px;
+            overflow: hidden;
+            height: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .gallery-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .trek-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ffd700, #ffcc00);
+            color: #000000;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 5;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .gallery-image:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Itinerary & Lists */
+        .modern-list {
+            list-style: none;
+        }
+
+        .modern-list > li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            line-height: 1.7;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .modern-list > li:last-child {
+            border-bottom: none;
+        }
+
+        .itinerary-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.3s ease;
+        }
+
+        .itinerary-item:last-child {
+            border-bottom: none;
+        }
+
+        .itinerary-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.25rem 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .itinerary-header:hover {
+            opacity: 0.85;
+        }
+
+        .day-tag {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #ffd700;
+            min-width: 90px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .itinerary-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+
+        .dropdown-icon {
+            width: 24px;
+            height: 24px;
+            fill: #ffd700;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .itinerary-item.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .itinerary-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-left: calc(90px + 1.5rem);
+            opacity: 0;
+        }
+
+        .itinerary-item.active .itinerary-content {
+            max-height: 3500px;
+            padding-bottom: 1.5rem;
+            opacity: 1;
+        }
+
+        .itinerary-content p {
+            line-height: 1.8;
+            margin-top: 0.5rem;
+            color: #b0b0b0;
+        }
+
+        .itinerary-content li {
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .itinerary-content li:last-child {
+            margin-bottom: 0;
+        }
+
+        .itinerary-time {
+            color: #ffd700;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        .pickup-link {
+            color: #ffd700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .pickup-link:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .itinerary-content {
+                padding-left: 0;
+            }
+            .itinerary-header {
+                gap: 1rem;
+            }
+            .day-tag {
+                min-width: 70px;
+                font-size: 0.8rem;
+            }
+            .itinerary-title {
+                font-size: 1rem;
+            }
+        }
+
+        /* Inclusions & Exclusions Tabs */
+        .inc-exc-container {
+            margin-top: 0.5rem;
+        }
+
+        .inc-exc-tabs-wrapper {
+            margin-bottom: 2rem;
+        }
+
+        .inc-exc-tabs {
+            display: inline-flex;
+            background: #ffefe6;
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .inc-exc-tab {
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #222222;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 8px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+
+        .inc-exc-tab.active {
+            background: #f25c27;
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(242, 92, 39, 0.4);
+        }
+
+        .inc-exc-panel {
+            display: none;
+            animation: incExcFadeIn 0.3s ease;
+        }
+
+        .inc-exc-panel.active {
+            display: block;
+        }
+
+        @keyframes incExcFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .inc-exc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .inc-exc-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            line-height: 1.65;
+            font-size: 0.98rem;
+            color: #f1f5f9;
+        }
+
+        .inc-icon, .exc-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .inc-icon {
+            background: #22c55e;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+        }
+
+        .exc-icon {
+            background: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+        }
+
+        .inc-icon svg, .exc-icon svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 3.2;
+        }
+
+        /* Pricing Cards */
+        .pricing-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .price-card:hover {
+            border-color: #ffd700;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .price-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .amount-box {
+            margin-bottom: 2rem;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #888888;
+            font-size: 1.1rem;
+        }
+
+        .new-price {
+            display: block;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .pricing-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 1.25rem 2rem;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .price-card:hover .pricing-btn {
+            background: #ffd700;
+        }
+
+        /* Floating Buttons */
+        .floating-book-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            background: linear-gradient(45deg, #ffd700, #ffb300);
+            color: #000000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        .floating-book-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+            background: #ffffff;
+        }
+
+        .enquiry-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(37, 211, 102, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .enquiry-button:hover {
+            transform: scale(1.1) rotate(10deg);
+            background: #25D366;
+            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-icon {
+            width: 32px;
+            height: 32px;
+            fill: #25D366;
+            transition: fill 0.3s ease;
+        }
+
+        .enquiry-button:hover .whatsapp-icon {
+            fill: #ffffff;
+        }
+
+        /* Footer */
+        footer {
+            background: #000000;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 6rem 1.5rem 2rem 1.5rem;
+        }
+
+        .footer-container {
+            max-width: 85rem;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .footer-links-col h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            color: #ffffff;
+        }
+
+        .footer-links-col ul {
+            list-style: none;
+        }
+
+        .footer-links-col li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links-col a {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links-col a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: #666666;
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #666666;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #ffffff;
+        }
+
+        .social-links svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../../auth-navigation.css?v=12">
+</head>
+
+<body>
+    <!-- Background Video -->
+    <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+        <source src="/img/BG.webp" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <!-- GLOBAL HEADER -->
+    <header id="global-header"></header>
+    <script src="/global-header.js"></script>
+
+    <main>
+        <section class="hero">
+            <h1>Dudhsagar Falls & Dandeli</h1>
+            <p>Waterfall Trails & Jungle Thrills • Experience Dudhsagar & Dandeli!</p>
+        </section>
+
+        <div class="page-container">
+            <!-- Adventure Overview Card -->
+            <div class="glass-card">
+                <h2 class="section-title">Adventure Overview</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Vibe</span>
+                        <span class="info-value">Cascades & River Thrills</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Duration</span>
+                        <span class="info-value">3 Days / 2 Nights</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Difficulty</span>
+                        <span class="info-value">Moderate to Difficult</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Best Season</span>
+                        <span class="info-value">Monsoon & Post-Monsoon</span>
+                    </div>
+                </div>
+                <p style="margin-top: 2rem; line-height: 1.8; color: #b0b0b0;">
+                    What do travelers with great taste do beyond the beaches? They embark on the legendary <strong>Dudhsagar Falls Trek & Dandeli Adventure</strong>. Dudhsagar Falls is a majestic four-tiered waterfall on the Mandovi River along the Goa-Karnataka border, surrounded by deep deciduous jungle and the iconic railway bridge. 
+                </p>
+                <p style="margin-top: 1rem; line-height: 1.8; color: #b0b0b0;">
+                    On <strong>Day 1</strong>, we trek to the magnificent roaring Dudhsagar Waterfalls and take a refreshing dip with safety life jackets. On <strong>Day 2</strong>, we head into the wild heart of Dandeli for high-energy water activities (white water rafting, kayaking, natural jacuzzi) followed by the serene views of the <strong>Supa Dam Backwaters</strong>.
+                </p>
+                <p style="margin-top: 1rem; color: #b0b0b0;">Explore the rocky trails of Karnataka with <a
+                        href="https://karnatakatourism.org/" target="_blank" rel="noopener"
+                        style="color: #ffd700;">Karnataka Tourism</a>.</p>
+            </div>
+
+            <!-- Visual Highlights -->
+            <div class="glass-card">
+                <h2 class="section-title">Visual Highlights</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-image">
+                        <span class="trek-badge">Dudhsagar Falls</span>
+                        <img src="/img/dudhsagar.jpg" alt="Dudhsagar Waterfalls Trek">
+                    </div>
+                    <div class="gallery-image">
+                        <span class="trek-badge">Kali River Rafting</span>
+                        <img src="/img/dandeli1.jpg" alt="Dandeli White Water Rafting">
+                    </div>
+                    <div class="gallery-image">
+                        <span class="trek-badge">Jungle Campsite</span>
+                        <img src="/img/dandeli2.jpg" alt="Dandeli Jungle Camp & Bonfire">
+                    </div>
+                    <div class="gallery-image">
+                        <span class="trek-badge">Natural Jacuzzi</span>
+                        <img src="/img/dandeli3.jpg" alt="Kali River Natural Jacuzzi Bath">
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Itinerary -->
+            <div class="glass-card">
+                <h2 class="section-title">Trip Itinerary</h2>
+                <div class="modern-list">
+                    <!-- Day 0 -->
+                    <div class="itinerary-item active">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 0</span>
+                            <span class="itinerary-title">Departure from Bengaluru — Journey to Kulem, Goa!</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0; font-weight: 600;">Journey to Kulem, Goa!</p>
+                            <p style="color: #b0b0b0;">As the sun sets over Bangalore, our adventure begins as we head towards Kulem. We'll embark on a comfortable journey of <strong>540 km</strong> in a Tempo Traveler or Minibus with push-back seats, ensuring a smooth ride for our hikers.</p>
+                            <p style="color: #b0b0b0; font-weight: 600; margin-top: 1rem;">Bangalore Pickup Points Schedule (Click location for directions):</p>
+                            <ul style="color: #b0b0b0; margin-left: 1.5rem; margin-top: 0.5rem; list-style-type: disc;">
+                                <li><strong style="color: #ffffff;">07:00 PM:</strong> Start from <a href="https://maps.app.goo.gl/CiYENXnwiix8ZDLo6" target="_blank" rel="noopener" class="pickup-link">BTM Layout</a></li>
+                                <li><strong style="color: #ffffff;">07:15 PM:</strong> Next stop, <a href="https://maps.app.goo.gl/2ZGjxQY2sLXsSDtb6" target="_blank" rel="noopener" class="pickup-link">Silk Board</a></li>
+                                <li><strong style="color: #ffffff;">07:30 PM:</strong> Assemble at <a href="https://maps.app.goo.gl/K35W4T22ZF7wTxsT9" target="_blank" rel="noopener" class="pickup-link">Koramangala</a></li>
+                                <li><strong style="color: #ffffff;">07:45 PM:</strong> Picking up at <a href="https://maps.app.goo.gl/W5grrxo5quqvqEyUA" target="_blank" rel="noopener" class="pickup-link">Domlur</a></li>
+                                <li><strong style="color: #ffffff;">08:00 PM:</strong> Meet us at <a href="https://maps.app.goo.gl/XqXEtxPeepGuB2qy6" target="_blank" rel="noopener" class="pickup-link">MG Road</a></li>
+                                <li><strong style="color: #ffffff;">08:15 PM:</strong> Join at <a href="https://maps.app.goo.gl/JQHw3UV7bd1WVy8f6" target="_blank" rel="noopener" class="pickup-link">KTM Mekhri Circle</a></li>
+                                <li><strong style="color: #ffffff;">08:30 PM:</strong> Board at <a href="https://maps.app.goo.gl/WHWfEYXvy9t5e4mg7" target="_blank" rel="noopener" class="pickup-link">Yeshwanthpura</a></li>
+                                <li><strong style="color: #ffffff;">08:45 PM:</strong> Last pickup at <a href="https://maps.app.goo.gl/DeX8qvhvdneNbteW6" target="_blank" rel="noopener" class="pickup-link">Goraguntepalya</a></li>
+                            </ul>
+                            <p style="color: #b0b0b0; margin-top: 1rem;"><strong style="color: #ffffff;">Note for the entire trip:</strong> The travel time may vary depending on traffic and road conditions. Yet, we will make sure to cover all the places on the itinerary.</p>
+                        </div>
+                    </div>
+
+                    <!-- Day 1 -->
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 1</span>
+                            <span class="itinerary-title">Exploration & Adventure at Dudhsagar Falls Trek</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">07:00 AM – 08:00 AM:</span> Arrival at Campsite, check-in, have breakfast, explore campsite, carry packed lunch.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">08:00 AM – 09:30 AM:</span> Head out to and reach the starting point of the Dudhsagar falls trek.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">09:30 AM – 01:30 PM:</span> Start the trek and reach the waterfalls (4 hours of scenic Western Ghats trails).</p>
+                            <p style="color: #ffd700; margin: 0.5rem 0;"><strong>Note:</strong> All trekkers must acquire life jackets from the designated department before the trek if they want to jump into the water.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">01:30 PM – 02:30 PM:</span> Have packed lunch and take a refreshing dip in the natural pool below the roaring falls.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">02:30 PM:</span> Trek back down and get back to the campsite for hot dinner and rest.</p>
+                            <p style="color: #b0b0b0; margin-top: 0.5rem;"><em>Note: This is the primary trek for the day. The timings for this trek change slightly with each group.</em></p>
+                        </div>
+                    </div>
+
+                    <!-- Day 2 -->
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 2</span>
+                            <span class="itinerary-title">Dandeli Adventure & Supa Dam Backwaters!</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">08:15 AM:</span> Freshen up, have breakfast, check out, and get ready to travel to Dandeli.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">08:15 AM – 09:30 AM:</span> Head to <strong>Dandeli Water Activities Area</strong> and reach there.</p>
+                            <p style="color: #ffd700; margin: 0.5rem 0;"><strong>Note:</strong> Activities in Dandeli are subject to river conditions and forest availability. If activities are closed or unavailable, we will return to Bengaluru.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">09:30 AM – 02:30 PM:</span> Spend time at the <strong>Water Activities Area</strong> (White Water Rafting, Kayaking, Coracle Ride, Natural Jacuzzi Bath) *<em>Self-Sponsored</em>.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">02:30 PM – 03:30 PM:</span> Have delicious Lunch *<em>Self-Sponsored</em>.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">04:00 PM – 06:00 PM:</span> Head to <strong>Supa Dam Backwater</strong> and witness the serene sunset reflections over the reservoir.</p>
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">06:00 PM:</span> Head towards Bengaluru, stop for Dinner en route *<em>Self-Sponsored</em>.</p>
+                        </div>
+                    </div>
+
+                    <!-- Day 3 -->
+                    <div class="itinerary-item">
+                        <div class="itinerary-header" onclick="toggleItinerary(this)">
+                            <span class="day-tag">Day 3</span>
+                            <span class="itinerary-title">Homeward Bound — Arrive in Bengaluru</span>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-content">
+                            <p style="color: #b0b0b0;"><span class="itinerary-time">06:00 AM – Reach Bangalore:</span> After an overnight journey, arrive back in Bangalore feeling refreshed from the trip.</p>
+                            <p style="color: #b0b0b0;"><strong style="color: #ffffff;">Drop-off Points:</strong> The drop-off points will be the same as the pick-up points to ensure convenience for all travelers. Please ensure you have all your belongings before leaving the vehicle.</p>
+                            <p style="color: #b0b0b0; margin-top: 0.5rem;">🏡 <strong style="color: #ffffff;">Home Sweet Home:</strong> Once you've reached your drop-off point, it's time to head home, take a well-deserved rest, and start planning your next adventure with Hikers Horizon!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inclusions & Exclusions -->
+            <div class="glass-card">
+                <h2 class="section-title">Inclusions & Exclusions</h2>
+                <div class="inc-exc-container">
+                    <div class="inc-exc-tabs-wrapper">
+                        <div class="inc-exc-tabs" role="tablist">
+                            <button type="button" class="inc-exc-tab active" id="tab-inclusion" onclick="switchIncExc('inclusion')" role="tab" aria-selected="true">Inclusions</button>
+                            <button type="button" class="inc-exc-tab" id="tab-exclusion" onclick="switchIncExc('exclusion')" role="tab" aria-selected="false">Exclusions</button>
+                        </div>
+                    </div>
+
+                    <!-- Inclusion Panel -->
+                    <div id="inclusion-panel" class="inc-exc-panel active" role="tabpanel" aria-labelledby="tab-inclusion">
+                        <ul class="inc-exc-list">
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Transport:</strong> Round-trip travel from Bangalore in a comfortable private Non-AC vehicle (pushback seats).</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Meals:</strong> 2 Breakfasts, 1 Packed Lunch for the Dudhsagar trek, and 1 Dinner.</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Accommodation:</strong> Clean campsite / dorm stay.</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Guided Treks:</strong> Led by experienced Hikers Horizon outdoor trip captains.</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Permits:</strong> All forest and trek entry permissions covered.</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Safety:</strong> First aid kit & life jackets for the Dudhsagar trek waterfall dip.</span>
+                            </li>
+                            <li>
+                                <span class="inc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </span>
+                                <span><strong>Sightseeing:</strong> Dudhsagar Falls Trek & Supa Dam Backwaters visit.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Exclusion Panel -->
+                    <div id="exclusion-panel" class="inc-exc-panel" role="tabpanel" aria-labelledby="tab-exclusion">
+                        <ul class="inc-exc-list">
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span><strong>Dandeli Water Activities:</strong> Additional costs for specific adventures in Dandeli (White Water Rafting, Jacuzzi, Kayaking — self-sponsored).</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span><strong>En Route Meals:</strong> Day 2 Lunch and transit dinners during travel stops are not included.</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span><strong>Personal Expenses:</strong> Souvenirs, bottled water, snacks, or individual purchases.</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span><strong>Insurance:</strong> Personal travel and health insurance coverage.</span>
+                            </li>
+                            <li>
+                                <span class="exc-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </span>
+                                <span><strong>Emergency Evacuations:</strong> Unforeseen medical evacuation or emergency transit costs.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Things to Carry -->
+            <div class="glass-card">
+                <h2 class="section-title">Things to Carry (Pre-Departure Checklist)</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Xerox Copy of Aadhar/Voter ID
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Small backpack for trek essentials
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Water bottles 1-2 (1 liter each)
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Lunch Box & Spoon for packed lunch
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Raincoat / Poncho / Bag covers
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Trekking shoes with grip + socks
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Flip-flops for campsite leisure
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Torch / Headlamp for night walk
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Extra quick-dry clothes for water dip
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Polybags for wet clothing
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Portable charger & power bank
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
+                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        Personal meds, sanitizer & dry snacks
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Packages -->
+            <div class="glass-card">
+                <h2 class="section-title">Pricing Packages</h2>
+                <div class="pricing-section">
+                    <div class="price-card">
+                        <h3>Dudhsagar & Dandeli Expedition</h3>
+                        <div class="amount-box">
+                            <span class="old-price">₹5,499</span>
+                            <span class="new-price">₹3,999</span>
+                        </div>
+                        <ul class="modern-list" style="text-align: left; margin-bottom: 2rem; font-size: 0.9rem;">
+                            <li>• Round-Trip Transport (Bangalore to Bangalore)</li>
+                            <li>• 1 Night Campsite / Dorm Accommodation</li>
+                            <li>• 2 Breakfasts, 1 Packed Lunch, 1 Dinner</li>
+                            <li>• Dudhsagar Falls Guided Trek & Permissions</li>
+                            <li>• Supa Dam Backwaters Sightseeing</li>
+                            <li>• Experienced Trip Captain & Safety Lead</li>
+                        </ul>
+                        <a href="../../booking-dandeli" class="pricing-btn">Reserve Spot</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review & FAQs -->
+            <div class="glass-card">
+                <h2 class="section-title">Traveler Experiences</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div
+                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
+                        "Standing before Dudhsagar Falls while the train crossed the bridge was surreal. And taking a dip in the cool waters was the best feeling ever!"
+                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">- Karthik M.</strong>
+                    </div>
+                    <div
+                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
+                        "The combination of Dudhsagar's roaring falls and Dandeli's river activities was unmatched. Well organized with super friendly trip captains."
+                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">- Sneha P.</strong>
+                    </div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 4rem;">Frequently Asked Questions</h2>
+                <ul class="modern-list">
+                    <li>
+                        <div>
+                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">How hard is the Dudhsagar Falls Trek?</strong>
+                            <p style="color: #b0b0b0;">The trek difficulty is <strong>Moderate to Difficult</strong>. It covers approximately 11-14 km through rocky tracks, stream crossings, and jungle trails. Trekkers should have basic fitness.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">Is swimming required to enjoy the waterfalls and Dandeli?</strong>
+                            <p style="color: #b0b0b0;">No, swimming is <strong>not mandatory</strong>. Certified life jackets are mandatory and provided for entering the water at Dudhsagar, and trained safety kayakers supervise water activities in Dandeli.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">Are water activities included in Dandeli?</strong>
+                            <p style="color: #b0b0b0;">Transport to Dandeli water area and Supa Dam is fully included. Individual activities such as white water rafting, kayaking, and natural jacuzzi bath are self-sponsored so travelers can choose what they prefer.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">Can I call to book tickets directly?</strong>
+                            <p style="color: #b0b0b0;">Yes! You can reserve your spot online or connect directly with our support team on WhatsApp at <strong>+91 99026 53393</strong>.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Other Adventures -->
+            <div class="glass-card">
+                <h2 class="section-title">Explore More Adventures</h2>
+                <div class="gallery-grid">
+                    <a href="../Hampi" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <img src="/img/Hampi.jpg" alt="Hampi Heritage Expedition">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat', sans-serif; text-align: center;">Hampi Heritage</h4>
+                    </a>
+                    <a href="../Wayanad" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <img src="/img/Wayanad.jpg" alt="Wayanad Wild Expedition">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat', sans-serif; text-align: center;">Wayanad Wild</h4>
+                    </a>
+                    <a href="../Munnar" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <img src="/img/munnar.png" alt="Munnar & Kolukkumalai">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat', sans-serif; text-align: center;">Munnar & Kolukkumalai</h4>
+                    </a>
+                    <a href="../../Twodays/Gokarna" style="text-decoration: none; color: inherit;">
+                        <div class="gallery-image">
+                            <img src="/img/Gokarna.jpg" alt="Gokarna Beach Trek">
+                        </div>
+                        <h4 style="margin-top: 1rem; font-family: 'Montserrat', sans-serif; text-align: center;">Gokarna Beach Trek</h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Book Now Button -->
+    <a href="../../booking-dandeli" class="floating-book-btn">Book Now</a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-links-col">
+                    <h3>Explore</h3>
+                    <ul>
+                        <li><a href="../../Twodays">Two Day Treks</a></li>
+                        <li><a href="../../Sunrise">Sunrise Treks</a></li>
+                        <li><a href="../../Backpacking">Backpacking Trips</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-col">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="../../About">About Us</a></li>
+                        <li><a href="../../Contact">Contact Us</a></li>
+                        <li><a href="../../Blog">Blog</a></li>
+                        <li><a href="/swiftseat/">Swift Seat</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-col">
+                    <h3>Policies</h3>
+                    <ul>
+                        <li><a href="../../Privacy">Privacy Policy</a></li>
+                        <li><a href="../../Terms">Terms and Conditions</a></li>
+                        <li><a href="../../Cancellation">Cancellation Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Hikers Horizon. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/hikershorizon" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/hikershorizon" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Enquiry Button -->
+    <a href="https://wa.me/919902653393" class="enquiry-button" id="enquiryButton" aria-label="WhatsApp">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+        </svg>
+    </a>
+
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Dudhsagar Falls Trek & Dandeli Adventure from Bangalore",
+        "description": "Join Hikers Horizon for a 3-day Dudhsagar Falls trek and Dandeli adventure starting at ₹3,999. Visit Dudhsagar waterfalls, Supa Dam, and Dandeli river sports.",
+        "startDate": "2026-11-06T19:00:00+05:30",
+        "endDate": "2026-11-09T06:00:00+05:30",
+        "location": {
+            "@type": "Place",
+            "name": "Dudhsagar Falls & Dandeli",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Dandeli & Kulem",
+                "addressRegion": "Karnataka & Goa",
+                "addressCountry": "IN"
+            }
+        },
+        "organizer": {
+            "@type": "Organization",
+            "name": "Hikers Horizon",
+            "url": "https://hikershorizon.in"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "3999",
+            "priceCurrency": "INR",
+            "url": "https://hikershorizon.in/Backpacking/Dandeli",
+            "availability": "https://schema.org/InStock"
+        }
+    }
+    </script>
+
+    <script>
+        function toggleItinerary(header) {
+            const item = header.parentElement;
+            const isActive = item.classList.contains('active');
+            document.querySelectorAll('.itinerary-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        function switchIncExc(type) {
+            const incTab = document.getElementById('tab-inclusion');
+            const excTab = document.getElementById('tab-exclusion');
+            const incPanel = document.getElementById('inclusion-panel');
+            const excPanel = document.getElementById('exclusion-panel');
+
+            if (type === 'inclusion') {
+                incTab.classList.add('active');
+                incTab.setAttribute('aria-selected', 'true');
+                excTab.classList.remove('active');
+                excTab.setAttribute('aria-selected', 'false');
+
+                incPanel.classList.add('active');
+                excPanel.classList.remove('active');
+            } else {
+                excTab.classList.add('active');
+                excTab.setAttribute('aria-selected', 'true');
+                incTab.classList.remove('active');
+                incTab.setAttribute('aria-selected', 'false');
+
+                excPanel.classList.add('active');
+                incPanel.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>

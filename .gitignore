@@ -33,6 +33,10 @@ android-app/.gradle/
 
 
 
+# Secrets & Archives
+*.env
+*.zip
+
 # CampFlow CRM
 campflow/**/.env
 campflow/**/__pycache__/
@@ -40,3 +44,4 @@ campflow/**/.venv/
 campflow/frontend/node_modules/
 campflow/frontend/.next/
 campflow/frontend/out/
+

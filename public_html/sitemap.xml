@@ -165,6 +165,16 @@
       <image:title>Munnar Tea Gardens</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://hikershorizon.in/Backpacking/Dandeli/</loc>
+    <lastmod>2026-10-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://hikershorizon.in/img/dudhsagar.jpg</image:loc>
+      <image:title>Dudhsagar Falls & Dandeli Adventure</image:title>
+    </image:image>
+  </url>
 
   <!-- ====== CORPORATE ====== -->
   <url>

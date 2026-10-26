@@ -413,12 +413,16 @@ app.post(['/verify-payment', '/api/verify-payment'], async (req, res) => {
                 <p style="font-size: 12px; color: #94a3b8;">Payment ID: ${razorpay_payment_id}</p>
             </div>`;
 
-            await transporter.sendMail({
-                from: `"Hikers Horizon" <${process.env.EMAIL_USER}>`,
-                to: normalizedEmail,
-                subject: `Expedition Confirmed! — ${bookingData.trekName}`,
-                html: emailHtml
-            });
+            try {
+                await transporter.sendMail({
+                    from: `"Hikers Horizon" <${process.env.EMAIL_USER}>`,
+                    to: normalizedEmail,
+                    subject: `Expedition Confirmed! — ${bookingData.trekName}`,
+                    html: emailHtml
+                });
+            } catch (mailErr) {
+                console.error('[BOOKING CONFIRMATION EMAIL WARNING]', mailErr.message || mailErr);
+            }
 
             res.json({ message: 'Success', bookingId: result.insertId });
         } catch (dbErr) {
