@@ -3,25 +3,33 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Munnar & Kolukkumalai Adventure | BENGALURU TRAILS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Munnar & Kolukkumalai Sunrise Adventure from Bangalore | Hikers Horizon</title>
     <meta name="description"
-        content="Experience a stunning 2-day Munnar & Kolukkumalai tour from Bangalore. Misty trails, world's highest tea estate sunrise, and cultural show. Book for ₹5,499!">
-    <meta name="keywords" content="munnar tour, kolukkumalai trek, kolukkumalai sunrise, munnar trip from bangalore, munnar tea garden, BENGALURU TRAILS">
-    <link rel="canonical" href="https://bengalurutrails.in/Backpacking/Munnar" />
+        content="Experience a stunning 2-Day Munnar & Kolukkumalai tour from Bangalore. World's highest tea estate sunrise (7,130 FT), misty Shola forests, Kalari cultural show, Attukad waterfalls & tent camping. Starting at ₹5,499.">
+    <meta name="keywords"
+        content="munnar tour from bangalore, kolukkumalai sunrise trek, kolukkumalai jeep safari, 2 day munnar trip, munnar tea garden, attukad waterfalls, hikers horizon">
+    <link rel="canonical" href="https://hikershorizon.in/Backpacking/Munnar" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
-    <style>
+    <link rel="stylesheet" href="../../auth-navigation.css?v=12">
 
+    <style>
         :root {
-            --primary-color: #FFFFFF;
-            --secondary-color: #FFFFFF;
-            --text-light: #B0B0B0;
-            --bg-dark: #000000;
-            --glass-bg: rgba(255, 255, 255, 0.05);
+            --primary-emerald: #10B981;
+            --emerald-glow: rgba(16, 185, 129, 0.25);
+            --emerald-border: rgba(52, 211, 153, 0.2);
+            --gold-accent: #F59E0B;
+            --gold-bright: #FBBF24;
+            --bg-deep: #060B08;
+            --card-surface: rgba(15, 27, 20, 0.72);
+            --card-surface-hover: rgba(20, 36, 26, 0.85);
+            --text-pure: #FFFFFF;
+            --text-body: #D1D5DB;
+            --text-muted: #9CA3AF;
         }
 
         * {
@@ -31,19 +39,49 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background: #000000;
-            color: #ffffff;
-            font-family: 'Open Sans', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative;
-            overscroll-behavior-x: none;
+        html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
         }
 
-        /* Fixed Background Video */
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            line-height: 1.7;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Ambient Glow Blobs */
+        .ambient-glow-top {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 60vw;
+            height: 60vh;
+            background: radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.14), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ambient-glow-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 50vw;
+            height: 50vh;
+            background: radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.08), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
         video#bg-video {
             position: fixed;
             top: 0;
@@ -51,9 +89,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1;
-            opacity: 0.4;
-            filter: grayscale(100%);
+            z-index: -2;
+            opacity: 0.35;
+            filter: saturate(0.8) brightness(0.6);
         }
 
         .video-overlay {
@@ -62,618 +100,1032 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
+            background: linear-gradient(180deg, rgba(6, 11, 8, 0.82) 0%, rgba(6, 11, 8, 0.94) 100%);
+            z-index: -2;
         }
 
         /* Hero Section */
         .hero {
-            padding: clamp(4rem, 10vw, 8rem) 1rem;
+            padding: clamp(5rem, 12vw, 9rem) 1.5rem clamp(2.5rem, 6vw, 4rem);
             text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid var(--emerald-border);
+            padding: 0.45rem 1.25rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-emerald);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
         }
 
         .hero h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2rem, 6vw, 4rem);
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            font-size: clamp(2.2rem, 6.2vw, 4.4rem);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-            background: linear-gradient(to bottom, #ffffff, #b0b0b0);
+            line-height: 1.08;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(180deg, #FFFFFF 20%, #A7F3D0 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-            color: #b0b0b0;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-body);
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 2.5rem auto;
+            line-height: 1.7;
         }
 
-        /* Main Container */
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin-bottom: 3.5rem;
+        }
+
+        .btn-primary-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary-action:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.5);
+        }
+
+        .btn-secondary-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Highlights Bar */
+        .metrics-bar {
+            max-width: 950px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .metric-card {
+            background: rgba(16, 30, 22, 0.65);
+            border: 1px solid var(--emerald-border);
+            border-radius: 18px;
+            padding: 1.25rem 1rem;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .metric-card:hover {
+            border-color: var(--gold-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .metric-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 0.2rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-emerald);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Main Container & Section Cards */
         .page-container {
-            max-width: 1100px;
-            margin: 0 auto 8rem auto;
+            max-width: 1140px;
+            margin: 0 auto 7rem auto;
             padding: 0 1.5rem;
+            position: relative;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-surface);
+            border: 1px solid var(--emerald-border);
             border-radius: 24px;
-            backdrop-filter: blur(20px);
-            padding: clamp(1.5rem, 4vw, 3rem);
-            margin-bottom: 2.5rem;
+            backdrop-filter: blur(24px);
+            padding: clamp(1.75rem, 4vw, 3.25rem);
+            margin-bottom: 2.75rem;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+            transition: border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(52, 211, 153, 0.35);
+        }
+
+        .section-header-wrap {
+            margin-bottom: 2.25rem;
+        }
+
+        .section-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold-accent);
+            margin-bottom: 0.5rem;
+            display: block;
         }
 
         .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         .section-title::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(90deg, var(--emerald-border), transparent);
         }
 
-        /* Detail Grid */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 2rem;
+        /* Overview Text */
+        .overview-text {
+            color: var(--text-body);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
         }
 
-        .info-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .info-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #ffd700;
-            letter-spacing: 0.1em;
-        }
-
-        .info-value {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        /* Gallery System */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 600px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-            }
-            .gallery-image {
-                width: 100%;
-                padding-bottom: 100%;
-                height: 0;
-                position: relative;
-                border-radius: 12px;
-            }
-        }
-
-        .gallery-image {
+        /* Advisory Box */
+        .permit-advisory-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 16px;
-            overflow: hidden;
-            height: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
+            padding: 1.5rem 1.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            margin-top: 2rem;
         }
 
-        .gallery-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .permit-icon {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .permit-content h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .permit-content p {
+            color: var(--text-body);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Visual Highlights Mosaic */
+        .mosaic-gallery {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.25rem;
+        }
+
+        .mosaic-item {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #050806;
+            min-height: 220px;
+        }
+
+        .mosaic-item.large {
+            grid-column: span 7;
+            height: 360px;
+        }
+
+        .mosaic-item.medium {
+            grid-column: span 5;
+            height: 360px;
+        }
+
+        .mosaic-item.small-left {
+            grid-column: span 6;
+            height: 260px;
+        }
+
+        .mosaic-item.small-right {
+            grid-column: span 6;
+            height: 260px;
+        }
+
+        .mosaic-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s ease;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+            filter: brightness(0.9);
         }
 
-        .trek-badge {
+        .mosaic-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.05);
+        }
+
+        .mosaic-caption {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: linear-gradient(135deg, #ffd700, #ffcc00);
-            color: #000000;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 0.6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            z-index: 5;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.3);
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(180deg, transparent, rgba(6, 11, 8, 0.92));
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: 0.02em;
         }
 
-        .gallery-image:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Itinerary & Lists */
-        .modern-list {
-            list-style: none;
-        }
-
-        .modern-list > li {
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            line-height: 1.7;
+        /* Itinerary Accordion */
+        .itinerary-list {
             display: flex;
-            gap: 1.5rem;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .modern-list > li:last-child {
-            border-bottom: none;
+        .itinerary-card {
+            background: rgba(10, 20, 14, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .itinerary-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.3s ease;
+        .itinerary-card.active {
+            border-color: var(--emerald-border);
+            background: rgba(16, 32, 22, 0.7);
         }
 
-        .itinerary-item:last-child {
-            border-bottom: none;
-        }
-
-        .itinerary-header {
+        .itinerary-card-header {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            padding: 1.25rem 0;
+            justify-content: space-between;
+            padding: 1.4rem 1.75rem;
             cursor: pointer;
             user-select: none;
+            gap: 1.25rem;
         }
 
-        .itinerary-header:hover {
-            opacity: 0.8;
-        }
-
-        .day-tag {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            color: #ffd700;
-            min-width: 90px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        .itinerary-title {
-            font-weight: 700;
-            font-size: 1.1rem;
+        .itinerary-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
             flex: 1;
         }
 
-        .dropdown-icon {
-            width: 24px;
-            height: 24px;
-            fill: #ffd700;
-            transition: transform 0.3s ease;
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary-emerald), #059669);
+            color: #061109;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            flex-shrink: 0;
         }
 
-        .itinerary-item.active .dropdown-icon {
+        .itinerary-title-text {
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .accordion-chevron {
+            width: 22px;
+            height: 22px;
+            fill: var(--gold-bright);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
+        }
+
+        .itinerary-card.active .accordion-chevron {
             transform: rotate(180deg);
         }
 
-        .itinerary-content {
+        .itinerary-card-body {
             max-height: 0;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-left: calc(90px + 1.5rem); /* Day-tag width + gap */
-            opacity: 0;
+            transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+            padding: 0 1.75rem;
         }
 
-        .itinerary-item.active .itinerary-content {
-            max-height: 3500px; /* Accommodate very long content on mobile */
-            padding-bottom: 1.5rem;
-            opacity: 1;
+        .itinerary-card.active .itinerary-card-body {
+            max-height: 1200px;
+            padding: 0 1.75rem 1.75rem 1.75rem;
         }
 
-        .itinerary-content p {
-            line-height: 1.8;
-            margin-top: 0.5rem;
-            color: #b0b0b0;
-        }
-
-        .itinerary-content li {
-            margin-bottom: 0.75rem;
-            line-height: 1.8;
-        }
-
-        .itinerary-content li:last-child {
-            margin-bottom: 0;
-        }
-
-        .itinerary-time {
-            color: #ffd700;
-            font-weight: 700;
-            margin-right: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .itinerary-content {
-                padding-left: 0;
-            }
-            .itinerary-header {
-                gap: 1rem;
-            }
-            .day-tag {
-                min-width: 70px;
-                font-size: 0.8rem;
-            }
-            .itinerary-title {
-                font-size: 1rem;
-            }
-        }
-
-        /* Pricing Cards */
-        .pricing-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .price-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .price-card:hover {
-            border-color: #ffd700;
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-        }
-
-        .price-card h3 {
-            font-family: 'Montserrat', sans-serif;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-        }
-
-        .amount-box {
-            margin-bottom: 2rem;
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .new-price {
-            display: block;
-            font-size: 3rem;
-            font-weight: 800;
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .pricing-btn {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 1.25rem 2rem;
-            border-radius: 12px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .price-card:hover .pricing-btn {
-            background: #ffd700;
-        }
-
-        /* Carry grid */
-        .carry-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-        }
-
-        .carry-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* Footer */
-        footer {
-            background: #000000;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 6rem 1.5rem 2rem 1.5rem;
-        }
-
-        .footer-container {
-            max-width: 85rem;
-            margin: 0 auto;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 4rem;
-            margin-bottom: 6rem;
-        }
-
-        .footer-links-col h3 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 2rem;
-            color: #ffffff;
-        }
-
-        .footer-links-col ul {
+        .timeline-list {
             list-style: none;
+            position: relative;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
         }
 
-        .footer-links-col li {
-            margin-bottom: 1rem;
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: rgba(52, 211, 153, 0.25);
         }
 
-        .footer-links-col a {
-            color: #b0b0b0;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
+        .timeline-item {
+            position: relative;
+            padding: 0.6rem 0;
+            color: var(--text-body);
+            font-size: 0.96rem;
+            line-height: 1.65;
         }
 
-        .footer-links-col a:hover {
-            color: #ffffff;
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .footer-copyright {
-            color: #666666;
-            font-size: 0.85rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .social-links a {
-            color: #666666;
-            transition: color 0.3s ease;
-        }
-
-        .social-links a:hover {
-            color: #ffffff;
-        }
-
-        .social-links svg {
-            width: 1.25rem;
-            height: 1.25rem;
-            fill: currentColor;
-        }
-
-        /* Floating WhatsApp Enquiry Button */
-        .enquiry-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: rgba(37, 211, 102, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(37, 211, 102, 0.3);
-            color: white;
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1rem;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
+            background: var(--gold-accent);
+            border: 2px solid var(--bg-deep);
+        }
+
+        .time-tag {
+            color: var(--gold-bright);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 0.4rem;
+        }
+
+        /* Included / Excluded Grid */
+        .inc-exc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .inc-column, .exc-column {
+            background: rgba(12, 24, 16, 0.5);
+            border-radius: 20px;
+            padding: 1.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .column-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .enquiry-button:hover {
-            transform: scale(1.1) rotate(10deg);
-            background: #25D366;
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
-        }
-
-        .whatsapp-icon {
-            width: 32px;
-            height: 32px;
-            fill: #25D366;
-            transition: fill 0.3s ease;
-        }
-
-        .enquiry-button:hover .whatsapp-icon {
-            fill: #ffffff;
-        }
-
-        /* Floating Book Now Button */
-        .floating-book-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 25px;
-            background: linear-gradient(45deg, #ffd700, #ffb300);
-            color: #000000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            font-family: 'Montserrat', sans-serif;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
             font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-            z-index: 999;
-            transition: all 0.3s ease;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .floating-book-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
-            background: #ffffff;
-        }
+        .column-header.inc { color: #34D399; }
+        .column-header.exc { color: #F87171; }
 
-        @media (max-width: 768px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-        }
-
-        /* Inclusions & Exclusions Tabs */
-        .inc-exc-container {
-            margin-top: 0.5rem;
-        }
-
-        .inc-exc-tabs-wrapper {
-            margin-bottom: 2rem;
-        }
-
-        .inc-exc-tabs {
-            display: inline-flex;
-            background: #ffefe6;
-            padding: 4px;
-            border-radius: 12px;
-            gap: 4px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-        }
-
-        .inc-exc-tab {
-            border: none;
-            outline: none;
-            background: transparent;
-            color: #222222;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            padding: 8px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            user-select: none;
-        }
-
-        .inc-exc-tab.active {
-            background: #f25c27;
-            color: #ffffff;
-            box-shadow: 0 3px 10px rgba(242, 92, 39, 0.4);
-        }
-
-        .inc-exc-panel {
-            display: none;
-            animation: incExcFadeIn 0.3s ease;
-        }
-
-        .inc-exc-panel.active {
-            display: block;
-        }
-
-        @keyframes incExcFadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .inc-exc-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1.1rem;
-        }
-
-        .inc-exc-list li {
+        .feature-item {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
-            line-height: 1.65;
-            font-size: 0.98rem;
-            color: #f1f5f9;
+            gap: 0.85rem;
+            padding: 0.65rem 0;
+            color: var(--text-body);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .inc-icon, .exc-icon {
+        .feature-icon-badge {
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             margin-top: 2px;
         }
 
-        .inc-icon {
-            background: #22c55e;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.35);
+        .feature-icon-badge.inc {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34D399;
         }
 
-        .exc-icon {
-            background: #ef4444;
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+        .feature-icon-badge.exc {
+            background: rgba(239, 68, 68, 0.2);
+            color: #F87171;
         }
 
-        .inc-icon svg, .exc-icon svg {
-            width: 12px;
-            height: 12px;
-            stroke-width: 3.2;
+        .feature-icon-badge svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
         }
-    
+
+        /* Things to Carry Grid */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem 1.25rem;
+        }
+
+        .check-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
+            color: #E2E8F0;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .check-pill:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: var(--emerald-border);
+            transform: translateX(4px);
+        }
+
+        .check-pill svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--gold-bright);
+            flex-shrink: 0;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .package-card {
+            background: rgba(10, 22, 14, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.35s ease;
+        }
+
+        .package-card.featured {
+            border-color: var(--gold-accent);
+            background: linear-gradient(180deg, rgba(20, 40, 28, 0.8) 0%, rgba(10, 22, 14, 0.75) 100%);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(245, 158, 11, 0.15);
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-bright);
+        }
+
+        .package-badge-popular {
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            padding: 0.3rem 0.9rem;
+            border-radius: 50px;
+            letter-spacing: 0.08em;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .package-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 0.35rem;
+        }
+
+        .package-subtitle {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .package-price-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .price-strike {
+            font-size: 1.1rem;
+            color: #64748B;
+            text-decoration: line-through;
+        }
+
+        .price-amount {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--gold-bright);
+        }
+
+        .price-unit {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .package-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            color: var(--text-body);
+            font-size: 0.92rem;
+            margin-bottom: 2rem;
+        }
+
+        .package-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .btn-reserve {
+            display: block;
+            text-align: center;
+            width: 100%;
+            padding: 0.95rem 1.5rem;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reserve.featured-btn {
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-reserve.featured-btn:hover {
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .review-box {
+            background: rgba(12, 24, 16, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 3px solid var(--emerald-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+        }
+
+        .review-stars {
+            color: var(--gold-bright);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .review-text {
+            color: var(--text-body);
+            font-style: italic;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .review-author {
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* FAQs */
+        .faq-item {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .faq-answer {
+            color: var(--text-body);
+            line-height: 1.65;
+            font-size: 0.95rem;
+        }
+
+        /* Explore More Treks Grid */
+        .adventures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .adventure-card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .adventure-thumb-card {
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(10, 20, 14, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .adventure-thumb-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .adventure-thumb-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .adventure-thumb-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .adventure-info {
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .adventure-info h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.25rem;
+        }
+
+        .adventure-info span {
+            color: var(--primary-emerald);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Floating Action Bar */
+        .floating-action-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 99;
+            background: rgba(8, 18, 12, 0.88);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 50px;
+            padding: 0.6rem 0.8rem 0.6rem 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(20px);
+            max-width: 90vw;
+        }
+
+        .floating-price-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floating-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--primary-emerald);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1;
+        }
+
+        .floating-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #FFFFFF;
+        }
+
+        .btn-floating-cta {
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-floating-cta:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        }
+
+        /* WhatsApp Button */
+        .enquiry-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 58px;
+            height: 58px;
+            background: rgba(37, 211, 102, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(37, 211, 102, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .enquiry-button:hover {
+            transform: scale(1.1) rotate(8deg);
+            background: #25D366;
+            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-icon {
+            width: 30px;
+            height: 30px;
+            fill: #25D366;
+            transition: fill 0.3s ease;
+        }
+
+        .enquiry-button:hover .whatsapp-icon {
+            fill: #FFFFFF;
+        }
+
+        /* Responsive Mobile Layouts & Media Queries */
+        @media (max-width: 900px) {
+            .mosaic-gallery {
+                grid-template-columns: 1fr;
+            }
+            .mosaic-item.large,
+            .mosaic-item.medium,
+            .mosaic-item.small-left,
+            .mosaic-item.small-right {
+                grid-column: span 1;
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
+            }
+
+            .metrics-bar {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.85rem;
+            }
+
+            .metric-card {
+                padding: 1rem 0.75rem;
+                border-radius: 14px;
+            }
+
+            .metric-value {
+                font-size: 1.4rem;
+            }
+
+            .metric-label {
+                font-size: 0.7rem;
+            }
+
+            .page-container {
+                padding: 0 1rem;
+                margin-bottom: 5.5rem;
+            }
+
+            .glass-card {
+                padding: 1.75rem 1.25rem;
+                border-radius: 20px;
+                margin-bottom: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.45rem;
+            }
+
+            .itinerary-card-header {
+                padding: 1.15rem 1.25rem;
+            }
+
+            .itinerary-card.active .itinerary-card-body {
+                padding: 0 1.25rem 1.25rem 1.25rem;
+            }
+
+            .package-card {
+                padding: 1.75rem 1.25rem;
+            }
+
+            .floating-action-bar {
+                bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+                left: 12px;
+                right: 12px;
+                transform: none;
+                width: auto;
+                max-width: 440px;
+                margin: 0 auto;
+                padding: 0.55rem 0.75rem 0.55rem 1.15rem;
+                border-radius: 16px;
+                justify-content: space-between;
+                gap: 0.75rem;
+                z-index: 998;
+            }
+
+            .floating-price-col {
+                min-width: 0;
+            }
+
+            .floating-label {
+                font-size: 0.65rem;
+            }
+
+            .floating-price {
+                font-size: 1.15rem;
+            }
+
+            .btn-floating-cta {
+                padding: 0.65rem 1.25rem;
+                font-size: 0.9rem;
+            }
+
+            #enquiryButton.enquiry-button {
+                bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+                right: 14px !important;
+                width: 48px !important;
+                height: 48px !important;
+                z-index: 9999 !important;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(37, 211, 102, 0.4) !important;
+            }
+
+            #enquiryButton .whatsapp-icon {
+                width: 26px !important;
+                height: 26px !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .page-container {
+                padding: 0 0.5rem;
+            }
+            .glass-card {
+                padding: 1.25rem 0.75rem;
+            }
+            .package-card {
+                padding: 1.25rem 0.75rem;
+            }
+            .metrics-bar {
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 340px) {
+            .hero {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            .hero h1 {
+                font-size: 1.85rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-primary-action, .btn-secondary-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="../../auth-navigation.css?v=12">
 </head>
 
 <body>
-    <!-- Background Video -->
-    <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
+    <!-- Radial Ambient Blobs -->
+    <div class="ambient-glow-top"></div>
+    <div class="ambient-glow-bottom"></div>
+
+    <!-- Background Video & Overlay -->
+    <video id="bg-video" autoplay muted loop playsinline poster="/img/munnar.png">
         <source src="/img/BG.webp" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
@@ -683,483 +1135,453 @@
     <script src="/global-header.js"></script>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero">
-            <h1>Munnar & Kolukkumalai</h1>
-            <p>Where Munnar’s charm turns wild. Rolling tea gardens, misty peaks, and the world's highest tea estate.</p>
+            <div class="hero-badge">
+                <span>🍃</span> KERALA HIGHLANDS • 7,130 FT
+            </div>
+            <h1>Munnar & Kolukkumalai<br>Sunrise Expedition</h1>
+            <p>Stand above a sea of clouds at Kolukkumalai—the highest tea plantation on planet Earth. Journey through misty Shola forests, rolling emerald estates, Attukad cascades, and ancient Kalaripayattu martial arts.</p>
+
+            <div class="hero-actions">
+                <a href="#pricing" class="btn-primary-action">
+                    <span>Reserve Spot</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+                <a href="#itinerary" class="btn-secondary-action">
+                    <span>View Itinerary</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </a>
+            </div>
+
+            <!-- Key Metrics Highlights Bar -->
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <div class="metric-value">7,130 FT</div>
+                    <div class="metric-label">Kolukkumalai Peak</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">Highest</div>
+                    <div class="metric-label">World Tea Estate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">Easy-Mod</div>
+                    <div class="metric-label">Trail & Safari</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2D / 1N</div>
+                    <div class="metric-label">Weekend Getaway</div>
+                </div>
+            </div>
         </section>
 
         <div class="page-container">
-            <!-- Adventure Overview Card -->
-            <div class="glass-card">
-                <h2 class="section-title">Munnar Tour Overview</h2>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Vibe</span>
-                        <span class="info-value">Misty Peaks & Tea Gardens</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Duration</span>
-                        <span class="info-value">2 Days / 1 Night</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Difficulty</span>
-                        <span class="info-value">Easy</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Best Season</span>
-                        <span class="info-value">Sept - May</span>
-                    </div>
+            <!-- Expedition Overview -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">The Highland Expedition</span>
+                    <h2 class="section-title">Into Kerala’s Misty Mountains</h2>
                 </div>
-                <p style="margin-top: 2rem; line-height: 1.8; color: #b0b0b0;">
-                    Looking for a weekend that blends adrenaline, scenic peaks, and local culture? The Munnar & Kolukkumalai Adventure is a thrilling 2-day getaway into the lush landscapes of Kerala’s hill country. From ziplining and kayaking to sunrise views at Kolukkumalai and traditional Kalaripayattu shows, this journey is a perfect balance of nature, adventure, and heritage.
+                <p class="overview-text">
+                    Looking for a weekend that blends adrenaline, scenic peaks, and Kerala’s rich highland heritage? The <strong>Munnar & Kolukkumalai Adventure</strong> is an exhilarating 2-day getaway into the cloud-kissed landscapes of the Western Ghats.
                 </p>
-                <p style="margin-top: 1rem; color: #b0b0b0;">Explore the scenic wonders of Kerala with <a
-                        href="https://www.keralatourism.org/" target="_blank" rel="noopener"
-                        style="color: #ffd700;">Kerala Tourism</a>.</p>
-            </div>
+                <p class="overview-text">
+                    From witnessing the legendary dawn above the clouds at <strong>Kolukkumalai (7,130 FT)</strong>—accessible only via rugged 4x4 mountain jeeps—to hiking through blooming tea terraces, watching ancient <strong>Kalaripayattu martial arts</strong>, and exploring thunderous waterfalls like <strong>Attukad</strong> and <strong>Periyakanal</strong>, this tour is curated for nature lovers and adventurers alike.
+                </p>
 
-            <!-- Visual Journey -->
-            <div class="glass-card">
-                <h2 class="section-title">Munnar Visual Highlights</h2>
-                <div class="gallery-grid">
-                    <div class="gallery-image"><img src="/img/munnar.png" alt="Munnar Tea Gardens"></div>
-                    <div class="gallery-image"><img src="/img/munnar1.png" alt="Kolukkumalai Sunrise"></div>
-                    <div class="gallery-image"><img src="/img/munnar2.png" alt="Ziplining & Adventure"></div>
-                    <div class="gallery-image"><img src="/img/munnar3.png" alt="Kalaripayattu Performance"></div>
+                <!-- High Altitude & Jeep Safari Advisory Box -->
+                <div class="permit-advisory-box">
+                    <div class="permit-icon">🚙</div>
+                    <div class="permit-content">
+                        <h4>Kolukkumalai Sunrise 4x4 Jeep Safari & Weather Advisory</h4>
+                        <p>
+                            Kolukkumalai sunrise point is situated at 7,130 FT and reached via an exhilarating off-road trail regulated by the local Jeep Union (self-sponsored, split among group members). Morning temperatures often drop below 10°C—make sure to pack a warm jacket, fleece, and beanie!
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- The Itinerary -->
-            <div class="glass-card">
-                <h2 class="section-title">Munnar Tour Itinerary</h2>
-                <div class="modern-list">
+            <!-- Visual Journey Mosaic -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Visual Journey</span>
+                    <h2 class="section-title">Captured in the Clouds</h2>
+                </div>
+                <div class="mosaic-gallery">
+                    <div class="mosaic-item large">
+                        <img src="/img/munnar.png" alt="Kolukkumalai sunrise overlooking misty cloud bed in Munnar" loading="lazy">
+                        <div class="mosaic-caption">Kolukkumalai • Sunrise Above the Sea of Clouds</div>
+                    </div>
+                    <div class="mosaic-item medium">
+                        <img src="/img/munnar1.png" alt="Rolling green tea estates of Munnar" loading="lazy">
+                        <div class="mosaic-caption">Munnar Tea Plantations • Endless Green Carpets</div>
+                    </div>
+                    <div class="mosaic-item small-left">
+                        <img src="/img/munnar2.png" alt="Attukad waterfalls cascading down rocky slopes in Kerala" loading="lazy">
+                        <div class="mosaic-caption">Attukad Cascades • Roaring Mountain Streams</div>
+                    </div>
+                    <div class="mosaic-item small-right">
+                        <img src="/img/munnar3.png" alt="Campfire under stars in Munnar hill campsite" loading="lazy">
+                        <div class="mosaic-caption">Hillside Campsite • Warm Fires & Starry Nights</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Itinerary Accordion -->
+            <section class="glass-card" id="itinerary">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Trip Schedule</span>
+                    <h2 class="section-title">2-Day Mountain Itinerary</h2>
+                </div>
+                
+                <div class="itinerary-list">
                     <!-- Day 0 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 0</span>
-                            <span class="itinerary-title">Overnight Bangalore to Munnar Trip</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    <div class="itinerary-card active">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 0</span>
+                                <span class="itinerary-title-text">Overnight Journey from Bangalore</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <p style="color: #b0b0b0; margin-bottom: 0.5rem;"><strong style="color: #ffffff;">Pickup Points & Travel Details</strong><br>
-                            Escape the hustle of Bangalore and unwind in the misty hills of Munnar. Join our comfortable overnight journey to Kerala’s favorite hill station, complete with multiple pickup points across Bengaluru and private Non-AC transportation for a smooth ride.</p>
-                            <ul style="color: #b0b0b0; padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">08:00 PM</span>: Start from MG Road</li>
-                                <li><span class="itinerary-time">08:10 PM</span>: Next stop, Halasuru</li>
-                                <li><span class="itinerary-time">08:20 PM</span>: Assemble at Indira Nagar</li>
-                                <li><span class="itinerary-time">08:40 PM</span>: Picking up at Tin Factory</li>
-                                <li><span class="itinerary-time">09:00 PM</span>: Meet us at Marathahalli</li>
-                                <li><span class="itinerary-time">09:20 PM</span>: Join at Bellandur</li>
-                                <li><span class="itinerary-time">09:40 PM</span>: Board at Silk Board</li>
-                                <li><span class="itinerary-time">10:00 PM</span>: Last pickup at Electronic City</li>
+                        <div class="itinerary-card-body">
+                            <p style="color: var(--text-body); margin-bottom: 0.75rem;">
+                                Depart Bangalore on an overnight scenic journey through the rolling plains and Ghats towards Munnar.
+                            </p>
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">08:00 PM:</span> Boarding begins across our designated Bangalore pickup points (Banashankari, BTM, Silk Board, Koramangala, Domlur, MG Road, Mekhri Circle, Yeshwanthpur).</li>
+                                <li class="timeline-item"><span class="time-tag">10:30 PM:</span> Highway comfort stop; overnight road trip into God's Own Country.</li>
                             </ul>
-                            <p style="color: #b0b0b0; margin-top: 1rem;"><strong style="color: #ffffff;">Note for the entire trip:</strong> The travel time may vary depending on the traffic and road conditions. Yet, we will make sure that we will cover all the places on the itinerary.</p>
-                            <p style="color: #b0b0b0; margin-top: 1rem;">🛣️ <strong style="color: #ffffff;">Travel Distance & Duration:</strong><br>
-                            The distance from Bangalore to Munnar is approximately 480 km and takes around 10 to 11 hours by road. Departing at night ensures you arrive in the fresh morning air, ready to explore Munnar’s tea plantations, waterfalls, and serene landscapes.</p>
                         </div>
                     </div>
 
                     <!-- Day 1 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 1</span>
-                            <span class="itinerary-title">Campsite Check-in, Adventure Activities & Phantom Hills Sunset</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    <div class="itinerary-card">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 1</span>
+                                <span class="itinerary-title-text">Tea Estates, Waterfalls & Kalaripayattu Culture</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <ul style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">08:30 AM - 11:00 AM</span>: Check into your campsite, take some time to rest and have breakfast</li>
-                                <li><span class="itinerary-time">11:00 AM - 01:00 PM</span>: Engage in <strong style="color: #ffffff;">Adventure activities (Self-Sponsored)</strong> on the outskirts of Munnar (ziplining, kayaking, etc.)</li>
-                                <li><span class="itinerary-time">01:00 PM - 02:00 PM</span>: Visit the local <strong style="color: #ffffff;">Tea Factory</strong> for shopping</li>
-                                <li><span class="itinerary-time">02:30 PM - 03:30 PM</span>: Stop for <strong style="color: #ffffff;">Lunch (Self-Sponsored)</strong></li>
-                                <li><span class="itinerary-time">04:00 PM - 06:30 PM</span>: Embark on a trek to <strong style="color: #ffffff;">Phantom Hills Sunset Point</strong> and enjoy the stunning sunset from atop the hill <strong style="color: #ffffff;">(1 KM trek)</strong></li>
-                                <li><span class="itinerary-time">06:30 PM</span>: Return to campsite and enjoy the warmth of the campfire, sharing stories and experiences</li>
-                                <li><span class="itinerary-time">08:00 PM - 09:00 PM</span>: Hot dinner will be served; retire for the night</li>
+                        <div class="itinerary-card-body">
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">08:00 AM:</span> Arrive at our Munnar hillside campsite, freshen up, and enjoy a traditional Kerala breakfast.</li>
+                                <li class="timeline-item"><span class="time-tag">10:00 AM:</span> Visit Panthom Hill viewpoint and the dramatic Jaguar Rock vantage.</li>
+                                <li class="timeline-item"><span class="time-tag">11:30 AM:</span> Guided tour of a century-old Tea Factory and local Chocolate Factory to taste fresh handcrafted blends.</li>
+                                <li class="timeline-item"><span class="time-tag">01:30 PM:</span> Self-sponsored lunch at Munnar town featuring authentic Malabar & Kerala specialties.</li>
+                                <li class="timeline-item"><span class="time-tag">03:30 PM:</span> Hike to the roaring cascades of Attukad Waterfall and capture scenic views of Lockhart Gap.</li>
+                                <li class="timeline-item"><span class="time-tag">05:30 PM:</span> Attend a live, heart-pounding Kalaripayattu & Kathakali cultural show at Kalari Kshetra (*Self-sponsored ticket).</li>
+                                <li class="timeline-item"><span class="time-tag">08:00 PM:</span> Return to campsite. Savor a hot dinner, gather around the crackling campfire, and rest for the early morning summit.</li>
                             </ul>
                         </div>
                     </div>
 
                     <!-- Day 2 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 2</span>
-                            <span class="itinerary-title">Kolukkumalai Sunrise Jeep Ride, Viewpoints & Kalaripayattu Show</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    <div class="itinerary-card">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 2</span>
+                                <span class="itinerary-title-text">Kolukkumalai Sunrise Above Clouds & Return</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <ul style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><strong style="color: #ffffff;">Note: Kolukkumalai sunrise timings depend on jeep availability. (2 slots, Timings: 1st Slot - 04:30 AM, 2nd Slot - 08:30 AM)</strong></li>
-                                <li><span class="itinerary-time">03:30 AM - 09:30 AM</span>: Rise early and head to <strong style="color: #ffffff;">Kolukkumalai</strong>, the world’s highest tea estate via jeep ride <strong style="color: #ffffff;">(Self-Sponsored)</strong></li>
-                                <li><span class="itinerary-time">06:15 AM - 07:30 AM</span>: Take in the picturesque sunrise landscape above the clouds</li>
-                                <li><span class="itinerary-time">07:30 AM - 09:30 AM</span>: Visit <strong style="color: #ffffff;">Jaguar Rock viewpoint</strong> and head back to the campsite</li>
-                                <li><span class="itinerary-time">10:00 AM - 11:00 AM</span>: Enjoy a hearty breakfast and checkout of the campsite</li>
-                                <li><span class="itinerary-time">11:00 AM - 12:00 PM</span>: Visit <strong style="color: #ffffff;">Signal Point</strong> (viewpoint from where the Munnar valley can be seen)</li>
-                                <li><span class="itinerary-time">12:00 PM - 01:30 PM</span>: Head to the scenic <strong style="color: #ffffff;">Mattupetty Dam</strong></li>
-                                <li><span class="itinerary-time">02:00 PM - 03:30 PM</span>: Stop for <strong style="color: #ffffff;">Lunch (Self-Sponsored)</strong> and enjoy shopping in Munnar for fresh tea leaves, handmade chocolates, aromatic oils, and spices</li>
-                                <li><span class="itinerary-time">04:00 PM - 06:00 PM</span>: Visit and enjoy a traditional <strong style="color: #ffffff;">Kalaripayattu Show (Self-Sponsored)</strong></li>
-                                <li><span class="itinerary-time">06:00 PM</span>: Board the vehicle and depart to Bangalore</li>
-                                <li><span class="itinerary-time">09:00 PM</span>: Stop for <strong style="color: #ffffff;">Dinner (Self-Sponsored)</strong> on the highway</li>
+                        <div class="itinerary-card-body">
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">04:00 AM:</span> Early morning departure in 4x4 rugged jeeps towards Kolukkumalai (7,130 FT).</li>
+                                <li class="timeline-item"><span class="time-tag">06:00 AM:</span> Witness one of Asia's most breathtaking sunrises, with crimson light breaking through a blanket of white clouds below you.</li>
+                                <li class="timeline-item"><span class="time-tag">08:30 AM:</span> Visit Singapara & Signal Point; savor hot tea brewed right from the highest tea gardens in the world.</li>
+                                <li class="timeline-item"><span class="time-tag">10:30 AM:</span> Return to campsite for breakfast, pack bags, and check out.</li>
+                                <li class="timeline-item"><span class="time-tag">12:30 PM:</span> Visit Mattupetty Dam and echo point. Optional boating / kayaking.</li>
+                                <li class="timeline-item"><span class="time-tag">02:30 PM:</span> Lunch break (*Self-sponsored).</li>
+                                <li class="timeline-item"><span class="time-tag">06:00 PM:</span> Board our vehicle and depart back to Bangalore with lifelong mountain memories.</li>
+                                <li class="timeline-item"><span class="time-tag">05:00 AM (Day 3):</span> Reach Bangalore; drop-off at your original pickup locations.</li>
                             </ul>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <!-- Day 3 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 3</span>
-                            <span class="itinerary-title">Back to Bangalore</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            <!-- Package Details (Inclusions & Exclusions) -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Trip Package Details</span>
+                    <h2 class="section-title">Inclusions & Exclusions</h2>
+                </div>
+
+                <div class="inc-exc-grid">
+                    <!-- Included Column -->
+                    <div class="inc-column">
+                        <div class="column-header inc">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>What's Included</span>
                         </div>
-                        <div class="itinerary-content">
-                            <ul style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">05:00 AM</span>: <strong style="color: #ffffff;">Arrive in Bangalore. The drop-off points will be the same as the pickup points.</strong></li>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Bangalore-Munnar roundtrip push-back transportation</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Munnar hillside tent stay accommodation (sharing)</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>2 Fresh Breakfasts & 1 Campfire Dinner</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Sightseeing: Panthom Hill, Attukad Waterfalls, Tea & Chocolate Factory</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Campfire night at campsite (weather permitting)</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Dedicated Hikers Horizon Trip Captain & Local Guide</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>First Aid Kit & Emergency Protocol support</span>
+                        </div>
+                    </div>
+
+                    <!-- Excluded Column -->
+                    <div class="exc-column">
+                        <div class="column-header exc">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            <span>What's Not Included</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                            <span>Kolukkumalai 4x4 Jeep Safari (Self-sponsored union jeep ride)</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                            <span>Kalari Kshetra show & any sightseeing entry tickets</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                            <span>Saturday & Sunday Lunches and Highway Dinner</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                            <span>Adventure activities (Kayaking, Zipline, Elephant ride)</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span>
+                            <span>Anything not specifically mentioned in the inclusions list</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Packing Guide Checklist -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Packing Guide</span>
+                    <h2 class="section-title">Things to Bring to Munnar</h2>
+                </div>
+
+                <div class="checklist-grid">
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Warm jacket / hoodie / sweater</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Comfortable trekking / walking shoes</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Rain jacket / poncho</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Small daypack (20L)</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Reusable water bottle (1-2L)</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Torch / phone flashlight</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Power bank & personal medicines</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Govt Photo ID & photocopy</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transparent Pricing Packages -->
+            <section class="glass-card" id="pricing">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Fair & Transparent Rates</span>
+                    <h2 class="section-title">Munnar Pricing Package</h2>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Misty Bliss Package -->
+                    <div class="package-card featured">
+                        <span class="package-badge-popular">All-Inclusive</span>
+                        <div>
+                            <h3 class="package-title" style="color: var(--gold-bright);">Misty Bliss</h3>
+                            <p class="package-subtitle">Full Roundtrip Journey from Bangalore (Campsite Stay & Travel)</p>
+                            
+                            <div class="package-price-wrap">
+                                <span class="price-strike">₹6,078</span>
+                                <span class="price-amount">₹5,499</span>
+                                <span class="price-unit">/ person</span>
+                            </div>
+
+                            <ul class="package-features-list">
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span><strong>Roundtrip Push-Back Transport</strong> from BLR</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span>Hillside Campsite Tent Stay (3-sharing, 1 Night)</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span>2 Breakfasts & 1 Campfire Dinner</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span>Kolukkumalai Sunrise & Mattupetty Coordination</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span>Attukad Falls & Tea Plantation Walks</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FBBF24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                                    <span>Knowledgeable Trip Captain from Hikers Horizon</span>
+                                </li>
                             </ul>
-                            <p style="color: #b0b0b0; margin-top: 1rem;">Please bear in mind that this itinerary is subject to change based on weather conditions, traffic and other variables. The timings provided are approximate.</p>
                         </div>
+                        <a href="/booking-munnar.html" class="btn-reserve featured-btn">Reserve Spot Now</a>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Inclusions & Exclusions -->
-            <div class="glass-card">
-                <h2 class="section-title">Inclusions & Exclusions</h2>
-                <div class="inc-exc-container">
-                    <div class="inc-exc-tabs-wrapper">
-                        <div class="inc-exc-tabs" role="tablist">
-                            <button type="button" class="inc-exc-tab active" id="tab-inclusion" onclick="switchIncExc('inclusion')" role="tab" aria-selected="true">Inclusion</button>
-                            <button type="button" class="inc-exc-tab" id="tab-exclusion" onclick="switchIncExc('exclusion')" role="tab" aria-selected="false">Exclusion</button>
-                        </div>
-                    </div>
-
-                    <!-- Inclusion Panel -->
-                    <div id="inclusion-panel" class="inc-exc-panel active" role="tabpanel" aria-labelledby="tab-inclusion">
-                        <ul class="inc-exc-list">
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Transportation (Non-AC)</span>
-                            </li>
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>2 Breakfast</span>
-                            </li>
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>1 Dinner</span>
-                            </li>
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Panthom Hill Sunset Point | Visit Jaguar Rock's viewpoint | Tea Factory | Chocolate Factory | Kalari Kshetra Visit | Eravikulam National Park | Attukad Waterfall | Lockhart View Point | Periyakanal Waterfalls Visit</span>
-                            </li>
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Trip Captain</span>
-                            </li>
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Accommodation Tent Stay</span>
-                            </li>
-                            <li>
-                                <span class="inc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </span>
-                                <span>Campfire (Depends On Weather)</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Exclusion Panel -->
-                    <div id="exclusion-panel" class="inc-exc-panel" role="tabpanel" aria-labelledby="tab-exclusion">
-                        <ul class="inc-exc-list">
-                            <li>
-                                <span class="exc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <span>Kolukkumalai Trek (Jeep Safari)</span>
-                            </li>
-                            <li>
-                                <span class="exc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <span>All Entry Charges for any sightseeing areas</span>
-                            </li>
-                            <li>
-                                <span class="exc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <span>Kayaking, Zip-line, Elephant ride</span>
-                            </li>
-                            <li>
-                                <span class="exc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <span>Saturday & Sunday Lunch</span>
-                            </li>
-                            <li>
-                                <span class="exc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <span>Anything Not Mentioned Includes</span>
-                            </li>
-                            <li>
-                                <span class="exc-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                                    </svg>
-                                </span>
-                                <span>Entry charges for any sightseeing area.</span>
-                            </li>
-                        </ul>
-                    </div>
+            <!-- Traveler Reviews & Community -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Community</span>
+                    <h2 class="section-title">Traveler Stories</h2>
                 </div>
-            </div>
 
-            <!-- Know Before You Go -->
-            <div class="glass-card">
-                <h2 class="section-title">Munnar Tour Guidelines</h2>
-                <ul class="modern-list" style="color: #b0b0b0;">
-                    <li>• Kolukkumalai sunrise jeep ride is self-sponsored and subject to local jeep union regulations</li>
-                    <li>• Kalaripayattu show, adventure activities, and dam entry are self-sponsored</li>
-                    <li>• Munnar weather can be cool; carry warm layers for early mornings</li>
-                    <li>• Alcohol consumption and smoking are strictly prohibited during the trip</li>
-                    <li>• Carry xerox copies of your Aadhar/Voter ID card for forest permits</li>
-                </ul>
-            </div>
-
-            <!-- Things to Carry -->
-            <div class="glass-card">
-                <h2 class="section-title">Things to Carry for Munnar</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem 1.5rem;">
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Backpack (small daypack for trek)
+                <div class="reviews-grid">
+                    <div class="review-box">
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">"The sunrise at Kolukkumalai was absolutely out of this world! Standing literally above the clouds with the morning sun casting golden rays over the tea gardens. Campfire at the campsite was a memorable night."</p>
+                        <div class="review-author">— Navya R., Bangalore</div>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Warm Jacket / Sweaters
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Comfortable Trekking Shoes
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Raincoat / Poncho
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Water Bottle (1-2 Litres)
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Torch / Headlamp
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Government ID Proof & Xerox copy
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                        Powerbank & Personal Meds
-                    </div>
-                </div>
-            </div>
-
-            <!-- Boutique Packages -->
-            <div class="glass-card">
-                <h2 class="section-title">Munnar Pricing Packages</h2>
-                <div class="pricing-section">
-                    <div class="price-card">
-                        <h3>Misty Bliss</h3>
-                        <div class="amount-box">
-                            <span class="old-price">₹6,078</span>
-                            <span class="new-price">₹5,499</span>
-                        </div>
-                        <ul class="modern-list" style="text-align: left; margin-bottom: 2rem; font-size: 0.9rem;">
-                            <li>• Campsite Tent Stay (3-sharing, 1 Night)</li>
-                            <li>• Bangalore-Munnar AC/Non-AC Return Transport</li>
-                            <li>• 2 Breakfasts, 1 Campfire Dinner</li>
-                            <li>• Knowledgeable Trip Captain / Guide</li>
-                            <li>• Basic First Aid & Safety Gear</li>
-                        </ul>
-                        <a href="../../booking-munnar" class="pricing-btn">Reserve Spot</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Review & FAQs -->
-            <div class="glass-card">
-                <h2 class="section-title">Traveler Experiences</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                    <div
-                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
-                        "The sunrise at Kolukkumalai was absolutely out of this world, literally standing above the clouds! Campfire at the campsite was a great experience."
-                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">-
-                            Navya R.</strong>
-                    </div>
-                    <div
-                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
-                        "Perfect weekend getaway. Ziplining over the hills and the Kalaripayattu show were amazing. Excellent planning!"
-                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">-
-                            Akash V.</strong>
+                    <div class="review-box">
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">"Perfect weekend getaway. The off-road jeep drive to the top of Kolukkumalai and the Kalaripayattu show were exhilarating. Superbly managed by Hikers Horizon!"</p>
+                        <div class="review-author">— Akash V., Tech Lead</div>
                     </div>
                 </div>
 
-                <h2 class="section-title" style="margin-top: 4rem;">Frequently Asked Questions</h2>
-                <ul class="modern-list">
-                    <li>
-                        <div>
-                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">Is the Kolukkumalai jeep ride included?</strong>
-                            <p style="color: #b0b0b0;">No, the jeep ride of about 2 hours and 45 minutes to the sunrise point is self-sponsored because it is regulated by local jeep unions.</p>
+                <!-- FAQs -->
+                <div class="section-header-wrap" style="margin-top: 3.5rem;">
+                    <span class="section-eyebrow">Common Queries</span>
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h4 class="faq-question">How cold does it get at Kolukkumalai sunrise?</h4>
+                        <p class="faq-answer">At 7,130 FT before dawn, temperatures can dip between 6°C to 12°C depending on the season, with gusty mountain winds. Warm jackets, thermals, and windcheaters are strongly advised.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4 class="faq-question">How does the Kolukkumalai Jeep Safari work?</h4>
+                        <p class="faq-answer">Due to rugged forest terrain, private transport cannot climb Kolukkumalai. Local 4x4 jeeps are hired from the base union (self-sponsored, typically ₹2,500 - ₹3,000 per jeep shared among 6-7 trekkers). Our trek captain coordinates the entire convoy smoothly.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4 class="faq-question">Is this trip suitable for solo travelers and girls?</h4>
+                        <p class="faq-answer">Yes, 100%! Over 60% of our travelers join solo. We ensure dedicated female-friendly accommodations, experienced trek captains, and a welcoming community atmosphere.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cross Trails Navigation -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Explore More</span>
+                    <h2 class="section-title">Other Popular Weekend Expeditions</h2>
+                </div>
+                <div class="adventures-grid">
+                    <a href="/Twodays/Netravathi" class="adventure-card-link">
+                        <div class="adventure-thumb-card">
+                            <img src="/img/Netravathi.jpg" alt="Netravathi Peak Trek" loading="lazy">
+                            <div class="adventure-info">
+                                <h4>Netravathi Peak</h4>
+                                <span>Kudremukh • 4,990 FT</span>
+                            </div>
                         </div>
-                    </li>
-                    <li>
-                        <div>
-                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">What is the travel distance from Bangalore?</strong>
-                            <p style="color: #b0b0b0;">It is approximately 480 km from Bangalore, covered overnight (around 10-11 hours) for a comfortable arrival in the morning.</p>
+                    </a>
+                    <a href="/Twodays/Gokarna" class="adventure-card-link">
+                        <div class="adventure-thumb-card">
+                            <img src="/img/Gokarna.jpg" alt="Gokarna Beach Trek" loading="lazy">
+                            <div class="adventure-info">
+                                <h4>Gokarna Beach Trek</h4>
+                                <span>Coastal • 5 Beaches</span>
+                            </div>
                         </div>
-                    </li>
-                </ul>
-            </div>
-            <!-- Other Adventures -->
-            <div class="glass-card">
-                <h2 class="section-title">Explore More</h2>
-                <div class="gallery-grid">
-                    <a href="../Hampi" style="text-decoration: none; color: inherit;">
-                        <div class="gallery-image">
-                            <img src="/img/Hampi.jpg" alt="Hampi Heritage">
+                    </a>
+                    <a href="/Backpacking/Wayanad" class="adventure-card-link">
+                        <div class="adventure-thumb-card">
+                            <img src="/img/wayanad.jpg" alt="Wayanad Trek" loading="lazy">
+                            <div class="adventure-info">
+                                <h4>Wayanad Expedition</h4>
+                                <span>Chembra Peak & Caves</span>
+                            </div>
                         </div>
-                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Hampi Heritage
-                        </h4>
-                    </a> <a href="../Wayanad" style="text-decoration: none; color: inherit;">
-                        <div class="gallery-image">
-                            <img src="/img/Wayanad.jpg" alt="Wayanad Wild">
-                        </div>
-                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Wayanad Wild
-                        </h4>
-                    </a> <a href="../Chikmagaluru" style="text-decoration: none; color: inherit;">
-                        <div class="gallery-image">
-                            <img src="/img/Chikmagalur.jpg" alt="Chikmagaluru Coffee">
-                        </div>
-                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Chikmagaluru Coffee
-                        </h4>
                     </a>
                 </div>
-            </div>
+            </section>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-grid">
-                <div class="footer-links-col">
-                    <h3>Explore</h3>
-                    <ul>
-                        <li><a href="../../Sunrise">Sunrise Treks</a></li>
-                        <li><a href="../../Twodays">Two-day Treks</a></li>
-                        <li><a href="../../Backpacking">Backpacking Trips</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links-col">
-                    <h3>Company</h3>
-                        <ul>
-                        <li><a href="../../About">About Us</a></li>
-                        <li><a href="../../Contact">Contact</a></li>
-                        <li><a href="../../Blogs">Blog</a></li>
-                                                <li><a href="/swiftseat/">Swift Seat</a></li>
-                        </ul>
-                </div>
-                <div class="footer-links-col">
-                    <h3>Policies</h3>
-                    <ul>
-                        <li><a href="../../Privacy">Privacy Policy</a></li>
-                        <li><a href="../../Terms">Terms and Conditions</a></li>
-                        <li><a href="../../Cancellation">Cancellation Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 BENGALURU TRAILS. All rights reserved.</p>
-                <div class="social-links">
-                    <a href="https://facebook.com/bengalurutrails" aria-label="Facebook">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                        </svg>
-                    </a>
-                    <a href="https://instagram.com/bengalurutrails" aria-label="Instagram">
-                        <svg viewBox="0 0 24 24">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
-                    </a>
-                </div>
-            </div>
+    <!-- Floating Docked Action Bar -->
+    <div class="floating-action-bar">
+        <div class="floating-price-col">
+            <span class="floating-label">All-Inclusive</span>
+            <span class="floating-price">₹5,499</span>
         </div>
-    </footer>
+        <a href="/booking-munnar.html" class="btn-floating-cta">Reserve Slot</a>
+    </div>
 
-    <!-- WhatsApp Button logic -->
-    <a href="https://wa.me/919902653393" class="enquiry-button" id="enquiryButton" aria-label="WhatsApp">
+    <!-- WhatsApp Enquiry Button -->
+    <a href="https://wa.me/919902653393?text=Hi%20Hikers%20Horizon,%20I%20want%20to%20know%20more%20about%20the%20Munnar%20%26%20Kolukkumalai%20Adventure" 
+       class="enquiry-button" id="enquiryButton" aria-label="Chat on WhatsApp" target="_blank" rel="noopener">
         <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
         </svg>
     </a>
 
-    <!-- Schema Markup -->
+    <!-- Structured Data (Event Schema) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Event",
         "name": "Munnar & Kolukkumalai Adventure from Bangalore",
-        "description": "Join BENGALURU TRAILS for a 2-day Munnar and Kolukkumalai trip starting at ₹5,499. Visit Kolukkumalai Sunrise point, Mattupetty Dam, Signal Point, and enjoy a Kalaripayattu Show.",
-        "startDate": "2025-10-24T20:00:00+05:30",
-        "endDate": "2025-10-26T23:00:00+05:30",
+        "description": "Experience sunrise at the world's highest tea estate (7,130 FT), Attukad waterfalls, and Kalaripayattu with Hikers Horizon starting at ₹5,499.",
+        "startDate": "2026-11-06T20:00:00+05:30",
+        "endDate": "2026-11-08T05:00:00+05:30",
         "location": {
             "@type": "Place",
-            "name": "Munnar",
+            "name": "Munnar & Kolukkumalai",
             "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Munnar",
@@ -1169,54 +1591,32 @@
         },
         "organizer": {
             "@type": "Organization",
-            "name": "BENGALURU TRAILS",
-            "url": "https://bengalurutrails.in"
+            "name": "Hikers Horizon",
+            "url": "https://hikershorizon.in"
         },
         "offers": {
             "@type": "Offer",
             "price": "5499",
             "priceCurrency": "INR",
-            "url": "https://bengalurutrails.in/Backpacking/Munnar",
+            "url": "https://hikershorizon.in/Backpacking/Munnar",
             "availability": "https://schema.org/InStock"
         }
     }
     </script>
-    
 
     <script>
         function toggleItinerary(header) {
-            const item = header.parentElement;
-            const isActive = item.classList.contains('active');
-            document.querySelectorAll('.itinerary-item').forEach(el => {
-                el.classList.remove('active');
+            const card = header.closest('.itinerary-card');
+            const isActive = card.classList.contains('active');
+            
+            // Close other accordion cards
+            document.querySelectorAll('.itinerary-card').forEach(item => {
+                item.classList.remove('active');
             });
+
+            // Toggle current
             if (!isActive) {
-                item.classList.add('active');
-            }
-        }
-
-        function switchIncExc(type) {
-            const incTab = document.getElementById('tab-inclusion');
-            const excTab = document.getElementById('tab-exclusion');
-            const incPanel = document.getElementById('inclusion-panel');
-            const excPanel = document.getElementById('exclusion-panel');
-
-            if (type === 'inclusion') {
-                incTab.classList.add('active');
-                incTab.setAttribute('aria-selected', 'true');
-                excTab.classList.remove('active');
-                excTab.setAttribute('aria-selected', 'false');
-
-                incPanel.classList.add('active');
-                excPanel.classList.remove('active');
-            } else {
-                excTab.classList.add('active');
-                excTab.setAttribute('aria-selected', 'true');
-                incTab.classList.remove('active');
-                incTab.setAttribute('aria-selected', 'false');
-
-                excPanel.classList.add('active');
-                incPanel.classList.remove('active');
+                card.classList.add('active');
             }
         }
     </script>
