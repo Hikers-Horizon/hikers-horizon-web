@@ -227,7 +227,7 @@
                                     <img src="/img/BP.webp" alt="Gokarna Beach Trek">
                                     <div class="featured-trek-content">
                                         <div class="featured-trek-title">Gokarna Beach Trek</div>
-                                        <a href="/Backpacking/" class="featured-trek-btn">Explore Now</a>
+                                        <a href="/Backpacking/Gokarna/" class="featured-trek-btn">Explore Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -423,7 +423,7 @@
                 { name: 'Gokarna Beach Trek', link: '/Twodays/Gokarna/index.html' }
             ],
             backpacking: [
-                { name: 'Gokarna Beach Trek', link: '/Backpacking/index.html' },
+                { name: 'Gokarna & Murudeshwar (3D)', link: '/Backpacking/Gokarna/index.html' },
                 { name: 'Chikmagaluru Escape', link: '/Backpacking/Chikmagaluru/index.html' },
                 { name: 'Coorg 3-Day Trip', link: '/Backpacking/Coorg3days/index.html' },
                 { name: 'Hampi Heritage Trail', link: '/Backpacking/Hampi/index.html' },

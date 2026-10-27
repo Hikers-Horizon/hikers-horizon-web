@@ -100,6 +100,13 @@
       image: '/img/gokarna4.jpg', duration: '2 days',
       keywords: 'gokarna trek, gokarna beach trek, gokarna beach trek from bangalore, gokarna trekking, gokarna trek from bangalore, gokarna coastal trek, gokarna trip from bangalore, gokarna beach trek booking, gokarna beach trek itinerary, gokarna om beach trek, gokarna half moon beach trek, gokarna paradise beach trek, gokarna murudeshwar trip, gokarna trek package price, gokarna beach camping trek, best gokarna trek organizer, gokarna 2 day trip from bangalore, weekend gokarna trip'
     },
+    '/Backpacking/Gokarna': {
+      name: 'Gokarna, Honnavar & Murudeshwar 3-Day Trip',
+      desc: '3-Day Gokarna beach trek, Honnavar backwaters boating, Murudeshwar Shiva temple, Vibhooti Falls, Yana Caves & Mirjan Fort from Bangalore. Book at ₹4,999.',
+      price: '4999', altitude: 'Sea level', difficulty: 'Easy-Moderate', distance: '12 km',
+      image: '/img/Gokarna.jpg', duration: '3 days',
+      keywords: 'gokarna 3 day trip, gokarna honnavar murudeshwar trip, 3 day gokarna backpacking, gokarna beach trek from bangalore, honnavara backwaters, vibhooti falls, yana caves, murudeshwar temple'
+    },
     '/Backpacking/Wayanad': {
       name: 'Wayanad Backpacking Trip',
       desc: 'Explore the lush green hills and waterfalls of Wayanad. Multi-day backpacking trip from Bangalore. Book from ₹3699.',
