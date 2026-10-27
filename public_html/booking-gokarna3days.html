@@ -39,10 +39,22 @@
   <script>
     BookingEngine.init({
       trekName: '3 Day Gokarna Honnavar Murudeshwar Trip',
-      pricingType: 'fixed',
-      basePrice: 4999,
-      transportInclusive: true
+      pricingType: 'transport',
+      basePrice: 3999,
+      transportPrice: 5499
     });
+
+    // Default to 'With Transport' (₹5,499) unless explicitly requesting without transport (?type=base or ?transport=false)
+    const urlParams = new URLSearchParams(window.location.search);
+    const transSelect = document.getElementById('transportation');
+    if (transSelect) {
+      if (urlParams.get('type') === 'base' || urlParams.get('transport') === 'false') {
+        transSelect.value = 'false';
+      } else {
+        transSelect.value = 'true';
+      }
+      transSelect.dispatchEvent(new Event('change'));
+    }
   </script>
 </body>
 

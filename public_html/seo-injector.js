@@ -102,8 +102,8 @@
     },
     '/Backpacking/Gokarna': {
       name: 'Gokarna, Honnavar & Murudeshwar 3-Day Trip',
-      desc: '3-Day Gokarna beach trek, Honnavar backwaters boating, Murudeshwar Shiva temple, Vibhooti Falls, Yana Caves & Mirjan Fort from Bangalore. Book at ₹4,999.',
-      price: '4999', altitude: 'Sea level', difficulty: 'Easy-Moderate', distance: '12 km',
+      desc: '3-Day Gokarna beach trek, Honnavar backwaters boating, Murudeshwar Shiva temple, Vibhooti Falls, Yana Caves & Mirjan Fort from Bangalore. Book at ₹5,499 with transport / ₹3,999 base.',
+      price: '5499', altitude: 'Sea level', difficulty: 'Easy-Moderate', distance: '12 km',
       image: '/img/Gokarna.jpg', duration: '3 days',
       keywords: 'gokarna 3 day trip, gokarna honnavar murudeshwar trip, 3 day gokarna backpacking, gokarna beach trek from bangalore, honnavara backwaters, vibhooti falls, yana caves, murudeshwar temple'
     },
