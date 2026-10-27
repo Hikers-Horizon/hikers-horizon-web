@@ -4,24 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netravati Peak Trek | Hikers Horizon</title>
+    <title>Netravathi Peak Trek from Bangalore (4,990 FT) | Hikers Horizon</title>
     <meta name="description"
-        content="Discover the cloud corridors of the Western Ghats. Netravati Peak trek details. Book for just ₹3,499!">
+        content="Ascend Netravathi Peak in Kudremukh National Park (4,990 ft). Hike the iconic heart-shaped Shola meadow, cross mountain streams, visit Samse tea estate & Horanadu Temple. 2-Day weekend trek from Bangalore starting at ₹2,299.">
     <meta name="keywords"
-        content="netravathi peak trek, netravathi trekking, 2 day trek from bangalore, shola forest trek, western ghats trekking, netravathi river origin, hikers horizon">
+        content="netravathi peak trek, netravathi trek from bangalore, kudremukh shola forest trek, netravathi heart shaped meadow, western ghats trekking, 2 day trek bangalore, hikers horizon">
     <link rel="canonical" href="https://hikershorizon.in/Twodays/Netravathi" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="../../auth-navigation.css?v=12">
+
     <style>
         :root {
-            --primary-color: #FFFFFF;
-            --secondary-color: #FFFFFF;
-            --text-light: #B0B0B0;
-            --bg-dark: #000000;
-            --glass-bg: rgba(255, 255, 255, 0.05);
+            --primary-emerald: #10B981;
+            --emerald-glow: rgba(16, 185, 129, 0.25);
+            --emerald-border: rgba(52, 211, 153, 0.2);
+            --gold-accent: #F59E0B;
+            --gold-bright: #FBBF24;
+            --bg-deep: #060B08;
+            --card-surface: rgba(15, 27, 20, 0.72);
+            --card-surface-hover: rgba(20, 36, 26, 0.85);
+            --text-pure: #FFFFFF;
+            --text-body: #D1D5DB;
+            --text-muted: #9CA3AF;
         }
 
         * {
@@ -32,18 +40,40 @@
         }
 
         body {
-            background: #000000;
-            color: #ffffff;
-            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
             position: relative;
-            overscroll-behavior-x: none;
-            scroll-behavior: smooth;
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
-        /* Fixed Background Video */
+        /* Atmospheric Background */
+        .ambient-glow-top {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 60vw;
+            height: 60vh;
+            background: radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.14), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ambient-glow-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 50vw;
+            height: 50vh;
+            background: radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.08), transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
         video#bg-video {
             position: fixed;
             top: 0;
@@ -51,9 +81,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1;
-            opacity: 0.4;
-            filter: grayscale(100%);
+            z-index: -2;
+            opacity: 0.35;
+            filter: saturate(0.8) brightness(0.6);
         }
 
         .video-overlay {
@@ -62,1025 +92,1518 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
+            background: linear-gradient(180deg, rgba(6, 11, 8, 0.82) 0%, rgba(6, 11, 8, 0.94) 100%);
+            z-index: -2;
         }
 
         /* Hero Section */
         .hero {
-            padding: clamp(4rem, 10vw, 8rem) 1rem;
+            padding: clamp(5rem, 12vw, 9rem) 1.5rem clamp(2.5rem, 6vw, 4rem);
             text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid var(--emerald-border);
+            padding: 0.45rem 1.25rem;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--primary-emerald);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
         }
 
         .hero h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2rem, 6vw, 4rem);
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            font-size: clamp(2.4rem, 6.5vw, 4.5rem);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -0.02em;
-            margin-bottom: 1rem;
-            background: linear-gradient(to bottom, #ffffff, #b0b0b0);
+            line-height: 1.08;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(180deg, #FFFFFF 20%, #A7F3D0 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-            color: #b0b0b0;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-body);
+            max-width: 780px;
+            margin: 0 auto 2.5rem auto;
+            line-height: 1.7;
         }
 
-        /* Main Container */
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin-bottom: 3.5rem;
+        }
+
+        .btn-primary-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-primary-action:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.5);
+        }
+
+        .btn-secondary-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Highlights Bar */
+        .metrics-bar {
+            max-width: 950px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .metric-card {
+            background: rgba(16, 30, 22, 0.65);
+            border: 1px solid var(--emerald-border);
+            border-radius: 18px;
+            padding: 1.25rem 1rem;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .metric-card:hover {
+            border-color: var(--gold-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .metric-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 0.2rem;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-emerald);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Main Container & Section Cards */
         .page-container {
-            max-width: 1100px;
-            margin: 0 auto 8rem auto;
+            max-width: 1140px;
+            margin: 0 auto 7rem auto;
             padding: 0 1.5rem;
+            position: relative;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-surface);
+            border: 1px solid var(--emerald-border);
             border-radius: 24px;
-            backdrop-filter: blur(20px);
-            padding: clamp(1.5rem, 4vw, 3rem);
-            margin-bottom: 2.5rem;
+            backdrop-filter: blur(24px);
+            padding: clamp(1.75rem, 4vw, 3.25rem);
+            margin-bottom: 2.75rem;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+            transition: border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(52, 211, 153, 0.35);
+        }
+
+        .section-header-wrap {
+            margin-bottom: 2.25rem;
+        }
+
+        .section-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold-accent);
+            margin-bottom: 0.5rem;
+            display: block;
         }
 
         .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
         .section-title::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(90deg, var(--emerald-border), transparent);
         }
 
-        /* Detail Grid */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 2rem;
-        }
-
-        .info-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .info-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #ffd700;
-            letter-spacing: 0.1em;
-        }
-
-        .info-value {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        /* Gallery */
-        /* Gallery System */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 600px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.75rem;
-            }
-
-            .gallery-image {
-                width: 100%;
-                padding-bottom: 100%;
-                height: 0;
-                position: relative;
-                border-radius: 12px;
-            }
-        }
-
-        .gallery-image {
-            border-radius: 16px;
-            overflow: hidden;
-            height: 200px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .gallery-image img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .trek-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: linear-gradient(135deg, #ffd700, #ffcc00);
-            color: #000000;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 0.6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            z-index: 5;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-
-        .gallery-image:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Itinerary & Lists */
-        .modern-list {
-            list-style: none;
-        }
-
-        .modern-list li {
-            padding: 1rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            line-height: 1.7;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .modern-list li:last-child {
-            border-bottom: none;
-        }
-
-        .itinerary-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: background 0.3s ease;
-        }
-
-        .itinerary-item:last-child {
-            border-bottom: none;
-        }
-
-        .itinerary-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 1.25rem 0;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .itinerary-header:hover {
-            opacity: 0.8;
-        }
-
-        .day-tag {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            color: #ffd700;
-            min-width: 90px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        .itinerary-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            flex: 1;
-        }
-
-        .dropdown-icon {
-            width: 24px;
-            height: 24px;
-            fill: #ffd700;
-            transition: transform 0.3s ease;
-        }
-
-        .itinerary-item.active .dropdown-icon {
-            transform: rotate(180deg);
-        }
-
-        .itinerary-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-left: calc(90px + 1.5rem);
-            /* Day-tag width + gap */
-            opacity: 0;
-        }
-
-        .itinerary-item.active .itinerary-content {
-            max-height: 3500px;
-            /* Accommodate very long content on mobile */
-            padding-bottom: 1.5rem;
-            opacity: 1;
-        }
-
-        .itinerary-content p {
+        /* Overview Text */
+        .overview-text {
+            color: var(--text-body);
+            font-size: 1.05rem;
             line-height: 1.8;
-            margin-top: 0.5rem;
-            color: #b0b0b0;
-        }
-
-        .itinerary-time {
-            color: #ffd700;
-            font-weight: 700;
-            margin-right: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .itinerary-content {
-                padding-left: 0;
-            }
-
-            .itinerary-header {
-                gap: 1rem;
-            }
-
-            .day-tag {
-                min-width: 70px;
-                font-size: 0.8rem;
-            }
-
-            .itinerary-title {
-                font-size: 1rem;
-            }
-        }
-
-        /* Pricing Cards */
-        .pricing-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .price-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .price-card:hover {
-            border-color: #ffd700;
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-5px);
-        }
-
-        .price-card h3 {
-            font-family: 'Montserrat', sans-serif;
             margin-bottom: 1.5rem;
-            text-transform: uppercase;
         }
 
-        .amount-box {
-            margin-bottom: 2rem;
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .new-price {
-            display: block;
-            font-size: 3rem;
-            font-weight: 800;
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .pricing-btn {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 1.25rem 2rem;
-            border-radius: 12px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .price-card:hover .pricing-btn {
-            background: #ffd700;
-        }
-
-        /* Carry grid */
-        .carry-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-        }
-
-        .carry-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* Included/Excluded Section */
-        .inc-exc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .inc-exc-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-
-        .inc-exc-column {
+        /* Advisory Permit Box */
+        .permit-advisory-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem 1.75rem;
             display: flex;
-            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .permit-icon {
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .permit-content h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .permit-content p {
+            color: var(--text-body);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .permit-link {
+            color: var(--gold-bright);
+            text-decoration: underline;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .permit-link:hover {
+            color: #FFFFFF;
+        }
+
+        /* Visual Highlights Mosaic */
+        .mosaic-gallery {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
             gap: 1.25rem;
         }
 
-        .inc-exc-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #e0e0e0;
+        .mosaic-item {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #050806;
+            min-height: 220px;
         }
 
-        .inc-exc-icon {
+        .mosaic-item.large {
+            grid-column: span 7;
+            height: 360px;
+        }
+
+        .mosaic-item.medium {
+            grid-column: span 5;
+            height: 360px;
+        }
+
+        .mosaic-item.small-left {
+            grid-column: span 6;
+            height: 260px;
+        }
+
+        .mosaic-item.small-right {
+            grid-column: span 6;
+            height: 260px;
+        }
+
+        .mosaic-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+            filter: brightness(0.9);
+        }
+
+        .mosaic-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.05);
+        }
+
+        .mosaic-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem;
+            background: linear-gradient(180deg, transparent, rgba(6, 11, 8, 0.9));
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: 0.02em;
+        }
+
+        /* Itinerary Accordion */
+        .itinerary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .itinerary-card {
+            background: rgba(10, 20, 14, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .itinerary-card.active {
+            border-color: var(--emerald-border);
+            background: rgba(16, 32, 22, 0.7);
+        }
+
+        .itinerary-card-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
+            justify-content: space-between;
+            padding: 1.4rem 1.75rem;
+            cursor: pointer;
+            user-select: none;
+            gap: 1.25rem;
+        }
+
+        .itinerary-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            flex: 1;
+        }
+
+        .day-badge {
+            background: linear-gradient(135deg, var(--primary-emerald), #059669);
+            color: #061109;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
             flex-shrink: 0;
         }
 
-        .inc-exc-icon.included {
-            background: rgba(46, 213, 115, 0.15);
-            color: #2ed573;
-            border: 1px solid rgba(46, 213, 115, 0.3);
+        .itinerary-title-text {
+            font-family: 'Outfit', 'Montserrat', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #FFFFFF;
         }
 
-        .inc-exc-icon.excluded {
-            background: rgba(255, 71, 87, 0.15);
-            color: #ff4757;
-            border: 1px solid rgba(255, 71, 87, 0.3);
+        .accordion-chevron {
+            width: 22px;
+            height: 22px;
+            fill: var(--gold-bright);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-shrink: 0;
         }
 
-        .inc-exc-icon svg {
+        .itinerary-card.active .accordion-chevron {
+            transform: rotate(180deg);
+        }
+
+        .itinerary-card-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+            padding: 0 1.75rem;
+        }
+
+        .itinerary-card.active .itinerary-card-body {
+            max-height: 1000px;
+            padding: 0 1.75rem 1.75rem 1.75rem;
+        }
+
+        .timeline-list {
+            list-style: none;
+            position: relative;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: rgba(52, 211, 153, 0.25);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 0.6rem 0;
+            color: var(--text-body);
+            font-size: 0.96rem;
+            line-height: 1.65;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 1rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gold-accent);
+            border: 2px solid var(--bg-deep);
+        }
+
+        .time-tag {
+            color: var(--gold-bright);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-right: 0.4rem;
+        }
+
+        .note-highlight {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid var(--gold-accent);
+            padding: 0.8rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            color: #FEF3C7;
+            font-size: 0.9rem;
+        }
+
+        /* Included / Excluded Grid */
+        .inc-exc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .inc-column, .exc-column {
+            background: rgba(12, 24, 16, 0.5);
+            border-radius: 20px;
+            padding: 1.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .column-header.inc { color: #34D399; }
+        .column-header.exc { color: #F87171; }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            padding: 0.65rem 0;
+            color: var(--text-body);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .feature-icon-badge {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feature-icon-badge.inc {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34D399;
+        }
+
+        .feature-icon-badge.exc {
+            background: rgba(239, 68, 68, 0.2);
+            color: #F87171;
+        }
+
+        .feature-icon-badge svg {
             width: 14px;
             height: 14px;
             fill: currentColor;
         }
 
+        /* Things to Carry Grid */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem 1.25rem;
+        }
+
+        .check-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0.85rem 1.1rem;
+            color: #E2E8F0;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .check-pill:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: var(--emerald-border);
+            transform: translateX(4px);
+        }
+
+        .check-pill svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--gold-bright);
+            flex-shrink: 0;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .package-card {
+            background: rgba(10, 22, 14, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.35s ease;
+        }
+
+        .package-card.featured {
+            border-color: var(--gold-accent);
+            background: linear-gradient(180deg, rgba(20, 40, 28, 0.8) 0%, rgba(10, 22, 14, 0.75) 100%);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(245, 158, 11, 0.15);
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-bright);
+        }
+
+        .package-badge-popular {
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            padding: 0.3rem 0.9rem;
+            border-radius: 50px;
+            letter-spacing: 0.08em;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .package-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 0.35rem;
+        }
+
+        .package-subtitle {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .package-price-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .price-strike {
+            font-size: 1.1rem;
+            color: #64748B;
+            text-decoration: line-through;
+        }
+
+        .price-amount {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #FFFFFF;
+        }
+
+        .featured .price-amount {
+            color: var(--gold-bright);
+        }
+
+        .price-unit {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .package-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            color: var(--text-body);
+            font-size: 0.92rem;
+            margin-bottom: 2rem;
+        }
+
+        .package-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+
+        .package-features-list li.excluded {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        .btn-reserve {
+            display: block;
+            text-align: center;
+            width: 100%;
+            padding: 0.95rem 1.5rem;
+            border-radius: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reserve.featured-btn {
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-reserve.featured-btn:hover {
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-reserve.outline-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+        }
+
+        .btn-reserve.outline-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .review-box {
+            background: rgba(12, 24, 16, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-left: 3px solid var(--emerald-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+        }
+
+        .review-stars {
+            color: var(--gold-bright);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .review-text {
+            color: var(--text-body);
+            font-style: italic;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .review-author {
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* FAQs */
+        .faq-item {
+            padding: 1.25rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .faq-answer {
+            color: var(--text-body);
+            line-height: 1.65;
+            font-size: 0.95rem;
+        }
+
+        /* Explore More Treks Grid */
+        .adventures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .adventure-card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .adventure-thumb-card {
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(10, 20, 14, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .adventure-thumb-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .adventure-thumb-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .adventure-thumb-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .adventure-info {
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .adventure-info h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 0.25rem;
+        }
+
+        .adventure-info span {
+            color: var(--primary-emerald);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Floating Mobile & Desktop Action Bar */
+        .floating-action-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 99;
+            background: rgba(8, 18, 12, 0.88);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 50px;
+            padding: 0.6rem 0.8rem 0.6rem 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(20px);
+            max-width: 90vw;
+        }
+
+        .floating-price-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floating-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--primary-emerald);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            line-height: 1;
+        }
+
+        .floating-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #FFFFFF;
+        }
+
+        .btn-floating-cta {
+            background: linear-gradient(135deg, var(--gold-accent), var(--gold-bright));
+            color: #07100A;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-floating-cta:hover {
+            transform: scale(1.04);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        }
+
         /* Footer */
         footer {
-            background: #000000;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 6rem 1.5rem 2rem 1.5rem;
+            background: rgba(4, 8, 6, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 5rem 1.5rem 3rem 1.5rem;
+            margin-top: auto;
         }
 
         .footer-container {
-            max-width: 85rem;
+            max-width: 1140px;
             margin: 0 auto;
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 4rem;
-            margin-bottom: 6rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
         }
 
-        .footer-links-col h3 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
+        .footer-col h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 2rem;
-            color: #ffffff;
+            color: #FFFFFF;
+            margin-bottom: 1.5rem;
         }
 
-        .footer-links-col ul {
+        .footer-col ul {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
         }
 
-        .footer-links-col li {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links-col a {
-            color: #b0b0b0;
+        .footer-col a {
+            color: var(--text-muted);
             text-decoration: none;
             font-size: 0.95rem;
-            transition: color 0.3s ease;
+            transition: color 0.2s ease;
         }
 
-        .footer-links-col a:hover {
-            color: #ffffff;
+        .footer-col a:hover {
+            color: var(--gold-bright);
         }
 
         .footer-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
             padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.25rem;
         }
 
-        .footer-copyright {
-            color: #666666;
-            font-size: 0.85rem;
+        .footer-bottom p {
+            color: #64748B;
+            font-size: 0.88rem;
         }
 
-        .social-links {
+        .social-icons {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
-        .social-links a {
-            color: #666666;
-            transition: color 0.3s ease;
+        .social-icons a {
+            color: #94A3B8;
+            transition: color 0.2s ease;
         }
 
-        .social-links a:hover {
-            color: #ffffff;
+        .social-icons a:hover {
+            color: var(--gold-bright);
         }
 
-        .social-links svg {
-            width: 1.25rem;
-            height: 1.25rem;
+        .social-icons svg {
+            width: 20px;
+            height: 20px;
             fill: currentColor;
         }
 
-        /* Floating WhatsApp Enquiry Button */
+        /* WhatsApp Button */
         .enquiry-button {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: rgba(37, 211, 102, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(37, 211, 102, 0.3);
-            color: white;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: rgba(37, 211, 102, 0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(37, 211, 102, 0.4);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .enquiry-button:hover {
-            transform: scale(1.1) rotate(10deg);
-            background: #25D366;
-            box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
-        }
-
-        .whatsapp-icon {
-            width: 32px;
-            height: 32px;
-            fill: #25D366;
-            transition: fill 0.3s ease;
-        }
-
-        .enquiry-button:hover .whatsapp-icon {
-            fill: #ffffff;
-        }
-
-        /* Floating Book Now Button */
-        .floating-book-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 25px;
-            /* Slightly adjusted to align with WhatsApp */
-            background: linear-gradient(45deg, #ffd700, #ffb300);
-            color: #000000;
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-            z-index: 999;
+            color: white;
+            z-index: 100;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
             transition: all 0.3s ease;
         }
 
-        .floating-book-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
-            background: #ffffff;
+        .enquiry-button:hover {
+            transform: scale(1.1);
+            background: rgba(37, 211, 102, 0.4);
         }
 
+        .whatsapp-icon {
+            width: 30px;
+            height: 30px;
+            fill: #25D366;
+        }
+
+        /* Responsive Breakpoints */
         @media (max-width: 768px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 3rem;
+            .mosaic-item.large,
+            .mosaic-item.medium,
+            .mosaic-item.small-left,
+            .mosaic-item.small-right {
+                grid-column: span 12;
+                height: 240px;
+            }
+
+            .hero {
+                padding-top: 6rem;
+            }
+
+            .floating-action-bar {
+                bottom: 16px;
+                padding: 0.5rem 0.6rem 0.5rem 1.2rem;
+                gap: 1rem;
+            }
+
+            .itinerary-card-header {
+                padding: 1.2rem 1.25rem;
+            }
+
+            .itinerary-card.active .itinerary-card-body {
+                padding: 0 1.25rem 1.25rem 1.25rem;
             }
         }
     </style>
-    <link rel="stylesheet" href="../../auth-navigation.css?v=12">
 </head>
 
 <body>
-    <!-- Background Video -->
+    <!-- Ambient Background Elements -->
+    <div class="ambient-glow-top"></div>
+    <div class="ambient-glow-bottom"></div>
+
     <video id="bg-video" data-autoplay="true" muted playsinline preload="none" poster="/img/back.jpg">
         <source src="/img/BG.webp" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
 
-    <!-- Header -->
-    <!-- GLOBAL HEADER -->
+    <!-- Global Header -->
     <header id="global-header"></header>
     <script src="/global-header.js"></script>
 
     <main>
+        <!-- Hero Section -->
         <section class="hero">
-            <h1>Netravati Peak Trek</h1>
-            <p>Ascend the cloud corridors of the Western Ghats. A journey through mist and meadows.</p>
+            <div class="hero-badge">
+                <span>🌿</span> KUDREMUKH NATIONAL PARK • 4,990 FT
+            </div>
+            <h1>Netravathi Peak Trek</h1>
+            <p>Ascend the cloud corridors of the Western Ghats. Traverse emerald Shola ridges, pristine mountain springs, and the iconic heart-shaped meadow rising above the mist.</p>
+            
+            <div class="hero-actions">
+                <a href="#pricing" class="btn-primary-action">
+                    <span>Reserve Trek Slot</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#itinerary" class="btn-secondary-action">
+                    <span>View Itinerary</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 9l-7 7-7-7"/></svg>
+                </a>
+            </div>
+
+            <!-- Key Quick Metrics -->
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <div class="metric-value">4,990 FT</div>
+                    <div class="metric-label">Summit Altitude</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12 KM</div>
+                    <div class="metric-label">Trek Distance</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">MODERATE</div>
+                    <div class="metric-label">Trail Grade</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">2D / 1N</div>
+                    <div class="metric-label">Duration</div>
+                </div>
+            </div>
         </section>
 
         <div class="page-container">
-            <!-- Adventure Overview Card -->
-            <div class="glass-card">
-                <h2 class="section-title">Netravathi Trek Overview</h2>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Difficulty</span>
-                        <span class="info-value">Moderate</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Altitude</span>
-                        <span class="info-value">4,990 ft.</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Duration</span>
-                        <span class="info-value">2 Days / 1 Night</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Distance</span>
-                        <span class="info-value">12 km (Total)</span>
+            <!-- Trail Overview -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">The Expedition</span>
+                    <h2 class="section-title">Trail Overview & Experience</h2>
+                </div>
+                <p class="overview-text">
+                    Perched high in the protected core of the Kudremukh National Park forest range, <strong>Netravathi Peak</strong> is revered among South India's most breathtaking ridges. The trail winds through dense evergreen Shola forests, ancient moss-covered tree canopies, and crystal-clear mountain streams before unveiling the celebrated <strong>heart-shaped meadow</strong> tucked between rolling mist-laden summits.
+                </p>
+                <p class="overview-text">
+                    Standing atop the windswept ridge, you are treated to unbroken 360-degree vistas across the Western Ghats UNESCO World Heritage boundary. This expedition balances raw highland wilderness with restorative cultural stops at the historic Horanadu Annapoorneshwari Temple, picturesque Samse tea plantations, and the thunderous Soormane Falls.
+                </p>
+
+                <!-- Permit Advisory Callout -->
+                <div class="permit-advisory-box">
+                    <div class="permit-icon">⚠️</div>
+                    <div class="permit-content">
+                        <h4>Forest Department Permit Advisory</h4>
+                        <p>
+                            Netravathi Peak falls under strictly regulated conservation limits by the Karnataka Forest Department with capped daily entries. Forest permits incur an additional government fee of INR 505. When booking with Hikers Horizon, our trek leads coordinate your slot confirmation. Self-trekking travelers can follow our comprehensive <a href="/Blog/Netravathi-Trek-Permit-Booking-Aranya-Vihara" class="permit-link">Aranya Vihara Netravathi Permit Booking Guide</a>.
+                        </p>
                     </div>
                 </div>
-                <p style="margin-top: 2rem; line-height: 1.8; color: #b0b0b0;">
-                    Netravati Peak, located in the Kudremukh National Park forest range, is one of the most scenic treks
-                    in Karnataka. Known for its heart-shaped meadow and the mist-covered peaks, it offers trekker a
-                    chance to walk above the clouds. The trail passes through dense shola forests, crystal-clear
-                    streams, and rolling green hills.
-                </p>
-                <p style="margin-top: 1rem; color: #b0b0b0;">Explore the biodiversity of Kudremukh range with <a
-                        href="https://karnatakatourism.org/" target="_blank" rel="noopener"
-                        style="color: #ffd700;">Karnataka Tourism</a>.</p>
-                <p style="margin-top: 1.5rem; background: rgba(255, 215, 0, 0.05); border: 1px dashed rgba(255, 215, 0, 0.3); padding: 1rem 1.5rem; border-radius: 12px; font-size: 0.95rem; line-height: 1.6;">
-                    <strong>ℹ️ Permit Booking Guide:</strong> Planning to do this trek by yourself? Read our detailed, step-by-step <a href="/Blog/Netravathi-Trek-Permit-Booking-Aranya-Vihara" style="color: #ffd700; font-weight: bold; text-decoration: underline;">Aranya Vihara Netravathi Permit Booking Guide</a> to secure your slot easily!
-                </p>
-            </div>
+            </section>
 
-            <!-- Visual Journey -->
-            <div class="glass-card">
-                <h2 class="section-title">Netravathi Visual Highlights</h2>
-                <div class="gallery-grid">
-                    <div class="gallery-image"><img src="/img/Netravathi.jpg" alt="Mountain Mist"></div>
-                    <div class="gallery-image"><img src="/img/Netravathi.jpg" alt="Cloud Corridors"></div>
-                    <div class="gallery-image"><img src="/img/Netravathi.jpg" alt="Heart Meadows"></div>
-                    <div class="gallery-image"><img src="/img/Netravathi.jpg" alt="Peak Vistas"></div>
+            <!-- Visual Journey Mosaic -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Visual Journey</span>
+                    <h2 class="section-title">Highland Moments & Scenery</h2>
                 </div>
-            </div>
+                <div class="mosaic-gallery">
+                    <div class="mosaic-item large">
+                        <img src="/img/Netravathi.jpg" alt="Netravathi Peak rolling grasslands and sea of clouds">
+                        <div class="mosaic-caption">Netravathi Peak • The Windswept Shola Grasslands</div>
+                    </div>
+                    <div class="mosaic-item medium">
+                        <img src="/img/Kuduremukha.jpg" alt="Kudremukh National Park mountain valley">
+                        <div class="mosaic-caption">Kudremukh Range • Cloud Corridors</div>
+                    </div>
+                    <div class="mosaic-item small-left">
+                        <img src="/img/Chikmagalur1.jpg" alt="Samse tea estate rolling hills">
+                        <div class="mosaic-caption">Samse Estate • Emerald Tea Valleys</div>
+                    </div>
+                    <div class="mosaic-item small-right">
+                        <img src="/img/Chikmagalur2.jpg" alt="Gushing mountain waterfall in Western Ghats">
+                        <div class="mosaic-caption">Soormane Falls • Mountain Spring Pools</div>
+                    </div>
+                </div>
+            </section>
 
-            <!-- The Itinerary -->
-            <div class="glass-card">
-                <h2 class="section-title">Netravathi Trek Itinerary</h2>
-                <div class="modern-list">
+            <!-- Detailed Day-by-Day Itinerary -->
+            <section class="glass-card" id="itinerary">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Trip Schedule</span>
+                    <h2 class="section-title">Detailed 2-Day Trek Itinerary</h2>
+                </div>
+
+                <div class="itinerary-list">
                     <!-- Day 0 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 0</span>
-                            <span class="itinerary-title">Depart from Bangalore</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
+                    <div class="itinerary-card active">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 0</span>
+                                <span class="itinerary-title-text">Bangalore Departure & Night Journey</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <p style="color: #b0b0b0;">We'll pick up our fellow explorers at the following locations.
-                                Click on each location to see the exact pickup point.</p>
-                            <ul style="color: #b0b0b0; padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">10:00 PM</span>: Start from Banashankari</li>
-                                <li><span class="itinerary-time">10:15 PM</span>: Quick pickup BTM Layout</li>
-                                <li><span class="itinerary-time">10:30 PM</span>: Next stop, Silk Board</li>
-                                <li><span class="itinerary-time">10:45 PM</span>: Board at Bellandur</li>
-                                <li><span class="itinerary-time">11:00 PM</span>: Assemble at Marathalli</li>
-                                <li><span class="itinerary-time">11:30 PM</span>: Pickup at Tin Factory</li>
-                                <li><span class="itinerary-time">11:50 PM</span>: Picking up at Indira Nagar</li>
-                                <li><span class="itinerary-time">12:00 AM</span>: Meet us at Halasuru</li>
-                                <li><span class="itinerary-time">12:10 AM</span>: Join at Mg Road</li>
-                                <li><span class="itinerary-time">12:30 AM</span>: Board at Mekhri Circle</li>
-                                <li><span class="itinerary-time">12:40 AM</span>: Quick pickup at Yeshwanthpur</li>
-                                <li><span class="itinerary-time">12:50 AM</span>: Last pickup at Gorguntepalya</li>
+                        <div class="itinerary-card-body">
+                            <p style="color: var(--text-body); margin-bottom: 0.75rem;">
+                                Depart Bengaluru in a comfortable Non-A/c Push-back Tempo Traveler or Minibus. Boarding begins at convenient pickup hubs across the city:
+                            </p>
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">10:00 PM</span>: Banashankari Bus Stop</li>
+                                <li class="timeline-item"><span class="time-tag">10:15 PM</span>: BTM Layout (Near Udupi Garden signal)</li>
+                                <li class="timeline-item"><span class="time-tag">10:30 PM</span>: Silk Board (Near skywalk)</li>
+                                <li class="timeline-item"><span class="time-tag">10:45 PM</span>: Bellandur Petrol Pump</li>
+                                <li class="timeline-item"><span class="time-tag">11:00 PM</span>: Marathahalli (Opposite Kalamandir)</li>
+                                <li class="timeline-item"><span class="time-tag">11:30 PM</span>: Tin Factory Bus Stop</li>
+                                <li class="timeline-item"><span class="time-tag">11:50 PM</span>: Indiranagar (Domlur Bridge)</li>
+                                <li class="timeline-item"><span class="time-tag">12:00 AM</span>: Halasuru Metro Station</li>
+                                <li class="timeline-item"><span class="time-tag">12:10 AM</span>: MG Road (Near 1MG Mall)</li>
+                                <li class="timeline-item"><span class="time-tag">12:30 AM</span>: Mekhri Circle</li>
+                                <li class="timeline-item"><span class="time-tag">12:40 AM</span>: Yeshwanthpur Metro Station</li>
+                                <li class="timeline-item"><span class="time-tag">12:50 AM</span>: Goraguntepalya (Last pickup point)</li>
                             </ul>
-                            <p style="color: #b0b0b0; margin-top: 1rem;"><strong>Note for the entire trip:</strong> The
-                                travel time may vary depending on the traffic and road conditions. Yet, we will make
-                                sure that we will cover all the places on the itinerary.</p>
+                            <div class="note-highlight">
+                                <strong>Trip Notice:</strong> Travel times may vary based on weekend traffic and ghat road conditions. Our drivers and leads ensure a steady, secure journey.
+                            </div>
                         </div>
                     </div>
 
                     <!-- Day 1 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 1</span>
-                            <span class="itinerary-title">Tea Estate for the Eyes, Temple for the Soul, and Back to
-                                Stay</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
+                    <div class="itinerary-card">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 1</span>
+                                <span class="itinerary-title-text">Homestay Check-in, Samse Tea Gardens, Temple & Waterfalls</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <ul
-                                style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">06:00 AM - 07:00 AM</span>: Check-in the homestay</li>
-                                <li><span class="itinerary-time">07:00 AM - 08:00 AM</span>: Freshen-up and have
-                                    breakfast</li>
-                                <li><span class="itinerary-time">09:00 AM - 10:00 AM</span>: Visit Samse Tea Estate</li>
-                                <li><span class="itinerary-time">10:30 AM - 12:30 PM</span>: Reach Horanadu Temple, have
-                                    Darshan and Lunch (Either temple prasadam or lunch in near-by hotel
-                                    (self-sponsored))</li>
-                                <li style="color: #ffd700; font-weight: 600;">Note: Temple dress code applies.</li>
-                                <li><span class="itinerary-time">02:30 PM - 04:30 PM</span>: Visit Soormane Falls (Jeep
-                                    ride *self-sponsored)</li>
-                                <li><span class="itinerary-time">05:30 PM</span>: Visit Hanging Bridge Kalasa</li>
-                                <li><span class="itinerary-time">07:00 PM</span>: Reach Homestay, have dinner and rest
-                                </li>
+                        <div class="itinerary-card-body">
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">06:00 AM – 07:00 AM</span>: Arrive at our rustic Malnad homestay nestled among coffee and areca nut plantations. Check in and unwind.</li>
+                                <li class="timeline-item"><span class="time-tag">07:00 AM – 08:30 AM</span>: Freshen up and enjoy a hearty hot Malnad breakfast with fresh filter coffee.</li>
+                                <li class="timeline-item"><span class="time-tag">09:00 AM – 10:15 AM</span>: Stroll through the misty slopes of <strong>Samse Tea Estate</strong> for photography and panoramic valley views.</li>
+                                <li class="timeline-item"><span class="time-tag">10:45 AM – 01:00 PM</span>: Visit the sacred <strong>Horanadu Annapoorneshwari Temple</strong>. Experience divine darshan and traditional temple prasadam lunch.</li>
+                                <li class="timeline-item"><span class="time-tag">02:30 PM – 04:30 PM</span>: Embark on a thrilling local 4x4 jeep ride to <strong>Soormane Falls</strong>; dip your feet in the natural mountain pools.</li>
+                                <li class="timeline-item"><span class="time-tag">05:15 PM – 06:15 PM</span>: Walk across the picturesque <strong>Kalasa Hanging Bridge</strong> over the Bhadra River during golden hour.</li>
+                                <li class="timeline-item"><span class="time-tag">07:30 PM Onwards</span>: Return to homestay. Savor a piping hot vegetarian dinner, campfire stories under starlight, and rest for the summit day.</li>
                             </ul>
+                            <div class="note-highlight">
+                                <strong>Dress Code Reminder:</strong> Traditional attire is mandatory inside Horanadu Temple (Dhotis/Kurta for men; Sarees/Salwar for women). Shorts and sleeveless garments are not allowed on temple premises.
+                            </div>
                         </div>
                     </div>
 
                     <!-- Day 2 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 2</span>
-                            <span class="itinerary-title">Netravathi Trek</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
+                    <div class="itinerary-card">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 2</span>
+                                <span class="itinerary-title-text">Netravathi Summit Hike, Shola Forests & Return Journey</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <ul
-                                style="color: #b0b0b0; padding-left: 0; list-style: none; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">05:30 AM</span>: Wake-up call</li>
-                                <li><span class="itinerary-time">06:00 AM - 07:30 AM</span>: Freshen up, have breakfast
-                                    and carry packed lunch</li>
-                                <li><strong style="color: #ffffff;">Note 1: Forest permits are not included. They are
-                                        subject to availability and will incur an additional cost of INR 505.</strong>
-                                </li>
-                                <li><strong style="color: #ffffff;">Note 2: Kindly book at least 1 month in advance to
-                                        secure forest permits. Limited slots will be available - early confirmation is
-                                        highly recommended!</strong></li>
-                                <li><span class="itinerary-time">07:30 AM - 09:00 AM</span>: Travel to the starting
-                                    point of the Netravathi Trek (Jeep ride)</li>
-                                <li><span class="itinerary-time">01:30 PM - 02:30 PM</span>: Have packed lunch</li>
-                                <li><span class="itinerary-time">02:30 PM</span>: Start descent</li>
-                                <li><span class="itinerary-time">06:00 PM - 06:30 PM</span>: Reach homestay and sip tea
-                                    with snacks</li>
-                                <li><span class="itinerary-time">08:00 PM</span>: Depart to Bangalore</li>
-                                <li><span style="font-weight: 600;">Drop-off Points</span> are same as pick-up points.
-                                </li>
+                        <div class="itinerary-card-body">
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">05:30 AM</span>: Wake-up call amidst chirping birds and misty mountain breeze.</li>
+                                <li class="timeline-item"><span class="time-tag">06:00 AM – 07:15 AM</span>: Freshen up, eat energizing breakfast, and collect packed summit lunch & trail snacks.</li>
+                                <li class="timeline-item"><span class="time-tag">07:30 AM – 08:30 AM</span>: 4x4 Jeep transfer to the forest checkpost and base trail point.</li>
+                                <li class="timeline-item"><span class="time-tag">08:45 AM – 01:30 PM</span>: Trek through Shola forest patches, cross cascading mountain brooks, climb the emerald grassy saddles, and reach the iconic <strong>Heart-Shaped Meadow</strong> and <strong>Netravathi Peak (4,990 ft)</strong>.</li>
+                                <li class="timeline-item"><span class="time-tag">01:30 PM – 02:15 PM</span>: Enjoy packed lunch with 360-degree horizon views above cloud layers.</li>
+                                <li class="timeline-item"><span class="time-tag">02:15 PM – 05:30 PM</span>: Begin careful descent back to the base checkpoint.</li>
+                                <li class="timeline-item"><span class="time-tag">06:00 PM – 07:30 PM</span>: Reach homestay, freshen up, enjoy hot evening tea & snacks, and pack bags.</li>
+                                <li class="timeline-item"><span class="time-tag">08:00 PM</span>: Depart for Bangalore; stop for dinner en route (*self-sponsored).</li>
                             </ul>
                         </div>
                     </div>
 
                     <!-- Day 3 -->
-                    <div class="itinerary-item">
-                        <div class="itinerary-header" onclick="toggleItinerary(this)">
-                            <span class="day-tag">Day 3</span>
-                            <span class="itinerary-title">Homeward Bound</span>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24">
-                                <path d="M7 10l5 5 5-5z" />
-                            </svg>
+                    <div class="itinerary-card">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 3</span>
+                                <span class="itinerary-title-text">Early Morning Arrival in Bengaluru</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
                         </div>
-                        <div class="itinerary-content">
-                            <ul style="color: #b0b0b0; padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.8;">
-                                <li><span class="itinerary-time">05:00 AM</span>: Reach Bengaluru</li>
+                        <div class="itinerary-card-body">
+                            <ul class="timeline-list">
+                                <li class="timeline-item"><span class="time-tag">05:00 AM</span>: Arrive back in Bengaluru refreshed with memories, friendships, and stunning peak photos.</li>
                             </ul>
-                            <p style="color: #b0b0b0; margin-top: 1rem;"><strong>Drop-off Points:</strong> The drop-off
-                                points will be the same as the pick-up points to ensure convenience for all travelers.
-                                Please ensure you have all your belongings before leaving the vehicle.</p>
-                            <p style="color: #b0b0b0;"><strong>Home Sweet Home:</strong> Once you've reached your
-                                drop-off point, it's time to head home, take a well-deserved rest, and start planning
-                                your next adventure with HIKERS HORIZON!</p>
+                            <p style="color: var(--text-body); margin-top: 0.5rem;">
+                                Drop-offs follow the exact sequence as Day 0 pickup points for seamless convenience.
+                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Know Before You Go -->
-            <div class="glass-card">
-                <h2 class="section-title">Netravathi Trek Guidelines</h2>
-                <ul class="modern-list" style="color: #b0b0b0;">
-                    <li>• Leeches are common during monsoons; carry salt or Odomos</li>
-                    <li>• Weather changes rapidly; always carry a light jacket/raincoat</li>
-                    <li>• Zero-plastic zone; please do not carry disposable plastics</li>
-                    <li>• Mobile network is sparse; inform family in advance</li>
-                    <li>• Carry own towel and personal toiletries for the homestay</li>
-                </ul>
-            </div>
-
-            <!-- Things to Carry -->
-            <div class="glass-card">
-                <h2 class="section-title">Things to Carry for Netravathi</h2>
-                <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem 1.5rem;">
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Daypack (20L)
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Trekking Shoes
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Raincoat/Poncho
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Water Bottle
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Sunscreen/Hat
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Flashlight
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        ID Proof
-                    </div>
-                    <div
-                        style="display: flex; align-items: center; gap: 0.75rem; color: #e0e0e0; font-size: 0.9rem; font-weight: 500;">
-                        <svg style="width: 18px; height: 18px; fill: #ffd700; flex-shrink: 0;" viewBox="0 0 24 24">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                        </svg>
-                        Quick-dry Clothes
-                    </div>
+            <!-- Included and Excluded -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Trip Package Details</span>
+                    <h2 class="section-title">Inclusions & Exclusions</h2>
                 </div>
-            </div>
-
-            <!-- Included/Excluded -->
-            <div class="glass-card">
-                <h2 class="section-title">Included/Excluded</h2>
                 <div class="inc-exc-grid">
-                    <!-- Included Column -->
-                    <div class="inc-exc-column">
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon included">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                            </span>
-                            <span>To and fro transport from Bengaluru (Non-A/c)</span>
+                    <!-- Included -->
+                    <div class="inc-column">
+                        <div class="column-header inc">
+                            <span>✓</span> What's Included
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon included">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                            </span>
-                            <span>Only Veg Food (2 Breakfast, 1 Dinner, Packed lunch on Trek day)</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>To & Fro Non-A/c push-back group transport from Bangalore (12 Pickup Points)</span>
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon included">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                            </span>
-                            <span>Dorms Rooms</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Homestay / Dorm accommodation with clean bedding & hot water facilities</span>
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon included">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                            </span>
-                            <span>Trek Leads from the Tripbae Team</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Fresh vegetarian meals: 2 Breakfasts, 1 Packed Trail Lunch, and 1 Dinner</span>
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon included">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                            </span>
-                            <span>Basic First Aid Kit</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Certified, experienced Trek Leaders from the Hikers Horizon team</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Local sightseeing: Samse Tea Estate, Horanadu Temple, Hanging Bridge</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Campfire & group activities (weather permitting)</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge inc"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+                            <span>Emergency First Aid Kit & safety coordination</span>
                         </div>
                     </div>
 
-                    <!-- Excluded Column -->
-                    <div class="inc-exc-column">
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon excluded">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </span>
-                            <span>Forest Permits excluded and are subject to availability</span>
+                    <!-- Excluded -->
+                    <div class="exc-column">
+                        <div class="column-header exc">
+                            <span>✗</span> What's Not Included
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon excluded">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </span>
-                            <span>Any kind of Insurance</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+                            <span>Karnataka Forest Department Permit charges (~INR 505 per person)</span>
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon excluded">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </span>
-                            <span>Sightseeing Entry charges</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+                            <span>Jeep ride to base checkpost / Soormane Falls (~₹150-₹200 sharing)</span>
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon excluded">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </span>
-                            <span>Any Eatables (snacks, mineral water, etc)</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+                            <span>Any kind of travel or medical insurance</span>
                         </div>
-                        <div class="inc-exc-item">
-                            <span class="inc-exc-icon excluded">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                                </svg>
-                            </span>
-                            <span>Anything not included in the included section</span>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+                            <span>Meals on Day 0 and Day 2 return journey dinner</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+                            <span>Personal expenses, bottled beverages, packaged snacks</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon-badge exc"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+                            <span>Anything not expressly cited in the inclusions list</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Boutique Packages -->
-            <div class="glass-card">
-                <h2 class="section-title">Netravathi Pricing Packages</h2>
-                <div class="pricing-section">
-                    <div class="price-card">
-                        <h3>Wanderer</h3>
-                        <div class="amount-box">
-                            <span class="old-price">₹3,999</span>
-                            <span class="new-price">₹3,499</span>
-                        </div>
-                        <ul class="modern-list" style="text-align: left; margin-bottom: 2rem; font-size: 0.9rem;">
-                            <li>• Homestay Stay (Multiple Sharing)</li>
-                            <li>• 2 Breakfasts, 1 Lunch, 1 Dinner</li>
-                            <li>• Non-AC Group Transport</li>
-                            <li>• Bonfire & Music Night</li>
-                        </ul>
-                        <a href="../../booking-netravathi" class="pricing-btn">Reserve Spot</a>
+            <!-- Things to Carry Checklist -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Packing Guide</span>
+                    <h2 class="section-title">Things to Carry</h2>
+                </div>
+                <div class="checklist-grid">
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Daypack (20L - 30L)</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Trekking shoes with solid grip</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>2 reusable water bottles (1L each)</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Raincoat / Poncho & bag cover</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Quick-dry trekking trousers & tees</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Government ID proof (Aadhar/Voter)</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Traditional wear for Horanadu Temple</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Torch or headlamp with batteries</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Power bank & charging cables</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Personal medicines & Odomos/salt</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Flip-flops for homestay relaxation</span>
+                    </div>
+                    <div class="check-pill">
+                        <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <span>Dry fruits & energy bars</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Reviews & FAQs -->
-            <div class="glass-card">
-                <h2 class="section-title">Trekker Experiences</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                    <div
-                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
-                        "The homestay was so cozy, and the trek itself felt like walking in heaven. Highly recommended!"
-                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">-
-                            Rohan K.</strong>
-                    </div>
-                    <div
-                        style="font-style: italic; color: #b0b0b0; border-left: 2px solid #ffd700; padding-left: 1.5rem;">
-                        "Netravathi Peak is a dream for photographers. HH team managed the permits seamlessly."
-                        <br><strong style="color: #ffffff; font-style: normal; display: block; margin-top: 0.5rem;">-
-                            Ananya P.</strong>
-                    </div>
+            <!-- Pricing Packages -->
+            <section class="glass-card" id="pricing">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Fair & Transparent Rates</span>
+                    <h2 class="section-title">Pricing Packages</h2>
                 </div>
-
-                <h2 class="section-title" style="margin-top: 4rem;">Frequently Asked Questions</h2>
-                <ul class="modern-list">
-                    <li>
+                <div class="pricing-grid">
+                    <!-- Base Package -->
+                    <div class="package-card">
                         <div>
-                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">Is trekking
-                                experience required?</strong>
-                            <p style="color: #b0b0b0;">No, but a basic level of fitness is recommended as it's a 12km
-                                total walk.</p>
+                            <h3 class="package-title">Self-Drive Package</h3>
+                            <p class="package-subtitle">Join us directly at the homestay in Kalasa</p>
+                            <div class="package-price-wrap">
+                                <span class="price-strike">₹3,499</span>
+                                <span class="price-amount">₹2,299</span>
+                                <span class="price-unit">/ trekker</span>
+                            </div>
+                            <ul class="package-features-list">
+                                <li>✓ 1 Night Homestay / Dorm Accommodation</li>
+                                <li>✓ 2 Breakfasts, 1 Packed Lunch, 1 Dinner</li>
+                                <li>✓ Certified Trek Leads on the Mountain</li>
+                                <li>✓ Campfire & Evening Experience</li>
+                                <li>✓ Basic First Aid Support</li>
+                                <li class="excluded">✗ To & Fro Travel from Bangalore</li>
+                            </ul>
                         </div>
-                    </li>
-                    <li>
+                        <a href="/booking-netravathi?type=base" class="btn-reserve outline-btn">Book Without Travel</a>
+                    </div>
+
+                    <!-- All-Inclusive Package -->
+                    <div class="package-card featured">
+                        <div class="package-badge-popular">Most Popular</div>
                         <div>
-                            <strong style="color: #ffd700; display: block; margin-bottom: 0.5rem;">What about
-                                electricity at homestay?</strong>
-                            <p style="color: #b0b0b0;">Yes, backup power is usually available for charging mobile
-                                phones.</p>
+                            <h3 class="package-title" style="color: var(--gold-bright);">All-Inclusive Tour</h3>
+                            <p class="package-subtitle">Includes round-trip travel from Bengaluru</p>
+                            <div class="package-price-wrap">
+                                <span class="price-strike">₹4,499</span>
+                                <span class="price-amount">₹3,499</span>
+                                <span class="price-unit">/ trekker</span>
+                            </div>
+                            <ul class="package-features-list">
+                                <li>✓ Bangalore Round-Trip Non-A/c Push-back Transport</li>
+                                <li>✓ 12 Convenient City Pickup & Drop Points</li>
+                                <li>✓ 1 Night Homestay / Dorm Accommodation</li>
+                                <li>✓ 2 Breakfasts, 1 Packed Lunch, 1 Dinner</li>
+                                <li>✓ Samse Tea Garden & Horanadu Temple Visit</li>
+                                <li>✓ Experienced Hikers Horizon Trek Leads</li>
+                                <li>✓ Emergency First Aid Kit Support</li>
+                            </ul>
                         </div>
-                    </li>
-                </ul>
-            </div>
-            <!-- Other Adventures -->
-            <div class="glass-card">
-                <h2 class="section-title">Explore More</h2>
-                <div class="gallery-grid">
-                    <a href="../Netravathi" style="text-decoration: none; color: inherit;">
-                        <div class="gallery-image">
+                        <a href="/booking-netravathi" class="btn-reserve featured-btn">Book With Travel</a>
+                    </div>
+                </div>
+            </section>
 
-                            <img src="/img/Netravathi.jpg" alt="Netravathi Peak">
-                        </div>
-                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Netravathi Peak
-                        </h4>
-                    </a> <a href="../Tadiandamol" style="text-decoration: none; color: inherit;">
-                        <div class="gallery-image">
+            <!-- Reviews & FAQ -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">Community</span>
+                    <h2 class="section-title">Hiker Stories & Common Questions</h2>
+                </div>
 
-                            <img src="/img/Tadiandamol.jpg" alt="Tadiandamol Coorg">
-                        </div>
-                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Tadiandamol Coorg
-                        </h4>
-                    </a> <a href="../Kumaraparvatha" style="text-decoration: none; color: inherit;">
-                        <div class="gallery-image">
+                <div class="reviews-grid">
+                    <div class="review-box">
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">"Standing on the Netravathi ridge surrounded by floating clouds was pure magic. The homestay food was super homely and the trek leads took great care of the group."</p>
+                        <div class="review-author">— Rohan K., Bangalore</div>
+                    </div>
+                    <div class="review-box">
+                        <div class="review-stars">★★★★★</div>
+                        <p class="review-text">"The heart-shaped meadow looks even better than photos. The permit process was handled smoothly by Hikers Horizon. Perfect weekend escape!"</p>
+                        <div class="review-author">— Ananya P., Software Engineer</div>
+                    </div>
+                </div>
 
-                            <img src="/img/Kumara.jpg" alt="Kumara Parvatha">
+                <div style="margin-top: 3.5rem;">
+                    <h3 style="font-family: 'Outfit'; font-size: 1.3rem; margin-bottom: 1.5rem; color: #FFFFFF;">Frequently Asked Questions</h3>
+                    <div class="faq-item">
+                        <div class="faq-question">How difficult is the Netravathi Peak hike?</div>
+                        <div class="faq-answer">The trek is rated <strong>Moderate</strong>. The overall round-trip trail is approximately 12 kilometers across rolling Shola meadows with steady elevation gain. A basic level of cardiovascular fitness is recommended.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What about leeches along the trail?</div>
+                        <div class="faq-answer">Leeches are commonly found in Shola patches during the monsoon and post-monsoon months (July to October). Wearing full-length trek pants, gaiters, and applying salt or insect repellent easily prevents discomfort.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Can solo travelers or women join this trek?</div>
+                        <div class="faq-answer">Yes, absolutely! More than 45% of our trekkers join solo. We ensure respectful, verified group dynamics, safe separate dorm rooms, and friendly female trek-lead support.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Explore More Adventures -->
+            <section class="glass-card">
+                <div class="section-header-wrap">
+                    <span class="section-eyebrow">More Western Ghats Trails</span>
+                    <h2 class="section-title">Explore Nearby Peaks</h2>
+                </div>
+                <div class="adventures-grid">
+                    <a href="../Kuduremukha" class="adventure-card-link">
+                        <div class="adventure-thumb-card">
+                            <img src="/img/Kuduremukha.jpg" alt="Kudremukh Peak Trek">
+                            <div class="adventure-info">
+                                <h4>Kudremukh Peak</h4>
+                                <span>Chikmagalur • 6,214 FT</span>
+                            </div>
                         </div>
-                        <h4 style="margin-top: 1rem; font-family: 'Montserrat'; text-align: center;">Kumara Parvatha
-                        </h4>
+                    </a>
+                    <a href="../Tadiandamol" class="adventure-card-link">
+                        <div class="adventure-thumb-card">
+                            <img src="/img/Tadiandamol.jpg" alt="Tadiandamol Trek Coorg">
+                            <div class="adventure-info">
+                                <h4>Tadiandamol Peak</h4>
+                                <span>Coorg • 5,735 FT</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="../Kumaraparvatha" class="adventure-card-link">
+                        <div class="adventure-thumb-card">
+                            <img src="/img/Kumara.jpg" alt="Kumara Parvatha Trek">
+                            <div class="adventure-info">
+                                <h4>Kumara Parvatha</h4>
+                                <span>Pushpagiri • 5,627 FT</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
-            </div>
+            </section>
         </div>
     </main>
+
+    <!-- Floating Mobile & Desktop Action Bar -->
+    <div class="floating-action-bar">
+        <div class="floating-price-col">
+            <span class="floating-label">Starting From</span>
+            <span class="floating-price">₹3,499</span>
+        </div>
+        <a href="/booking-netravathi" class="btn-floating-cta">Reserve Slot</a>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="footer-container">
             <div class="footer-grid">
-                <div class="footer-links-col">
+                <div class="footer-col">
                     <h3>Explore</h3>
                     <ul>
                         <li><a href="../../Sunrise">Sunrise Treks</a></li>
@@ -1088,67 +1611,61 @@
                         <li><a href="../../Backpacking">Backpacking Trips</a></li>
                     </ul>
                 </div>
-                <div class="footer-links-col">
+                <div class="footer-col">
                     <h3>Company</h3>
-                        <ul>
+                    <ul>
                         <li><a href="../../About">About Us</a></li>
-                        <li><a href="../../Contact">Contact</a></li>
-                        <li><a href="../../Blogs">Blog</a></li>
-                                                <li><a href="/swiftseat/">Swift Seat</a></li>
-                        </ul>
+                        <li><a href="../../Contact">Contact Us</a></li>
+                        <li><a href="../../Blog">Trek Blogs</a></li>
+                        <li><a href="/swiftseat/">Swift Seat</a></li>
+                    </ul>
                 </div>
-                <div class="footer-links-col">
+                <div class="footer-col">
                     <h3>Policies</h3>
                     <ul>
                         <li><a href="../../Privacy">Privacy Policy</a></li>
-                        <li><a href="../../Terms">Terms and Conditions</a></li>
+                        <li><a href="../../Terms">Terms & Conditions</a></li>
                         <li><a href="../../Cancellation">Cancellation Policy</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copyright">© 2026 Hikers Horizon. All rights reserved.</p>
-                <div class="social-links">
-                    <a href="https://facebook.com/hikershorizon" aria-label="Facebook">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                        </svg>
+                <p>© 2026 Hikers Horizon. Crafted with passion for the mountains.</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com/hikershorizon" aria-label="Facebook" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                     </a>
-                    <a href="https://instagram.com/hikershorizon" aria-label="Instagram">
-                        <svg viewBox="0 0 24 24">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
+                    <a href="https://instagram.com/hikershorizon" aria-label="Instagram" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                     </a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- WhatsApp Button logic -->
-    <a href="https://wa.me/919902653393" class="enquiry-button" id="enquiryButton" aria-label="WhatsApp">
+    <!-- WhatsApp Enquiry Button -->
+    <a href="https://wa.me/919902653393?text=Hi%20Hikers%20Horizon,%20I%20want%20to%20know%20more%20about%20the%20Netravathi%20Peak%20Trek" 
+       class="enquiry-button" id="enquiryButton" aria-label="Chat on WhatsApp" target="_blank" rel="noopener">
         <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
         </svg>
     </a>
 
-    <!-- Schema Markup -->
+    <!-- Structured Data (Event Schema) -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Event",
-        "name": "Netravati Peak Trek from Bangalore",
-        "description": "Join Hikers Horizon for a 2-day Netravati Peak trek. Explore cloud corridors, heart-shaped meadows, and forest stay starting at ₹3,499.",
-        "startDate": "2025-09-05T22:00:00+05:30",
-        "endDate": "2025-09-07T22:30:00+05:30",
+        "name": "Netravathi Peak Trek from Bangalore (4,990 FT)",
+        "description": "2-Day weekend trek to Netravathi Peak in Kudremukh National Park. Experience the heart-shaped meadow, Shola forests, and sea-of-clouds.",
+        "startDate": "2026-11-06T22:00:00+05:30",
+        "endDate": "2026-11-08T05:00:00+05:30",
         "location": {
             "@type": "Place",
-            "name": "Netravati Peak",
+            "name": "Netravathi Peak, Kudremukh National Park",
             "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Chikmagalur",
+                "addressLocality": "Kalasa, Chikmagalur",
                 "addressRegion": "Karnataka",
                 "addressCountry": "IN"
             }
@@ -1162,22 +1679,25 @@
             "@type": "Offer",
             "price": "3499",
             "priceCurrency": "INR",
-            "url": "https://hikershorizon.in/treks/netravati",
+            "url": "https://hikershorizon.in/Twodays/Netravathi",
             "availability": "https://schema.org/InStock"
         }
     }
     </script>
 
-
     <script>
         function toggleItinerary(header) {
-            const item = header.parentElement;
-            const isActive = item.classList.contains('active');
-            document.querySelectorAll('.itinerary-item').forEach(el => {
-                el.classList.remove('active');
+            const card = header.closest('.itinerary-card');
+            const isActive = card.classList.contains('active');
+            
+            // Close other accordion cards
+            document.querySelectorAll('.itinerary-card').forEach(item => {
+                item.classList.remove('active');
             });
+
+            // Toggle current
             if (!isActive) {
-                item.classList.add('active');
+                card.classList.add('active');
             }
         }
     </script>
