@@ -1,0 +1,416 @@
+/* ═══════════════════════════════════════════════════
+   HIKERS HORIZON — UNIVERSAL GLOBAL FOOTER SYSTEM
+   Engineered for visual excellence & all aspect ratios
+   ═══════════════════════════════════════════════════ */
+
+.hh-global-footer {
+  position: relative !important;
+  background: #040805 !important;
+  color: #FFFFFF !important;
+  border-top: 1px solid rgba(16, 185, 129, 0.22) !important;
+  padding: 5rem 1.5rem calc(95px + env(safe-area-inset-bottom, 0px)) 1.5rem !important;
+  margin-top: auto !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.hh-global-footer * {
+  box-sizing: border-box !important;
+}
+
+/* Ambient Mountain Glow at Top of Footer */
+.hh-global-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  max-width: 900px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.6), rgba(16, 185, 129, 0.8), rgba(245, 158, 11, 0.6), transparent);
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+  pointer-events: none;
+}
+
+.hh-footer-container {
+  max-width: 1320px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+}
+
+/* ──── TOP GRID ──── */
+.hh-footer-top {
+  display: grid !important;
+  grid-template-columns: 2fr 1.1fr 1.1fr 1.4fr !important;
+  gap: 3.5rem !important;
+  margin-bottom: 4rem !important;
+}
+
+/* Brand Column */
+.hh-footer-brand-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.25rem !important;
+}
+
+.hh-footer-logo-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.85rem !important;
+  text-decoration: none !important;
+  width: fit-content !important;
+}
+
+.hh-footer-logo-img {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25) !important;
+  flex-shrink: 0 !important;
+}
+
+.hh-footer-logo-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.hh-footer-logo-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.2rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  background: linear-gradient(90deg, #FFFFFF 30%, #FBBF24 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #FFFFFF !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+}
+
+.hh-footer-logo-tagline {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.15em !important;
+  text-transform: uppercase !important;
+  color: rgba(16, 185, 129, 0.85) !important;
+}
+
+.hh-footer-desc {
+  font-size: 0.92rem !important;
+  line-height: 1.7 !important;
+  color: rgba(255, 255, 255, 0.68) !important;
+  margin: 0 !important;
+  max-width: 420px !important;
+}
+
+/* Trust Badges */
+.hh-footer-badges {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  margin-top: 0.25rem !important;
+}
+
+.hh-footer-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  border: 1px solid rgba(16, 185, 129, 0.22) !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 50px !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  color: #A7F3D0 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.hh-footer-badge svg {
+  width: 13px !important;
+  height: 13px !important;
+  fill: #10B981 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Social Icon Row */
+.hh-footer-socials {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  margin-top: 0.5rem !important;
+}
+
+.hh-footer-social-btn {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.hh-footer-social-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  fill: currentColor !important;
+  transition: transform 0.3s ease !important;
+}
+
+.hh-footer-social-btn:hover {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: #F59E0B !important;
+  color: #FBBF24 !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25) !important;
+}
+
+.hh-footer-social-btn:hover svg {
+  transform: scale(1.1) !important;
+}
+
+/* Nav Column Titles */
+.hh-footer-col-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  color: #FFFFFF !important;
+  margin: 0 0 1.25rem 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.hh-footer-col-title::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #F59E0B;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+}
+
+/* Link Lists */
+.hh-footer-links {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+}
+
+.hh-footer-links li {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.hh-footer-links a {
+  font-size: 0.88rem !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  text-decoration: none !important;
+  transition: all 0.25s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+
+.hh-footer-links a:hover {
+  color: #34D399 !important;
+  transform: translateX(4px) !important;
+  text-decoration: none !important;
+}
+
+/* Newsletter Column */
+.hh-footer-newsletter-card {
+  background: rgba(16, 30, 22, 0.45) !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+  border-radius: 18px !important;
+  padding: 1.5rem !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.hh-footer-newsletter-card p {
+  font-size: 0.85rem !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  line-height: 1.6 !important;
+  margin: 0 0 1.15rem 0 !important;
+}
+
+.hh-footer-newsletter-form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.65rem !important;
+}
+
+.hh-footer-newsletter-input {
+  width: 100% !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 50px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.85rem !important;
+  color: #FFFFFF !important;
+  outline: none !important;
+  transition: all 0.3s ease !important;
+  font-family: inherit !important;
+}
+
+.hh-footer-newsletter-input:focus {
+  border-color: #10B981 !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.25) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.hh-footer-newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.hh-footer-newsletter-btn {
+  width: 100% !important;
+  background: linear-gradient(135deg, #F59E0B, #FBBF24) !important;
+  color: #050B07 !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3) !important;
+}
+
+.hh-footer-newsletter-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45) !important;
+}
+
+.hh-footer-newsletter-btn svg {
+  width: 15px !important;
+  height: 15px !important;
+  fill: currentColor !important;
+}
+
+/* ──── BOTTOM BAR ──── */
+.hh-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding-top: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 1.25rem !important;
+}
+
+.hh-footer-copy {
+  font-size: 0.82rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin: 0 !important;
+}
+
+.hh-footer-coords {
+  font-family: 'Outfit', monospace !important;
+  font-size: 0.75rem !important;
+  color: rgba(16, 185, 129, 0.7) !important;
+  letter-spacing: 0.08em !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+
+.hh-footer-bottom-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  flex-wrap: wrap !important;
+}
+
+.hh-footer-bottom-links a {
+  font-size: 0.8rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease !important;
+}
+
+.hh-footer-bottom-links a:hover {
+  color: #FBBF24 !important;
+  text-decoration: none !important;
+}
+
+.hh-footer-top-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 50px !important;
+  padding: 0.4rem 0.9rem !important;
+  font-size: 0.78rem !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  transition: all 0.25s ease !important;
+  font-family: inherit !important;
+}
+
+.hh-footer-top-btn:hover {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: #10B981 !important;
+  color: #FFFFFF !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE DESIGN (Tablets & Mobile / iPhone 17)
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .hh-footer-top {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2.75rem 2rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hh-global-footer {
+    padding: 3.5rem 1.25rem calc(85px + env(safe-area-inset-bottom, 0px)) 1.25rem !important;
+  }
+
+  .hh-footer-top {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .hh-footer-desc {
+    max-width: 100% !important;
+  }
+
+  .hh-footer-bottom {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+  }
+
+  .hh-footer-bottom-links {
+    gap: 1rem !important;
+  }
+}
