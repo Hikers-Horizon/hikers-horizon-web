@@ -262,6 +262,7 @@ const BookingEngine = (() => {
     });
 
     if (step === 1) updatePrice();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function validateStep1() {
@@ -562,9 +563,9 @@ const BookingEngine = (() => {
   Booked On:     ${new Date().toLocaleString('en-IN')}
 
 ═══════════════════════════════════════
-  Thank you for choosing BENGALURU TRAILS!
+  Thank you for choosing Hikers Horizon!
   ${isFullPay ? 'Your booking is fully paid.' : 'Note: Settle balance on departure day.'}
-  For support: bengalurutrails2026@gmail.com
+  For support: hikershorizon2026@gmail.com
 ═══════════════════════════════════════
     `.trim();
 
@@ -853,8 +854,8 @@ const BookingEngine = (() => {
         const fullLabel = $('#labelPayFull');
         if (paymentMode === 'advance') {
           if (advanceLabel) {
-            advanceLabel.style.borderColor = 'rgba(255, 215, 0, 0.4)';
-            advanceLabel.style.background = 'rgba(255, 255, 255, 0.05)';
+            advanceLabel.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+            advanceLabel.style.background = 'rgba(16, 185, 129, 0.08)';
           }
           if (fullLabel) {
             fullLabel.style.borderColor = 'rgba(255, 255, 255, 0.08)';
@@ -866,8 +867,8 @@ const BookingEngine = (() => {
             advanceLabel.style.background = 'rgba(255, 255, 255, 0.02)';
           }
           if (fullLabel) {
-            fullLabel.style.borderColor = 'rgba(255, 215, 0, 0.4)';
-            fullLabel.style.background = 'rgba(255, 255, 255, 0.05)';
+            fullLabel.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+            fullLabel.style.background = 'rgba(16, 185, 129, 0.08)';
           }
         }
       });
