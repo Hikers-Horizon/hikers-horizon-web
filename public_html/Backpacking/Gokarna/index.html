@@ -537,6 +537,48 @@
             word-break: break-word;
         }
 
+        .pickup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .pickup-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 0.6rem 0.85rem;
+            transition: all 0.25s ease;
+        }
+
+        .pickup-pill:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--emerald-border);
+            transform: translateY(-2px);
+        }
+
+        .pickup-time {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--gold-bright);
+            white-space: nowrap;
+        }
+
+        .pickup-name {
+            font-size: 0.88rem;
+            color: #FFFFFF;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .pickup-name:hover {
+            color: var(--gold-bright);
+        }
+
         /* Inclusions / Exclusions */
         .inc-exc-grid {
             display: grid;
@@ -1462,7 +1504,65 @@
                 </div>
                 <div class="itinerary-list">
                     
+                    <!-- Day 0 -->
                     <div class="itinerary-card active">
+                        <div class="itinerary-card-header" onclick="toggleItinerary(this)">
+                            <div class="itinerary-header-left">
+                                <span class="day-badge">Day 0</span>
+                                <span class="itinerary-title-text">Departure from Bengaluru</span>
+                            </div>
+                            <svg class="accordion-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                        <div class="itinerary-card-body">
+                            <p style="color: var(--text-body); margin-bottom: 1rem;">
+                                Journey to Gokarna! As the sun sets over Bangalore, our adventure begins as we head toward the Uttara Kannada District. We'll embark on a comfortable journey of <strong>480 km</strong> in a Tempo Traveler or a Minibus with push-back seats, ensuring a smooth ride for our hikers. We'll pick up our fellow explorers at the following locations. <strong>Click on each location to see the exact pickup point.</strong>
+                            </p>
+                            <h4 style="color: var(--gold-bright); font-size: 0.95rem; margin-bottom: 0.5rem;">Bangalore Pickup Hubs (Click for Maps):</h4>
+                            <div class="pickup-grid">
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">08:00 PM</span>
+                                    <a href="https://maps.app.goo.gl/9ao3vzdRAi1K2jnQA" target="_blank" rel="noopener" class="pickup-name">Start from Banashankari bus stop</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">08:15 PM</span>
+                                    <a href="https://goo.gl/maps/3QMuMiUsFFZnb7sn6" target="_blank" rel="noopener" class="pickup-name">Join from BTM Layout</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">08:30 PM</span>
+                                    <a href="https://maps.app.goo.gl/2ZGjxQY2sLXsSDtb6" target="_blank" rel="noopener" class="pickup-name">Next stop, Silk Board</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">08:45 PM</span>
+                                    <a href="https://maps.app.goo.gl/7rDzJyzwjb2Jwa7Q9" target="_blank" rel="noopener" class="pickup-name">Assemble at Koramangala</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">09:00 PM</span>
+                                    <a href="https://maps.app.goo.gl/W5grrxo5quqvqEyUA" target="_blank" rel="noopener" class="pickup-name">Picking up at Domlur</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">09:15 PM</span>
+                                    <a href="https://maps.app.goo.gl/XqXEtxPeepGuB2qy6" target="_blank" rel="noopener" class="pickup-name">Meet us at MG Road</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">09:30 PM</span>
+                                    <a href="https://maps.app.goo.gl/JQHw3UV7bd1WVy8f6" target="_blank" rel="noopener" class="pickup-name">Join at KTM Mekhri Circle</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">09:45 PM</span>
+                                    <a href="https://maps.app.goo.gl/WHWfEYXvy9t5e4mg7" target="_blank" rel="noopener" class="pickup-name">Board at Yeshwanthpura</a>
+                                </div>
+                                <div class="pickup-pill">
+                                    <span class="pickup-time">10:00 PM</span>
+                                    <a href="https://maps.app.goo.gl/DeX8qvhvdneNbteW6" target="_blank" rel="noopener" class="pickup-name">Last pickup at Goraguntepalya</a>
+                                </div>
+                            </div>
+                            <div class="note-highlight" style="margin-top: 1.25rem;">
+                                <p><strong>Note for the entire trip:</strong> The travel time may vary depending on the <strong>traffic</strong> and road <strong>conditions</strong>. Yet, we will make sure that we will <strong>cover all the places on the itinerary</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="itinerary-card">
                         <div class="itinerary-card-header" onclick="toggleItinerary(this)">
                             <div class="itinerary-header-left">
                                 <span class="day-badge">Day 1</span>
@@ -1745,28 +1845,54 @@
                     <span class="section-eyebrow">Fair & Transparent Rates</span>
                     <h2 class="section-title">Pricing Packages</h2>
                 </div>
-                <div class="pricing-grid" style="max-width: 550px; margin: 0 auto;">
-                    
-                    <div class="package-card featured">
-                        <div class="package-badge-popular">Most Popular</div>
+                <div class="pricing-grid">
+                    <!-- Self-Drive Package (Without Travel) -->
+                    <div class="package-card">
                         <div>
-                            <h3 class="package-title" style="color: var(--gold-bright);">Base Package</h3>
-                            <p class="package-subtitle">Includes round-trip transport from Bangalore</p>
+                            <h3 class="package-title">Self-Drive Package</h3>
+                            <p class="package-subtitle">Reach Gokarna Campsite Directly (Without Travel)</p>
                             <div class="package-price-wrap">
                                 <span class="price-strike">₹4,999</span>
                                 <span class="price-amount">₹3,999</span>
                                 <span class="price-unit">/ person</span>
                             </div>
                             <ul class="package-features-list">
-                                <li>• Non-A/c Push-back travel from Bangalore</li>
-                                <li>• Camp / Homestay stay with all basic amenities</li>
-                                <li>• 2 Breakfasts, 1 Packed Summit Lunch, 1 Dinner</li>
-                                <li>• Certified Trek Leaders & Local Trail Guide</li>
-                                <li>• Campfire, music & group bonding session</li>
-                                <li>• First Aid and safety coordination</li>
+                                <li>• 2 Nights Beachside Stay / Coastal Cottage</li>
+                                <li>• 3 Breakfasts & 2 Dinners Included</li>
+                                <li>• Guided 5-Beach Trek (Belekan to Kudle)</li>
+                                <li>• Vibhooti Falls & Yana Caves Sightseeing</li>
+                                <li>• Mirjan Fort & Murudeshwar Temple Visit</li>
+                                <li>• Honnavara Mangrove Boardwalk & Boating</li>
+                                <li>• Certified Trek Leaders & First Aid Kit</li>
+                                <li class="excluded">• Excludes Bangalore roundtrip travel</li>
                             </ul>
                         </div>
-                        <a href="/booking-gokarna3days.html?type=base" class="btn-reserve featured-btn">Reserve Spot</a>
+                        <a href="/booking-gokarna3days.html?type=base" class="btn-reserve outline-btn">Reserve Self-Drive</a>
+                    </div>
+
+                    <!-- All-Inclusive Full Trip (With Travel) -->
+                    <div class="package-card featured">
+                        <div class="package-badge-popular">Most Popular</div>
+                        <div>
+                            <h3 class="package-title" style="color: var(--gold-bright);">All-Inclusive (Full Trip)</h3>
+                            <p class="package-subtitle">Full Roundtrip Journey from Bangalore (9 Pickups)</p>
+                            <div class="package-price-wrap">
+                                <span class="price-strike">₹6,999</span>
+                                <span class="price-amount">₹5,499</span>
+                                <span class="price-unit">/ person</span>
+                            </div>
+                            <ul class="package-features-list">
+                                <li>• <strong>Roundtrip Push-Back Transport</strong> from Bangalore</li>
+                                <li>• 2 Nights Beachside Stay / Coastal Cottage</li>
+                                <li>• 3 Breakfasts & 2 Dinners Included</li>
+                                <li>• Guided 5-Beach Trek (Belekan to Kudle)</li>
+                                <li>• Vibhooti Falls & Yana Limestone Caves</li>
+                                <li>• Historic Mirjan Fort & Murudeshwar Temple</li>
+                                <li>• Honnavara Mangrove Boardwalk & Backwater Boating</li>
+                                <li>• Dedicated Hikers Horizon Trek Captains & First Aid</li>
+                            </ul>
+                        </div>
+                        <a href="/booking-gokarna3days.html?type=with-travel" class="btn-reserve featured-btn">Reserve Full Trip</a>
                     </div>
                 </div>
             </section>
@@ -1902,7 +2028,7 @@
             <span class="floating-label">Starting From</span>
             <span class="floating-price">₹3,999</span>
         </div>
-        <a href="/booking-gokarna3days.html?type=base" class="btn-floating-cta">Reserve Spot</a>
+        <a href="#pricing" class="btn-floating-cta">Reserve Spot</a>
     </div>
 
     
